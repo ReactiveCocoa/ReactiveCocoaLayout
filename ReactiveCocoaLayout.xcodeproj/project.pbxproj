@@ -22,6 +22,9 @@
 		D0BB24E916787A01005E9371 /* RACSignal+RCLGeometryAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = D0BB24E716787A01005E9371 /* RACSignal+RCLGeometryAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D0BB24EA16787A01005E9371 /* RACSignal+RCLGeometryAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = D0BB24E816787A01005E9371 /* RACSignal+RCLGeometryAdditions.m */; };
 		D0BB25A9167880BC005E9371 /* libArchimedes.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D0BB257E1678809D005E9371 /* libArchimedes.a */; };
+		D0BB25E01678847A005E9371 /* NSView+RCLObservationAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = D0BB25DE1678847A005E9371 /* NSView+RCLObservationAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D0BB25E11678847A005E9371 /* NSView+RCLObservationAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = D0BB25DF1678847A005E9371 /* NSView+RCLObservationAdditions.m */; };
+		D0BB25EB16788579005E9371 /* NSNotificationCenter+RACSupport.m in Sources */ = {isa = PBXBuildFile; fileRef = D0BB25E916788579005E9371 /* NSNotificationCenter+RACSupport.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -134,6 +137,10 @@
 		D0BB24E716787A01005E9371 /* RACSignal+RCLGeometryAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RACSignal+RCLGeometryAdditions.h"; sourceTree = "<group>"; };
 		D0BB24E816787A01005E9371 /* RACSignal+RCLGeometryAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RACSignal+RCLGeometryAdditions.m"; sourceTree = "<group>"; };
 		D0BB25711678809C005E9371 /* Archimedes.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Archimedes.xcodeproj; path = External/Archimedes/Archimedes.xcodeproj; sourceTree = "<group>"; };
+		D0BB25DE1678847A005E9371 /* NSView+RCLObservationAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSView+RCLObservationAdditions.h"; sourceTree = "<group>"; };
+		D0BB25DF1678847A005E9371 /* NSView+RCLObservationAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSView+RCLObservationAdditions.m"; sourceTree = "<group>"; };
+		D0BB25E816788579005E9371 /* NSNotificationCenter+RACSupport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSNotificationCenter+RACSupport.h"; path = "External/ReactiveCocoa/RACExtensions/NSNotificationCenter+RACSupport.h"; sourceTree = "<group>"; };
+		D0BB25E916788579005E9371 /* NSNotificationCenter+RACSupport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSNotificationCenter+RACSupport.m"; path = "External/ReactiveCocoa/RACExtensions/NSNotificationCenter+RACSupport.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -184,6 +191,7 @@
 			isa = PBXGroup;
 			children = (
 				D0BB24D916787927005E9371 /* libextobjc */,
+				D0BB25EC1678857E005E9371 /* RACExtensions */,
 				D0BB25711678809C005E9371 /* Archimedes.xcodeproj */,
 				D0BB24BB16787923005E9371 /* ReactiveCocoa.xcodeproj */,
 				D0BB24741678772C005E9371 /* Cocoa.framework */,
@@ -319,6 +327,8 @@
 		D0BB24E6167879E6005E9371 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				D0BB25DE1678847A005E9371 /* NSView+RCLObservationAdditions.h */,
+				D0BB25DF1678847A005E9371 /* NSView+RCLObservationAdditions.m */,
 				D0BB24E716787A01005E9371 /* RACSignal+RCLGeometryAdditions.h */,
 				D0BB24E816787A01005E9371 /* RACSignal+RCLGeometryAdditions.m */,
 			);
@@ -336,6 +346,15 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		D0BB25EC1678857E005E9371 /* RACExtensions */ = {
+			isa = PBXGroup;
+			children = (
+				D0BB25E816788579005E9371 /* NSNotificationCenter+RACSupport.h */,
+				D0BB25E916788579005E9371 /* NSNotificationCenter+RACSupport.m */,
+			);
+			name = RACExtensions;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -347,6 +366,7 @@
 				D0BB24E4167879D5005E9371 /* EXTProtocolCategory.h in Headers */,
 				D0BB24E5167879DA005E9371 /* metamacros.h in Headers */,
 				D0BB24E916787A01005E9371 /* RACSignal+RCLGeometryAdditions.h in Headers */,
+				D0BB25E01678847A005E9371 /* NSView+RCLObservationAdditions.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -523,6 +543,8 @@
 			files = (
 				D0BB24E2167879CA005E9371 /* EXTProtocolCategory.m in Sources */,
 				D0BB24EA16787A01005E9371 /* RACSignal+RCLGeometryAdditions.m in Sources */,
+				D0BB25E11678847A005E9371 /* NSView+RCLObservationAdditions.m in Sources */,
+				D0BB25EB16788579005E9371 /* NSNotificationCenter+RACSupport.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

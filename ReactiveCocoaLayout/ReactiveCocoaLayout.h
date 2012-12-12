@@ -9,3 +9,8 @@
 #import <ReactiveCocoa/ReactiveCocoa.h>
 
 #import "RACSignal+RCLGeometryAdditions.h"
+
+#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
+#elif TARGET_OS_MAC
+	#import "NSView+RCLObservationAdditions.h"
+#endif

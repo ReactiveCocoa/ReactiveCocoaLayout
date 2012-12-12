@@ -64,4 +64,12 @@
 	}];
 }
 
+- (RACTuple *)rcl_divideWithAmount:(CGFloat)amount fromEdge:(CGRectEdge)edge {
+	return [self rcl_divideWithAmount:amount padding:0 fromEdge:edge];
+}
+
+- (RACTuple *)rcl_divideWithAmount:(CGFloat)amount padding:(CGFloat)padding fromEdge:(CGRectEdge)edge {
+	return [RACTuple tupleWithObjects:[self rcl_sliceWithAmount:amount fromEdge:edge], [self rcl_remainderWithAmount:fmax(0, amount + padding) fromEdge:edge], nil];
+}
+
 @end
