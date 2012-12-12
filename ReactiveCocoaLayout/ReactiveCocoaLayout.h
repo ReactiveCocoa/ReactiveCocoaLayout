@@ -6,4 +6,6 @@
 //  Copyright (c) 2012 GitHub. All rights reserved.
 //
 
+#import <ReactiveCocoa/ReactiveCocoa.h>
 
+#import "RACSignal+RCLGeometryAdditions.h"

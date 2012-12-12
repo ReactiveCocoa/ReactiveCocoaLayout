@@ -16,6 +16,11 @@
 		D0BB24981678772C005E9371 /* ReactiveCocoaLayoutTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D0BB24971678772C005E9371 /* ReactiveCocoaLayoutTests.m */; };
 		D0BB24DC16787938005E9371 /* ReactiveCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0BB24CD16787923005E9371 /* ReactiveCocoa.framework */; };
 		D0BB24DD167879A3005E9371 /* ReactiveCocoaLayout.h in Headers */ = {isa = PBXBuildFile; fileRef = D0BB24811678772C005E9371 /* ReactiveCocoaLayout.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D0BB24E2167879CA005E9371 /* EXTProtocolCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = D0BB24DF167879CA005E9371 /* EXTProtocolCategory.m */; };
+		D0BB24E4167879D5005E9371 /* EXTProtocolCategory.h in Headers */ = {isa = PBXBuildFile; fileRef = D0BB24DE167879CA005E9371 /* EXTProtocolCategory.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D0BB24E5167879DA005E9371 /* metamacros.h in Headers */ = {isa = PBXBuildFile; fileRef = D0BB24E0167879CA005E9371 /* metamacros.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D0BB24E916787A01005E9371 /* RACSignal+RCLGeometryAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = D0BB24E716787A01005E9371 /* RACSignal+RCLGeometryAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D0BB24EA16787A01005E9371 /* RACSignal+RCLGeometryAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = D0BB24E816787A01005E9371 /* RACSignal+RCLGeometryAdditions.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -87,6 +92,11 @@
 		D0BB24B91678789A005E9371 /* Mac-StaticLibrary.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Mac-StaticLibrary.xcconfig"; sourceTree = "<group>"; };
 		D0BB24BA1678789A005E9371 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
 		D0BB24BB16787923005E9371 /* ReactiveCocoa.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ReactiveCocoa.xcodeproj; path = External/ReactiveCocoa/ReactiveCocoaFramework/ReactiveCocoa.xcodeproj; sourceTree = "<group>"; };
+		D0BB24DE167879CA005E9371 /* EXTProtocolCategory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EXTProtocolCategory.h; path = External/ReactiveCocoa/ReactiveCocoaFramework/ReactiveCocoa/libextobjc/extobjc/EXTProtocolCategory.h; sourceTree = "<group>"; };
+		D0BB24DF167879CA005E9371 /* EXTProtocolCategory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EXTProtocolCategory.m; path = External/ReactiveCocoa/ReactiveCocoaFramework/ReactiveCocoa/libextobjc/extobjc/EXTProtocolCategory.m; sourceTree = "<group>"; };
+		D0BB24E0167879CA005E9371 /* metamacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = metamacros.h; path = External/ReactiveCocoa/ReactiveCocoaFramework/ReactiveCocoa/libextobjc/extobjc/metamacros.h; sourceTree = "<group>"; };
+		D0BB24E716787A01005E9371 /* RACSignal+RCLGeometryAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RACSignal+RCLGeometryAdditions.h"; sourceTree = "<group>"; };
+		D0BB24E816787A01005E9371 /* RACSignal+RCLGeometryAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RACSignal+RCLGeometryAdditions.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -149,6 +159,7 @@
 			isa = PBXGroup;
 			children = (
 				D0BB24811678772C005E9371 /* ReactiveCocoaLayout.h */,
+				D0BB24E6167879E6005E9371 /* Extensions */,
 				D0BB247B1678772C005E9371 /* Supporting Files */,
 			);
 			path = ReactiveCocoaLayout;
@@ -259,8 +270,20 @@
 		D0BB24D916787927005E9371 /* libextobjc */ = {
 			isa = PBXGroup;
 			children = (
+				D0BB24DE167879CA005E9371 /* EXTProtocolCategory.h */,
+				D0BB24DF167879CA005E9371 /* EXTProtocolCategory.m */,
+				D0BB24E0167879CA005E9371 /* metamacros.h */,
 			);
 			name = libextobjc;
+			sourceTree = "<group>";
+		};
+		D0BB24E6167879E6005E9371 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				D0BB24E716787A01005E9371 /* RACSignal+RCLGeometryAdditions.h */,
+				D0BB24E816787A01005E9371 /* RACSignal+RCLGeometryAdditions.m */,
+			);
+			name = Extensions;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -271,6 +294,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				D0BB24DD167879A3005E9371 /* ReactiveCocoaLayout.h in Headers */,
+				D0BB24E4167879D5005E9371 /* EXTProtocolCategory.h in Headers */,
+				D0BB24E5167879DA005E9371 /* metamacros.h in Headers */,
+				D0BB24E916787A01005E9371 /* RACSignal+RCLGeometryAdditions.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -412,6 +438,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D0BB24E2167879CA005E9371 /* EXTProtocolCategory.m in Sources */,
+				D0BB24EA16787A01005E9371 /* RACSignal+RCLGeometryAdditions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
