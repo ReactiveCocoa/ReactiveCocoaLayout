@@ -3,7 +3,13 @@
 //
 
 #ifdef __OBJC__
-	#import <Cocoa/Cocoa.h>
+	#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
+		#import <Foundation/Foundation.h>
+		#import <UIKit/UIKit.h>
+	#elif TARGET_OS_MAC
+		#import <Cocoa/Cocoa.h>
+	#endif
+
 	#import <Archimedes/Archimedes.h>
 	#import <ReactiveCocoa/ReactiveCocoa.h>
 #endif
