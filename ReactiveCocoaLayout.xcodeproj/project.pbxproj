@@ -21,6 +21,7 @@
 		D0BB24E5167879DA005E9371 /* metamacros.h in Headers */ = {isa = PBXBuildFile; fileRef = D0BB24E0167879CA005E9371 /* metamacros.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D0BB24E916787A01005E9371 /* RACSignal+RCLGeometryAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = D0BB24E716787A01005E9371 /* RACSignal+RCLGeometryAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D0BB24EA16787A01005E9371 /* RACSignal+RCLGeometryAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = D0BB24E816787A01005E9371 /* RACSignal+RCLGeometryAdditions.m */; };
+		D0BB25A9167880BC005E9371 /* libArchimedes.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D0BB257E1678809D005E9371 /* libArchimedes.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -58,6 +59,41 @@
 			proxyType = 1;
 			remoteGlobalIDString = 88037F8215056328001A5B19;
 			remoteInfo = ReactiveCocoa;
+		};
+		D0BB257D1678809D005E9371 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D0BB25711678809C005E9371 /* Archimedes.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = D02FAED91635DDC0008D42D9;
+			remoteInfo = "Archimedes Mac";
+		};
+		D0BB257F1678809D005E9371 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D0BB25711678809C005E9371 /* Archimedes.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = D02FAEED1635DDC0008D42D9;
+			remoteInfo = "Archimedes Mac Tests";
+		};
+		D0BB25811678809D005E9371 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D0BB25711678809C005E9371 /* Archimedes.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = D02FAF8F1635DFD8008D42D9;
+			remoteInfo = "Archimedes iOS";
+		};
+		D0BB25831678809D005E9371 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D0BB25711678809C005E9371 /* Archimedes.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = D02FAF9D1635DFD9008D42D9;
+			remoteInfo = "Archimedes iOS Tests";
+		};
+		D0BB25A7167880B2005E9371 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D0BB25711678809C005E9371 /* Archimedes.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = D02FAED81635DDC0008D42D9;
+			remoteInfo = "Archimedes Mac";
 		};
 /* End PBXContainerItemProxy section */
 
@@ -97,6 +133,7 @@
 		D0BB24E0167879CA005E9371 /* metamacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = metamacros.h; path = External/ReactiveCocoa/ReactiveCocoaFramework/ReactiveCocoa/libextobjc/extobjc/metamacros.h; sourceTree = "<group>"; };
 		D0BB24E716787A01005E9371 /* RACSignal+RCLGeometryAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RACSignal+RCLGeometryAdditions.h"; sourceTree = "<group>"; };
 		D0BB24E816787A01005E9371 /* RACSignal+RCLGeometryAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RACSignal+RCLGeometryAdditions.m"; sourceTree = "<group>"; };
+		D0BB25711678809C005E9371 /* Archimedes.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Archimedes.xcodeproj; path = External/Archimedes/Archimedes.xcodeproj; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -104,6 +141,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D0BB25A9167880BC005E9371 /* libArchimedes.a in Frameworks */,
 				D0BB24751678772C005E9371 /* Cocoa.framework in Frameworks */,
 				D0BB24DC16787938005E9371 /* ReactiveCocoa.framework in Frameworks */,
 			);
@@ -146,6 +184,7 @@
 			isa = PBXGroup;
 			children = (
 				D0BB24D916787927005E9371 /* libextobjc */,
+				D0BB25711678809C005E9371 /* Archimedes.xcodeproj */,
 				D0BB24BB16787923005E9371 /* ReactiveCocoa.xcodeproj */,
 				D0BB24741678772C005E9371 /* Cocoa.framework */,
 				D0BB248A1678772C005E9371 /* SenTestingKit.framework */,
@@ -286,6 +325,17 @@
 			name = Extensions;
 			sourceTree = "<group>";
 		};
+		D0BB25721678809C005E9371 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				D0BB257E1678809D005E9371 /* libArchimedes.a */,
+				D0BB25801678809D005E9371 /* Archimedes Mac Tests.octest */,
+				D0BB25821678809D005E9371 /* libArchimedes.a */,
+				D0BB25841678809D005E9371 /* Archimedes iOS Tests.octest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -315,6 +365,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				D0BB25A8167880B2005E9371 /* PBXTargetDependency */,
 				D0BB24DB16787933005E9371 /* PBXTargetDependency */,
 			);
 			name = ReactiveCocoaLayout;
@@ -362,6 +413,10 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
+					ProductGroup = D0BB25721678809C005E9371 /* Products */;
+					ProjectRef = D0BB25711678809C005E9371 /* Archimedes.xcodeproj */;
+				},
+				{
 					ProductGroup = D0BB24BC16787923005E9371 /* Products */;
 					ProjectRef = D0BB24BB16787923005E9371 /* ReactiveCocoa.xcodeproj */;
 				},
@@ -394,6 +449,34 @@
 			fileType = wrapper.cfbundle;
 			path = ReactiveCocoaTests.octest;
 			remoteRef = D0BB24D016787923005E9371 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		D0BB257E1678809D005E9371 /* libArchimedes.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libArchimedes.a;
+			remoteRef = D0BB257D1678809D005E9371 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		D0BB25801678809D005E9371 /* Archimedes Mac Tests.octest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = "Archimedes Mac Tests.octest";
+			remoteRef = D0BB257F1678809D005E9371 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		D0BB25821678809D005E9371 /* libArchimedes.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libArchimedes.a;
+			remoteRef = D0BB25811678809D005E9371 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		D0BB25841678809D005E9371 /* Archimedes iOS Tests.octest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = "Archimedes iOS Tests.octest";
+			remoteRef = D0BB25831678809D005E9371 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -464,6 +547,11 @@
 			name = ReactiveCocoa;
 			targetProxy = D0BB24DA16787933005E9371 /* PBXContainerItemProxy */;
 		};
+		D0BB25A8167880B2005E9371 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "Archimedes Mac";
+			targetProxy = D0BB25A7167880B2005E9371 /* PBXContainerItemProxy */;
+		};
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
@@ -494,6 +582,7 @@
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
+				HEADER_SEARCH_PATHS = External/Archimedes;
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
 			};
 			name = Debug;
@@ -506,6 +595,7 @@
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
+				HEADER_SEARCH_PATHS = External/Archimedes;
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
 			};
 			name = Release;
