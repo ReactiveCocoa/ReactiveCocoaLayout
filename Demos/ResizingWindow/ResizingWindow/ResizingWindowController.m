@@ -38,9 +38,9 @@
 	NSTextField *nameField = [self textFieldWithString:@""];
 	NSTextField *emailField = [self textFieldWithString:@""];
 
-	RACTuple *availableTuple = [[self.contentView.rcl_frame rcl_insetWidth:32 height:16] rcl_divideWithAmount:CGRectGetHeight(nameField.bounds) padding:8 fromEdge:CGRectMaxYEdge];
-	RACTuple *nameTuple = [availableTuple[0] rcl_divideWithAmount:labelWidth padding:8 fromEdge:CGRectMinXEdge];
-	RACTuple *emailTuple = [[availableTuple[1] rcl_sliceWithAmount:CGRectGetHeight(emailField.bounds) fromEdge:CGRectMaxYEdge] rcl_divideWithAmount:labelWidth padding:8 fromEdge:CGRectMinXEdge];
+	RACTuple *availableTuple = [[self.contentView.rcl_frame insetWidth:32 height:16] divideWithAmount:CGRectGetHeight(nameField.bounds) padding:8 fromEdge:CGRectMaxYEdge];
+	RACTuple *nameTuple = [availableTuple[0] divideWithAmount:labelWidth padding:8 fromEdge:CGRectMinXEdge];
+	RACTuple *emailTuple = [[availableTuple[1] sliceWithAmount:CGRectGetHeight(emailField.bounds) fromEdge:CGRectMaxYEdge] divideWithAmount:labelWidth padding:8 fromEdge:CGRectMinXEdge];
 
 	RAC(nameLabel, frame) = nameTuple[0];
 	RAC(nameField, frame) = nameTuple[1];

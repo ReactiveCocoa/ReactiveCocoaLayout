@@ -38,66 +38,66 @@
 
 #pragma mark RCLSignal
 
-- (id<RCLSignal>)rcl_size {
+- (id<RCLSignal>)size {
 	return [self map:^(NSValue *value) {
 		return [NSValue valueWithSize:value.rectValue.size];
 	}];
 }
 
-- (id<RCLSignal>)rcl_origin {
+- (id<RCLSignal>)origin {
 	return [self map:^(NSValue *value) {
 		return [NSValue valueWithPoint:value.rectValue.origin];
 	}];
 }
 
-- (id<RCLSignal>)rcl_width {
+- (id<RCLSignal>)width {
 	return [self map:^(NSValue *value) {
 		return @(value.sizeValue.width);
 	}];
 }
 
-- (id<RCLSignal>)rcl_height {
+- (id<RCLSignal>)height {
 	return [self map:^(NSValue *value) {
 		return @(value.sizeValue.height);
 	}];
 }
 
-- (id<RCLSignal>)rcl_x {
+- (id<RCLSignal>)x {
 	return [self map:^(NSValue *value) {
 		return @(value.pointValue.x);
 	}];
 }
 
-- (id<RCLSignal>)rcl_y {
+- (id<RCLSignal>)y {
 	return [self map:^(NSValue *value) {
 		return @(value.pointValue.y);
 	}];
 }
 
-- (id<RCLSignal>)rcl_insetWidth:(CGFloat)width height:(CGFloat)height {
+- (id<RCLSignal>)insetWidth:(CGFloat)width height:(CGFloat)height {
 	return [self map:^(NSValue *value) {
 		return [NSValue valueWithRect:CGRectInset(value.rectValue, width, height)];
 	}];
 }
 
-- (id<RCLSignal>)rcl_sliceWithAmount:(CGFloat)amount fromEdge:(CGRectEdge)edge {
+- (id<RCLSignal>)sliceWithAmount:(CGFloat)amount fromEdge:(CGRectEdge)edge {
 	return [self map:^(NSValue *value) {
 		return [NSValue valueWithRect:CGRectSlice(value.rectValue, amount, edge)];
 	}];
 }
 
-- (id<RCLSignal>)rcl_remainderWithAmount:(CGFloat)amount fromEdge:(CGRectEdge)edge {
+- (id<RCLSignal>)remainderWithAmount:(CGFloat)amount fromEdge:(CGRectEdge)edge {
 	return [self map:^(NSValue *value) {
 		return [NSValue valueWithRect:CGRectRemainder(value.rectValue, amount, edge)];
 	}];
 }
 
-- (RACTuple *)rcl_divideWithAmount:(CGFloat)amount fromEdge:(CGRectEdge)edge {
-	return [self rcl_divideWithAmount:amount padding:0 fromEdge:edge];
+- (RACTuple *)divideWithAmount:(CGFloat)amount fromEdge:(CGRectEdge)edge {
+	return [self divideWithAmount:amount padding:0 fromEdge:edge];
 }
 
-- (RACTuple *)rcl_divideWithAmount:(CGFloat)amount padding:(CGFloat)padding fromEdge:(CGRectEdge)edge {
-	return [RACTuple tupleWithObjects:[self rcl_sliceWithAmount:amount fromEdge:edge], [self rcl_remainderWithAmount:fmax(0, amount + padding) fromEdge:edge], nil];
+- (RACTuple *)divideWithAmount:(CGFloat)amount padding:(CGFloat)padding fromEdge:(CGRectEdge)edge {
+	return [RACTuple tupleWithObjects:[self sliceWithAmount:amount fromEdge:edge], [self remainderWithAmount:fmax(0, amount + padding) fromEdge:edge], nil];
 }
 
 @end

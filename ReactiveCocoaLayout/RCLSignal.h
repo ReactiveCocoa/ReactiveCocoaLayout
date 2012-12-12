@@ -12,30 +12,30 @@
 @concrete
 
 // Maps rectangles to their `size` fields.
-- (id<RCLSignal>)rcl_size;
+- (id<RCLSignal>)size;
 
 // Maps sizes to their `width` fields.
-- (id<RCLSignal>)rcl_width;
+- (id<RCLSignal>)width;
 
 // Maps sizes to their `height` fields.
-- (id<RCLSignal>)rcl_height;
+- (id<RCLSignal>)height;
 
 // Maps rectangles to their `origin` fields.
-- (id<RCLSignal>)rcl_origin;
+- (id<RCLSignal>)origin;
 
 // Maps points to their `x` fields.
-- (id<RCLSignal>)rcl_x;
+- (id<RCLSignal>)x;
 
 // Maps points to their `y` fields.
-- (id<RCLSignal>)rcl_y;
+- (id<RCLSignal>)y;
 
 // Insets a stream by rectangles by the given width and height.
-- (id<RCLSignal>)rcl_insetWidth:(CGFloat)width height:(CGFloat)height;
+- (id<RCLSignal>)insetWidth:(CGFloat)width height:(CGFloat)height;
 
-- (id<RCLSignal>)rcl_sliceWithAmount:(CGFloat)amount fromEdge:(CGRectEdge)edge;
-- (id<RCLSignal>)rcl_remainderWithAmount:(CGFloat)amount fromEdge:(CGRectEdge)edge;
+- (id<RCLSignal>)sliceWithAmount:(CGFloat)amount fromEdge:(CGRectEdge)edge;
+- (id<RCLSignal>)remainderWithAmount:(CGFloat)amount fromEdge:(CGRectEdge)edge;
 
-- (RACTuple *)rcl_divideWithAmount:(CGFloat)amount fromEdge:(CGRectEdge)edge;
-- (RACTuple *)rcl_divideWithAmount:(CGFloat)amount padding:(CGFloat)padding fromEdge:(CGRectEdge)edge;
+- (RACTuple *)divideWithAmount:(CGFloat)amount fromEdge:(CGRectEdge)edge;
+- (RACTuple *)divideWithAmount:(CGFloat)amount padding:(CGFloat)padding fromEdge:(CGRectEdge)edge;
 
 @end
