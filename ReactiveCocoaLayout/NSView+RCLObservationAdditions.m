@@ -11,7 +11,7 @@
 
 @implementation NSView (RCLObservationAdditions)
 
-- (id)rcl_bounds {
+- (id)rcl_boundsSignal {
 	self.postsBoundsChangedNotifications = YES;
 	return [[[NSNotificationCenter.defaultCenter rac_addObserverForName:NSViewBoundsDidChangeNotification object:self]
 		map:^(NSNotification *notification) {
@@ -21,7 +21,7 @@
 		startWith:[NSValue valueWithRect:self.bounds]];
 }
 
-- (id)rcl_frame {
+- (id)rcl_frameSignal {
 	self.postsFrameChangedNotifications = YES;
 	return [[[NSNotificationCenter.defaultCenter rac_addObserverForName:NSViewFrameDidChangeNotification object:self]
 		map:^(NSNotification *notification) {

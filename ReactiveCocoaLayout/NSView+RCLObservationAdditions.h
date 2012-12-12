@@ -12,7 +12,7 @@
 
 @interface NSView (RCLObservationAdditions)
 
-- (id<RCLSignal>)rcl_bounds;
-- (id<RCLSignal>)rcl_frame;
+- (id<RCLSignal>)rcl_boundsSignal;
+- (id<RCLSignal>)rcl_frameSignal;
 
 @end
