@@ -9,13 +9,13 @@
 /* Begin PBXBuildFile section */
 		D0BB24751678772C005E9371 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0BB24741678772C005E9371 /* Cocoa.framework */; };
 		D0BB247F1678772C005E9371 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = D0BB247D1678772C005E9371 /* InfoPlist.strings */; };
-		D0BB24831678772C005E9371 /* ReactiveCocoaLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = D0BB24821678772C005E9371 /* ReactiveCocoaLayout.m */; };
 		D0BB248B1678772C005E9371 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0BB248A1678772C005E9371 /* SenTestingKit.framework */; };
 		D0BB248C1678772C005E9371 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0BB24741678772C005E9371 /* Cocoa.framework */; };
 		D0BB248F1678772C005E9371 /* ReactiveCocoaLayout.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0BB24711678772C005E9371 /* ReactiveCocoaLayout.framework */; };
 		D0BB24951678772C005E9371 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = D0BB24931678772C005E9371 /* InfoPlist.strings */; };
 		D0BB24981678772C005E9371 /* ReactiveCocoaLayoutTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D0BB24971678772C005E9371 /* ReactiveCocoaLayoutTests.m */; };
 		D0BB24DC16787938005E9371 /* ReactiveCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0BB24CD16787923005E9371 /* ReactiveCocoa.framework */; };
+		D0BB24DD167879A3005E9371 /* ReactiveCocoaLayout.h in Headers */ = {isa = PBXBuildFile; fileRef = D0BB24811678772C005E9371 /* ReactiveCocoaLayout.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -65,7 +65,6 @@
 		D0BB247E1678772C005E9371 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		D0BB24801678772C005E9371 /* ReactiveCocoaLayout-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ReactiveCocoaLayout-Prefix.pch"; sourceTree = "<group>"; };
 		D0BB24811678772C005E9371 /* ReactiveCocoaLayout.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ReactiveCocoaLayout.h; sourceTree = "<group>"; };
-		D0BB24821678772C005E9371 /* ReactiveCocoaLayout.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ReactiveCocoaLayout.m; sourceTree = "<group>"; };
 		D0BB24891678772C005E9371 /* ReactiveCocoaLayoutTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ReactiveCocoaLayoutTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D0BB248A1678772C005E9371 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
 		D0BB24921678772C005E9371 /* ReactiveCocoaLayoutTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "ReactiveCocoaLayoutTests-Info.plist"; sourceTree = "<group>"; };
@@ -118,8 +117,8 @@
 			children = (
 				D0BB247A1678772C005E9371 /* ReactiveCocoaLayout */,
 				D0BB24901678772C005E9371 /* ReactiveCocoaLayoutTests */,
-				D0BB24A61678789A005E9371 /* Configuration */,
 				D0BB24731678772C005E9371 /* Frameworks */,
+				D0BB24A61678789A005E9371 /* Configuration */,
 				D0BB24721678772C005E9371 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -150,7 +149,6 @@
 			isa = PBXGroup;
 			children = (
 				D0BB24811678772C005E9371 /* ReactiveCocoaLayout.h */,
-				D0BB24821678772C005E9371 /* ReactiveCocoaLayout.m */,
 				D0BB247B1678772C005E9371 /* Supporting Files */,
 			);
 			path = ReactiveCocoaLayout;
@@ -272,6 +270,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D0BB24DD167879A3005E9371 /* ReactiveCocoaLayout.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -413,7 +412,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D0BB24831678772C005E9371 /* ReactiveCocoaLayout.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
