@@ -38,13 +38,18 @@
 	NSTextField *nameField = [self textFieldWithString:@""];
 	NSTextField *emailField = [self textFieldWithString:@""];
 
-	RACTupleUnpack(id<RCLSignal> nameRect, id<RCLSignal> emailRect) = [[self.contentView.rcl_frameSignal insetWidth:32 height:16] divideWithAmount:CGRectGetHeight(nameField.bounds) padding:8 fromEdge:CGRectMaxYEdge];
+	RACTupleUnpack(id<RCLSignal> nameRect, id<RCLSignal> emailRect) = [[self.contentView.rcl_frameSignal
+		insetWidth:32 height:16]
+		divideWithAmount:CGRectGetHeight(nameField.bounds) padding:8 fromEdge:CGRectMaxYEdge];
 
 	RACTuple *nameTuple = [nameRect divideWithAmount:labelWidth padding:8 fromEdge:CGRectMinXEdge];
 	RAC(nameLabel, frame) = nameTuple[0];
 	RAC(nameField, frame) = nameTuple[1];
 
-	RACTuple *emailTuple = [[emailRect sliceWithAmount:CGRectGetHeight(emailField.bounds) fromEdge:CGRectMaxYEdge] divideWithAmount:labelWidth padding:8 fromEdge:CGRectMinXEdge];
+	RACTuple *emailTuple = [[emailRect
+		sliceWithAmount:CGRectGetHeight(emailField.bounds) fromEdge:CGRectMaxYEdge]
+		divideWithAmount:labelWidth padding:8 fromEdge:CGRectMinXEdge];
+
 	RAC(emailLabel, frame) = emailTuple[0];
 	RAC(emailField, frame) = emailTuple[1];
 }
