@@ -1,64 +1,92 @@
 //
-//  RACSignal+RCLGeometryAdditions.m
+//  RCLSignal.m
 //  ReactiveCocoaLayout
 //
 //  Created by Justin Spahr-Summers on 2012-12-12.
 //  Copyright (c) 2012 GitHub. All rights reserved.
 //
 
-#import "RACSignal+RCLGeometryAdditions.h"
+#import "RCLSignal.h"
 
-@pcategoryimplementation(RACSignal, RCLGeometryAdditions)
+@concreteprotocol(RCLSignal)
 
-- (id<RACSignal>)rcl_size {
+#pragma mark RACStream
+
++ (instancetype)empty {
+	return nil;
+}
+
++ (instancetype)return:(id)value {
+	return nil;
+}
+
+- (instancetype)bind:(id (^)(id value))block {
+	return nil;
+}
+
+- (instancetype)concat:(id<RACStream>)stream {
+	return nil;
+}
+
+- (instancetype)flatten {
+	return nil;
+}
+
++ (instancetype)zip:(NSArray *)streams reduce:(id)reduceBlock {
+	return nil;
+}
+
+#pragma mark RCLSignal
+
+- (id<RCLSignal>)rcl_size {
 	return [self map:^(NSValue *value) {
 		return [NSValue valueWithSize:value.rectValue.size];
 	}];
 }
 
-- (id<RACSignal>)rcl_origin {
+- (id<RCLSignal>)rcl_origin {
 	return [self map:^(NSValue *value) {
 		return [NSValue valueWithPoint:value.rectValue.origin];
 	}];
 }
 
-- (id<RACSignal>)rcl_width {
+- (id<RCLSignal>)rcl_width {
 	return [self map:^(NSValue *value) {
 		return @(value.sizeValue.width);
 	}];
 }
 
-- (id<RACSignal>)rcl_height {
+- (id<RCLSignal>)rcl_height {
 	return [self map:^(NSValue *value) {
 		return @(value.sizeValue.height);
 	}];
 }
 
-- (id<RACSignal>)rcl_x {
+- (id<RCLSignal>)rcl_x {
 	return [self map:^(NSValue *value) {
 		return @(value.pointValue.x);
 	}];
 }
 
-- (id<RACSignal>)rcl_y {
+- (id<RCLSignal>)rcl_y {
 	return [self map:^(NSValue *value) {
 		return @(value.pointValue.y);
 	}];
 }
 
-- (id<RACSignal>)rcl_insetWidth:(CGFloat)width height:(CGFloat)height {
+- (id<RCLSignal>)rcl_insetWidth:(CGFloat)width height:(CGFloat)height {
 	return [self map:^(NSValue *value) {
 		return [NSValue valueWithRect:CGRectInset(value.rectValue, width, height)];
 	}];
 }
 
-- (id<RACSignal>)rcl_sliceWithAmount:(CGFloat)amount fromEdge:(CGRectEdge)edge {
+- (id<RCLSignal>)rcl_sliceWithAmount:(CGFloat)amount fromEdge:(CGRectEdge)edge {
 	return [self map:^(NSValue *value) {
 		return [NSValue valueWithRect:CGRectSlice(value.rectValue, amount, edge)];
 	}];
 }
 
-- (id<RACSignal>)rcl_remainderWithAmount:(CGFloat)amount fromEdge:(CGRectEdge)edge {
+- (id<RCLSignal>)rcl_remainderWithAmount:(CGFloat)amount fromEdge:(CGRectEdge)edge {
 	return [self map:^(NSValue *value) {
 		return [NSValue valueWithRect:CGRectRemainder(value.rectValue, amount, edge)];
 	}];

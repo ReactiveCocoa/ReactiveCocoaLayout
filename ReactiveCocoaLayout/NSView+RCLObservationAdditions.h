@@ -8,9 +8,11 @@
 
 #import <Cocoa/Cocoa.h>
 
+@protocol RCLSignal;
+
 @interface NSView (RCLObservationAdditions)
 
-- (id)rcl_bounds;
-- (id)rcl_frame;
+- (id<RCLSignal>)rcl_bounds;
+- (id<RCLSignal>)rcl_frame;
 
 @end
