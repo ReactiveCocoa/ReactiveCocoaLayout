@@ -52,4 +52,16 @@
 	}];
 }
 
+- (id<RACSignal>)rcl_sliceWithAmount:(CGFloat)amount fromEdge:(CGRectEdge)edge {
+	return [self map:^(NSValue *value) {
+		return [NSValue valueWithRect:CGRectSlice(value.rectValue, amount, edge)];
+	}];
+}
+
+- (id<RACSignal>)rcl_remainderWithAmount:(CGFloat)amount fromEdge:(CGRectEdge)edge {
+	return [self map:^(NSValue *value) {
+		return [NSValue valueWithRect:CGRectRemainder(value.rectValue, amount, edge)];
+	}];
+}
+
 @end

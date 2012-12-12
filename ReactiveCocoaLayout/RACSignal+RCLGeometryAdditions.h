@@ -31,4 +31,7 @@
 // Insets a stream by rectangles by the given width and height.
 - (id<RACSignal>)rcl_insetWidth:(CGFloat)width height:(CGFloat)height;
 
+- (id<RACSignal>)rcl_sliceWithAmount:(CGFloat)amount fromEdge:(CGRectEdge)edge;
+- (id<RACSignal>)rcl_remainderWithAmount:(CGFloat)amount fromEdge:(CGRectEdge)edge;
+
 @end
