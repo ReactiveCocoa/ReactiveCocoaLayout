@@ -18,6 +18,7 @@
 		D0626A3E167944E900E951A5 /* RCLSignal.m in Sources */ = {isa = PBXBuildFile; fileRef = D0BB24E816787A01005E9371 /* RCLSignal.m */; };
 		D0626A3F167944EC00E951A5 /* EXTConcreteProtocol.m in Sources */ = {isa = PBXBuildFile; fileRef = D0BB268D16788866005E9371 /* EXTConcreteProtocol.m */; };
 		D0626A40167944EE00E951A5 /* EXTRuntimeExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = D0BB268F16788866005E9371 /* EXTRuntimeExtensions.m */; };
+		D0A1ABE0167963B700AC3278 /* ReactiveCocoaLayoutTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D0BB24971678772C005E9371 /* ReactiveCocoaLayoutTests.m */; };
 		D0BB24751678772C005E9371 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0BB24741678772C005E9371 /* Cocoa.framework */; };
 		D0BB247F1678772C005E9371 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = D0BB247D1678772C005E9371 /* InfoPlist.strings */; };
 		D0BB248B1678772C005E9371 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0BB248A1678772C005E9371 /* SenTestingKit.framework */; };
@@ -703,6 +704,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D0A1ABE0167963B700AC3278 /* ReactiveCocoaLayoutTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -841,7 +843,7 @@
 				GCC_PREFIX_HEADER = "ReactiveCocoaLayout/ReactiveCocoaLayout-Prefix.pch";
 				HEADER_SEARCH_PATHS = (
 					External/Archimedes,
-					External/ReactiveCocoa/ReactiveCocoaFramework,
+					"External/ReactiveCocoa/ReactiveCocoaFramework/**",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
@@ -909,7 +911,7 @@
 				GCC_PREFIX_HEADER = "ReactiveCocoaLayout/ReactiveCocoaLayout-Prefix.pch";
 				HEADER_SEARCH_PATHS = (
 					External/Archimedes,
-					External/ReactiveCocoa/ReactiveCocoaFramework,
+					"External/ReactiveCocoa/ReactiveCocoaFramework/**",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
@@ -929,7 +931,7 @@
 				GCC_PREFIX_HEADER = "ReactiveCocoaLayout/ReactiveCocoaLayout-Prefix.pch";
 				HEADER_SEARCH_PATHS = (
 					External/Archimedes,
-					External/ReactiveCocoa/ReactiveCocoaFramework,
+					"External/ReactiveCocoa/ReactiveCocoaFramework/**",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
