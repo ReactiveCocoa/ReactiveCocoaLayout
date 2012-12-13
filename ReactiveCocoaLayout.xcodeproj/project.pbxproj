@@ -786,6 +786,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = D0BB24B31678789A005E9371 /* iOS-StaticLibrary.xcconfig */;
 			buildSettings = {
+				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = NO;
 				DSTROOT = /tmp/ReactiveCocoaLayout.dst;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -795,6 +796,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = D0BB24B31678789A005E9371 /* iOS-StaticLibrary.xcconfig */;
 			buildSettings = {
+				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = NO;
 				DSTROOT = /tmp/ReactiveCocoaLayout.dst;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -876,6 +878,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = D0BB24B31678789A005E9371 /* iOS-StaticLibrary.xcconfig */;
 			buildSettings = {
+				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = NO;
 				DSTROOT = /tmp/ReactiveCocoaLayout.dst;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
