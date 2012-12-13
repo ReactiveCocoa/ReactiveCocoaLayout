@@ -8,6 +8,7 @@
 
 #import <ReactiveCocoa/ReactiveCocoa.h>
 
+#import "RACSignal+RCLSignalAdditions.h"
 #import "RCLSignal.h"
 
 #ifdef __IPHONE_OS_VERSION_MIN_REQUIRED

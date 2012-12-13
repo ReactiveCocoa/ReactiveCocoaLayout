@@ -34,7 +34,7 @@
 		D0BB25E01678847A005E9371 /* NSView+RCLObservationAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = D0BB25DE1678847A005E9371 /* NSView+RCLObservationAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D0BB25E11678847A005E9371 /* NSView+RCLObservationAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = D0BB25DF1678847A005E9371 /* NSView+RCLObservationAdditions.m */; };
 		D0BB25EB16788579005E9371 /* NSNotificationCenter+RACSupport.m in Sources */ = {isa = PBXBuildFile; fileRef = D0BB25E916788579005E9371 /* NSNotificationCenter+RACSupport.m */; };
-		D0BB2632167887C3005E9371 /* RACSignal+RCLSignalAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = D0BB2630167887C3005E9371 /* RACSignal+RCLSignalAdditions.h */; };
+		D0BB2632167887C3005E9371 /* RACSignal+RCLSignalAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = D0BB2630167887C3005E9371 /* RACSignal+RCLSignalAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D0BB2633167887C3005E9371 /* RACSignal+RCLSignalAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = D0BB2631167887C3005E9371 /* RACSignal+RCLSignalAdditions.m */; };
 		D0BB269016788866005E9371 /* EXTConcreteProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = D0BB268C16788866005E9371 /* EXTConcreteProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D0BB269116788866005E9371 /* EXTConcreteProtocol.m in Sources */ = {isa = PBXBuildFile; fileRef = D0BB268D16788866005E9371 /* EXTConcreteProtocol.m */; };
@@ -285,8 +285,8 @@
 			isa = PBXGroup;
 			children = (
 				D0BB24811678772C005E9371 /* ReactiveCocoaLayout.h */,
-				D0BB262F16788758005E9371 /* Protocols */,
-				D0BB24E6167879E6005E9371 /* Extensions */,
+				D0BB262F16788758005E9371 /* Signals */,
+				D0BB24E6167879E6005E9371 /* AppKit Extensions */,
 				D0BB247B1678772C005E9371 /* Supporting Files */,
 			);
 			path = ReactiveCocoaLayout;
@@ -406,15 +406,13 @@
 			name = libextobjc;
 			sourceTree = "<group>";
 		};
-		D0BB24E6167879E6005E9371 /* Extensions */ = {
+		D0BB24E6167879E6005E9371 /* AppKit Extensions */ = {
 			isa = PBXGroup;
 			children = (
 				D0BB25DE1678847A005E9371 /* NSView+RCLObservationAdditions.h */,
 				D0BB25DF1678847A005E9371 /* NSView+RCLObservationAdditions.m */,
-				D0BB2630167887C3005E9371 /* RACSignal+RCLSignalAdditions.h */,
-				D0BB2631167887C3005E9371 /* RACSignal+RCLSignalAdditions.m */,
 			);
-			name = Extensions;
+			name = "AppKit Extensions";
 			sourceTree = "<group>";
 		};
 		D0BB25721678809C005E9371 /* Products */ = {
@@ -437,13 +435,15 @@
 			name = RACExtensions;
 			sourceTree = "<group>";
 		};
-		D0BB262F16788758005E9371 /* Protocols */ = {
+		D0BB262F16788758005E9371 /* Signals */ = {
 			isa = PBXGroup;
 			children = (
 				D0BB24E716787A01005E9371 /* RCLSignal.h */,
 				D0BB24E816787A01005E9371 /* RCLSignal.m */,
+				D0BB2630167887C3005E9371 /* RACSignal+RCLSignalAdditions.h */,
+				D0BB2631167887C3005E9371 /* RACSignal+RCLSignalAdditions.m */,
 			);
-			name = Protocols;
+			name = Signals;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

@@ -69,6 +69,20 @@
 			remoteGlobalIDString = 88037F8215056328001A5B19;
 			remoteInfo = ReactiveCocoa;
 		};
+		D0FD5A521679E071003C3210 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D0BB251716787D0B005E9371 /* ReactiveCocoaLayout.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = D06269ED1679440C00E951A5;
+			remoteInfo = "ReactiveCocoaLayout iOS";
+		};
+		D0FD5A541679E071003C3210 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D0BB251716787D0B005E9371 /* ReactiveCocoaLayout.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = D06269FB1679440C00E951A5;
+			remoteInfo = "ReactiveCocoaLayout iOS Tests";
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
@@ -191,6 +205,8 @@
 			children = (
 				D0BB252C16787D0C005E9371 /* ReactiveCocoaLayout.framework */,
 				D0BB252E16787D0C005E9371 /* ReactiveCocoaLayoutTests.octest */,
+				D0FD5A531679E071003C3210 /* libReactiveCocoaLayout iOS.a */,
+				D0FD5A551679E071003C3210 /* ReactiveCocoaLayout iOS Tests.octest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -337,7 +353,8 @@
 		D0BB252E16787D0C005E9371 /* ReactiveCocoaLayoutTests.octest */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.cfbundle;
-			path = ReactiveCocoaLayoutTests.octest;
+			name = ReactiveCocoaLayoutTests.octest;
+			path = "ReactiveCocoaLayout Mac Tests.octest";
 			remoteRef = D0BB252D16787D0C005E9371 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
@@ -360,6 +377,20 @@
 			fileType = wrapper.cfbundle;
 			path = ReactiveCocoaTests.octest;
 			remoteRef = D0BB255316787D45005E9371 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		D0FD5A531679E071003C3210 /* libReactiveCocoaLayout iOS.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libReactiveCocoaLayout iOS.a";
+			remoteRef = D0FD5A521679E071003C3210 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		D0FD5A551679E071003C3210 /* ReactiveCocoaLayout iOS Tests.octest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = "ReactiveCocoaLayout iOS Tests.octest";
+			remoteRef = D0FD5A541679E071003C3210 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
