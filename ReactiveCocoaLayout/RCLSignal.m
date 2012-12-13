@@ -40,55 +40,55 @@
 
 - (id<RCLSignal>)size {
 	return [self map:^(NSValue *value) {
-		return [NSValue valueWithSize:value.rectValue.size];
+		return MEDBox(value.med_rectValue.size);
 	}];
 }
 
 - (id<RCLSignal>)origin {
 	return [self map:^(NSValue *value) {
-		return [NSValue valueWithPoint:value.rectValue.origin];
+		return MEDBox(value.med_rectValue.origin);
 	}];
 }
 
 - (id<RCLSignal>)width {
 	return [self map:^(NSValue *value) {
-		return @(value.sizeValue.width);
+		return @(value.med_sizeValue.width);
 	}];
 }
 
 - (id<RCLSignal>)height {
 	return [self map:^(NSValue *value) {
-		return @(value.sizeValue.height);
+		return @(value.med_sizeValue.height);
 	}];
 }
 
 - (id<RCLSignal>)x {
 	return [self map:^(NSValue *value) {
-		return @(value.pointValue.x);
+		return @(value.med_pointValue.x);
 	}];
 }
 
 - (id<RCLSignal>)y {
 	return [self map:^(NSValue *value) {
-		return @(value.pointValue.y);
+		return @(value.med_pointValue.y);
 	}];
 }
 
 - (id<RCLSignal>)insetWidth:(CGFloat)width height:(CGFloat)height {
 	return [self map:^(NSValue *value) {
-		return [NSValue valueWithRect:CGRectInset(value.rectValue, width, height)];
+		return MEDBox(CGRectInset(value.med_rectValue, width, height));
 	}];
 }
 
 - (id<RCLSignal>)sliceWithAmount:(CGFloat)amount fromEdge:(CGRectEdge)edge {
 	return [self map:^(NSValue *value) {
-		return [NSValue valueWithRect:CGRectSlice(value.rectValue, amount, edge)];
+		return MEDBox(CGRectSlice(value.med_rectValue, amount, edge));
 	}];
 }
 
 - (id<RCLSignal>)remainderWithAmount:(CGFloat)amount fromEdge:(CGRectEdge)edge {
 	return [self map:^(NSValue *value) {
-		return [NSValue valueWithRect:CGRectRemainder(value.rectValue, amount, edge)];
+		return MEDBox(CGRectRemainder(value.med_rectValue, amount, edge));
 	}];
 }
 
