@@ -8,5 +8,6 @@
 
 #import "RCLSignal.h"
 
+// Adds <RCLSignal> conformance to the RACSignal class.
 @interface RACSignal (RCLSignalAdditions) <RCLSignal>
 @end
