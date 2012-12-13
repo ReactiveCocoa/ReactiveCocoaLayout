@@ -12,7 +12,6 @@
 		D06269FF1679440D00E951A5 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0BB24791678772C005E9371 /* Foundation.framework */; };
 		D0626A021679440D00E951A5 /* libReactiveCocoaLayout iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D06269ED1679440C00E951A5 /* libReactiveCocoaLayout iOS.a */; };
 		D0626A3A167944CF00E951A5 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0626A39167944CF00E951A5 /* UIKit.framework */; };
-		D0626A3B167944DA00E951A5 /* libArchimedes.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D0BB257E1678809D005E9371 /* libArchimedes.a */; };
 		D0626A3C167944DA00E951A5 /* libReactiveCocoa-iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D0BB24CF16787923005E9371 /* libReactiveCocoa-iOS.a */; };
 		D0626A3D167944E800E951A5 /* RACSignal+RCLSignalAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = D0BB2631167887C3005E9371 /* RACSignal+RCLSignalAdditions.m */; };
 		D0626A3E167944E900E951A5 /* RCLSignal.m in Sources */ = {isa = PBXBuildFile; fileRef = D0BB24E816787A01005E9371 /* RCLSignal.m */; };
@@ -31,7 +30,7 @@
 		D0BB24E5167879DA005E9371 /* metamacros.h in Headers */ = {isa = PBXBuildFile; fileRef = D0BB24E0167879CA005E9371 /* metamacros.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D0BB24E916787A01005E9371 /* RCLSignal.h in Headers */ = {isa = PBXBuildFile; fileRef = D0BB24E716787A01005E9371 /* RCLSignal.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D0BB24EA16787A01005E9371 /* RCLSignal.m in Sources */ = {isa = PBXBuildFile; fileRef = D0BB24E816787A01005E9371 /* RCLSignal.m */; };
-		D0BB25A9167880BC005E9371 /* libArchimedes.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D0BB257E1678809D005E9371 /* libArchimedes.a */; };
+		D0BB25A9167880BC005E9371 /* libArchimedes-Mac.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D0BB257E1678809D005E9371 /* libArchimedes-Mac.a */; };
 		D0BB25E01678847A005E9371 /* NSView+RCLObservationAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = D0BB25DE1678847A005E9371 /* NSView+RCLObservationAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D0BB25E11678847A005E9371 /* NSView+RCLObservationAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = D0BB25DF1678847A005E9371 /* NSView+RCLObservationAdditions.m */; };
 		D0BB25EB16788579005E9371 /* NSNotificationCenter+RACSupport.m in Sources */ = {isa = PBXBuildFile; fileRef = D0BB25E916788579005E9371 /* NSNotificationCenter+RACSupport.m */; };
@@ -40,6 +39,7 @@
 		D0BB269016788866005E9371 /* EXTConcreteProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = D0BB268C16788866005E9371 /* EXTConcreteProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D0BB269116788866005E9371 /* EXTConcreteProtocol.m in Sources */ = {isa = PBXBuildFile; fileRef = D0BB268D16788866005E9371 /* EXTConcreteProtocol.m */; };
 		D0BB269316788866005E9371 /* EXTRuntimeExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = D0BB268F16788866005E9371 /* EXTRuntimeExtensions.m */; };
+		D0FD5A0C1679DFA8003C3210 /* libArchimedes-iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D0BB25821678809D005E9371 /* libArchimedes-iOS.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -203,7 +203,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D0626A3B167944DA00E951A5 /* libArchimedes.a in Frameworks */,
+				D0FD5A0C1679DFA8003C3210 /* libArchimedes-iOS.a in Frameworks */,
 				D0626A3C167944DA00E951A5 /* libReactiveCocoa-iOS.a in Frameworks */,
 				D0626A3A167944CF00E951A5 /* UIKit.framework in Frameworks */,
 				D06269EE1679440C00E951A5 /* Foundation.framework in Frameworks */,
@@ -224,7 +224,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D0BB25A9167880BC005E9371 /* libArchimedes.a in Frameworks */,
+				D0BB25A9167880BC005E9371 /* libArchimedes-Mac.a in Frameworks */,
 				D0BB24751678772C005E9371 /* Cocoa.framework in Frameworks */,
 				D0BB24DC16787938005E9371 /* ReactiveCocoa.framework in Frameworks */,
 			);
@@ -420,9 +420,9 @@
 		D0BB25721678809C005E9371 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				D0BB257E1678809D005E9371 /* libArchimedes.a */,
+				D0BB257E1678809D005E9371 /* libArchimedes-Mac.a */,
 				D0BB25801678809D005E9371 /* Archimedes Mac Tests.octest */,
-				D0BB25821678809D005E9371 /* libArchimedes.a */,
+				D0BB25821678809D005E9371 /* libArchimedes-iOS.a */,
 				D0BB25841678809D005E9371 /* Archimedes iOS Tests.octest */,
 			);
 			name = Products;
@@ -603,10 +603,10 @@
 			remoteRef = D0BB24D016787923005E9371 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		D0BB257E1678809D005E9371 /* libArchimedes.a */ = {
+		D0BB257E1678809D005E9371 /* libArchimedes-Mac.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
-			path = libArchimedes.a;
+			path = "libArchimedes-Mac.a";
 			remoteRef = D0BB257D1678809D005E9371 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
@@ -617,10 +617,10 @@
 			remoteRef = D0BB257F1678809D005E9371 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		D0BB25821678809D005E9371 /* libArchimedes.a */ = {
+		D0BB25821678809D005E9371 /* libArchimedes-iOS.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
-			path = libArchimedes.a;
+			path = "libArchimedes-iOS.a";
 			remoteRef = D0BB25811678809D005E9371 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
