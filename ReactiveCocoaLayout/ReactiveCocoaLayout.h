@@ -12,6 +12,7 @@
 #import "RCLSignal.h"
 
 #ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
+	#import "UIView+RCLObservationAdditions.h"
 #elif TARGET_OS_MAC
 	#import "NSView+RCLObservationAdditions.h"
 #endif

@@ -40,6 +40,7 @@
 		D0BB269116788866005E9371 /* EXTConcreteProtocol.m in Sources */ = {isa = PBXBuildFile; fileRef = D0BB268D16788866005E9371 /* EXTConcreteProtocol.m */; };
 		D0BB269316788866005E9371 /* EXTRuntimeExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = D0BB268F16788866005E9371 /* EXTRuntimeExtensions.m */; };
 		D0FD5A0C1679DFA8003C3210 /* libArchimedes-iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D0BB25821678809D005E9371 /* libArchimedes-iOS.a */; };
+		D0FD5A981679E7AF003C3210 /* UIView+RCLObservationAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = D0FD5A971679E7AF003C3210 /* UIView+RCLObservationAdditions.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -196,6 +197,8 @@
 		D0BB268D16788866005E9371 /* EXTConcreteProtocol.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EXTConcreteProtocol.m; path = External/ReactiveCocoa/ReactiveCocoaFramework/ReactiveCocoa/libextobjc/extobjc/EXTConcreteProtocol.m; sourceTree = "<group>"; };
 		D0BB268E16788866005E9371 /* EXTRuntimeExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EXTRuntimeExtensions.h; path = External/ReactiveCocoa/ReactiveCocoaFramework/ReactiveCocoa/libextobjc/extobjc/EXTRuntimeExtensions.h; sourceTree = "<group>"; };
 		D0BB268F16788866005E9371 /* EXTRuntimeExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EXTRuntimeExtensions.m; path = External/ReactiveCocoa/ReactiveCocoaFramework/ReactiveCocoa/libextobjc/extobjc/EXTRuntimeExtensions.m; sourceTree = "<group>"; };
+		D0FD5A961679E7AF003C3210 /* UIView+RCLObservationAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+RCLObservationAdditions.h"; sourceTree = "<group>"; };
+		D0FD5A971679E7AF003C3210 /* UIView+RCLObservationAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+RCLObservationAdditions.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -287,6 +290,7 @@
 				D0BB24811678772C005E9371 /* ReactiveCocoaLayout.h */,
 				D0BB262F16788758005E9371 /* Signals */,
 				D0BB24E6167879E6005E9371 /* AppKit Extensions */,
+				D0FD5A951679E758003C3210 /* UIKit Extensions */,
 				D0BB247B1678772C005E9371 /* Supporting Files */,
 			);
 			path = ReactiveCocoaLayout;
@@ -444,6 +448,15 @@
 				D0BB2631167887C3005E9371 /* RACSignal+RCLSignalAdditions.m */,
 			);
 			name = Signals;
+			sourceTree = "<group>";
+		};
+		D0FD5A951679E758003C3210 /* UIKit Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				D0FD5A961679E7AF003C3210 /* UIView+RCLObservationAdditions.h */,
+				D0FD5A971679E7AF003C3210 /* UIView+RCLObservationAdditions.m */,
+			);
+			name = "UIKit Extensions";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -697,6 +710,7 @@
 				D0626A3E167944E900E951A5 /* RCLSignal.m in Sources */,
 				D0626A3F167944EC00E951A5 /* EXTConcreteProtocol.m in Sources */,
 				D0626A40167944EE00E951A5 /* EXTRuntimeExtensions.m in Sources */,
+				D0FD5A981679E7AF003C3210 /* UIView+RCLObservationAdditions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
