@@ -17,8 +17,8 @@ RCL intends to offer the following advantages over Auto Layout:
  * **Top-down layout.** A view's layout doesn't interact with its superview's
    layout unless the former's size or frame is explicitly incorporated in the
    latter's layout chain, creating a unidirectional relationship that leads to
-   better encapsulation and less complexity. Bidirectional relationships are
-   still possible, but must be made explicit.
+   better encapsulation (no global priorities!) and less complexity.
+   Bidirectional relationships are still possible, but must be made explicit.
  * **Conditional layouts at runtime.** RCL is built on the full power
    of [ReactiveCocoa](https://github.com/github/ReactiveCocoa), and signals can
    be composed to dynamically disable and re-enable entire layout chains (like
