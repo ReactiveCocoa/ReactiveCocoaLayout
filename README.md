@@ -28,6 +28,11 @@ RCL intends to offer the following advantages over Auto Layout:
    constants anywhere.
    _([Planned](https://github.com/github/ReactiveCocoaLayout/issues/3), but not
    yet implemented.)_
+ * **Incremental use.** RCL can be used internally in views without any
+   implementation details leaking out. Callers using Auto Layout or struts and
+   springs can incorporate reactive views without knowing or caring how they
+   perform layout internally. No UI-wide slowdowns or behavior changes just from
+   using RCL!
  * **Extensibility.** RCL is made up of many independent bits of functionality
    unified into a framework. It's easy to extend it with your own functionality
    if you want it to behave differently.
