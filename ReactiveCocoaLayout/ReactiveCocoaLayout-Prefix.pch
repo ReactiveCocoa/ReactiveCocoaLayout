@@ -5,6 +5,7 @@
 #ifdef __OBJC__
 	#import <Foundation/Foundation.h>
 	#import <CoreGraphics/CoreGraphics.h>
+	#import <QuartzCore/QuartzCore.h>
 
 	#import <Archimedes/Archimedes.h>
 	#import <ReactiveCocoa/ReactiveCocoa.h>

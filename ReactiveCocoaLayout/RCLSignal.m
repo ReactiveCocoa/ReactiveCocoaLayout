@@ -8,6 +8,69 @@
 
 #import "RCLSignal.h"
 
+// Animates the given signal.
+//
+// self        - The signal to animate.
+// durationPtr - If not NULL, an explicit duration to specify when starting the
+//				 animation.
+// curve       - The animation curve to use.
+static id<RCLSignal> animateWithDuration (id<RCLSignal> self, NSTimeInterval *durationPtr, RCLAnimationCurve curve) {
+	return (id)[RACSignal createSignal:^(id<RACSubscriber> subscriber) {
+		return [self subscribeNext:^(id value) {
+			#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
+				// This seems like a saner default setting for a layout-triggered
+				// animation.
+				UIViewAnimationOptions options = curve | UIViewAnimationOptionLayoutSubviews;
+				if (curve != RCLAnimationCurveDefault) options |= UIViewAnimationOptionOverrideInheritedCurve;
+
+				NSTimeInterval duration = 0.2;
+				if (durationPtr != NULL) {
+					duration = *durationPtr;
+					options |= UIViewAnimationOptionOverrideInheritedDuration;
+				}
+
+				[UIView animateWithDuration:duration delay:0 options:options animations:^{
+					[subscriber sendNext:value];
+				} completion:NULL];
+			#elif TARGET_OS_MAC
+				[NSAnimationContext beginGrouping];
+				if (durationPtr != NULL) NSAnimationContext.currentContext.duration = *durationPtr;
+
+				switch (curve) {
+					case RCLAnimationCurveEaseInOut:
+						NSAnimationContext.currentContext.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+						break;
+
+					case RCLAnimationCurveEaseIn:
+						NSAnimationContext.currentContext.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseIn];
+						break;
+
+					case RCLAnimationCurveEaseOut:
+						NSAnimationContext.currentContext.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut];
+						break;
+
+					case RCLAnimationCurveLinear:
+						NSAnimationContext.currentContext.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
+						break;
+
+					case RCLAnimationCurveDefault:
+						break;
+
+					default:
+						NSCAssert(NO, @"Unrecognized animation curve: %i", (int)curve);
+				}
+
+				[subscriber sendNext:value];
+				[NSAnimationContext endGrouping];
+			#endif
+		} error:^(NSError *error) {
+			[subscriber sendError:error];
+		} completed:^{
+			[subscriber sendCompleted];
+		}];
+	}];
+}
+
 @concreteprotocol(RCLSignal)
 
 #pragma mark RACStream
@@ -98,6 +161,18 @@
 
 - (RACTuple *)divideWithAmount:(CGFloat)amount padding:(CGFloat)padding fromEdge:(CGRectEdge)edge {
 	return [RACTuple tupleWithObjects:[self sliceWithAmount:amount fromEdge:edge], [self remainderWithAmount:fmax(0, amount + padding) fromEdge:edge], nil];
+}
+
+- (id<RCLSignal>)animate {
+	return animateWithDuration(self, NULL, RCLAnimationCurveDefault);
+}
+
+- (id<RCLSignal>)animateWithDuration:(NSTimeInterval)duration {
+	return [self animateWithDuration:duration curve:RCLAnimationCurveDefault];
+}
+
+- (id<RCLSignal>)animateWithDuration:(NSTimeInterval)duration curve:(RCLAnimationCurve)curve {
+	return animateWithDuration(self, &duration, RCLAnimationCurveDefault);
 }
 
 @end

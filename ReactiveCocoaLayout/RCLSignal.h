@@ -8,6 +8,35 @@
 
 #import "EXTConcreteProtocol.h"
 
+// Defines the curve (timing function) for an animation.
+//
+// RCLAnimationCurveDefault   - The default or inherited animation curve.
+// RCLAnimationCurveEaseInOut - Begins the animation slowly, speeds up in the
+//                              middle, and then slows to a stop.
+// RCLAnimationCurveEaseIn    - Begins the animation slowly and speeds up to
+//                              a stop.
+// RCLAnimationCurveEaseOut   - Begins the animation quickly and slows down to
+//                              a stop.
+// RCLAnimationCurveLinear    - Animates with the same pace over the duration of
+//                              the animation.
+#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
+    typedef enum : UIViewAnimationOptions {
+        RCLAnimationCurveDefault = 0,
+        RCLAnimationCurveEaseInOut = UIViewAnimationOptionCurveEaseInOut,
+        RCLAnimationCurveEaseIn = UIViewAnimationOptionCurveEaseIn,
+        RCLAnimationCurveEaseOut = UIViewAnimationOptionCurveEaseOut,
+        RCLAnimationCurveLinear = UIViewAnimationOptionCurveLinear
+    } RCLAnimationCurve;
+#elif TARGET_OS_MAC
+    typedef enum : NSUInteger {
+        RCLAnimationCurveDefault,
+        RCLAnimationCurveEaseInOut,
+        RCLAnimationCurveEaseIn,
+        RCLAnimationCurveEaseOut,
+        RCLAnimationCurveLinear
+    } RCLAnimationCurve;
+#endif
+
 // A concrete protocol representing a geometric signal.
 //
 // When conforming to this protocol in a custom class, only `@required` methods
@@ -96,5 +125,22 @@
 // Returns a RACTuple containing two signals, which will send the slices and
 // remainders, respectively.
 - (RACTuple *)divideWithAmount:(CGFloat)sliceAmount padding:(CGFloat)padding fromEdge:(CGRectEdge)edge;
+
+// Wraps every next in an animation block, using the default duration and
+// animation curve.
+//
+// Binding the resulting signal to a view property will result in updates to
+// that property (that originate from the signal) being automatically animated.
+- (id<RCLSignal>)animate;
+
+// Invokes -animateWithDuration:curve: with a curve of RCLAnimationCurveDefault.
+- (id<RCLSignal>)animateWithDuration:(NSTimeInterval)duration;
+
+// Wraps every next in an animation block of the given duration and with the
+// given animation curve.
+//
+// Binding the resulting signal to a view property will result in updates to
+// that property (that originate from the signal) being automatically animated.
+- (id<RCLSignal>)animateWithDuration:(NSTimeInterval)duration curve:(RCLAnimationCurve)curve;
 
 @end
