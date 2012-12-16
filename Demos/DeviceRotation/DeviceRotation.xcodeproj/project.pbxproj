@@ -382,7 +382,6 @@
 		D0FD5B081679E988003C3210 /* ReactiveCocoaLayoutTests.octest */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.cfbundle;
-			name = ReactiveCocoaLayoutTests.octest;
 			path = "ReactiveCocoaLayout Mac Tests.octest";
 			remoteRef = D0FD5B071679E988003C3210 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
