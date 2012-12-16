@@ -48,9 +48,8 @@
 	// Don't animate setting the initial frame.
 	RAC(nameField, frame) = [nameTuple[1] take:1];
 
-	// Can't lift this until https://github.com/github/ReactiveCocoa/issues/186
-	// is implemented.
 	[[nameTuple[1] skip:1] subscribeNext:^(NSValue *frame) {
+		// Can't lift this because lolappkit.
 		[nameField.animator setFrame:frame.med_rectValue];
 	}];
 
