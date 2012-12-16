@@ -21,8 +21,8 @@
 		D06C9E49167D888100276090 /* libSpecta.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D06C9E3D167D886A00276090 /* libSpecta.a */; };
 		D06C9E4E167D888B00276090 /* libExpecta-iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D06C9E33167D886A00276090 /* libExpecta-iOS.a */; };
 		D06C9E4F167D888B00276090 /* libSpecta-iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D06C9E3F167D886A00276090 /* libSpecta-iOS.a */; };
-		D06C9E53167D896000276090 /* RACSignalAdditionsSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = D06C9E52167D896000276090 /* RACSignalAdditionsSpec.m */; };
-		D06C9E54167D896000276090 /* RACSignalAdditionsSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = D06C9E52167D896000276090 /* RACSignalAdditionsSpec.m */; };
+		D06C9E53167D896000276090 /* RACSignalRCLSignalAdditionsSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = D06C9E52167D896000276090 /* RACSignalRCLSignalAdditionsSpec.m */; };
+		D06C9E54167D896000276090 /* RACSignalRCLSignalAdditionsSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = D06C9E52167D896000276090 /* RACSignalRCLSignalAdditionsSpec.m */; };
 		D06C9E55167D89B500276090 /* ReactiveCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0BB24CD16787923005E9371 /* ReactiveCocoa.framework */; };
 		D06C9E57167D89BE00276090 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0626A39167944CF00E951A5 /* UIKit.framework */; };
 		D06C9E59167D89DB00276090 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D06C9E58167D89DB00276090 /* CoreGraphics.framework */; };
@@ -247,7 +247,7 @@
 		D06C9E26167D886A00276090 /* Expecta.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Expecta.xcodeproj; path = External/ReactiveCocoa/external/expecta/Expecta.xcodeproj; sourceTree = "<group>"; };
 		D06C9E29167D886A00276090 /* Specta.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Specta.xcodeproj; path = External/ReactiveCocoa/external/specta/Specta.xcodeproj; sourceTree = "<group>"; };
 		D06C9E50167D88B000276090 /* ReactiveCocoaLayoutTests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ReactiveCocoaLayoutTests-Prefix.pch"; sourceTree = "<group>"; };
-		D06C9E52167D896000276090 /* RACSignalAdditionsSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RACSignalAdditionsSpec.m; sourceTree = "<group>"; };
+		D06C9E52167D896000276090 /* RACSignalRCLSignalAdditionsSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RACSignalRCLSignalAdditionsSpec.m; sourceTree = "<group>"; };
 		D06C9E58167D89DB00276090 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.0.sdk/System/Library/Frameworks/CoreGraphics.framework; sourceTree = DEVELOPER_DIR; };
 		D0BB24711678772C005E9371 /* ReactiveCocoaLayout.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ReactiveCocoaLayout.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D0BB24741678772C005E9371 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
@@ -372,7 +372,7 @@
 		D06C9E51167D894200276090 /* Specs */ = {
 			isa = PBXGroup;
 			children = (
-				D06C9E52167D896000276090 /* RACSignalAdditionsSpec.m */,
+				D06C9E52167D896000276090 /* RACSignalRCLSignalAdditionsSpec.m */,
 			);
 			name = Specs;
 			sourceTree = "<group>";
@@ -920,7 +920,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D06C9E54167D896000276090 /* RACSignalAdditionsSpec.m in Sources */,
+				D06C9E54167D896000276090 /* RACSignalRCLSignalAdditionsSpec.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -941,7 +941,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D06C9E53167D896000276090 /* RACSignalAdditionsSpec.m in Sources */,
+				D06C9E53167D896000276090 /* RACSignalRCLSignalAdditionsSpec.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
