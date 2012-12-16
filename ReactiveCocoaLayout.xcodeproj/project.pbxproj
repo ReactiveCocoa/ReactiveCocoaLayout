@@ -26,6 +26,7 @@
 		D06C9E55167D89B500276090 /* ReactiveCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0BB24CD16787923005E9371 /* ReactiveCocoa.framework */; };
 		D06C9E57167D89BE00276090 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0626A39167944CF00E951A5 /* UIKit.framework */; };
 		D06C9E59167D89DB00276090 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D06C9E58167D89DB00276090 /* CoreGraphics.framework */; };
+		D06C9E5B167D8A9A00276090 /* NSViewRCLObservationAdditionsSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = D06C9E5A167D8A9A00276090 /* NSViewRCLObservationAdditionsSpec.m */; };
 		D0BB24751678772C005E9371 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0BB24741678772C005E9371 /* Cocoa.framework */; };
 		D0BB247F1678772C005E9371 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = D0BB247D1678772C005E9371 /* InfoPlist.strings */; };
 		D0BB248B1678772C005E9371 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0BB248A1678772C005E9371 /* SenTestingKit.framework */; };
@@ -249,6 +250,7 @@
 		D06C9E50167D88B000276090 /* ReactiveCocoaLayoutTests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ReactiveCocoaLayoutTests-Prefix.pch"; sourceTree = "<group>"; };
 		D06C9E52167D896000276090 /* RACSignalRCLSignalAdditionsSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RACSignalRCLSignalAdditionsSpec.m; sourceTree = "<group>"; };
 		D06C9E58167D89DB00276090 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.0.sdk/System/Library/Frameworks/CoreGraphics.framework; sourceTree = DEVELOPER_DIR; };
+		D06C9E5A167D8A9A00276090 /* NSViewRCLObservationAdditionsSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSViewRCLObservationAdditionsSpec.m; sourceTree = "<group>"; };
 		D0BB24711678772C005E9371 /* ReactiveCocoaLayout.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ReactiveCocoaLayout.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D0BB24741678772C005E9371 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		D0BB24771678772C005E9371 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -372,6 +374,7 @@
 		D06C9E51167D894200276090 /* Specs */ = {
 			isa = PBXGroup;
 			children = (
+				D06C9E5A167D8A9A00276090 /* NSViewRCLObservationAdditionsSpec.m */,
 				D06C9E52167D896000276090 /* RACSignalRCLSignalAdditionsSpec.m */,
 			);
 			name = Specs;
@@ -942,6 +945,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D06C9E53167D896000276090 /* RACSignalRCLSignalAdditionsSpec.m in Sources */,
+				D06C9E5B167D8A9A00276090 /* NSViewRCLObservationAdditionsSpec.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

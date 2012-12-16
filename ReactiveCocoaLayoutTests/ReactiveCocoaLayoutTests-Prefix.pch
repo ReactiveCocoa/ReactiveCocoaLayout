@@ -9,6 +9,8 @@
 #import <Foundation/Foundation.h>
 #import <CoreGraphics/CoreGraphics.h>
 
+#import <Archimedes/Archimedes.h>
+#import <ReactiveCocoa/ReactiveCocoa.h>
 #import <ReactiveCocoaLayout/ReactiveCocoaLayout.h>
 
 #define EXP_SHORTHAND
