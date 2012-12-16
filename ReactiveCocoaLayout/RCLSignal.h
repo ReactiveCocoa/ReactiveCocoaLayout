@@ -131,16 +131,17 @@
 //
 // Binding the resulting signal to a view property will result in updates to
 // that property (that originate from the signal) being automatically animated.
+//
+// Returns a signal which animates the sending of its values. Deferring the
+// signal's events or having them delivered on another thread is considered
+// undefined behavior.
 - (id<RCLSignal>)animate;
 
 // Invokes -animateWithDuration:curve: with a curve of RCLAnimationCurveDefault.
 - (id<RCLSignal>)animateWithDuration:(NSTimeInterval)duration;
 
-// Wraps every next in an animation block of the given duration and with the
-// given animation curve.
-//
-// Binding the resulting signal to a view property will result in updates to
-// that property (that originate from the signal) being automatically animated.
+// Behaves like -animate, but uses the given duration and animation curve
+// instead of the defaults.
 - (id<RCLSignal>)animateWithDuration:(NSTimeInterval)duration curve:(RCLAnimationCurve)curve;
 
 @end
