@@ -15,26 +15,31 @@
 //				 animation.
 // curve       - The animation curve to use.
 static id<RCLSignal> animateWithDuration (id<RCLSignal> self, NSTimeInterval *durationPtr, RCLAnimationCurve curve) {
+	#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
+		// This seems like a saner default setting for a layout-triggered
+		// animation.
+		UIViewAnimationOptions options = curve | UIViewAnimationOptionLayoutSubviews;
+		if (curve != RCLAnimationCurveDefault) options |= UIViewAnimationOptionOverrideInheritedCurve;
+
+		NSTimeInterval duration = 0.2;
+		if (durationPtr != NULL) {
+			duration = *durationPtr;
+			options |= UIViewAnimationOptionOverrideInheritedDuration;
+		}
+	#elif TARGET_OS_MAC
+		BOOL hasDuration = (durationPtr != NULL);
+		NSTimeInterval duration = (hasDuration ? *durationPtr : 0);
+	#endif
+
 	return (id)[RACSignal createSignal:^(id<RACSubscriber> subscriber) {
 		return [self subscribeNext:^(id value) {
 			#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
-				// This seems like a saner default setting for a layout-triggered
-				// animation.
-				UIViewAnimationOptions options = curve | UIViewAnimationOptionLayoutSubviews;
-				if (curve != RCLAnimationCurveDefault) options |= UIViewAnimationOptionOverrideInheritedCurve;
-
-				NSTimeInterval duration = 0.2;
-				if (durationPtr != NULL) {
-					duration = *durationPtr;
-					options |= UIViewAnimationOptionOverrideInheritedDuration;
-				}
-
 				[UIView animateWithDuration:duration delay:0 options:options animations:^{
 					[subscriber sendNext:value];
 				} completion:NULL];
 			#elif TARGET_OS_MAC
 				[NSAnimationContext beginGrouping];
-				if (durationPtr != NULL) NSAnimationContext.currentContext.duration = *durationPtr;
+				if (hasDuration) NSAnimationContext.currentContext.duration = duration;
 
 				switch (curve) {
 					case RCLAnimationCurveEaseInOut:
