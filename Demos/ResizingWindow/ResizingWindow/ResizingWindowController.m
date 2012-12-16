@@ -42,9 +42,17 @@
 		insetWidth:32 height:16]
 		divideWithAmount:CGRectGetHeight(nameField.bounds) padding:8 fromEdge:CGRectMaxYEdge];
 
-	RACTuple *nameTuple = [nameRect divideWithAmount:labelWidth padding:8 fromEdge:CGRectMinXEdge];
+	RACTuple *nameTuple = [[nameRect animateWithDuration:0.5] divideWithAmount:labelWidth padding:8 fromEdge:CGRectMinXEdge];
 	RAC(nameLabel, frame) = nameTuple[0];
-	RAC(nameField, frame) = nameTuple[1];
+
+	// Don't animate setting the initial frame.
+	RAC(nameField, frame) = [nameTuple[1] take:1];
+
+	// Can't lift this until https://github.com/github/ReactiveCocoa/issues/186
+	// is implemented.
+	[[nameTuple[1] skip:1] subscribeNext:^(NSValue *frame) {
+		[nameField.animator setFrame:frame.med_rectValue];
+	}];
 
 	RACTuple *emailTuple = [[emailRect
 		sliceWithAmount:CGRectGetHeight(emailField.bounds) fromEdge:CGRectMaxYEdge]
