@@ -26,8 +26,6 @@ RCL intends to offer the following advantages over Auto Layout:
  * **Implicit animations.** To animate the setting of a view's frame, simply add
    an animation method into the signal chain. No need to explicitly animate
    constants anywhere.
-   _([Planned](https://github.com/github/ReactiveCocoaLayout/issues/3), but not
-   yet implemented.)_
  * **Incremental use.** RCL can be used internally in views without any
    implementation details leaking out. Callers using Auto Layout or struts and
    springs can incorporate reactive views without knowing or caring how they
