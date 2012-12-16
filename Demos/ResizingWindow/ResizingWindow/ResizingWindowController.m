@@ -73,6 +73,10 @@
 	label.stringValue = string;
 	[label sizeToFit];
 
+	// We don't actually use autoresizing to move these views, but rather to
+	// keep them pinned in the absence of any movement.
+	label.autoresizingMask = NSViewMaxXMargin | NSViewMinYMargin;
+
 	[self.contentView addSubview:label];
 	return label;
 }
@@ -81,6 +85,10 @@
 	NSTextField *textField = [[NSTextField alloc] initWithFrame:NSZeroRect];
 	textField.stringValue = string;
 	[textField sizeToFit];
+
+	// We don't actually use autoresizing to move these views, but rather to
+	// keep them pinned in the absence of any movement.
+	textField.autoresizingMask = NSViewMaxXMargin | NSViewMinYMargin;
 
 	[self.contentView addSubview:textField];
 	return textField;
