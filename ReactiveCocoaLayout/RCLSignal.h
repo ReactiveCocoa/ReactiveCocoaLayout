@@ -47,15 +47,16 @@
 // Returns a signal of CGFloat values.
 - (id<RCLSignal>)y;
 
-// Insets each CGRect in the signal by the given width and height.
+// Insets each CGRect by the number of points sent from the given width and
+// height signals.
 //
-// width  - The number of points to remove from both the left and right sides of
-//          the rectangle.
-// height - The number of points to remove from both the top and bottom sides of
-//          the rectangle.
+// widthSignal  - A signal of CGFloat values, representing the number of points
+//                to remove from both the left and right sides of the rectangle.
+// heightSignal - A signal of CGFloat values, representing the number of points
+//                to remove from both the top and bottom sides of the rectangle.
 //
 // Returns a signal of new, inset CGRect values.
-- (id<RCLSignal>)insetWidth:(CGFloat)width height:(CGFloat)height;
+- (id<RCLSignal>)insetWidth:(id<RACSignal>)widthSignal height:(id<RACSignal>)heightSignal;
 
 // Trims each CGRect to only `amount` points in size, as measured starting from
 // the given edge.

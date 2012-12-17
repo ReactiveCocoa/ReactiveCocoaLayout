@@ -74,9 +74,14 @@
 	}];
 }
 
-- (id<RCLSignal>)insetWidth:(CGFloat)width height:(CGFloat)height {
-	return [self map:^(NSValue *value) {
-		return MEDBox(CGRectInset(value.med_rectValue, width, height));
+- (id)insetWidth:(id<RACSignal>)widthSignal height:(id<RACSignal>)heightSignal {
+	NSParameterAssert(widthSignal != nil);
+	NSParameterAssert(heightSignal != nil);
+
+	// Subscribe to self last so that we don't skip any values sent
+	// immediately. See https://github.com/github/ReactiveCocoa/issues/192.
+	return [RACSignal combineLatest:@[ widthSignal, heightSignal, self ] reduce:^(NSNumber *width, NSNumber *height, NSValue *rect) {
+		return MEDBox(CGRectInset(rect.med_rectValue, width.doubleValue, height.doubleValue));
 	}];
 }
 

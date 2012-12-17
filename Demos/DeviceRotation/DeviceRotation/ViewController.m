@@ -41,7 +41,7 @@
 
 	@weakify(self);
 
-	id<RCLSignal> insetBounds = [self.view.rcl_boundsSignal insetWidth:16 height:16];
+	id<RCLSignal> insetBounds = [self.view.rcl_boundsSignal insetWidth:[RACSignal return:@16] height:[RACSignal return:@16]];
 
 	self.nameLabel = [[UILabel alloc] initWithFrame:CGRectZero];
 	[self.view addSubview:self.nameLabel];

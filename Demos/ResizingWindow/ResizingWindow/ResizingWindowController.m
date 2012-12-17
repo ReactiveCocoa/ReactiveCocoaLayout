@@ -39,7 +39,7 @@
 	NSTextField *emailField = [self textFieldWithString:@""];
 
 	RACTupleUnpack(id<RCLSignal> nameRect, id<RCLSignal> emailRect) = [[self.contentView.rcl_frameSignal
-		insetWidth:32 height:16]
+		insetWidth:[RACSignal return:@32] height:[RACSignal return:@16]]
 		divideWithAmount:CGRectGetHeight(nameField.bounds) padding:8 fromEdge:CGRectMaxYEdge];
 
 	RACTuple *nameTuple = [nameRect divideWithAmount:labelWidth padding:8 fromEdge:CGRectMinXEdge];

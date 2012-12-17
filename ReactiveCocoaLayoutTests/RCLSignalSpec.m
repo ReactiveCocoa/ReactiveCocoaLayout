@@ -66,7 +66,7 @@ describe(@"signal of CGRects", ^{
 	});
 
 	it(@"should inset", ^{
-		id<RCLSignal> result = [signal insetWidth:3 height:5];
+		id<RCLSignal> result = [signal insetWidth:[RACSignal return:@3] height:[RACSignal return:@5]];
 		NSArray *expectedRects = @[
 			MEDBox(CGRectMake(13, 15, 14, 10)),
 			MEDBox(CGRectMake(13, 25, 24, 30)),
