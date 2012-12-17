@@ -56,6 +56,21 @@ sharedExamplesFor(ViewExamples, ^{
 		view.frame = newFrame;
 		expect(lastValue.med_rectValue).to.equal(newFrame);
 	});
+
+	it(@"should send values on rcl_intrinsicContentSizeSignal", ^{
+		__block NSValue *lastValue = nil;
+		[view.rcl_intrinsicContentSizeSignal subscribeNext:^(NSValue *value) {
+			expect(value).to.beKindOf(NSValue.class);
+			lastValue = value;
+		}];
+
+		expect(lastValue).notTo.beNil();
+		expect(lastValue.med_sizeValue).to.equal(CGSizeZero);
+
+		CGSize newSize = CGSizeMake(5, 10);
+		[view invalidateAndSetIntrinsicContentSize:newSize];
+		expect(lastValue.med_sizeValue).to.equal(newSize);
+	});
 });
 
 SharedExampleGroupsEnd

@@ -8,6 +8,25 @@
 
 #import "TestView.h"
 
+@interface TestView ()
+
+@property (nonatomic, assign) CGSize size;
+
+@end
+
 @implementation TestView
+
+#pragma mark Test API
+
+- (void)invalidateAndSetIntrinsicContentSize:(CGSize)size {
+	self.size = size;
+	[self invalidateIntrinsicContentSize];
+}
+
+#pragma mark Auto Layout
+
+- (CGSize)intrinsicContentSize {
+	return self.size;
+}
 
 @end

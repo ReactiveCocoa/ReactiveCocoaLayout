@@ -18,6 +18,6 @@
 
 #endif
 
-
+- (void)invalidateAndSetIntrinsicContentSize:(CGSize)size;
 
 @end
