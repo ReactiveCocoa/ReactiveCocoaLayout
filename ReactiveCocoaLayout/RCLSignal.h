@@ -17,10 +17,25 @@
 @protocol RCLSignal <RACSignal>
 @concrete
 
+// Constructs rects from the given X, Y, width, and height signals.
+//
+// Returns a signal of CGRect values.
++ (id<RCLSignal>)rectsWithX:(id<RACSignal>)xSignal Y:(id<RACSignal>)ySignal width:(id<RACSignal>)widthSignal height:(id<RACSignal>)heightSignal;
+
+// Constructs rects from the given origin and size signals.
+//
+// Returns a signal of CGRect values.
++ (id<RCLSignal>)rectsWithOrigin:(id<RACSignal>)originSignal size:(id<RACSignal>)sizeSignal;
+
 // Maps CGRect values to their `size` fields.
 //
 // Returns a signal of CGSize values.
 - (id<RCLSignal>)size;
+
+// Constructs sizes from the given width and height signals.
+//
+// Returns a signal of CGSize values.
++ (id<RCLSignal>)sizesWithWidth:(id<RACSignal>)widthSignal height:(id<RACSignal>)heightSignal;
 
 // Maps CGSize values to their `width` fields.
 //
@@ -36,6 +51,11 @@
 //
 // Returns a signal of CGPoint values.
 - (id<RCLSignal>)origin;
+
+// Constructs points from the given X and Y signals.
+//
+// Returns a signal of CGPoint values.
++ (id<RCLSignal>)pointsWithX:(id<RACSignal>)xSignal Y:(id<RACSignal>)ySignal;
 
 // Maps CGPoint values to their `x` fields.
 //
