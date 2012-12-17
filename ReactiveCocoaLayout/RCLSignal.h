@@ -58,44 +58,49 @@
 // Returns a signal of new, inset CGRect values.
 - (id<RCLSignal>)insetWidth:(id<RACSignal>)widthSignal height:(id<RACSignal>)heightSignal;
 
-// Trims each CGRect to only `amount` points in size, as measured starting from
-// the given edge.
+// Trims each CGRect to the number of points sent from `amountSignal`, as
+// measured starting from the given edge.
 //
-// amount - The number of points to include in the slice. If greater than the
-//          size of a given rectangle, the result will be the entire rectangle.
-// edge   - The edge from which to start including points in the slice.
+// amountSignal - A signal of CGFloat values, representing the number of points
+//                to include in the slice. If greater than the size of a given
+//                rectangle, the result will be the entire rectangle.
+// edge         - The edge from which to start including points in the slice.
 //
 // Returns a signal of CGRect slices.
-- (id<RCLSignal>)sliceWithAmount:(CGFloat)amount fromEdge:(CGRectEdge)edge;
+- (id<RCLSignal>)sliceWithAmount:(id<RACSignal>)amountSignal fromEdge:(CGRectEdge)edge;
 
-// Trims `amount` points from the given edge of each CGRect.
+// From the given edge of each CGRect, trims the number of points sent from
+// `amountSignal`.
 //
-// amount - The number of points to remove. If greater than the size of a given
-//          rectangle, the result will be CGRectZero.
-// edge   - The edge from which to trim.
+// amountSignal - A signal of CGFloat values, representing the number of points
+//                to remove. If greater than the size of a given rectangle, the
+//                result will be CGRectZero.
+// edge         - The edge from which to trim.
 //
 // Returns a signal of CGRect remainders.
-- (id<RCLSignal>)remainderAfterSlicingAmount:(CGFloat)amount fromEdge:(CGRectEdge)edge;
+- (id<RCLSignal>)remainderAfterSlicingAmount:(id<RACSignal>)amountSignal fromEdge:(CGRectEdge)edge;
 
-// Invokes -divideWithAmount:padding:fromEdge: with a `padding` value of 0.
-- (RACTuple *)divideWithAmount:(CGFloat)amount fromEdge:(CGRectEdge)edge;
+// Invokes -divideWithAmount:padding:fromEdge: with a constant padding of 0.
+- (RACTuple *)divideWithAmount:(id<RACSignal>)sliceAmountSignal fromEdge:(CGRectEdge)edge;
 
-// Divides each CGRect into two component rectangles, skipping the given amount
-// of padding between them.
+// Divides each CGRect into two component rectangles, skipping an amount of
+// padding between them.
 //
-// sliceAmount - The number of points to include in the slice rectangle,
-//               starting from `edge`. If greater than the size of a given
-//               rectangle, the slice will be the entire rectangle, and the
-//               remainder will be CGRectZero.
-// padding     - The number of points of padding to omit between the slice and
-//               remainder rectangles. If `padding + sliceAmount` is greater
-//               than or equal to the size of a given rectangle, the remainder
-//               will be CGRectZero.
-// edge        - The edge from which division begins, proceeding toward the
-//               opposite edge.
+// sliceAmountSignal - A signal of CGFloat values, representing the number of
+//                     points to include in the slice rectangle, starting from
+//                     `edge`. If greater than the size of a given rectangle,
+//                     the slice will be the entire rectangle, and the remainder
+//                     will be CGRectZero.
+// paddingSignal     - A signal of CGFloat values, representing the number of
+//                     points of padding to omit between the slice and remainder
+//                     rectangles. If the padding plus the slice amount is
+//                     greater than or equal to the size of a given rectangle,
+//                     the remainder will be CGRectZero. 
+// edge              - The edge from which division begins, proceeding toward the
+//                     opposite edge.
 //
 // Returns a RACTuple containing two signals, which will send the slices and
 // remainders, respectively.
-- (RACTuple *)divideWithAmount:(CGFloat)sliceAmount padding:(CGFloat)padding fromEdge:(CGRectEdge)edge;
+- (RACTuple *)divideWithAmount:(id<RACSignal>)sliceAmountSignal padding:(id<RACSignal>)paddingSignal fromEdge:(CGRectEdge)edge;
 
 @end

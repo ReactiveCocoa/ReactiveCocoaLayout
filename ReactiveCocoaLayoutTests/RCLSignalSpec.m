@@ -77,7 +77,7 @@ describe(@"signal of CGRects", ^{
 	});
 
 	it(@"should slice", ^{
-		id<RCLSignal> result = [signal sliceWithAmount:5 fromEdge:CGRectMinXEdge];
+		id<RCLSignal> result = [signal sliceWithAmount:[RACSignal return:@5] fromEdge:CGRectMinXEdge];
 		NSArray *expectedRects = @[
 			MEDBox(CGRectMake(10, 10, 5, 20)),
 			MEDBox(CGRectMake(10, 20, 5, 40)),
@@ -88,7 +88,7 @@ describe(@"signal of CGRects", ^{
 	});
 
 	it(@"should return a remainder", ^{
-		id<RCLSignal> result = [signal remainderAfterSlicingAmount:5 fromEdge:CGRectMinYEdge];
+		id<RCLSignal> result = [signal remainderAfterSlicingAmount:[RACSignal return:@5] fromEdge:CGRectMinYEdge];
 		NSArray *expectedRects = @[
 			MEDBox(CGRectMake(10, 15, 20, 15)),
 			MEDBox(CGRectMake(10, 25, 30, 35)),
@@ -99,7 +99,7 @@ describe(@"signal of CGRects", ^{
 	});
 
 	it(@"should divide", ^{
-		RACTupleUnpack(id<RCLSignal> slices, id<RCLSignal> remainders) = [signal divideWithAmount:15 fromEdge:CGRectMinXEdge];
+		RACTupleUnpack(id<RCLSignal> slices, id<RCLSignal> remainders) = [signal divideWithAmount:[RACSignal return:@15] fromEdge:CGRectMinXEdge];
 
 		NSArray *expectedSlices = @[
 			MEDBox(CGRectMake(10, 10, 15, 20)),
@@ -118,7 +118,7 @@ describe(@"signal of CGRects", ^{
 	});
 
 	it(@"should divide with padding", ^{
-		RACTupleUnpack(id<RCLSignal> slices, id<RCLSignal> remainders) = [signal divideWithAmount:15 padding:3 fromEdge:CGRectMinXEdge];
+		RACTupleUnpack(id<RCLSignal> slices, id<RCLSignal> remainders) = [signal divideWithAmount:[RACSignal return:@15] padding:[RACSignal return:@3] fromEdge:CGRectMinXEdge];
 
 		NSArray *expectedSlices = @[
 			MEDBox(CGRectMake(10, 10, 15, 20)),
