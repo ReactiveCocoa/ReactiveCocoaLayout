@@ -22,10 +22,4 @@
 // Returns a signal which sends the current and all future values for `frame`.
 - (id<RCLSignal>)rcl_frameSignal;
 
-// Observes the receiver's `intrinsicContentSize` for changes.
-//
-// Returns a signal which sends the current and all future values for
-// `intrinsicContentSize`.
-- (id<RCLSignal>)rcl_intrinsicContentSizeSignal;
-
 @end

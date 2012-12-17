@@ -10,6 +10,7 @@
 
 #import "RACSignal+RCLSignalAdditions.h"
 #import "RCLSignal.h"
+#import "View+RCLAutoLayoutObservationAdditions.h"
 
 #ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
 	#import "UIView+RCLObservationAdditions.h"
