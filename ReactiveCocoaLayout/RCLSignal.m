@@ -154,7 +154,7 @@ static id<RCLSignal> animateWithDuration (id<RCLSignal> self, NSTimeInterval *du
 	}];
 }
 
-- (id<RCLSignal>)remainderWithAmount:(CGFloat)amount fromEdge:(CGRectEdge)edge {
+- (id<RCLSignal>)remainderAfterSlicingAmount:(CGFloat)amount fromEdge:(CGRectEdge)edge {
 	return [self map:^(NSValue *value) {
 		return MEDBox(CGRectRemainder(value.med_rectValue, amount, edge));
 	}];
@@ -165,7 +165,7 @@ static id<RCLSignal> animateWithDuration (id<RCLSignal> self, NSTimeInterval *du
 }
 
 - (RACTuple *)divideWithAmount:(CGFloat)amount padding:(CGFloat)padding fromEdge:(CGRectEdge)edge {
-	return [RACTuple tupleWithObjects:[self sliceWithAmount:amount fromEdge:edge], [self remainderWithAmount:fmax(0, amount + padding) fromEdge:edge], nil];
+	return [RACTuple tupleWithObjects:[self sliceWithAmount:amount fromEdge:edge], [self remainderAfterSlicingAmount:fmax(0, amount + padding) fromEdge:edge], nil];
 }
 
 - (id<RCLSignal>)animate {

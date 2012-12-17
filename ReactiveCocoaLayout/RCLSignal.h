@@ -103,7 +103,7 @@
 // edge   - The edge from which to trim.
 //
 // Returns a signal of CGRect remainders.
-- (id<RCLSignal>)remainderWithAmount:(CGFloat)amount fromEdge:(CGRectEdge)edge;
+- (id<RCLSignal>)remainderAfterSlicingAmount:(CGFloat)amount fromEdge:(CGRectEdge)edge;
 
 // Invokes -divideWithAmount:padding:fromEdge: with a `padding` value of 0.
 - (RACTuple *)divideWithAmount:(CGFloat)amount fromEdge:(CGRectEdge)edge;
