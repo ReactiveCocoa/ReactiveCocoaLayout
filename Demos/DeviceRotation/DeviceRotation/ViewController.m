@@ -61,10 +61,7 @@
 	self.nameTextView = [[UITextView alloc] initWithFrame:CGRectZero];
 	[self.view addSubview:self.nameTextView];
 
-	RAC(self.nameTextView.frame) = [RACSignal combineLatest:@[ insetBounds, self.nameLabel.rcl_frameSignal ] reduce:^(NSValue *availableBounds, NSValue *nameFrame) {
-		CGRect frame = CGRectRemainder(availableBounds.med_rectValue, CGRectGetWidth(nameFrame.med_rectValue) + 8, CGRectMinXEdge);
-		return MEDBox(frame);
-	}];
+	RAC(self.nameTextView.frame) = [insetBounds divideWithAmount:self.nameLabel.rcl_frameSignal.size.width padding:[RACSignal return:@8] fromEdge:CGRectMinXEdge][1];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
