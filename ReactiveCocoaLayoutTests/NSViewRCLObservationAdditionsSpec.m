@@ -10,8 +10,6 @@
 
 SpecBegin(NSViewRCLObservationAdditions)
 
-itShouldBehaveLike(ViewExamples, ^(CGRect frame) {
-	return [[NSView alloc] initWithFrame:frame];
-}, nil);
+itShouldBehaveLike(ViewExamples, nil);
 
 SpecEnd

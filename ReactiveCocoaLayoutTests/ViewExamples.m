@@ -6,35 +6,28 @@
 //  Copyright (c) 2012 GitHub. All rights reserved.
 //
 
+#import "TestView.h"
 #import "ViewExamples.h"
-
-#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
-	#import <UIKit/UIKit.h>
-	#define VIEW UIView
-#elif TARGET_OS_MAC
-	#import <AppKit/AppKit.h>
-	#define VIEW NSView
-#endif
 
 NSString * const ViewExamples = @"ViewExamples";
 
 SharedExampleGroupsBegin(ViewExamples)
 
-sharedExamplesFor(ViewExamples, ^(VIEW * (^viewWithFrame)(CGRect)) {
+sharedExamplesFor(ViewExamples, ^{
 	__block CGRect initialFrame;
 	__block CGRect initialBounds;
 
-	__block VIEW *view;
+	__block TestView *view;
 
 	beforeEach(^{
 		initialFrame = CGRectMake(100, 200, 300, 400);
 		initialBounds = CGRectMake(0, 0, 300, 400);
 
-		view = viewWithFrame(initialFrame);
+		view = [[TestView alloc] initWithFrame:initialFrame];
 		expect(view).notTo.beNil();
 	});
 
-	it(@"should send values on rcl_boundsSignal when its bounds changes", ^{
+	it(@"should send values on rcl_boundsSignal", ^{
 		__block NSValue *lastValue = nil;
 		[view.rcl_boundsSignal subscribeNext:^(NSValue *value) {
 			expect(value).to.beKindOf(NSValue.class);
@@ -49,7 +42,7 @@ sharedExamplesFor(ViewExamples, ^(VIEW * (^viewWithFrame)(CGRect)) {
 		expect(lastValue.med_rectValue).to.equal(newBounds);
 	});
 
-	it(@"should send values on rcl_frameSignal when its frame changes", ^{
+	it(@"should send values on rcl_frameSignal", ^{
 		__block NSValue *lastValue = nil;
 		[view.rcl_frameSignal subscribeNext:^(NSValue *value) {
 			expect(value).to.beKindOf(NSValue.class);

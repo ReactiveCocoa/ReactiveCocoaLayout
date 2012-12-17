@@ -12,6 +12,8 @@
 		D051391D167F108000334374 /* View+RCLAutoLayoutObservationAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = D051391A167F108000334374 /* View+RCLAutoLayoutObservationAdditions.m */; };
 		D051391F167F11FD00334374 /* ViewExamples.m in Sources */ = {isa = PBXBuildFile; fileRef = D051391E167F11FD00334374 /* ViewExamples.m */; };
 		D0513920167F11FD00334374 /* ViewExamples.m in Sources */ = {isa = PBXBuildFile; fileRef = D051391E167F11FD00334374 /* ViewExamples.m */; };
+		D0513974167F149F00334374 /* TestView.m in Sources */ = {isa = PBXBuildFile; fileRef = D0513973167F149F00334374 /* TestView.m */; };
+		D0513975167F149F00334374 /* TestView.m in Sources */ = {isa = PBXBuildFile; fileRef = D0513973167F149F00334374 /* TestView.m */; };
 		D06269EE1679440C00E951A5 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0BB24791678772C005E9371 /* Foundation.framework */; };
 		D06269FC1679440D00E951A5 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0BB248A1678772C005E9371 /* SenTestingKit.framework */; };
 		D06269FF1679440D00E951A5 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0BB24791678772C005E9371 /* Foundation.framework */; };
@@ -254,6 +256,8 @@
 		D051391A167F108000334374 /* View+RCLAutoLayoutObservationAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "View+RCLAutoLayoutObservationAdditions.m"; sourceTree = "<group>"; };
 		D051391E167F11FD00334374 /* ViewExamples.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewExamples.m; sourceTree = "<group>"; };
 		D0513921167F121300334374 /* ViewExamples.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewExamples.h; sourceTree = "<group>"; };
+		D0513972167F149F00334374 /* TestView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestView.h; sourceTree = "<group>"; };
+		D0513973167F149F00334374 /* TestView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestView.m; sourceTree = "<group>"; };
 		D06269ED1679440C00E951A5 /* libReactiveCocoaLayout iOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libReactiveCocoaLayout iOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D06269FB1679440C00E951A5 /* ReactiveCocoaLayout iOS Tests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "ReactiveCocoaLayout iOS Tests.octest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D0626A39167944CF00E951A5 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.0.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
@@ -483,6 +487,8 @@
 		D0BB24911678772C005E9371 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				D0513972167F149F00334374 /* TestView.h */,
+				D0513973167F149F00334374 /* TestView.m */,
 				D06C9E50167D88B000276090 /* ReactiveCocoaLayoutTests-Prefix.pch */,
 				D0BB24921678772C005E9371 /* ReactiveCocoaLayoutTests-Info.plist */,
 				D0BB24931678772C005E9371 /* InfoPlist.strings */,
@@ -957,6 +963,7 @@
 				D06C9E5E167D8BD900276090 /* UIViewRCLObservationAdditionsSpec.m in Sources */,
 				D06C9E61167D8C6500276090 /* RCLSignalSpec.m in Sources */,
 				D0513920167F11FD00334374 /* ViewExamples.m in Sources */,
+				D0513975167F149F00334374 /* TestView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -982,6 +989,7 @@
 				D06C9E5B167D8A9A00276090 /* NSViewRCLObservationAdditionsSpec.m in Sources */,
 				D06C9E60167D8C6500276090 /* RCLSignalSpec.m in Sources */,
 				D051391F167F11FD00334374 /* ViewExamples.m in Sources */,
+				D0513974167F149F00334374 /* TestView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
