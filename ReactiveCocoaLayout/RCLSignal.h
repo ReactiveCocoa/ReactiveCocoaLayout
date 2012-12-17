@@ -103,4 +103,22 @@
 // remainders, respectively.
 - (RACTuple *)divideWithAmount:(id<RACSignal>)sliceAmountSignal padding:(id<RACSignal>)paddingSignal fromEdge:(CGRectEdge)edge;
 
+// Sends the maximum value sent by any of the given signals.
+//
+// signals - An array of <RACSignal> objects. Each signal should contain
+//           NSNumber values. When any signal sends a value, the returned signal
+//           will send the new maximum.
+//
+// Returns a signal which sends NSNumber maximum values.
++ (id<RCLSignal>)max:(NSArray *)signals;
+
+// Sends the minimum value sent by any of the given signals.
+//
+// signals - An array of <RACSignal> objects. Each signal should contain
+//           NSNumber values. When any signal sends a value, the returned signal
+//           will send the new minimum.
+//
+// Returns a signal which sends NSNumber minimum values.
++ (id<RCLSignal>)min:(NSArray *)signals;
+
 @end

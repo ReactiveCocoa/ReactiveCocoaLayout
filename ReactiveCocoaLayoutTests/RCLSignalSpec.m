@@ -169,4 +169,27 @@ describe(@"signal of CGPoints", ^{
 	});
 });
 
+describe(@"+min: and +max:", ^{
+	__block NSArray *signals;
+
+	beforeEach(^{
+		signals = @[
+			[widths signalWithScheduler:RACScheduler.immediateScheduler],
+			[ys signalWithScheduler:RACScheduler.immediateScheduler],
+		];
+	});
+
+	it(@"should return maximums", ^{
+		id<RCLSignal> signal = [RACSignal max:signals];
+		NSArray *expected = @[ @20, @30, @45, @45, @45, @45 ];
+		expect(signal.sequence).to.equal(expected.rac_sequence);
+	});
+
+	it(@"should return minimums", ^{
+		id<RCLSignal> signal = [RACSignal min:signals];
+		NSArray *expected = @[ @20, @20, @20, @10, @10, @10 ];
+		expect(signal.sequence).to.equal(expected.rac_sequence);
+	});
+});
+
 SpecEnd
