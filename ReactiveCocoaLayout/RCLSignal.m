@@ -74,30 +74,49 @@
 	}];
 }
 
-- (id<RCLSignal>)insetWidth:(CGFloat)width height:(CGFloat)height {
-	return [self map:^(NSValue *value) {
-		return MEDBox(CGRectInset(value.med_rectValue, width, height));
+- (id)insetWidth:(id<RACSignal>)widthSignal height:(id<RACSignal>)heightSignal {
+	NSParameterAssert(widthSignal != nil);
+	NSParameterAssert(heightSignal != nil);
+
+	// Subscribe to self last so that we don't skip any values sent
+	// immediately. See https://github.com/github/ReactiveCocoa/issues/192.
+	return [RACSignal combineLatest:@[ widthSignal, heightSignal, self ] reduce:^(NSNumber *width, NSNumber *height, NSValue *rect) {
+		return MEDBox(CGRectInset(rect.med_rectValue, width.doubleValue, height.doubleValue));
 	}];
 }
 
-- (id<RCLSignal>)sliceWithAmount:(CGFloat)amount fromEdge:(CGRectEdge)edge {
-	return [self map:^(NSValue *value) {
-		return MEDBox(CGRectSlice(value.med_rectValue, amount, edge));
+- (id)sliceWithAmount:(id<RACSignal>)amountSignal fromEdge:(CGRectEdge)edge {
+	NSParameterAssert(amountSignal != nil);
+
+	return [RACSignal combineLatest:@[ amountSignal, self ] reduce:^(NSNumber *amount, NSValue *rect) {
+		return MEDBox(CGRectSlice(rect.med_rectValue, amount.doubleValue, edge));
 	}];
 }
 
-- (id<RCLSignal>)remainderAfterSlicingAmount:(CGFloat)amount fromEdge:(CGRectEdge)edge {
-	return [self map:^(NSValue *value) {
-		return MEDBox(CGRectRemainder(value.med_rectValue, amount, edge));
+- (id)remainderAfterSlicingAmount:(id<RACSignal>)amountSignal fromEdge:(CGRectEdge)edge {
+	NSParameterAssert(amountSignal != nil);
+
+	return [RACSignal combineLatest:@[ amountSignal, self ] reduce:^(NSNumber *amount, NSValue *rect) {
+		return MEDBox(CGRectRemainder(rect.med_rectValue, amount.doubleValue, edge));
 	}];
 }
 
-- (RACTuple *)divideWithAmount:(CGFloat)amount fromEdge:(CGRectEdge)edge {
-	return [self divideWithAmount:amount padding:0 fromEdge:edge];
+- (RACTuple *)divideWithAmount:(id<RACSignal>)sliceAmountSignal fromEdge:(CGRectEdge)edge {
+	return [self divideWithAmount:sliceAmountSignal padding:[RACSignal return:@0] fromEdge:edge];
 }
 
-- (RACTuple *)divideWithAmount:(CGFloat)amount padding:(CGFloat)padding fromEdge:(CGRectEdge)edge {
-	return [RACTuple tupleWithObjects:[self sliceWithAmount:amount fromEdge:edge], [self remainderAfterSlicingAmount:fmax(0, amount + padding) fromEdge:edge], nil];
+- (RACTuple *)divideWithAmount:(id<RACSignal>)sliceAmountSignal padding:(id<RACSignal>)paddingSignal fromEdge:(CGRectEdge)edge {
+	NSParameterAssert(sliceAmountSignal != nil);
+	NSParameterAssert(paddingSignal != nil);
+
+	id<RACSignal> amountPlusPadding = [RACSignal combineLatest:@[ sliceAmountSignal, paddingSignal ] reduce:^(NSNumber *amount, NSNumber *padding) {
+		return @(amount.doubleValue + padding.doubleValue);
+	}];
+
+	id<RCLSignal> sliceSignal = [self sliceWithAmount:sliceAmountSignal fromEdge:edge];
+	id<RCLSignal> remainderSignal = [self remainderAfterSlicingAmount:amountPlusPadding fromEdge:edge];
+
+	return [RACTuple tupleWithObjects:sliceSignal, remainderSignal, nil];
 }
 
 @end

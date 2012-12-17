@@ -41,7 +41,7 @@
 
 	@weakify(self);
 
-	id<RCLSignal> insetBounds = [self.view.rcl_boundsSignal insetWidth:16 height:16];
+	id<RCLSignal> insetBounds = [self.view.rcl_boundsSignal insetWidth:[RACSignal return:@16] height:[RACSignal return:@16]];
 
 	self.nameLabel = [[UILabel alloc] initWithFrame:CGRectZero];
 	[self.view addSubview:self.nameLabel];
@@ -61,10 +61,7 @@
 	self.nameTextView = [[UITextView alloc] initWithFrame:CGRectZero];
 	[self.view addSubview:self.nameTextView];
 
-	RAC(self.nameTextView.frame) = [RACSignal combineLatest:@[ insetBounds, self.nameLabel.rcl_frameSignal ] reduce:^(NSValue *availableBounds, NSValue *nameFrame) {
-		CGRect frame = CGRectRemainder(availableBounds.med_rectValue, CGRectGetWidth(nameFrame.med_rectValue) + 8, CGRectMinXEdge);
-		return MEDBox(frame);
-	}];
+	RAC(self.nameTextView.frame) = [insetBounds divideWithAmount:self.nameLabel.rcl_frameSignal.size.width padding:[RACSignal return:@8] fromEdge:CGRectMinXEdge][1];
 }
 
 - (void)viewWillAppear:(BOOL)animated {

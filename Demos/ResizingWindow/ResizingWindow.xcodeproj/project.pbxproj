@@ -204,7 +204,7 @@
 			isa = PBXGroup;
 			children = (
 				D0BB252C16787D0C005E9371 /* ReactiveCocoaLayout.framework */,
-				D0BB252E16787D0C005E9371 /* ReactiveCocoaLayoutTests.octest */,
+				D0BB252E16787D0C005E9371 /* ReactiveCocoaLayout Mac Tests.octest */,
 				D0FD5A531679E071003C3210 /* libReactiveCocoaLayout iOS.a */,
 				D0FD5A551679E071003C3210 /* ReactiveCocoaLayout iOS Tests.octest */,
 			);
@@ -350,7 +350,7 @@
 			remoteRef = D0BB252B16787D0C005E9371 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		D0BB252E16787D0C005E9371 /* ReactiveCocoaLayoutTests.octest */ = {
+		D0BB252E16787D0C005E9371 /* ReactiveCocoaLayout Mac Tests.octest */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.cfbundle;
 			path = "ReactiveCocoaLayout Mac Tests.octest";
