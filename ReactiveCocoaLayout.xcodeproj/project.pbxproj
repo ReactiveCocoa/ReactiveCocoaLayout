@@ -1099,7 +1099,7 @@
 					External/ReactiveCocoa/external/specta/src,
 					"External/ReactiveCocoa/external/expecta/src/**",
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = ReactiveCocoaLayout;
@@ -1170,7 +1170,7 @@
 					External/ReactiveCocoa/external/specta/src,
 					"External/ReactiveCocoa/external/expecta/src/**",
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = ReactiveCocoaLayout;
@@ -1192,7 +1192,7 @@
 					External/ReactiveCocoa/external/specta/src,
 					"External/ReactiveCocoa/external/expecta/src/**",
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = ReactiveCocoaLayout;
