@@ -48,10 +48,7 @@
 		return (UIInterfaceOrientationIsPortrait(orientation.integerValue) ? NSLocalizedString(@"Portrait!", @"") : NSLocalizedString(@"Landscape awww yeaahhh", @""));
 	}];
 
-	RAC(self.nameLabel.frame) = [RACSignal combineLatest:@[ insetBounds.origin, self.nameLabel.rcl_intrinsicContentSizeSignal ] reduce:^(NSValue *origin, NSValue *size) {
-		CGRect frame = { .origin = origin.med_pointValue, .size = size.med_sizeValue };
-		return MEDBox(frame);
-	}];
+	RAC(self.nameLabel.frame) = [RACSignal rectsWithOrigin:insetBounds.origin size:self.nameLabel.rcl_intrinsicContentSizeSignal];
 
 	self.nameTextView = [[UITextView alloc] initWithFrame:CGRectZero];
 	[self.view addSubview:self.nameTextView];
