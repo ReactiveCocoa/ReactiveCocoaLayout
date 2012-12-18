@@ -34,9 +34,7 @@
 	NSTextField *nameLabel = [self labelWithString:NSLocalizedString(@"Name", @"")];
 	NSTextField *emailLabel = [self labelWithString:NSLocalizedString(@"Email Address", @"")];
 
-	id<RACSignal> labelWidth = [RACSignal combineLatest:@[ nameLabel.rcl_boundsSignal.size.width, emailLabel.rcl_boundsSignal.size.width ] reduce:^(NSNumber *width1, NSNumber *width2) {
-		return @(fmax(width1.doubleValue, width2.doubleValue));
-	}];
+	id<RACSignal> labelWidth = [RACSignal max:@[ nameLabel.rcl_boundsSignal.size.width, emailLabel.rcl_boundsSignal.size.width ]];
 
 	NSTextField *nameField = [self textFieldWithString:@""];
 	NSTextField *emailField = [self textFieldWithString:@""];
