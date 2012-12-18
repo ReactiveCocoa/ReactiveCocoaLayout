@@ -7,6 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D051391B167F108000334374 /* View+RCLAutoLayoutObservationAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = D0513919167F108000334374 /* View+RCLAutoLayoutObservationAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D051391C167F108000334374 /* View+RCLAutoLayoutObservationAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = D051391A167F108000334374 /* View+RCLAutoLayoutObservationAdditions.m */; };
+		D051391D167F108000334374 /* View+RCLAutoLayoutObservationAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = D051391A167F108000334374 /* View+RCLAutoLayoutObservationAdditions.m */; };
+		D051391F167F11FD00334374 /* ViewExamples.m in Sources */ = {isa = PBXBuildFile; fileRef = D051391E167F11FD00334374 /* ViewExamples.m */; };
+		D0513920167F11FD00334374 /* ViewExamples.m in Sources */ = {isa = PBXBuildFile; fileRef = D051391E167F11FD00334374 /* ViewExamples.m */; };
+		D0513974167F149F00334374 /* TestView.m in Sources */ = {isa = PBXBuildFile; fileRef = D0513973167F149F00334374 /* TestView.m */; };
+		D0513975167F149F00334374 /* TestView.m in Sources */ = {isa = PBXBuildFile; fileRef = D0513973167F149F00334374 /* TestView.m */; };
 		D06269EE1679440C00E951A5 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0BB24791678772C005E9371 /* Foundation.framework */; };
 		D06269FC1679440D00E951A5 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0BB248A1678772C005E9371 /* SenTestingKit.framework */; };
 		D06269FF1679440D00E951A5 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0BB24791678772C005E9371 /* Foundation.framework */; };
@@ -245,6 +252,12 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		D0513919167F108000334374 /* View+RCLAutoLayoutObservationAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "View+RCLAutoLayoutObservationAdditions.h"; sourceTree = "<group>"; };
+		D051391A167F108000334374 /* View+RCLAutoLayoutObservationAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "View+RCLAutoLayoutObservationAdditions.m"; sourceTree = "<group>"; };
+		D051391E167F11FD00334374 /* ViewExamples.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewExamples.m; sourceTree = "<group>"; };
+		D0513921167F121300334374 /* ViewExamples.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewExamples.h; sourceTree = "<group>"; };
+		D0513972167F149F00334374 /* TestView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestView.h; sourceTree = "<group>"; };
+		D0513973167F149F00334374 /* TestView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestView.m; sourceTree = "<group>"; };
 		D06269ED1679440C00E951A5 /* libReactiveCocoaLayout iOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libReactiveCocoaLayout iOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D06269FB1679440C00E951A5 /* ReactiveCocoaLayout iOS Tests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "ReactiveCocoaLayout iOS Tests.octest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D0626A39167944CF00E951A5 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.0.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
@@ -354,6 +367,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		D0513918167F106800334374 /* Auto Layout Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				D0513919167F108000334374 /* View+RCLAutoLayoutObservationAdditions.h */,
+				D051391A167F108000334374 /* View+RCLAutoLayoutObservationAdditions.m */,
+			);
+			name = "Auto Layout Extensions";
+			sourceTree = "<group>";
+		};
 		D06C9E27167D886A00276090 /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -383,6 +405,8 @@
 				D06C9E52167D896000276090 /* RACSignalRCLSignalAdditionsSpec.m */,
 				D06C9E5F167D8C6500276090 /* RCLSignalSpec.m */,
 				D06C9E5D167D8BD900276090 /* UIViewRCLObservationAdditionsSpec.m */,
+				D0513921167F121300334374 /* ViewExamples.h */,
+				D051391E167F11FD00334374 /* ViewExamples.m */,
 			);
 			name = Specs;
 			sourceTree = "<group>";
@@ -433,6 +457,7 @@
 			children = (
 				D0BB24811678772C005E9371 /* ReactiveCocoaLayout.h */,
 				D0BB262F16788758005E9371 /* Signals */,
+				D0513918167F106800334374 /* Auto Layout Extensions */,
 				D0BB24E6167879E6005E9371 /* AppKit Extensions */,
 				D0FD5A951679E758003C3210 /* UIKit Extensions */,
 				D0BB247B1678772C005E9371 /* Supporting Files */,
@@ -462,6 +487,8 @@
 		D0BB24911678772C005E9371 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				D0513972167F149F00334374 /* TestView.h */,
+				D0513973167F149F00334374 /* TestView.m */,
 				D06C9E50167D88B000276090 /* ReactiveCocoaLayoutTests-Prefix.pch */,
 				D0BB24921678772C005E9371 /* ReactiveCocoaLayoutTests-Info.plist */,
 				D0BB24931678772C005E9371 /* InfoPlist.strings */,
@@ -616,6 +643,7 @@
 				D0BB25E01678847A005E9371 /* NSView+RCLObservationAdditions.h in Headers */,
 				D0BB2632167887C3005E9371 /* RACSignal+RCLSignalAdditions.h in Headers */,
 				D0BB269016788866005E9371 /* EXTConcreteProtocol.h in Headers */,
+				D051391B167F108000334374 /* View+RCLAutoLayoutObservationAdditions.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -923,6 +951,7 @@
 				D0626A3F167944EC00E951A5 /* EXTConcreteProtocol.m in Sources */,
 				D0626A40167944EE00E951A5 /* EXTRuntimeExtensions.m in Sources */,
 				D0FD5A981679E7AF003C3210 /* UIView+RCLObservationAdditions.m in Sources */,
+				D051391D167F108000334374 /* View+RCLAutoLayoutObservationAdditions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -933,6 +962,8 @@
 				D06C9E54167D896000276090 /* RACSignalRCLSignalAdditionsSpec.m in Sources */,
 				D06C9E5E167D8BD900276090 /* UIViewRCLObservationAdditionsSpec.m in Sources */,
 				D06C9E61167D8C6500276090 /* RCLSignalSpec.m in Sources */,
+				D0513920167F11FD00334374 /* ViewExamples.m in Sources */,
+				D0513975167F149F00334374 /* TestView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -946,6 +977,7 @@
 				D0BB2633167887C3005E9371 /* RACSignal+RCLSignalAdditions.m in Sources */,
 				D0BB269116788866005E9371 /* EXTConcreteProtocol.m in Sources */,
 				D0BB269316788866005E9371 /* EXTRuntimeExtensions.m in Sources */,
+				D051391C167F108000334374 /* View+RCLAutoLayoutObservationAdditions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -956,6 +988,8 @@
 				D06C9E53167D896000276090 /* RACSignalRCLSignalAdditionsSpec.m in Sources */,
 				D06C9E5B167D8A9A00276090 /* NSViewRCLObservationAdditionsSpec.m in Sources */,
 				D06C9E60167D8C6500276090 /* RCLSignalSpec.m in Sources */,
+				D051391F167F11FD00334374 /* ViewExamples.m in Sources */,
+				D0513974167F149F00334374 /* TestView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1099,7 +1133,7 @@
 					External/ReactiveCocoa/external/specta/src,
 					"External/ReactiveCocoa/external/expecta/src/**",
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = ReactiveCocoaLayout;
@@ -1170,7 +1204,7 @@
 					External/ReactiveCocoa/external/specta/src,
 					"External/ReactiveCocoa/external/expecta/src/**",
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = ReactiveCocoaLayout;
@@ -1192,7 +1226,7 @@
 					External/ReactiveCocoa/external/specta/src,
 					"External/ReactiveCocoa/external/expecta/src/**",
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = ReactiveCocoaLayout;

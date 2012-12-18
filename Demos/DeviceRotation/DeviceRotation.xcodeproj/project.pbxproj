@@ -510,7 +510,7 @@
 					"../../External/ReactiveCocoa/ReactiveCocoaFramework/**",
 					../../External/Archimedes,
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				OTHER_LDFLAGS = "-ObjC";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -528,7 +528,7 @@
 					"../../External/ReactiveCocoa/ReactiveCocoaFramework/**",
 					../../External/Archimedes,
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				OTHER_LDFLAGS = "-ObjC";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
