@@ -135,6 +135,24 @@ describe(@"signal of CGRects", ^{
 		expect(slices.sequence).to.equal(expectedSlices.rac_sequence);
 		expect(remainders.sequence).to.equal(expectedRemainders.rac_sequence);
 	});
+
+	it(@"should be returned from +rectsWithX:Y:width:height:", ^{
+		id<RCLSignal> constructedSignal = [RACSignal
+			rectsWithX:[xs signalWithScheduler:RACScheduler.immediateScheduler]
+			Y:[ys signalWithScheduler:RACScheduler.immediateScheduler]
+			width:[widths signalWithScheduler:RACScheduler.immediateScheduler]
+			height:[heights signalWithScheduler:RACScheduler.immediateScheduler]];
+
+		expect(constructedSignal.sequence).to.equal(signal.sequence);
+	});
+
+	it(@"should be returned from +rectsWithOrigin:size:", ^{
+		id<RCLSignal> constructedSignal = [RACSignal
+			rectsWithOrigin:[points signalWithScheduler:RACScheduler.immediateScheduler]
+			size:[sizes signalWithScheduler:RACScheduler.immediateScheduler]];
+
+		expect(constructedSignal.sequence).to.equal(signal.sequence);
+	});
 });
 
 describe(@"signal of CGSizes", ^{
@@ -151,6 +169,14 @@ describe(@"signal of CGSizes", ^{
 	it(@"should map to heights", ^{
 		expect(signal.height.sequence).to.equal(heights);
 	});
+
+	it(@"should be returned from +sizesWithWidth:height:", ^{
+		id<RCLSignal> constructedSignal = [RACSignal
+			sizesWithWidth:[widths signalWithScheduler:RACScheduler.immediateScheduler]
+			height:[heights signalWithScheduler:RACScheduler.immediateScheduler]];
+
+		expect(constructedSignal.sequence).to.equal(signal.sequence);
+	});
 });
 
 describe(@"signal of CGPoints", ^{
@@ -166,6 +192,14 @@ describe(@"signal of CGPoints", ^{
 
 	it(@"should map to Ys", ^{
 		expect(signal.y.sequence).to.equal(ys);
+	});
+
+	it(@"should be returned from +pointsWithX:Y:", ^{
+		id<RCLSignal> constructedSignal = [RACSignal
+			pointsWithX:[xs signalWithScheduler:RACScheduler.immediateScheduler]
+			Y:[ys signalWithScheduler:RACScheduler.immediateScheduler]];
+
+		expect(constructedSignal.sequence).to.equal(signal.sequence);
 	});
 });
 

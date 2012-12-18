@@ -38,15 +38,36 @@
 
 #pragma mark RCLSignal
 
++ (id)rectsWithX:(id<RACSignal>)xSignal Y:(id<RACSignal>)ySignal width:(id<RACSignal>)widthSignal height:(id<RACSignal>)heightSignal {
+	NSParameterAssert(xSignal != nil);
+	NSParameterAssert(ySignal != nil);
+	NSParameterAssert(widthSignal != nil);
+	NSParameterAssert(heightSignal != nil);
+
+	return [RACSignal combineLatest:@[ xSignal, ySignal, widthSignal, heightSignal ] reduce:^(NSNumber *x, NSNumber *y, NSNumber *width, NSNumber *height) {
+		return MEDBox(CGRectMake(x.doubleValue, y.doubleValue, width.doubleValue, height.doubleValue));
+	}];
+}
+
++ (id)rectsWithOrigin:(id<RCLSignal>)originSignal size:(id<RCLSignal>)sizeSignal {
+	NSParameterAssert(originSignal != nil);
+	NSParameterAssert(sizeSignal != nil);
+
+	return [self rectsWithX:originSignal.x Y:originSignal.y width:sizeSignal.width height:sizeSignal.height];
+}
+
 - (id<RCLSignal>)size {
 	return [self map:^(NSValue *value) {
 		return MEDBox(value.med_rectValue.size);
 	}];
 }
 
-- (id<RCLSignal>)origin {
-	return [self map:^(NSValue *value) {
-		return MEDBox(value.med_rectValue.origin);
++ (id)sizesWithWidth:(id<RACSignal>)widthSignal height:(id<RACSignal>)heightSignal {
+	NSParameterAssert(widthSignal != nil);
+	NSParameterAssert(heightSignal != nil);
+
+	return [RACSignal combineLatest:@[ widthSignal, heightSignal ] reduce:^(NSNumber *width, NSNumber *height) {
+		return MEDBox(CGSizeMake(width.doubleValue, height.doubleValue));
 	}];
 }
 
@@ -59,6 +80,21 @@
 - (id<RCLSignal>)height {
 	return [self map:^(NSValue *value) {
 		return @(value.med_sizeValue.height);
+	}];
+}
+
+- (id<RCLSignal>)origin {
+	return [self map:^(NSValue *value) {
+		return MEDBox(value.med_rectValue.origin);
+	}];
+}
+
++ (id)pointsWithX:(id<RACSignal>)xSignal Y:(id<RACSignal>)ySignal {
+	NSParameterAssert(xSignal != nil);
+	NSParameterAssert(ySignal != nil);
+
+	return [RACSignal combineLatest:@[ xSignal, ySignal ] reduce:^(NSNumber *x, NSNumber *y) {
+		return MEDBox(CGPointMake(x.doubleValue, y.doubleValue));
 	}];
 }
 
