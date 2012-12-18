@@ -75,7 +75,12 @@ static id<RCLSignal> latestNumberMatchingComparisonResult(NSArray *signals, NSCo
 	NSParameterAssert(originSignal != nil);
 	NSParameterAssert(sizeSignal != nil);
 
-	return [self rectsWithX:originSignal.x Y:originSignal.y width:sizeSignal.width height:sizeSignal.height];
+	return [RACSignal combineLatest:@[ originSignal, sizeSignal ] reduce:^(NSValue *origin, NSValue *size) {
+		CGPoint p = origin.med_pointValue;
+		CGSize s = size.med_sizeValue;
+
+		return MEDBox(CGRectMake(p.x, p.y, s.width, s.height));
+	}];
 }
 
 - (id<RCLSignal>)size {
