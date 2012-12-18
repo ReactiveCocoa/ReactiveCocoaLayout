@@ -39,9 +39,7 @@
 
 	self.view.backgroundColor = UIColor.lightGrayColor;
 
-	@weakify(self);
-
-	id<RCLSignal> insetBounds = [self.view.rcl_boundsSignal insetWidth:16 height:16];
+	id<RCLSignal> insetBounds = [self.view.rcl_boundsSignal insetWidth:[RACSignal return:@16] height:[RACSignal return:@16]];
 
 	self.nameLabel = [[UILabel alloc] initWithFrame:CGRectZero];
 	[self.view addSubview:self.nameLabel];
@@ -50,24 +48,17 @@
 		return (UIInterfaceOrientationIsPortrait(orientation.integerValue) ? NSLocalizedString(@"Portrait!", @"") : NSLocalizedString(@"Landscape awww yeaahhh", @""));
 	}];
 
-	RAC(self.nameLabel.frame) = [RACSignal combineLatest:@[ insetBounds, RACAbleWithStart(self.nameLabel.text).distinctUntilChanged ] reduce:^(NSValue *availableBounds, NSString *text) {
-		@strongify(self);
-
-		CGSize fittingSize = [self.nameLabel sizeThatFits:availableBounds.med_rectValue.size];
-		CGPoint origin = availableBounds.med_rectValue.origin;
-		return MEDBox(CGRectMake(origin.x, origin.y, fittingSize.width, fittingSize.height));
-	}];
+	RAC(self.nameLabel.frame) = [RACSignal rectsWithOrigin:insetBounds.origin size:self.nameLabel.rcl_intrinsicContentSizeSignal];
 
 	self.nameTextView = [[UITextView alloc] initWithFrame:CGRectZero];
 	[self.view addSubview:self.nameTextView];
 
+	id<RCLSignal> textViewBounds = [insetBounds divideWithAmount:self.nameLabel.rcl_frameSignal.size.width padding:[RACSignal return:@8] fromEdge:CGRectMinXEdge][1];
+
 	// Animate the initial appearance of the text view, but not any changes due
 	// to rotation.
-	RAC(self.nameTextView.frame) = [[[[insetBounds animateWithDuration:1 curve:RCLAnimationCurveEaseOut] take:1] delay:1] sequenceNext:^{
-		return [RACSignal combineLatest:@[ insetBounds, self.nameLabel.rcl_frameSignal ] reduce:^(NSValue *availableBounds, NSValue *nameFrame) {
-			CGRect frame = CGRectRemainder(availableBounds.med_rectValue, CGRectGetWidth(nameFrame.med_rectValue) + 8, CGRectMinXEdge);
-			return MEDBox(frame);
-		}];
+	RAC(self.nameTextView.frame) = [[[[textViewBounds animateWithDuration:1 curve:RCLAnimationCurveEaseOut] take:1] delay:1] sequenceNext:^{
+		return textViewBounds;
 	}];
 }
 

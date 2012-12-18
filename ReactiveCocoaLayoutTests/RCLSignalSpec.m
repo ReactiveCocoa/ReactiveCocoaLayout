@@ -66,7 +66,7 @@ describe(@"signal of CGRects", ^{
 	});
 
 	it(@"should inset", ^{
-		id<RCLSignal> result = [signal insetWidth:3 height:5];
+		id<RCLSignal> result = [signal insetWidth:[RACSignal return:@3] height:[RACSignal return:@5]];
 		NSArray *expectedRects = @[
 			MEDBox(CGRectMake(13, 15, 14, 10)),
 			MEDBox(CGRectMake(13, 25, 24, 30)),
@@ -77,7 +77,7 @@ describe(@"signal of CGRects", ^{
 	});
 
 	it(@"should slice", ^{
-		id<RCLSignal> result = [signal sliceWithAmount:5 fromEdge:CGRectMinXEdge];
+		id<RCLSignal> result = [signal sliceWithAmount:[RACSignal return:@5] fromEdge:CGRectMinXEdge];
 		NSArray *expectedRects = @[
 			MEDBox(CGRectMake(10, 10, 5, 20)),
 			MEDBox(CGRectMake(10, 20, 5, 40)),
@@ -88,7 +88,7 @@ describe(@"signal of CGRects", ^{
 	});
 
 	it(@"should return a remainder", ^{
-		id<RCLSignal> result = [signal remainderAfterSlicingAmount:5 fromEdge:CGRectMinYEdge];
+		id<RCLSignal> result = [signal remainderAfterSlicingAmount:[RACSignal return:@5] fromEdge:CGRectMinYEdge];
 		NSArray *expectedRects = @[
 			MEDBox(CGRectMake(10, 15, 20, 15)),
 			MEDBox(CGRectMake(10, 25, 30, 35)),
@@ -99,7 +99,7 @@ describe(@"signal of CGRects", ^{
 	});
 
 	it(@"should divide", ^{
-		RACTupleUnpack(id<RCLSignal> slices, id<RCLSignal> remainders) = [signal divideWithAmount:15 fromEdge:CGRectMinXEdge];
+		RACTupleUnpack(id<RCLSignal> slices, id<RCLSignal> remainders) = [signal divideWithAmount:[RACSignal return:@15] fromEdge:CGRectMinXEdge];
 
 		NSArray *expectedSlices = @[
 			MEDBox(CGRectMake(10, 10, 15, 20)),
@@ -118,7 +118,7 @@ describe(@"signal of CGRects", ^{
 	});
 
 	it(@"should divide with padding", ^{
-		RACTupleUnpack(id<RCLSignal> slices, id<RCLSignal> remainders) = [signal divideWithAmount:15 padding:3 fromEdge:CGRectMinXEdge];
+		RACTupleUnpack(id<RCLSignal> slices, id<RCLSignal> remainders) = [signal divideWithAmount:[RACSignal return:@15] padding:[RACSignal return:@3] fromEdge:CGRectMinXEdge];
 
 		NSArray *expectedSlices = @[
 			MEDBox(CGRectMake(10, 10, 15, 20)),
@@ -134,6 +134,24 @@ describe(@"signal of CGRects", ^{
 
 		expect(slices.sequence).to.equal(expectedSlices.rac_sequence);
 		expect(remainders.sequence).to.equal(expectedRemainders.rac_sequence);
+	});
+
+	it(@"should be returned from +rectsWithX:Y:width:height:", ^{
+		id<RCLSignal> constructedSignal = [RACSignal
+			rectsWithX:[xs signalWithScheduler:RACScheduler.immediateScheduler]
+			Y:[ys signalWithScheduler:RACScheduler.immediateScheduler]
+			width:[widths signalWithScheduler:RACScheduler.immediateScheduler]
+			height:[heights signalWithScheduler:RACScheduler.immediateScheduler]];
+
+		expect(constructedSignal.sequence).to.equal(signal.sequence);
+	});
+
+	it(@"should be returned from +rectsWithOrigin:size:", ^{
+		id<RCLSignal> constructedSignal = [RACSignal
+			rectsWithOrigin:[points signalWithScheduler:RACScheduler.immediateScheduler]
+			size:[sizes signalWithScheduler:RACScheduler.immediateScheduler]];
+
+		expect(constructedSignal.sequence).to.equal(signal.sequence);
 	});
 });
 
@@ -151,6 +169,14 @@ describe(@"signal of CGSizes", ^{
 	it(@"should map to heights", ^{
 		expect(signal.height.sequence).to.equal(heights);
 	});
+
+	it(@"should be returned from +sizesWithWidth:height:", ^{
+		id<RCLSignal> constructedSignal = [RACSignal
+			sizesWithWidth:[widths signalWithScheduler:RACScheduler.immediateScheduler]
+			height:[heights signalWithScheduler:RACScheduler.immediateScheduler]];
+
+		expect(constructedSignal.sequence).to.equal(signal.sequence);
+	});
 });
 
 describe(@"signal of CGPoints", ^{
@@ -166,6 +192,37 @@ describe(@"signal of CGPoints", ^{
 
 	it(@"should map to Ys", ^{
 		expect(signal.y.sequence).to.equal(ys);
+	});
+
+	it(@"should be returned from +pointsWithX:Y:", ^{
+		id<RCLSignal> constructedSignal = [RACSignal
+			pointsWithX:[xs signalWithScheduler:RACScheduler.immediateScheduler]
+			Y:[ys signalWithScheduler:RACScheduler.immediateScheduler]];
+
+		expect(constructedSignal.sequence).to.equal(signal.sequence);
+	});
+});
+
+describe(@"+min: and +max:", ^{
+	__block NSArray *signals;
+
+	beforeEach(^{
+		signals = @[
+			[widths signalWithScheduler:RACScheduler.immediateScheduler],
+			[ys signalWithScheduler:RACScheduler.immediateScheduler],
+		];
+	});
+
+	it(@"should return maximums", ^{
+		id<RCLSignal> signal = [RACSignal max:signals];
+		NSArray *expected = @[ @20, @30, @45, @45, @45, @45 ];
+		expect(signal.sequence).to.equal(expected.rac_sequence);
+	});
+
+	it(@"should return minimums", ^{
+		id<RCLSignal> signal = [RACSignal min:signals];
+		NSArray *expected = @[ @20, @20, @20, @10, @10, @10 ];
+		expect(signal.sequence).to.equal(expected.rac_sequence);
 	});
 });
 
