@@ -137,21 +137,50 @@ describe(@"signal of CGRects", ^{
 	});
 
 	it(@"should be returned from +rectsWithX:Y:width:height:", ^{
-		id<RCLSignal> constructedSignal = [RACSignal
-			rectsWithX:[xs signalWithScheduler:RACScheduler.immediateScheduler]
-			Y:[ys signalWithScheduler:RACScheduler.immediateScheduler]
-			width:[widths signalWithScheduler:RACScheduler.immediateScheduler]
-			height:[heights signalWithScheduler:RACScheduler.immediateScheduler]];
+		RACSubject *subject = [RACSubject subject];
 
-		expect(constructedSignal.sequence).to.equal(signal.sequence);
+		id<RCLSignal> constructedSignal = [RACSignal rectsWithX:subject Y:subject width:subject height:subject];
+		NSMutableArray *values = [NSMutableArray array];
+
+		[constructedSignal subscribeNext:^(id value) {
+			[values addObject:value];
+		}];
+
+		[subject sendNext:@0];
+		[subject sendNext:@5];
+
+		NSArray *expected = @[
+			MEDBox(CGRectMake(0, 0, 0, 0)),
+			MEDBox(CGRectMake(5, 0, 0, 0)),
+			MEDBox(CGRectMake(5, 5, 0, 0)),
+			MEDBox(CGRectMake(5, 5, 5, 0)),
+			MEDBox(CGRectMake(5, 5, 5, 5)),
+		];
+
+		expect(values).to.equal(expected);
 	});
 
 	it(@"should be returned from +rectsWithOrigin:size:", ^{
-		id<RCLSignal> constructedSignal = [RACSignal
-			rectsWithOrigin:[points signalWithScheduler:RACScheduler.immediateScheduler]
-			size:[sizes signalWithScheduler:RACScheduler.immediateScheduler]];
+		RACSubject *originSubject = [RACSubject subject];
+		RACSubject *sizeSubject = [RACSubject subject];
 
-		expect(constructedSignal.sequence).to.equal(signal.sequence);
+		id<RCLSignal> constructedSignal = [RACSignal rectsWithOrigin:originSubject size:sizeSubject];
+		NSMutableArray *values = [NSMutableArray array];
+
+		[constructedSignal subscribeNext:^(id value) {
+			[values addObject:value];
+		}];
+
+		[originSubject sendNext:MEDBox(CGPointMake(0, 0))];
+		[sizeSubject sendNext:MEDBox(CGSizeMake(0, 0))];
+		[sizeSubject sendNext:MEDBox(CGSizeMake(5, 5))];
+
+		NSArray *expected = @[
+			MEDBox(CGRectMake(0, 0, 0, 0)),
+			MEDBox(CGRectMake(0, 0, 5, 5)),
+		];
+
+		expect(values).to.equal(expected);
 	});
 });
 
@@ -171,11 +200,25 @@ describe(@"signal of CGSizes", ^{
 	});
 
 	it(@"should be returned from +sizesWithWidth:height:", ^{
-		id<RCLSignal> constructedSignal = [RACSignal
-			sizesWithWidth:[widths signalWithScheduler:RACScheduler.immediateScheduler]
-			height:[heights signalWithScheduler:RACScheduler.immediateScheduler]];
+		RACSubject *subject = [RACSubject subject];
 
-		expect(constructedSignal.sequence).to.equal(signal.sequence);
+		id<RCLSignal> constructedSignal = [RACSignal sizesWithWidth:subject height:subject];
+		NSMutableArray *values = [NSMutableArray array];
+
+		[constructedSignal subscribeNext:^(id value) {
+			[values addObject:value];
+		}];
+
+		[subject sendNext:@0];
+		[subject sendNext:@5];
+
+		NSArray *expected = @[
+			MEDBox(CGSizeMake(0, 0)),
+			MEDBox(CGSizeMake(5, 0)),
+			MEDBox(CGSizeMake(5, 5)),
+		];
+
+		expect(values).to.equal(expected);
 	});
 });
 
@@ -195,11 +238,25 @@ describe(@"signal of CGPoints", ^{
 	});
 
 	it(@"should be returned from +pointsWithX:Y:", ^{
-		id<RCLSignal> constructedSignal = [RACSignal
-			pointsWithX:[xs signalWithScheduler:RACScheduler.immediateScheduler]
-			Y:[ys signalWithScheduler:RACScheduler.immediateScheduler]];
+		RACSubject *subject = [RACSubject subject];
 
-		expect(constructedSignal.sequence).to.equal(signal.sequence);
+		id<RCLSignal> constructedSignal = [RACSignal pointsWithX:subject Y:subject];
+		NSMutableArray *values = [NSMutableArray array];
+
+		[constructedSignal subscribeNext:^(id value) {
+			[values addObject:value];
+		}];
+
+		[subject sendNext:@0];
+		[subject sendNext:@5];
+
+		NSArray *expected = @[
+			MEDBox(CGPointMake(0, 0)),
+			MEDBox(CGPointMake(5, 0)),
+			MEDBox(CGPointMake(5, 5)),
+		];
+
+		expect(values).to.equal(expected);
 	});
 });
 
