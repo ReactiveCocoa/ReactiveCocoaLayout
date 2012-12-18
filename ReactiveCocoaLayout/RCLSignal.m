@@ -8,6 +8,28 @@
 
 #import "RCLSignal.h"
 
+// When any signal sends an NSNumber, if -compare: invoked against the previous
+// value (and passed the new value) returns `result`, the new value is sent on
+// the returned signal.
+static id<RCLSignal> latestNumberMatchingComparisonResult(NSArray *signals, NSComparisonResult result) {
+	NSCParameterAssert(signals != nil);
+
+	return (id)[[[RACSignal merge:signals]
+		scanWithStart:nil combine:^(NSNumber *previous, NSNumber *next) {
+			if (previous == nil) return next;
+			if (next == nil) return previous;
+
+			if ([previous compare:next] == result) {
+				return next;
+			} else {
+				return previous;
+			}
+		}]
+		filter:^ BOOL (NSNumber *value) {
+			return value != nil;
+		}];
+}
+
 @concreteprotocol(RCLSignal)
 
 #pragma mark RACStream
@@ -153,6 +175,14 @@
 	id<RCLSignal> remainderSignal = [self remainderAfterSlicingAmount:amountPlusPadding fromEdge:edge];
 
 	return [RACTuple tupleWithObjects:sliceSignal, remainderSignal, nil];
+}
+
++ (id<RCLSignal>)max:(NSArray *)signals {
+	return latestNumberMatchingComparisonResult(signals, NSOrderedAscending);
+}
+
++ (id<RCLSignal>)min:(NSArray *)signals {
+	return latestNumberMatchingComparisonResult(signals, NSOrderedDescending);
 }
 
 @end
