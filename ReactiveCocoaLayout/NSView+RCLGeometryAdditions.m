@@ -8,6 +8,7 @@
 
 #import "NSView+RCLGeometryAdditions.h"
 #import "NSNotificationCenter+RACSupport.h"
+#import "RACSignal+RCLGeometryAdditions.h"
 
 @implementation NSView (RCLGeometryAdditions)
 
@@ -33,6 +34,20 @@
 			return [NSValue valueWithRect:view.frame];
 		}]
 		startWith:[NSValue valueWithRect:self.frame]];
+}
+
+- (RACSignal *)rcl_insetBaseline:(RACSignal *)rectSignal {
+	NSParameterAssert(rectSignal != nil);
+
+	RACSignal *baseline = [RACSignal return:@(self.baselineOffsetFromBottom)];
+	return [rectSignal remainderAfterSlicingAmount:baseline fromEdge:CGRectMinYEdge];
+}
+
+- (RACSignal *)rcl_outsetBaseline:(RACSignal *)rectSignal {
+	NSParameterAssert(rectSignal != nil);
+
+	RACSignal *baseline = [RACSignal return:@(self.baselineOffsetFromBottom)];
+	return [rectSignal growEdge:CGRectMinYEdge byAmount:baseline];
 }
 
 @end
