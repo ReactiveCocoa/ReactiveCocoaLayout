@@ -7,7 +7,7 @@
 //
 
 #import "View+RCLAutoLayoutObservationAdditions.h"
-#import "RACSignal+RCLSignalAdditions.h"
+#import "RACSignal+RCLGeometryAdditions.h"
 #import <objc/runtime.h>
 
 // Associated with a RACSubject which sends -intrinsicContentSize whenever
@@ -40,7 +40,7 @@ static void newInvalidateIntrinsicContentSize(id self, SEL _cmd) {
 	class_replaceMethod(self, selector, (IMP)&newInvalidateIntrinsicContentSize, method_getTypeEncoding(method));
 }
 
-- (id<RCLSignal>)rcl_intrinsicContentSizeSignal {
+- (RACSignal *)rcl_intrinsicContentSizeSignal {
 	RACSubject *subject = objc_getAssociatedObject(self, IntrinsicContentSizeSubjectKey);
 	if (subject == nil) {
 		subject = [RACSubject subject];

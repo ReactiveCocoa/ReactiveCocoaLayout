@@ -1,12 +1,12 @@
 //
-//  RCLSignalSpec.m
+//  RACSignalRCLGeometryAdditionsSpec.m
 //  ReactiveCocoaLayout
 //
 //  Created by Justin Spahr-Summers on 2012-12-15.
 //  Copyright (c) 2012 GitHub. All rights reserved.
 //
 
-SpecBegin(RCLSignal)
+SpecBegin(RACSignalRCLGeometryAdditions)
 
 __block RACSequence *rects;
 __block RACSequence *sizes;
@@ -51,7 +51,7 @@ beforeEach(^{
 });
 
 describe(@"signal of CGRects", ^{
-	__block id<RCLSignal> signal;
+	__block RACSignal *signal;
 
 	beforeEach(^{
 		signal = (id)[rects signalWithScheduler:RACScheduler.immediateScheduler];
@@ -66,7 +66,7 @@ describe(@"signal of CGRects", ^{
 	});
 
 	it(@"should inset", ^{
-		id<RCLSignal> result = [signal insetWidth:[RACSignal return:@3] height:[RACSignal return:@5]];
+		RACSignal *result = [signal insetWidth:[RACSignal return:@3] height:[RACSignal return:@5]];
 		NSArray *expectedRects = @[
 			MEDBox(CGRectMake(13, 15, 14, 10)),
 			MEDBox(CGRectMake(13, 25, 24, 30)),
@@ -77,7 +77,7 @@ describe(@"signal of CGRects", ^{
 	});
 
 	it(@"should slice", ^{
-		id<RCLSignal> result = [signal sliceWithAmount:[RACSignal return:@5] fromEdge:CGRectMinXEdge];
+		RACSignal *result = [signal sliceWithAmount:[RACSignal return:@5] fromEdge:CGRectMinXEdge];
 		NSArray *expectedRects = @[
 			MEDBox(CGRectMake(10, 10, 5, 20)),
 			MEDBox(CGRectMake(10, 20, 5, 40)),
@@ -88,7 +88,7 @@ describe(@"signal of CGRects", ^{
 	});
 
 	it(@"should return a remainder", ^{
-		id<RCLSignal> result = [signal remainderAfterSlicingAmount:[RACSignal return:@5] fromEdge:CGRectMinYEdge];
+		RACSignal *result = [signal remainderAfterSlicingAmount:[RACSignal return:@5] fromEdge:CGRectMinYEdge];
 		NSArray *expectedRects = @[
 			MEDBox(CGRectMake(10, 15, 20, 15)),
 			MEDBox(CGRectMake(10, 25, 30, 35)),
@@ -99,7 +99,7 @@ describe(@"signal of CGRects", ^{
 	});
 
 	it(@"should divide", ^{
-		RACTupleUnpack(id<RCLSignal> slices, id<RCLSignal> remainders) = [signal divideWithAmount:[RACSignal return:@15] fromEdge:CGRectMinXEdge];
+		RACTupleUnpack(RACSignal *slices, RACSignal *remainders) = [signal divideWithAmount:[RACSignal return:@15] fromEdge:CGRectMinXEdge];
 
 		NSArray *expectedSlices = @[
 			MEDBox(CGRectMake(10, 10, 15, 20)),
@@ -118,7 +118,7 @@ describe(@"signal of CGRects", ^{
 	});
 
 	it(@"should divide with padding", ^{
-		RACTupleUnpack(id<RCLSignal> slices, id<RCLSignal> remainders) = [signal divideWithAmount:[RACSignal return:@15] padding:[RACSignal return:@3] fromEdge:CGRectMinXEdge];
+		RACTupleUnpack(RACSignal *slices, RACSignal *remainders) = [signal divideWithAmount:[RACSignal return:@15] padding:[RACSignal return:@3] fromEdge:CGRectMinXEdge];
 
 		NSArray *expectedSlices = @[
 			MEDBox(CGRectMake(10, 10, 15, 20)),
@@ -139,7 +139,7 @@ describe(@"signal of CGRects", ^{
 	it(@"should be returned from +rectsWithX:Y:width:height:", ^{
 		RACSubject *subject = [RACSubject subject];
 
-		id<RCLSignal> constructedSignal = [RACSignal rectsWithX:subject Y:subject width:subject height:subject];
+		RACSignal *constructedSignal = [RACSignal rectsWithX:subject Y:subject width:subject height:subject];
 		NSMutableArray *values = [NSMutableArray array];
 
 		[constructedSignal subscribeNext:^(id value) {
@@ -164,7 +164,7 @@ describe(@"signal of CGRects", ^{
 		RACSubject *originSubject = [RACSubject subject];
 		RACSubject *sizeSubject = [RACSubject subject];
 
-		id<RCLSignal> constructedSignal = [RACSignal rectsWithOrigin:originSubject size:sizeSubject];
+		RACSignal *constructedSignal = [RACSignal rectsWithOrigin:originSubject size:sizeSubject];
 		NSMutableArray *values = [NSMutableArray array];
 
 		[constructedSignal subscribeNext:^(id value) {
@@ -185,7 +185,7 @@ describe(@"signal of CGRects", ^{
 });
 
 describe(@"signal of CGSizes", ^{
-	__block id<RCLSignal> signal;
+	__block RACSignal *signal;
 
 	beforeEach(^{
 		signal = (id)[sizes signalWithScheduler:RACScheduler.immediateScheduler];
@@ -202,7 +202,7 @@ describe(@"signal of CGSizes", ^{
 	it(@"should be returned from +sizesWithWidth:height:", ^{
 		RACSubject *subject = [RACSubject subject];
 
-		id<RCLSignal> constructedSignal = [RACSignal sizesWithWidth:subject height:subject];
+		RACSignal *constructedSignal = [RACSignal sizesWithWidth:subject height:subject];
 		NSMutableArray *values = [NSMutableArray array];
 
 		[constructedSignal subscribeNext:^(id value) {
@@ -223,7 +223,7 @@ describe(@"signal of CGSizes", ^{
 });
 
 describe(@"signal of CGPoints", ^{
-	__block id<RCLSignal> signal;
+	__block RACSignal *signal;
 
 	beforeEach(^{
 		signal = (id)[points signalWithScheduler:RACScheduler.immediateScheduler];
@@ -240,7 +240,7 @@ describe(@"signal of CGPoints", ^{
 	it(@"should be returned from +pointsWithX:Y:", ^{
 		RACSubject *subject = [RACSubject subject];
 
-		id<RCLSignal> constructedSignal = [RACSignal pointsWithX:subject Y:subject];
+		RACSignal *constructedSignal = [RACSignal pointsWithX:subject Y:subject];
 		NSMutableArray *values = [NSMutableArray array];
 
 		[constructedSignal subscribeNext:^(id value) {
@@ -271,13 +271,13 @@ describe(@"+min: and +max:", ^{
 	});
 
 	it(@"should return maximums", ^{
-		id<RCLSignal> signal = [RACSignal max:signals];
+		RACSignal *signal = [RACSignal max:signals];
 		NSArray *expected = @[ @20, @30, @45, @45, @45, @45 ];
 		expect(signal.sequence).to.equal(expected.rac_sequence);
 	});
 
 	it(@"should return minimums", ^{
-		id<RCLSignal> signal = [RACSignal min:signals];
+		RACSignal *signal = [RACSignal min:signals];
 		NSArray *expected = @[ @20, @20, @20, @10, @10, @10 ];
 		expect(signal.sequence).to.equal(expected.rac_sequence);
 	});

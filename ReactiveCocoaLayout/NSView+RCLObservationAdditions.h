@@ -8,7 +8,7 @@
 
 #import <Cocoa/Cocoa.h>
 
-@protocol RCLSignal;
+@class RCLSignal;
 
 @interface NSView (RCLObservationAdditions)
 
@@ -18,7 +18,7 @@
 // changes are received.
 //
 // Returns a signal which sends the current and all future values for `bounds`.
-- (id<RCLSignal>)rcl_boundsSignal;
+- (RACSignal *)rcl_boundsSignal;
 
 // Observes the receiver's `frame` for changes.
 //
@@ -26,6 +26,6 @@
 // changes are received.
 //
 // Returns a signal which sends the current and all future values for `frame`.
-- (id<RCLSignal>)rcl_frameSignal;
+- (RACSignal *)rcl_frameSignal;
 
 @end
