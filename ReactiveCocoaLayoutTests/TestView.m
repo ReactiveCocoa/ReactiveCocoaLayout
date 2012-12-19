@@ -29,6 +29,10 @@
 	return CGRectInset(frame, 1, 2);
 }
 
+- (CGRect)frameForAlignmentRect:(CGRect)rect {
+	return CGRectInset(rect, -1, -2);
+}
+
 - (CGSize)intrinsicContentSize {
 	return self.size;
 }

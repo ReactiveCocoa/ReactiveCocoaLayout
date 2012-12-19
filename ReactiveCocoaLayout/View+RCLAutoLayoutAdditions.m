@@ -61,4 +61,12 @@ static void newInvalidateIntrinsicContentSize(id self, SEL _cmd) {
 	}];
 }
 
+- (RACDisposable *)rcl_bindAlignmentRectToSignal:(RACSignal *)alignmentRectSignal {
+	NSParameterAssert(alignmentRectSignal != nil);
+
+	return [alignmentRectSignal subscribeNext:^(NSValue *alignmentRect) {
+		self.frame = [self frameForAlignmentRect:alignmentRect.med_rectValue];
+	}];
+}
+
 @end

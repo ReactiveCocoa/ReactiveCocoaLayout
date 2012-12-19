@@ -40,4 +40,10 @@
 // rect.
 - (RACSignal *)rcl_alignmentRectSignal;
 
+// Every time the given signal sends a new CGRect, adjusts the receiver's frame
+// such that the receiver's alignment rect matches the sent value.
+//
+// Returns a disposable which can be used to terminate the binding.
+- (RACDisposable *)rcl_bindAlignmentRectToSignal:(RACSignal *)alignmentRectSignal;
+
 @end

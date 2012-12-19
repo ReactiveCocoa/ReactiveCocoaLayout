@@ -101,6 +101,21 @@ sharedExamplesFor(ViewExamples, ^{
 		view.frame = newFrame;
 		expect(lastValue.med_rectValue).to.equal(CGRectMake(11, 22, 28, 36));
 	});
+
+	it(@"should bind the alignment rect", ^{
+		RACSubject *subject = [RACSubject subject];
+
+		RACDisposable *disposable = [view rcl_bindAlignmentRectToSignal:subject];
+		expect(disposable).notTo.beNil();
+
+		expect(view.frame).to.equal(initialFrame);
+
+		[subject sendNext:MEDBox(CGRectMake(1, 2, 8, 6))];
+		expect(view.frame).to.equal(CGRectMake(0, 0, 10, 10));
+
+		[subject sendNext:MEDBox(CGRectMake(5, 5, 10, 10))];
+		expect(view.frame).to.equal(CGRectMake(4, 3, 12, 14));
+	});
 });
 
 SharedExampleGroupsEnd
