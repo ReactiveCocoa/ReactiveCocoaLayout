@@ -73,6 +73,14 @@ describe(@"signal of CGRects", ^{
 		expect(signal.height.sequence).to.equal(heights);
 	});
 
+	it(@"should map to positions of a specific edge", ^{
+		RACSignal *minX = [signal positionOfEdge:[RACSignal return:@(CGRectMinXEdge)]];
+		expect(minX.sequence).to.equal(xs);
+
+		RACSignal *minY = [signal positionOfEdge:[RACSignal return:@(CGRectMinYEdge)]];
+		expect(minY.sequence).to.equal(ys);
+	});
+
 	it(@"should map to minX values", ^{
 		expect(signal.minX.sequence).to.equal(xs);
 	});

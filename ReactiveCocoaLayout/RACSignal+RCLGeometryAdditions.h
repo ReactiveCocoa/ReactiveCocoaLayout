@@ -81,6 +81,14 @@
 // Returns a signal of CGFloat values.
 - (RACSignal *)maxY;
 
+// Maps CGRect values to the position of the edge sent from the given signal.
+//
+// edgeSignal - A signal of NSNumber-boxed CGRectEdge values, representing the
+//              side to get the position of.
+//
+// Returns a signal of CGFloat values.
+- (RACSignal *)positionOfEdge:(RACSignal *)edgeSignal;
+
 // Insets each CGRect by the number of points sent from the given width and
 // height signals.
 //

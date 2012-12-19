@@ -118,26 +118,52 @@ static RACSignal *latestNumberMatchingComparisonResult(NSArray *signals, NSCompa
 }
 
 - (RACSignal *)minX {
-	return [self map:^(NSValue *value) {
-		return @(CGRectGetMinX(value.med_rectValue));
-	}];
+	return [self positionOfEdge:[RACSignal return:@(CGRectMinXEdge)]];
 }
 
 - (RACSignal *)minY {
-	return [self map:^(NSValue *value) {
-		return @(CGRectGetMinY(value.med_rectValue));
-	}];
+	return [self positionOfEdge:[RACSignal return:@(CGRectMinYEdge)]];
 }
 
 - (RACSignal *)maxX {
-	return [self map:^(NSValue *value) {
-		return @(CGRectGetMaxX(value.med_rectValue));
-	}];
+	return [self positionOfEdge:[RACSignal return:@(CGRectMaxXEdge)]];
 }
 
 - (RACSignal *)maxY {
-	return [self map:^(NSValue *value) {
-		return @(CGRectGetMaxY(value.med_rectValue));
+	return [self positionOfEdge:[RACSignal return:@(CGRectMaxYEdge)]];
+}
+
+- (RACSignal *)positionOfEdge:(RACSignal *)edgeSignal {
+	NSParameterAssert(edgeSignal != nil);
+
+	RACReplaySubject *edgeSubject = [RACReplaySubject replaySubjectWithCapacity:1];
+	[[edgeSignal multicast:edgeSubject] connect];
+
+	// Terminates edgeSubject when the receiver completes.
+	RACSignal *selfTerminatingEdge = [self doCompleted:^{
+		[edgeSubject sendCompleted];
+	}];
+
+	return [RACSignal combineLatest:@[ edgeSubject, selfTerminatingEdge ] reduce:^ id (NSNumber *edge, NSValue *value) {
+		CGRect rect = value.med_rectValue;
+
+		switch (edge.unsignedIntegerValue) {
+			case CGRectMinXEdge:
+				return @(CGRectGetMinX(rect));
+
+			case CGRectMinYEdge:
+				return @(CGRectGetMinY(rect));
+
+			case CGRectMaxXEdge:
+				return @(CGRectGetMaxX(rect));
+
+			case CGRectMaxYEdge:
+				return @(CGRectGetMaxY(rect));
+
+			default:
+				NSAssert(NO, @"Unrecognized edge: %@", edge);
+				return nil;
+		}
 	}];
 }
 
