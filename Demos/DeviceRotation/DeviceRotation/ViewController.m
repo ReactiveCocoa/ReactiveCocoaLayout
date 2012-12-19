@@ -53,7 +53,7 @@
 	self.nameTextView = [[UITextView alloc] initWithFrame:CGRectZero];
 	[self.view addSubview:self.nameTextView];
 
-	RAC(self.nameTextView.frame) = [insetBounds divideWithAmount:self.nameLabel.rcl_frameSignal.size.width padding:[RACSignal return:@8] fromEdge:CGRectMinXEdge][1];
+	RAC(self.nameTextView.frame) = [insetBounds divideWithAmount:self.nameLabel.rcl_frameSignal.width padding:[RACSignal return:@8] fromEdge:CGRectMinXEdge][1];
 }
 
 - (void)viewWillAppear:(BOOL)animated {

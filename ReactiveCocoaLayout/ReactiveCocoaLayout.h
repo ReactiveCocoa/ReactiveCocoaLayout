@@ -7,6 +7,7 @@
 //
 
 #import "RACSignal+RCLGeometryAdditions.h"
+#import "RACSignal+RCLWritingDirectionAdditions.h"
 #import "View+RCLAutoLayoutObservationAdditions.h"
 
 #ifdef __IPHONE_OS_VERSION_MIN_REQUIRED

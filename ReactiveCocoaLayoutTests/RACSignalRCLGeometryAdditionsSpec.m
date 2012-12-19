@@ -18,6 +18,9 @@ __block RACSequence *heights;
 __block RACSequence *xs;
 __block RACSequence *ys;
 
+__block RACSequence *maxXs;
+__block RACSequence *maxYs;
+
 beforeEach(^{
 	rects = @[
 		MEDBox(CGRectMake(10, 10, 20, 20)),
@@ -48,6 +51,14 @@ beforeEach(^{
 	ys = [points map:^(NSValue *value) {
 		return @(value.med_pointValue.y);
 	}];
+
+	maxXs = [RACSequence zip:@[ xs, widths ] reduce:^(NSNumber *x, NSNumber *width) {
+		return @(x.doubleValue + width.doubleValue);
+	}];
+
+	maxYs = [RACSequence zip:@[ ys, heights ] reduce:^(NSNumber *y, NSNumber *height) {
+		return @(y.doubleValue + height.doubleValue);
+	}];
 });
 
 describe(@"signal of CGRects", ^{
@@ -63,6 +74,50 @@ describe(@"signal of CGRects", ^{
 
 	it(@"should map to origins", ^{
 		expect(signal.origin.sequence).to.equal(points);
+	});
+
+	it(@"should map to widths", ^{
+		expect(signal.width.sequence).to.equal(widths);
+	});
+
+	it(@"should map to heights", ^{
+		expect(signal.height.sequence).to.equal(heights);
+	});
+
+	it(@"should map to positions of a specific edge", ^{
+		RACSignal *minX = [signal positionOfEdge:[RACSignal return:@(CGRectMinXEdge)]];
+		expect(minX.sequence).to.equal(xs);
+
+		RACSignal *minY = [signal positionOfEdge:[RACSignal return:@(CGRectMinYEdge)]];
+		expect(minY.sequence).to.equal(ys);
+	});
+
+	it(@"should map to minX values", ^{
+		expect(signal.minX.sequence).to.equal(xs);
+	});
+
+	it(@"should map to minY values", ^{
+		expect(signal.minY.sequence).to.equal(ys);
+	});
+
+	it(@"should map to maxX values", ^{
+		expect(signal.maxX.sequence).to.equal(maxXs);
+	});
+
+	it(@"should map to maxY values", ^{
+		expect(signal.maxY.sequence).to.equal(maxYs);
+	});
+
+	it(@"should map to leading and trailing", ^{
+		RACSequence *leading = signal.leading.sequence;
+		RACSequence *trailing = signal.trailing.sequence;
+
+		if ([leading isEqual:xs]) {
+			expect(trailing).to.equal(maxXs);
+		} else {
+			expect(leading).to.equal(maxXs);
+			expect(trailing).to.equal(xs);
+		}
 	});
 
 	it(@"should inset", ^{
