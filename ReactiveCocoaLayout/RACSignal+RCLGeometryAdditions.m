@@ -7,6 +7,7 @@
 //
 
 #import "RACSignal+RCLGeometryAdditions.h"
+#import "RACSignal+RCLWritingDirectionAdditions.h"
 
 // When any signal sends an NSNumber, if -compare: invoked against the previous
 // value (and passed the new value) returns `result`, the new value is sent on
@@ -165,6 +166,14 @@ static RACSignal *latestNumberMatchingComparisonResult(NSArray *signals, NSCompa
 				return nil;
 		}
 	}];
+}
+
+- (RACSignal *)leading {
+	return [self positionOfEdge:RACSignal.leadingEdgeSignal];
+}
+
+- (RACSignal *)trailing {
+	return [self positionOfEdge:RACSignal.trailingEdgeSignal];
 }
 
 - (RACSignal *)insetWidth:(RACSignal *)widthSignal height:(RACSignal *)heightSignal {
