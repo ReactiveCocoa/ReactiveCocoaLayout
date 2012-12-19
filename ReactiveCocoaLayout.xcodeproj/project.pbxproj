@@ -1092,6 +1092,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = D0BB24B11678789A005E9371 /* iOS-Application.xcconfig */;
 			buildSettings = {
+				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
 					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
@@ -1107,6 +1108,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = D0BB24B11678789A005E9371 /* iOS-Application.xcconfig */;
 			buildSettings = {
+				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
 					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
@@ -1179,6 +1181,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = D0BB24B11678789A005E9371 /* iOS-Application.xcconfig */;
 			buildSettings = {
+				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
 					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
