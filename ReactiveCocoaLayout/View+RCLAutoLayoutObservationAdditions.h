@@ -28,4 +28,7 @@
 // `intrinsicContentSize`.
 - (RACSignal *)rcl_intrinsicContentSizeSignal;
 
+// Like -rcl_intrinsicContentSizeSignal, but sends rectangles originating at (0, 0).
+- (RACSignal *)rcl_intrinsicBoundsSignal;
+
 @end

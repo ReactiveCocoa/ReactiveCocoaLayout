@@ -50,4 +50,8 @@ static void newInvalidateIntrinsicContentSize(id self, SEL _cmd) {
 	return [subject startWith:MEDBox(self.intrinsicContentSize)];
 }
 
+- (RACSignal *)rcl_intrinsicBoundsSignal {
+	return [RACSignal rectsWithSize:self.rcl_intrinsicContentSizeSignal];
+}
+
 @end

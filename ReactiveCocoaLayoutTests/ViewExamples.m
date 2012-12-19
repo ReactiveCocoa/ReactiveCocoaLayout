@@ -71,6 +71,21 @@ sharedExamplesFor(ViewExamples, ^{
 		[view invalidateAndSetIntrinsicContentSize:newSize];
 		expect(lastValue.med_sizeValue).to.equal(newSize);
 	});
+
+	it(@"should send values on rcl_intrinsicBoundsSignal", ^{
+		__block NSValue *lastValue = nil;
+		[view.rcl_intrinsicBoundsSignal subscribeNext:^(NSValue *value) {
+			expect(value).to.beKindOf(NSValue.class);
+			lastValue = value;
+		}];
+
+		expect(lastValue).notTo.beNil();
+		expect(lastValue.med_rectValue).to.equal(CGRectZero);
+
+		CGSize newSize = CGSizeMake(5, 10);
+		[view invalidateAndSetIntrinsicContentSize:newSize];
+		expect(lastValue.med_rectValue).to.equal(CGRectMake(0, 0, 5, 10));
+	});
 });
 
 SharedExampleGroupsEnd
