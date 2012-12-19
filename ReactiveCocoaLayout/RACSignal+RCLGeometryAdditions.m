@@ -31,6 +31,53 @@ static RACSignal *latestNumberMatchingComparisonResult(NSArray *signals, NSCompa
 		}];
 }
 
+// Combines the values of the two signals using the given operator.
+//
+// The values may be CGFloats, CGSizes, or CGPoints, but both signals must send
+// values of the same type.
+//
+// Returns a signal of results, using the same type as the input values.
+static RACSignal *combineSignalsWithOperator(RACSignal *a, RACSignal *b, CGFloat (^operator)(CGFloat, CGFloat)) {
+	NSCParameterAssert(a != nil);
+	NSCParameterAssert(b != nil);
+	NSCParameterAssert(operator != nil);
+
+	return [RACSignal combineLatest:@[ a, b ] reduce:^ id (id valueA, id valueB) {
+		if ([valueA isKindOfClass:NSNumber.class]) {
+			NSCAssert([valueB isKindOfClass:NSNumber.class], @"%@ is a number, but %@ is not", valueA, valueB);
+
+			return @(operator([valueA doubleValue], [valueB doubleValue]));
+		}
+
+		NSCAssert([valueA isKindOfClass:NSValue.class], @"%@ is not a number, so it should be an NSValue", valueA);
+		NSCAssert([valueB isKindOfClass:NSValue.class], @"%@ is an NSValue, but %@ is not", valueA, valueB);
+		NSCAssert([valueA med_geometryStructType] == [valueB med_geometryStructType], @"Values do not contain the same type of geometry structure: %@, %@", valueA, valueB);
+
+		switch ([valueA med_geometryStructType]) {
+			case MEDGeometryStructTypePoint: {
+				CGPoint pointA = [valueA med_pointValue];
+				CGPoint pointB = [valueB med_pointValue];
+
+				CGPoint result = CGPointMake(operator(pointA.x, pointB.x), operator(pointA.y, pointB.y));
+				return MEDBox(result);
+			}
+
+			case MEDGeometryStructTypeSize: {
+				CGSize sizeA = [valueA med_sizeValue];
+				CGSize sizeB = [valueB med_sizeValue];
+
+				CGSize result = CGSizeMake(operator(sizeA.width, sizeB.width), operator(sizeA.height, sizeB.height));
+				return MEDBox(result);
+			}
+
+			case MEDGeometryStructTypeRect:
+			default:
+				NSCAssert(NO, @"Values must contain CGSizes or CGPoints: %@, %@", valueA, valueB);
+				return nil;
+		}
+	}];
+}
+
 @implementation RACSignal (RCLGeometryAdditions)
 
 + (RACSignal *)rectsWithX:(RACSignal *)xSignal Y:(RACSignal *)ySignal width:(RACSignal *)widthSignal height:(RACSignal *)heightSignal {
@@ -294,6 +341,30 @@ static RACSignal *latestNumberMatchingComparisonResult(NSArray *signals, NSCompa
 
 + (RACSignal *)min:(NSArray *)signals {
 	return latestNumberMatchingComparisonResult(signals, NSOrderedDescending);
+}
+
+- (RACSignal *)plus:(RACSignal *)addendSignal {
+	return combineSignalsWithOperator(self, addendSignal, ^(CGFloat a, CGFloat b) {
+		return a + b;
+	});
+}
+
+- (RACSignal *)minus:(RACSignal *)subtrahendSignal {
+	return combineSignalsWithOperator(self, subtrahendSignal, ^(CGFloat a, CGFloat b) {
+		return a - b;
+	});
+}
+
+- (RACSignal *)multipliedBy:(RACSignal *)factorSignal {
+	return combineSignalsWithOperator(self, factorSignal, ^(CGFloat a, CGFloat b) {
+		return a * b;
+	});
+}
+
+- (RACSignal *)dividedBy:(RACSignal *)denominatorSignal {
+	return combineSignalsWithOperator(self, denominatorSignal, ^(CGFloat a, CGFloat b) {
+		return a / b;
+	});
 }
 
 @end

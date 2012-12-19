@@ -180,7 +180,7 @@ describe(@"signal of CGRects", ^{
 		expect(result.sequence).to.equal(expectedRects.rac_sequence);
 	});
 
-	it(@"should divide", ^{
+	it(@"should divide into two rects", ^{
 		RACTupleUnpack(RACSignal *slices, RACSignal *remainders) = [signal divideWithAmount:[RACSignal return:@15] fromEdge:CGRectMinXEdge];
 
 		NSArray *expectedSlices = @[
@@ -199,7 +199,7 @@ describe(@"signal of CGRects", ^{
 		expect(remainders.sequence).to.equal(expectedRemainders.rac_sequence);
 	});
 
-	it(@"should divide with padding", ^{
+	it(@"should divide into two rects with padding", ^{
 		RACTupleUnpack(RACSignal *slices, RACSignal *remainders) = [signal divideWithAmount:[RACSignal return:@15] padding:[RACSignal return:@3] fromEdge:CGRectMinXEdge];
 
 		NSArray *expectedSlices = @[
@@ -435,6 +435,92 @@ describe(@"+min: and +max:", ^{
 		RACSignal *signal = [RACSignal min:signals];
 		NSArray *expected = @[ @20, @20, @20, @10, @10, @10 ];
 		expect(signal.sequence).to.equal(expected.rac_sequence);
+	});
+});
+
+describe(@"mathematical operators", ^{
+	__block RACSignal *numberA;
+	__block RACSignal *numberB;
+
+	__block RACSignal *pointA;
+	__block RACSignal *pointB;
+
+	__block RACSignal *sizeA;
+	__block RACSignal *sizeB;
+
+	beforeEach(^{
+		numberA = [RACSignal return:@5];
+		numberB = [RACSignal return:@2];
+
+		pointA = [RACSignal return:MEDBox(CGPointMake(5, 10))];
+		pointB = [RACSignal return:MEDBox(CGPointMake(1, 2))];
+
+		sizeA = [RACSignal return:MEDBox(CGSizeMake(5, 10))];
+		sizeB = [RACSignal return:MEDBox(CGSizeMake(1, 2))];
+	});
+
+	describe(@"-plus:", ^{
+		it(@"should add two numbers", ^{
+			expect([numberA plus:numberB].sequence).to.equal(@[ @7 ].rac_sequence);
+		});
+
+		it(@"should add two points", ^{
+			CGPoint expected = CGPointMake(6, 12);
+			expect([pointA plus:pointB].sequence).to.equal(@[ MEDBox(expected) ].rac_sequence);
+		});
+
+		it(@"should add two sizes", ^{
+			CGSize expected = CGSizeMake(6, 12);
+			expect([sizeA plus:sizeB].sequence).to.equal(@[ MEDBox(expected) ].rac_sequence);
+		});
+	});
+
+	describe(@"-minus:", ^{
+		it(@"should subtract two numbers", ^{
+			expect([numberA minus:numberB].sequence).to.equal(@[ @3 ].rac_sequence);
+		});
+
+		it(@"should subtract two points", ^{
+			CGPoint expected = CGPointMake(4, 8);
+			expect([pointA minus:pointB].sequence).to.equal(@[ MEDBox(expected) ].rac_sequence);
+		});
+
+		it(@"should subtract two sizes", ^{
+			CGSize expected = CGSizeMake(4, 8);
+			expect([sizeA minus:sizeB].sequence).to.equal(@[ MEDBox(expected) ].rac_sequence);
+		});
+	});
+
+	describe(@"-multipliedBy:", ^{
+		it(@"should multiply two numbers", ^{
+			expect([numberA multipliedBy:numberB].sequence).to.equal(@[ @10 ].rac_sequence);
+		});
+
+		it(@"should multiply two points", ^{
+			CGPoint expected = CGPointMake(5, 20);
+			expect([pointA multipliedBy:pointB].sequence).to.equal(@[ MEDBox(expected) ].rac_sequence);
+		});
+
+		it(@"should multiply two sizes", ^{
+			CGSize expected = CGSizeMake(5, 20);
+			expect([sizeA multipliedBy:sizeB].sequence).to.equal(@[ MEDBox(expected) ].rac_sequence);
+		});
+	});
+
+	describe(@"-dividedBy:", ^{
+		it(@"should divide two numbers", ^{
+			expect([numberA dividedBy:numberB].sequence).to.equal(@[ @2.5 ].rac_sequence);
+		});
+
+		it(@"should divide two points", ^{
+			CGPoint expected = CGPointMake(5, 5);
+			expect([pointA dividedBy:pointB].sequence).to.equal(@[ MEDBox(expected) ].rac_sequence);
+		});
+
+		it(@"should divide two sizes", ^{
+			CGSize expected = CGSizeMake(5, 5);
+			expect([sizeA dividedBy:sizeB].sequence).to.equal(@[ MEDBox(expected) ].rac_sequence);
+		});
 	});
 });
 

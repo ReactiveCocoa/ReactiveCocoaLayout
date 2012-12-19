@@ -213,4 +213,36 @@
 // Returns a signal of aligned CGRect values.
 - (RACSignal *)alignEdge:(RACSignal *)edgeSignal toPosition:(RACSignal *)positionSignal;
 
+// Adds the values of the receiver and the given signal.
+//
+// The values may be CGFloats, CGSizes, or CGPoints, but both signals must send
+// values of the same type.
+//
+// Returns a signal of sums, using the same type as the input values.
+- (RACSignal *)plus:(RACSignal *)addendSignal;
+
+// Subtracts the values of the given signal from those of the receiver.
+//
+// The values may be CGFloats, CGSizes, or CGPoints, but both signals must send
+// values of the same type.
+//
+// Returns a signal of differences, using the same type as the input values.
+- (RACSignal *)minus:(RACSignal *)subtrahendSignal;
+
+// Multiplies the values of the receiver and the given signal.
+//
+// The values may be CGFloats, CGSizes, or CGPoints, but both signals must send
+// values of the same type.
+//
+// Returns a signal of products, using the same type as the input values.
+- (RACSignal *)multipliedBy:(RACSignal *)factorSignal;
+
+// Divides the values of the receiver by those of the given signal.
+//
+// The values may be CGFloats, CGSizes, or CGPoints, but both signals must send
+// values of the same type.
+//
+// Returns a signal of quotients, using the same type as the input values.
+- (RACSignal *)dividedBy:(RACSignal *)denominatorSignal;
+
 @end
