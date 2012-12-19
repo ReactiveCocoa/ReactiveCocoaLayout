@@ -182,6 +182,27 @@ describe(@"signal of CGRects", ^{
 
 		expect(values).to.equal(expected);
 	});
+
+	it(@"should be returned from +rectsWithSize:", ^{
+		RACSubject *sizeSubject = [RACSubject subject];
+
+		RACSignal *constructedSignal = [RACSignal rectsWithSize:sizeSubject];
+		NSMutableArray *values = [NSMutableArray array];
+
+		[constructedSignal subscribeNext:^(id value) {
+			[values addObject:value];
+		}];
+
+		[sizeSubject sendNext:MEDBox(CGSizeMake(0, 0))];
+		[sizeSubject sendNext:MEDBox(CGSizeMake(5, 5))];
+
+		NSArray *expected = @[
+			MEDBox(CGRectMake(0, 0, 0, 0)),
+			MEDBox(CGRectMake(0, 0, 5, 5)),
+		];
+
+		expect(values).to.equal(expected);
+	});
 });
 
 describe(@"signal of CGSizes", ^{

@@ -55,6 +55,12 @@ static RACSignal *latestNumberMatchingComparisonResult(NSArray *signals, NSCompa
 	}];
 }
 
++ (RACSignal *)rectsWithSize:(RACSignal *)sizeSignal {
+	// CGPointZero apparently isn't typed (for MEDBox), so manually create it.
+	RACSignal *originSignal = [RACSignal return:MEDBox(CGPointMake(0, 0))];
+	return [self rectsWithOrigin:originSignal size:sizeSignal];
+}
+
 - (RACSignal *)size {
 	return [self map:^(NSValue *value) {
 		return MEDBox(value.med_rectValue.size);
