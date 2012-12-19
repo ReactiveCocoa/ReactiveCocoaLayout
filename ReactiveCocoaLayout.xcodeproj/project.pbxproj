@@ -34,6 +34,7 @@
 		D06C9E59167D89DB00276090 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D06C9E58167D89DB00276090 /* CoreGraphics.framework */; };
 		D06C9E5B167D8A9A00276090 /* NSViewRCLObservationAdditionsSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = D06C9E5A167D8A9A00276090 /* NSViewRCLObservationAdditionsSpec.m */; };
 		D06C9E5E167D8BD900276090 /* UIViewRCLObservationAdditionsSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = D06C9E5D167D8BD900276090 /* UIViewRCLObservationAdditionsSpec.m */; };
+		D08D164A16819DE300FBBA12 /* NSNotificationCenter+RACSupport.m in Sources */ = {isa = PBXBuildFile; fileRef = D0BB25E916788579005E9371 /* NSNotificationCenter+RACSupport.m */; };
 		D0BB24751678772C005E9371 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0BB24741678772C005E9371 /* Cocoa.framework */; };
 		D0BB247F1678772C005E9371 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = D0BB247D1678772C005E9371 /* InfoPlist.strings */; };
 		D0BB248B1678772C005E9371 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0BB248A1678772C005E9371 /* SenTestingKit.framework */; };
@@ -952,6 +953,7 @@
 				D0FD5A981679E7AF003C3210 /* UIView+RCLObservationAdditions.m in Sources */,
 				D051391D167F108000334374 /* View+RCLAutoLayoutObservationAdditions.m in Sources */,
 				D0ED89F616814D800041A188 /* RACSignal+RCLWritingDirectionAdditions.m in Sources */,
+				D08D164A16819DE300FBBA12 /* NSNotificationCenter+RACSupport.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1092,6 +1094,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = D0BB24B11678789A005E9371 /* iOS-Application.xcconfig */;
 			buildSettings = {
+				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
 					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
@@ -1107,6 +1110,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = D0BB24B11678789A005E9371 /* iOS-Application.xcconfig */;
 			buildSettings = {
+				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
 					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
@@ -1179,6 +1183,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = D0BB24B11678789A005E9371 /* iOS-Application.xcconfig */;
 			buildSettings = {
+				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
 					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
