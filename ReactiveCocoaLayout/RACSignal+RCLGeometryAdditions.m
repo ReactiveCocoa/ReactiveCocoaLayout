@@ -184,6 +184,47 @@ static RACSignal *latestNumberMatchingComparisonResult(NSArray *signals, NSCompa
 	return [self positionOfEdge:RACSignal.trailingEdgeSignal];
 }
 
+- (RACSignal *)alignEdge:(RACSignal *)edgeSignal toPosition:(RACSignal *)positionSignal {
+	NSParameterAssert(edgeSignal != nil);
+	NSParameterAssert(positionSignal != nil);
+
+	RACReplaySubject *edgeSubject = [RACReplaySubject replaySubjectWithCapacity:1];
+	[[edgeSignal multicast:edgeSubject] connect];
+
+	// Terminates edgeSubject when the receiver completes.
+	RACSignal *selfTerminatingEdge = [self doCompleted:^{
+		[edgeSubject sendCompleted];
+	}];
+
+	return [RACSignal combineLatest:@[ edgeSubject, positionSignal, selfTerminatingEdge ] reduce:^ id (NSNumber *edge, NSNumber *position, NSValue *value) {
+		CGRect rect = value.med_rectValue;
+
+		switch (edge.unsignedIntegerValue) {
+			case CGRectMinXEdge:
+				rect.origin.x = position.doubleValue;
+				break;
+
+			case CGRectMinYEdge:
+				rect.origin.y = position.doubleValue;
+				break;
+
+			case CGRectMaxXEdge:
+				rect.origin.x = position.doubleValue - CGRectGetWidth(rect);
+				break;
+
+			case CGRectMaxYEdge:
+				rect.origin.y = position.doubleValue - CGRectGetHeight(rect);
+				break;
+
+			default:
+				NSAssert(NO, @"Unrecognized edge: %@", edge);
+				return nil;
+		}
+
+		return MEDBox(rect);
+	}];
+}
+
 - (RACSignal *)insetWidth:(RACSignal *)widthSignal height:(RACSignal *)heightSignal {
 	NSParameterAssert(widthSignal != nil);
 	NSParameterAssert(heightSignal != nil);

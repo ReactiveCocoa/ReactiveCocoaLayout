@@ -258,6 +258,58 @@ describe(@"signal of CGRects", ^{
 
 		expect(values).to.equal(expected);
 	});
+
+	describe(@"alignment", ^{
+		__block RACSignal *position;
+		
+		beforeEach(^{
+			position = [RACSignal return:@3];
+		});
+
+		it(@"should align minX to a specified position", ^{
+			RACSignal *aligned = [signal alignEdge:[RACSignal return:@(CGRectMinXEdge)] toPosition:position];
+			RACSequence *expected = @[
+				MEDBox(CGRectMake(3, 10, 20, 20)),
+				MEDBox(CGRectMake(3, 20, 30, 40)),
+				MEDBox(CGRectMake(3, 15, 45, 35)),
+			].rac_sequence;
+
+			expect(aligned.sequence).to.equal(expected);
+		});
+
+		it(@"should align minY to a specified position", ^{
+			RACSignal *aligned = [signal alignEdge:[RACSignal return:@(CGRectMinYEdge)] toPosition:position];
+			RACSequence *expected = @[
+				MEDBox(CGRectMake(10, 3, 20, 20)),
+				MEDBox(CGRectMake(10, 3, 30, 40)),
+				MEDBox(CGRectMake(25, 3, 45, 35)),
+			].rac_sequence;
+
+			expect(aligned.sequence).to.equal(expected);
+		});
+
+		it(@"should align maxX to a specified position", ^{
+			RACSignal *aligned = [signal alignEdge:[RACSignal return:@(CGRectMaxXEdge)] toPosition:position];
+			RACSequence *expected = @[
+				MEDBox(CGRectMake(-17, 10, 20, 20)),
+				MEDBox(CGRectMake(-27, 20, 30, 40)),
+				MEDBox(CGRectMake(-42, 15, 45, 35)),
+			].rac_sequence;
+
+			expect(aligned.sequence).to.equal(expected);
+		});
+
+		it(@"should align maxY to a specified position", ^{
+			RACSignal *aligned = [signal alignEdge:[RACSignal return:@(CGRectMaxYEdge)] toPosition:position];
+			RACSequence *expected = @[
+				MEDBox(CGRectMake(10, -17, 20, 20)),
+				MEDBox(CGRectMake(10, -37, 30, 40)),
+				MEDBox(CGRectMake(25, -32, 45, 35)),
+			].rac_sequence;
+
+			expect(aligned.sequence).to.equal(expected);
+		});
+	});
 });
 
 describe(@"signal of CGSizes", ^{

@@ -187,4 +187,15 @@
 // Returns a signal which sends NSNumber minimum values.
 + (RACSignal *)min:(NSArray *)signals;
 
+// Aligns a specific edge of each CGRect to the positions sent from the given
+// signal.
+//
+// edgeSignal     - A signal of NSNumber-boxed CGRectEdge values, representing
+//                  the side of the CGRect to align.
+// positionSignal - A signal of CGFloat values, representing the position to
+//                  align the specified edge to.
+//
+// Returns a signal of aligned CGRect values.
+- (RACSignal *)alignEdge:(RACSignal *)edgeSignal toPosition:(RACSignal *)positionSignal;
+
 @end
