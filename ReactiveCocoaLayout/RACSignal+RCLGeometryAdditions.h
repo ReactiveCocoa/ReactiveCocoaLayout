@@ -218,6 +218,24 @@
 // Returns a signal of aligned CGRect values.
 - (RACSignal *)alignEdge:(RACSignal *)edgeSignal toPosition:(RACSignal *)positionSignal;
 
+// Aligns the center X position of each CGRect to the values sent from the given
+// signal.
+//
+// centerXSignal - A signal of CGFloat values, representing the position to align
+//                 the horizontal center to.
+//
+// Returns a signal of aligned CGRect values.
+- (RACSignal *)alignCenterX:(RACSignal *)centerXSignal;
+
+// Aligns the center Y position of each CGRect to the values sent from the given
+// signal.
+//
+// centerYSignal - A signal of CGFloat values, representing the position to align
+//                 the vertical center to.
+//
+// Returns a signal of aligned CGRect values.
+- (RACSignal *)alignCenterY:(RACSignal *)centerYSignal;
+
 // Adds the values of the receiver and the given signal.
 //
 // The values may be CGFloats, CGSizes, or CGPoints, but both signals must send

@@ -340,6 +340,28 @@ describe(@"signal of CGRects", ^{
 			expect(aligned.sequence).to.equal(expected);
 		});
 
+		it(@"should align centerX to a specified position", ^{
+			RACSignal *aligned = [signal alignCenterX:position];
+			RACSequence *expected = @[
+				MEDBox(CGRectMake(-7, 10, 20, 20)),
+				MEDBox(CGRectMake(-12, 20, 30, 40)),
+				MEDBox(CGRectMake(-19.5, 15, 45, 35)),
+			].rac_sequence;
+
+			expect(aligned.sequence).to.equal(expected);
+		});
+
+		it(@"should align centerY to a specified position", ^{
+			RACSignal *aligned = [signal alignCenterY:position];
+			RACSequence *expected = @[
+				MEDBox(CGRectMake(10, -7, 20, 20)),
+				MEDBox(CGRectMake(10, -17, 30, 40)),
+				MEDBox(CGRectMake(25, -14.5, 45, 35)),
+			].rac_sequence;
+
+			expect(aligned.sequence).to.equal(expected);
+		});
+
 		it(@"should align maxX to a specified position", ^{
 			RACSignal *aligned = [signal alignEdge:[RACSignal return:@(CGRectMaxXEdge)] toPosition:position];
 			RACSequence *expected = @[

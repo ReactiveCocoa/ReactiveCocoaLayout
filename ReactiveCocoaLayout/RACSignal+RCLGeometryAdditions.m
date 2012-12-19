@@ -302,6 +302,24 @@ static RACSignal *combineSignalsWithOperator(RACSignal *a, RACSignal *b, CGFloat
 	}];
 }
 
+- (RACSignal *)alignCenterX:(RACSignal *)centerXSignal {
+	NSParameterAssert(centerXSignal != nil);
+
+	return [RACSignal combineLatest:@[ centerXSignal, self ] reduce:^(NSNumber *position, NSValue *value) {
+		CGRect rect = value.med_rectValue;
+		return MEDBox(CGRectMake(position.doubleValue - CGRectGetWidth(rect) / 2, CGRectGetMinY(rect), CGRectGetWidth(rect), CGRectGetHeight(rect)));
+	}];
+}
+
+- (RACSignal *)alignCenterY:(RACSignal *)centerYSignal {
+	NSParameterAssert(centerYSignal != nil);
+
+	return [RACSignal combineLatest:@[ centerYSignal, self ] reduce:^(NSNumber *position, NSValue *value) {
+		CGRect rect = value.med_rectValue;
+		return MEDBox(CGRectMake(CGRectGetMinX(rect), position.doubleValue - CGRectGetHeight(rect) / 2, CGRectGetWidth(rect), CGRectGetHeight(rect)));
+	}];
+}
+
 - (RACSignal *)insetWidth:(RACSignal *)widthSignal height:(RACSignal *)heightSignal {
 	NSParameterAssert(widthSignal != nil);
 	NSParameterAssert(heightSignal != nil);
