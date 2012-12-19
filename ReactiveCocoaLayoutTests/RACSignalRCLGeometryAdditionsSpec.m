@@ -54,7 +54,7 @@ describe(@"signal of CGRects", ^{
 	__block RACSignal *signal;
 
 	beforeEach(^{
-		signal = (id)[rects signalWithScheduler:RACScheduler.immediateScheduler];
+		signal = [rects signalWithScheduler:RACScheduler.immediateScheduler];
 	});
 
 	it(@"should map to sizes", ^{
@@ -188,7 +188,7 @@ describe(@"signal of CGSizes", ^{
 	__block RACSignal *signal;
 
 	beforeEach(^{
-		signal = (id)[sizes signalWithScheduler:RACScheduler.immediateScheduler];
+		signal = [sizes signalWithScheduler:RACScheduler.immediateScheduler];
 	});
 
 	it(@"should map to widths", ^{
@@ -226,7 +226,7 @@ describe(@"signal of CGPoints", ^{
 	__block RACSignal *signal;
 
 	beforeEach(^{
-		signal = (id)[points signalWithScheduler:RACScheduler.immediateScheduler];
+		signal = [points signalWithScheduler:RACScheduler.immediateScheduler];
 	});
 
 	it(@"should map to Xs", ^{

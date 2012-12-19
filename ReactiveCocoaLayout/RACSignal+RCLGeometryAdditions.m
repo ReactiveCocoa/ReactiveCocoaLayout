@@ -14,7 +14,7 @@
 static RACSignal *latestNumberMatchingComparisonResult(NSArray *signals, NSComparisonResult result) {
 	NSCParameterAssert(signals != nil);
 
-	return (id)[[[RACSignal merge:signals]
+	return [[[RACSignal merge:signals]
 		scanWithStart:nil combine:^(NSNumber *previous, NSNumber *next) {
 			if (previous == nil) return next;
 			if (next == nil) return previous;
@@ -32,7 +32,7 @@ static RACSignal *latestNumberMatchingComparisonResult(NSArray *signals, NSCompa
 
 @implementation RACSignal (RCLGeometryAdditions)
 
-+ (id)rectsWithX:(RACSignal *)xSignal Y:(RACSignal *)ySignal width:(RACSignal *)widthSignal height:(RACSignal *)heightSignal {
++ (RACSignal *)rectsWithX:(RACSignal *)xSignal Y:(RACSignal *)ySignal width:(RACSignal *)widthSignal height:(RACSignal *)heightSignal {
 	NSParameterAssert(xSignal != nil);
 	NSParameterAssert(ySignal != nil);
 	NSParameterAssert(widthSignal != nil);
@@ -43,7 +43,7 @@ static RACSignal *latestNumberMatchingComparisonResult(NSArray *signals, NSCompa
 	}];
 }
 
-+ (id)rectsWithOrigin:(RACSignal *)originSignal size:(RACSignal *)sizeSignal {
++ (RACSignal *)rectsWithOrigin:(RACSignal *)originSignal size:(RACSignal *)sizeSignal {
 	NSParameterAssert(originSignal != nil);
 	NSParameterAssert(sizeSignal != nil);
 
@@ -61,7 +61,7 @@ static RACSignal *latestNumberMatchingComparisonResult(NSArray *signals, NSCompa
 	}];
 }
 
-+ (id)sizesWithWidth:(RACSignal *)widthSignal height:(RACSignal *)heightSignal {
++ (RACSignal *)sizesWithWidth:(RACSignal *)widthSignal height:(RACSignal *)heightSignal {
 	NSParameterAssert(widthSignal != nil);
 	NSParameterAssert(heightSignal != nil);
 
@@ -88,7 +88,7 @@ static RACSignal *latestNumberMatchingComparisonResult(NSArray *signals, NSCompa
 	}];
 }
 
-+ (id)pointsWithX:(RACSignal *)xSignal Y:(RACSignal *)ySignal {
++ (RACSignal *)pointsWithX:(RACSignal *)xSignal Y:(RACSignal *)ySignal {
 	NSParameterAssert(xSignal != nil);
 	NSParameterAssert(ySignal != nil);
 
@@ -109,7 +109,7 @@ static RACSignal *latestNumberMatchingComparisonResult(NSArray *signals, NSCompa
 	}];
 }
 
-- (id)insetWidth:(RACSignal *)widthSignal height:(RACSignal *)heightSignal {
+- (RACSignal *)insetWidth:(RACSignal *)widthSignal height:(RACSignal *)heightSignal {
 	NSParameterAssert(widthSignal != nil);
 	NSParameterAssert(heightSignal != nil);
 
@@ -120,7 +120,7 @@ static RACSignal *latestNumberMatchingComparisonResult(NSArray *signals, NSCompa
 	}];
 }
 
-- (id)sliceWithAmount:(RACSignal *)amountSignal fromEdge:(CGRectEdge)edge {
+- (RACSignal *)sliceWithAmount:(RACSignal *)amountSignal fromEdge:(CGRectEdge)edge {
 	NSParameterAssert(amountSignal != nil);
 
 	return [RACSignal combineLatest:@[ amountSignal, self ] reduce:^(NSNumber *amount, NSValue *rect) {
@@ -128,7 +128,7 @@ static RACSignal *latestNumberMatchingComparisonResult(NSArray *signals, NSCompa
 	}];
 }
 
-- (id)remainderAfterSlicingAmount:(RACSignal *)amountSignal fromEdge:(CGRectEdge)edge {
+- (RACSignal *)remainderAfterSlicingAmount:(RACSignal *)amountSignal fromEdge:(CGRectEdge)edge {
 	NSParameterAssert(amountSignal != nil);
 
 	return [RACSignal combineLatest:@[ amountSignal, self ] reduce:^(NSNumber *amount, NSValue *rect) {
