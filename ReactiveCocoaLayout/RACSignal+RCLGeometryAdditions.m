@@ -99,6 +99,12 @@ static RACSignal *latestNumberMatchingComparisonResult(NSArray *signals, NSCompa
 	}];
 }
 
+- (RACSignal *)center {
+	return [self map:^(NSValue *value) {
+		return MEDBox(CGRectCenterPoint(value.med_rectValue));
+	}];
+}
+
 + (RACSignal *)pointsWithX:(RACSignal *)xSignal Y:(RACSignal *)ySignal {
 	NSParameterAssert(xSignal != nil);
 	NSParameterAssert(ySignal != nil);
@@ -126,6 +132,18 @@ static RACSignal *latestNumberMatchingComparisonResult(NSArray *signals, NSCompa
 
 - (RACSignal *)minY {
 	return [self positionOfEdge:[RACSignal return:@(CGRectMinYEdge)]];
+}
+
+- (RACSignal *)centerX {
+	return [self map:^(NSValue *value) {
+		return @(CGRectGetMidX(value.med_rectValue));
+	}];
+}
+
+- (RACSignal *)centerY {
+	return [self map:^(NSValue *value) {
+		return @(CGRectGetMidY(value.med_rectValue));
+	}];
 }
 
 - (RACSignal *)maxX {

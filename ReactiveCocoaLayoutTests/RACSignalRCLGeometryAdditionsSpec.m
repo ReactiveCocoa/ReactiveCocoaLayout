@@ -18,6 +18,9 @@ __block RACSequence *heights;
 __block RACSequence *minXs;
 __block RACSequence *minYs;
 
+__block RACSequence *centerXs;
+__block RACSequence *centerYs;
+
 __block RACSequence *maxXs;
 __block RACSequence *maxYs;
 
@@ -52,6 +55,14 @@ beforeEach(^{
 		return @(value.med_pointValue.y);
 	}];
 
+	centerXs = [RACSequence zip:@[ minXs, widths ] reduce:^(NSNumber *x, NSNumber *width) {
+		return @(x.doubleValue + width.doubleValue / 2);
+	}];
+
+	centerYs = [RACSequence zip:@[ minYs, heights ] reduce:^(NSNumber *y, NSNumber *height) {
+		return @(y.doubleValue + height.doubleValue / 2);
+	}];
+
 	maxXs = [RACSequence zip:@[ minXs, widths ] reduce:^(NSNumber *x, NSNumber *width) {
 		return @(x.doubleValue + width.doubleValue);
 	}];
@@ -76,6 +87,14 @@ describe(@"signal of CGRects", ^{
 		expect(signal.origin.sequence).to.equal(points);
 	});
 
+	it(@"should map to center points", ^{
+		RACSequence *expected = [RACSequence zip:@[ centerXs, centerYs ] reduce:^(NSNumber *x, NSNumber *y) {
+			return MEDBox(CGPointMake(x.doubleValue, y.doubleValue));
+		}];
+
+		expect(signal.center.sequence).to.equal(expected);
+	});
+
 	it(@"should map to widths", ^{
 		expect(signal.width.sequence).to.equal(widths);
 	});
@@ -98,6 +117,14 @@ describe(@"signal of CGRects", ^{
 
 	it(@"should map to minY values", ^{
 		expect(signal.minY.sequence).to.equal(minYs);
+	});
+
+	it(@"should map to centerX values", ^{
+		expect(signal.centerX.sequence).to.equal(centerXs);
+	});
+
+	it(@"should map to centerY values", ^{
+		expect(signal.centerY.sequence).to.equal(centerYs);
 	});
 
 	it(@"should map to maxX values", ^{
