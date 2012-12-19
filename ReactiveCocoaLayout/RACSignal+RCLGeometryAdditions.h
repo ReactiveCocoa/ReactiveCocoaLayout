@@ -31,12 +31,12 @@
 // Returns a signal of CGSize values.
 + (RACSignal *)sizesWithWidth:(RACSignal *)widthSignal height:(RACSignal *)heightSignal;
 
-// Maps CGSize values to their `width` fields.
+// Maps CGRect or CGSize values to their widths.
 //
 // Returns a signal of CGFloat values.
 - (RACSignal *)width;
 
-// Maps CGSize values to their `height` fields.
+// Maps CGRect or CGSize values to their heights.
 //
 // Returns a signal of CGFloat values.
 - (RACSignal *)height;

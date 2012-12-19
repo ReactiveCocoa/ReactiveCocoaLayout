@@ -72,13 +72,21 @@ static RACSignal *latestNumberMatchingComparisonResult(NSArray *signals, NSCompa
 
 - (RACSignal *)width {
 	return [self map:^(NSValue *value) {
-		return @(value.med_sizeValue.width);
+		if (value.med_geometryStructType == MEDGeometryStructTypeRect) {
+			return @(CGRectGetWidth(value.med_rectValue));
+		} else {
+			return @(value.med_sizeValue.width);
+		}
 	}];
 }
 
 - (RACSignal *)height {
 	return [self map:^(NSValue *value) {
-		return @(value.med_sizeValue.height);
+		if (value.med_geometryStructType == MEDGeometryStructTypeRect) {
+			return @(CGRectGetHeight(value.med_rectValue));
+		} else {
+			return @(value.med_sizeValue.height);
+		}
 	}];
 }
 

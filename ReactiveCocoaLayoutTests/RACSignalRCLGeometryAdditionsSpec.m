@@ -65,6 +65,14 @@ describe(@"signal of CGRects", ^{
 		expect(signal.origin.sequence).to.equal(points);
 	});
 
+	it(@"should map to widths", ^{
+		expect(signal.width.sequence).to.equal(widths);
+	});
+
+	it(@"should map to heights", ^{
+		expect(signal.height.sequence).to.equal(heights);
+	});
+
 	it(@"should inset", ^{
 		RACSignal *result = [signal insetWidth:[RACSignal return:@3] height:[RACSignal return:@5]];
 		NSArray *expectedRects = @[
