@@ -265,6 +265,31 @@ describe(@"signal of CGRects", ^{
 		expect(values).to.equal(expected);
 	});
 
+	it(@"should be returned from +rectsWithCenter:size:", ^{
+		RACSubject *centerSubject = [RACSubject subject];
+		RACSubject *sizeSubject = [RACSubject subject];
+
+		RACSignal *constructedSignal = [RACSignal rectsWithCenter:centerSubject size:sizeSubject];
+		NSMutableArray *values = [NSMutableArray array];
+
+		[constructedSignal subscribeNext:^(id value) {
+			[values addObject:value];
+		}];
+
+		[centerSubject sendNext:MEDBox(CGPointMake(0, 0))];
+		[sizeSubject sendNext:MEDBox(CGSizeMake(0, 0))];
+		[sizeSubject sendNext:MEDBox(CGSizeMake(2, 2))];
+		[sizeSubject sendNext:MEDBox(CGSizeMake(5, 5))];
+
+		NSArray *expected = @[
+			MEDBox(CGRectMake(0, 0, 0, 0)),
+			MEDBox(CGRectMake(-1, -1, 2, 2)),
+			MEDBox(CGRectMake(-2.5, -2.5, 5, 5)),
+		];
+
+		expect(values).to.equal(expected);
+	});
+
 	it(@"should be returned from +rectsWithSize:", ^{
 		RACSubject *sizeSubject = [RACSubject subject];
 

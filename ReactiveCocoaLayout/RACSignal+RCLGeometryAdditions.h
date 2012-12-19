@@ -21,6 +21,11 @@
 // Returns a signal of CGRect values.
 + (RACSignal *)rectsWithOrigin:(RACSignal *)originSignal size:(RACSignal *)sizeSignal;
 
+// Constructs rects from the given center and size signals.
+//
+// Returns a signal of CGRect values.
++ (RACSignal *)rectsWithCenter:(RACSignal *)centerSignal size:(RACSignal *)sizeSignal;
+
 // Constructs rects from the given size signal. All of the rectangles will
 // originate at (0, 0).
 //

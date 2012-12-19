@@ -103,6 +103,18 @@ static RACSignal *combineSignalsWithOperator(RACSignal *a, RACSignal *b, CGFloat
 	}];
 }
 
++ (RACSignal *)rectsWithCenter:(RACSignal *)centerSignal size:(RACSignal *)sizeSignal {
+	NSParameterAssert(centerSignal != nil);
+	NSParameterAssert(sizeSignal != nil);
+
+	return [RACSignal combineLatest:@[ centerSignal, sizeSignal ] reduce:^(NSValue *center, NSValue *size) {
+		CGPoint p = center.med_pointValue;
+		CGSize s = size.med_sizeValue;
+
+		return MEDBox(CGRectMake(p.x - s.width / 2, p.y - s.height / 2, s.width, s.height));
+	}];
+}
+
 + (RACSignal *)rectsWithSize:(RACSignal *)sizeSignal {
 	// CGPointZero apparently isn't typed (for MEDBox), so manually create it.
 	RACSignal *originSignal = [RACSignal return:MEDBox(CGPointMake(0, 0))];
