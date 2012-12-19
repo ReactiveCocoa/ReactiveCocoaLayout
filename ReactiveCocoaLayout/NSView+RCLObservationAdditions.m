@@ -11,7 +11,7 @@
 
 @implementation NSView (RCLObservationAdditions)
 
-- (id)rcl_boundsSignal {
+- (RACSignal *)rcl_boundsSignal {
 	// TODO: This only needs to be enabled when we actually start watching for
 	// the notification (i.e., after the startWith:).
 	self.postsBoundsChangedNotifications = YES;
@@ -23,7 +23,7 @@
 		startWith:[NSValue valueWithRect:self.bounds]];
 }
 
-- (id)rcl_frameSignal {
+- (RACSignal *)rcl_frameSignal {
 	// TODO: This only needs to be enabled when we actually start watching for
 	// the notification (i.e., after the startWith:).
 	self.postsFrameChangedNotifications = YES;

@@ -34,12 +34,12 @@
 	NSTextField *nameLabel = [self labelWithString:NSLocalizedString(@"Name", @"")];
 	NSTextField *emailLabel = [self labelWithString:NSLocalizedString(@"Email Address", @"")];
 
-	id<RACSignal> labelWidth = [RACSignal max:@[ nameLabel.rcl_boundsSignal.size.width, emailLabel.rcl_boundsSignal.size.width ]];
+	RACSignal *labelWidth = [RACSignal max:@[ nameLabel.rcl_boundsSignal.size.width, emailLabel.rcl_boundsSignal.size.width ]];
 
 	NSTextField *nameField = [self textFieldWithString:@""];
 	NSTextField *emailField = [self textFieldWithString:@""];
 
-	RACTupleUnpack(id<RCLSignal> nameRect, id<RCLSignal> emailRect) = [[self.contentView.rcl_frameSignal
+	RACTupleUnpack(RACSignal *nameRect, RACSignal *emailRect) = [[self.contentView.rcl_frameSignal
 		insetWidth:[RACSignal return:@32] height:[RACSignal return:@16]]
 		divideWithAmount:nameField.rcl_boundsSignal.size.height padding:[RACSignal return:@8] fromEdge:CGRectMaxYEdge];
 
