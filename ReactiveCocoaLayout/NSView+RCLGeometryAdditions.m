@@ -1,15 +1,15 @@
 //
-//  NSView+RCLObservationAdditions.m
+//  NSView+RCLGeometryAdditions.m
 //  ReactiveCocoaLayout
 //
 //  Created by Justin Spahr-Summers on 2012-12-12.
 //  Copyright (c) 2012 GitHub. All rights reserved.
 //
 
-#import "NSView+RCLObservationAdditions.h"
+#import "NSView+RCLGeometryAdditions.h"
 #import "NSNotificationCenter+RACSupport.h"
 
-@implementation NSView (RCLObservationAdditions)
+@implementation NSView (RCLGeometryAdditions)
 
 - (RACSignal *)rcl_boundsSignal {
 	// TODO: This only needs to be enabled when we actually start watching for

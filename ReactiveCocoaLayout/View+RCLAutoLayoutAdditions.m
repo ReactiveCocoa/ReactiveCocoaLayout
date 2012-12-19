@@ -1,12 +1,12 @@
 //
-//  View+RCLAutoLayoutObservationAdditions.m
+//  View+RCLAutoLayoutAdditions.m
 //  ReactiveCocoaLayout
 //
 //  Created by Justin Spahr-Summers on 2012-12-17.
 //  Copyright (c) 2012 GitHub. All rights reserved.
 //
 
-#import "View+RCLAutoLayoutObservationAdditions.h"
+#import "View+RCLAutoLayoutAdditions.h"
 #import "RACSignal+RCLGeometryAdditions.h"
 #import <objc/runtime.h>
 
@@ -25,9 +25,9 @@ static void newInvalidateIntrinsicContentSize(id self, SEL _cmd) {
 }
 
 #ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
-@implementation UIView (RCLAutoLayoutObservationAdditions)
+@implementation UIView (RCLAutoLayoutAdditions)
 #elif TARGET_OS_MAC
-@implementation NSView (RCLAutoLayoutObservationAdditions)
+@implementation NSView (RCLAutoLayoutAdditions)
 #endif
 
 + (void)load {

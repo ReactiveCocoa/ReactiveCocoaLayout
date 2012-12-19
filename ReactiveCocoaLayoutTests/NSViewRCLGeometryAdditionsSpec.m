@@ -1,5 +1,5 @@
 //
-//  UIViewRCLObservationAdditionsSpec.m
+//  NSViewRCLGeometryAdditionsSpec.m
 //  ReactiveCocoaLayout
 //
 //  Created by Justin Spahr-Summers on 2012-12-15.
@@ -8,7 +8,7 @@
 
 #import "ViewExamples.h"
 
-SpecBegin(UIViewRCLObservationAdditions)
+SpecBegin(NSViewRCLGeometryAdditions)
 
 itShouldBehaveLike(ViewExamples, nil);
 

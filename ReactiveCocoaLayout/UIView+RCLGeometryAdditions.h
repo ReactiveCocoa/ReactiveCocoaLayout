@@ -1,5 +1,5 @@
 //
-//  UIView+RCLObservationAdditions.h
+//  UIView+RCLGeometryAdditions.h
 //  ReactiveCocoaLayout
 //
 //  Created by Justin Spahr-Summers on 2012-12-13.
@@ -10,7 +10,7 @@
 
 @class RCLSignal;
 
-@interface UIView (RCLObservationAdditions)
+@interface UIView (RCLGeometryAdditions)
 
 // Observes the receiver's `bounds` for changes.
 //

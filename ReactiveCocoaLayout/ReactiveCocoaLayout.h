@@ -8,10 +8,10 @@
 
 #import "RACSignal+RCLGeometryAdditions.h"
 #import "RACSignal+RCLWritingDirectionAdditions.h"
-#import "View+RCLAutoLayoutObservationAdditions.h"
+#import "View+RCLAutoLayoutAdditions.h"
 
 #ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
-	#import "UIView+RCLObservationAdditions.h"
+	#import "UIView+RCLGeometryAdditions.h"
 #elif TARGET_OS_MAC
-	#import "NSView+RCLObservationAdditions.h"
+	#import "NSView+RCLGeometryAdditions.h"
 #endif
