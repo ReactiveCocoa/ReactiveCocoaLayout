@@ -12,7 +12,7 @@
 #import <AppKit/AppKit.h>
 #endif
 
-@protocol RCLSignal;
+@class RACSignal;
 
 // Extensions to UIView on iOS and NSView on OS X, depending only on
 // cross-platform Auto Layout APIs.
@@ -26,6 +26,6 @@
 //
 // Returns a signal which sends the current and all future values for
 // `intrinsicContentSize`.
-- (id<RCLSignal>)rcl_intrinsicContentSizeSignal;
+- (RACSignal *)rcl_intrinsicContentSizeSignal;
 
 @end

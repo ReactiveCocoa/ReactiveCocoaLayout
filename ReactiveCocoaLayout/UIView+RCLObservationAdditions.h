@@ -8,18 +8,18 @@
 
 #import <UIKit/UIKit.h>
 
-@protocol RCLSignal;
+@class RCLSignal;
 
 @interface UIView (RCLObservationAdditions)
 
 // Observes the receiver's `bounds` for changes.
 //
 // Returns a signal which sends the current and all future values for `bounds`.
-- (id<RCLSignal>)rcl_boundsSignal;
+- (RACSignal *)rcl_boundsSignal;
 
 // Observes the receiver's `frame` for changes.
 //
 // Returns a signal which sends the current and all future values for `frame`.
-- (id<RCLSignal>)rcl_frameSignal;
+- (RACSignal *)rcl_frameSignal;
 
 @end

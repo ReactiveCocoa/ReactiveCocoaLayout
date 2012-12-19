@@ -1,12 +1,12 @@
 //
-//  RCLSignal.h
+//  RACSignal+RCLGeometryAdditions.h
 //  ReactiveCocoaLayout
 //
 //  Created by Justin Spahr-Summers on 2012-12-12.
 //  Copyright (c) 2012 GitHub. All rights reserved.
 //
 
-#import "EXTConcreteProtocol.h"
+#import <ReactiveCocoa/ReactiveCocoa.h>
 
 // Defines the curve (timing function) for an animation.
 //
@@ -37,64 +37,58 @@
     } RCLAnimationCurve;
 #endif
 
-// A concrete protocol representing a geometric signal.
-//
-// When conforming to this protocol in a custom class, only `@required` methods
-// need to be implemented. Default implementations will automatically be
-// provided for any methods marked as `@concrete`. For more information, see
-// EXTConcreteProtocol.h.
-@protocol RCLSignal <RACSignal>
-@concrete
+// Adds geometry functions to RACSignal.
+@interface RACSignal (RCLGeometryAdditions)
 
 // Constructs rects from the given X, Y, width, and height signals.
 //
 // Returns a signal of CGRect values.
-+ (id<RCLSignal>)rectsWithX:(id<RACSignal>)xSignal Y:(id<RACSignal>)ySignal width:(id<RACSignal>)widthSignal height:(id<RACSignal>)heightSignal;
++ (RACSignal *)rectsWithX:(RACSignal *)xSignal Y:(RACSignal *)ySignal width:(RACSignal *)widthSignal height:(RACSignal *)heightSignal;
 
 // Constructs rects from the given origin and size signals.
 //
 // Returns a signal of CGRect values.
-+ (id<RCLSignal>)rectsWithOrigin:(id<RACSignal>)originSignal size:(id<RACSignal>)sizeSignal;
++ (RACSignal *)rectsWithOrigin:(RACSignal *)originSignal size:(RACSignal *)sizeSignal;
 
 // Maps CGRect values to their `size` fields.
 //
 // Returns a signal of CGSize values.
-- (id<RCLSignal>)size;
+- (RACSignal *)size;
 
 // Constructs sizes from the given width and height signals.
 //
 // Returns a signal of CGSize values.
-+ (id<RCLSignal>)sizesWithWidth:(id<RACSignal>)widthSignal height:(id<RACSignal>)heightSignal;
++ (RACSignal *)sizesWithWidth:(RACSignal *)widthSignal height:(RACSignal *)heightSignal;
 
 // Maps CGSize values to their `width` fields.
 //
 // Returns a signal of CGFloat values.
-- (id<RCLSignal>)width;
+- (RACSignal *)width;
 
 // Maps CGSize values to their `height` fields.
 //
 // Returns a signal of CGFloat values.
-- (id<RCLSignal>)height;
+- (RACSignal *)height;
 
 // Maps CGRect values to their `origin` fields.
 //
 // Returns a signal of CGPoint values.
-- (id<RCLSignal>)origin;
+- (RACSignal *)origin;
 
 // Constructs points from the given X and Y signals.
 //
 // Returns a signal of CGPoint values.
-+ (id<RCLSignal>)pointsWithX:(id<RACSignal>)xSignal Y:(id<RACSignal>)ySignal;
++ (RACSignal *)pointsWithX:(RACSignal *)xSignal Y:(RACSignal *)ySignal;
 
 // Maps CGPoint values to their `x` fields.
 //
 // Returns a signal of CGFloat values.
-- (id<RCLSignal>)x;
+- (RACSignal *)x;
 
 // Maps CGPoint values to their `y` fields.
 //
 // Returns a signal of CGFloat values.
-- (id<RCLSignal>)y;
+- (RACSignal *)y;
 
 // Insets each CGRect by the number of points sent from the given width and
 // height signals.
@@ -105,7 +99,7 @@
 //                to remove from both the top and bottom sides of the rectangle.
 //
 // Returns a signal of new, inset CGRect values.
-- (id<RCLSignal>)insetWidth:(id<RACSignal>)widthSignal height:(id<RACSignal>)heightSignal;
+- (RACSignal *)insetWidth:(RACSignal *)widthSignal height:(RACSignal *)heightSignal;
 
 // Trims each CGRect to the number of points sent from `amountSignal`, as
 // measured starting from the given edge.
@@ -116,7 +110,7 @@
 // edge         - The edge from which to start including points in the slice.
 //
 // Returns a signal of CGRect slices.
-- (id<RCLSignal>)sliceWithAmount:(id<RACSignal>)amountSignal fromEdge:(CGRectEdge)edge;
+- (RACSignal *)sliceWithAmount:(RACSignal *)amountSignal fromEdge:(CGRectEdge)edge;
 
 // From the given edge of each CGRect, trims the number of points sent from
 // `amountSignal`.
@@ -127,10 +121,10 @@
 // edge         - The edge from which to trim.
 //
 // Returns a signal of CGRect remainders.
-- (id<RCLSignal>)remainderAfterSlicingAmount:(id<RACSignal>)amountSignal fromEdge:(CGRectEdge)edge;
+- (RACSignal *)remainderAfterSlicingAmount:(RACSignal *)amountSignal fromEdge:(CGRectEdge)edge;
 
 // Invokes -divideWithAmount:padding:fromEdge: with a constant padding of 0.
-- (RACTuple *)divideWithAmount:(id<RACSignal>)sliceAmountSignal fromEdge:(CGRectEdge)edge;
+- (RACTuple *)divideWithAmount:(RACSignal *)sliceAmountSignal fromEdge:(CGRectEdge)edge;
 
 // Divides each CGRect into two component rectangles, skipping an amount of
 // padding between them.
@@ -150,7 +144,7 @@
 //
 // Returns a RACTuple containing two signals, which will send the slices and
 // remainders, respectively.
-- (RACTuple *)divideWithAmount:(id<RACSignal>)sliceAmountSignal padding:(id<RACSignal>)paddingSignal fromEdge:(CGRectEdge)edge;
+- (RACTuple *)divideWithAmount:(RACSignal *)sliceAmountSignal padding:(RACSignal *)paddingSignal fromEdge:(CGRectEdge)edge;
 
 // Sends the maximum value sent by any of the given signals.
 //
@@ -159,7 +153,7 @@
 //           will send the new maximum.
 //
 // Returns a signal which sends NSNumber maximum values.
-+ (id<RCLSignal>)max:(NSArray *)signals;
++ (RACSignal *)max:(NSArray *)signals;
 
 // Sends the minimum value sent by any of the given signals.
 //
@@ -168,7 +162,7 @@
 //           will send the new minimum.
 //
 // Returns a signal which sends NSNumber minimum values.
-+ (id<RCLSignal>)min:(NSArray *)signals;
++ (RACSignal *)min:(NSArray *)signals;
 
 // Wraps every next in an animation block, using the default duration and
 // animation curve.
@@ -179,13 +173,13 @@
 // Returns a signal which animates the sending of its values. Deferring the
 // signal's events or having them delivered on another thread is considered
 // undefined behavior.
-- (id<RCLSignal>)animate;
+- (RACSignal *)animate;
 
 // Invokes -animateWithDuration:curve: with a curve of RCLAnimationCurveDefault.
-- (id<RCLSignal>)animateWithDuration:(NSTimeInterval)duration;
+- (RACSignal *)animateWithDuration:(NSTimeInterval)duration;
 
 // Behaves like -animate, but uses the given duration and animation curve
 // instead of the defaults.
-- (id<RCLSignal>)animateWithDuration:(NSTimeInterval)duration curve:(RCLAnimationCurve)curve;
+- (RACSignal *)animateWithDuration:(NSTimeInterval)duration curve:(RCLAnimationCurve)curve;
 
 @end

@@ -14,7 +14,7 @@
 }
 
 // Sends the new interface orientation every time a rotation occurs.
-@property (nonatomic, strong, readonly) id<RACSignal> rotationSignal;
+@property (nonatomic, strong, readonly) RACSignal *rotationSignal;
 
 @property (nonatomic, strong) UILabel *nameLabel;
 @property (nonatomic, strong) UITextView *nameTextView;
@@ -39,7 +39,7 @@
 
 	self.view.backgroundColor = UIColor.lightGrayColor;
 
-	id<RCLSignal> insetBounds = [self.view.rcl_boundsSignal insetWidth:[RACSignal return:@16] height:[RACSignal return:@16]];
+	RACSignal *insetBounds = [self.view.rcl_boundsSignal insetWidth:[RACSignal return:@16] height:[RACSignal return:@16]];
 
 	self.nameLabel = [[UILabel alloc] initWithFrame:CGRectZero];
 	[self.view addSubview:self.nameLabel];
@@ -53,7 +53,7 @@
 	self.nameTextView = [[UITextView alloc] initWithFrame:CGRectZero];
 	[self.view addSubview:self.nameTextView];
 
-	id<RCLSignal> textViewBounds = [insetBounds divideWithAmount:self.nameLabel.rcl_frameSignal.size.width padding:[RACSignal return:@8] fromEdge:CGRectMinXEdge][1];
+	RACSignal *textViewBounds = [insetBounds divideWithAmount:self.nameLabel.rcl_frameSignal.size.width padding:[RACSignal return:@8] fromEdge:CGRectMinXEdge][1];
 
 	// Animate the initial appearance of the text view, but not any changes due
 	// to rotation.
