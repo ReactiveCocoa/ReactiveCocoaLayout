@@ -8,8 +8,10 @@
 
 #ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
 #import <UIKit/UIKit.h>
+#import "UIView+RCLGeometryAdditions.h"
 #elif TARGET_OS_MAC
 #import <AppKit/AppKit.h>
+#import "NSView+RCLGeometryAdditions.h"
 #endif
 
 @class RACSignal;
@@ -30,5 +32,12 @@
 
 // Like -rcl_intrinsicContentSizeSignal, but sends rectangles originating at (0, 0).
 - (RACSignal *)rcl_intrinsicBoundsSignal;
+
+// Observes the receiver's alignment rect for changes.
+//
+// Returns a signal which sends the current alignment rect, and a new CGRect
+// every time the view's frame changes in a way that might affect the alignment
+// rect.
+- (RACSignal *)rcl_alignmentRectSignal;
 
 @end

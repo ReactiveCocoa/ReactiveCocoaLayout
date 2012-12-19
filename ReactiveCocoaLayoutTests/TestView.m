@@ -25,6 +25,10 @@
 
 #pragma mark Auto Layout
 
+- (CGRect)alignmentRectForFrame:(CGRect)frame {
+	return CGRectInset(frame, 1, 2);
+}
+
 - (CGSize)intrinsicContentSize {
 	return self.size;
 }

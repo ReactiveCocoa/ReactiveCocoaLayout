@@ -54,4 +54,11 @@ static void newInvalidateIntrinsicContentSize(id self, SEL _cmd) {
 	return [RACSignal rectsWithSize:self.rcl_intrinsicContentSizeSignal];
 }
 
+- (RACSignal *)rcl_alignmentRectSignal {
+	return [self.rcl_frameSignal map:^(NSValue *frame) {
+		CGRect alignmentRect = [self alignmentRectForFrame:frame.med_rectValue];
+		return MEDBox(alignmentRect);
+	}];
+}
+
 @end
