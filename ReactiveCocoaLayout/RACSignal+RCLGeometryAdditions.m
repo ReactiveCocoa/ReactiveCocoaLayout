@@ -76,6 +76,7 @@ static RACSignal *latestNumberMatchingComparisonResult(NSArray *signals, NSCompa
 		if (value.med_geometryStructType == MEDGeometryStructTypeRect) {
 			return @(CGRectGetWidth(value.med_rectValue));
 		} else {
+			NSAssert(value.med_geometryStructType == MEDGeometryStructTypeSize, @"Unexpected type of value: %@", value);
 			return @(value.med_sizeValue.width);
 		}
 	}];
@@ -86,6 +87,7 @@ static RACSignal *latestNumberMatchingComparisonResult(NSArray *signals, NSCompa
 		if (value.med_geometryStructType == MEDGeometryStructTypeRect) {
 			return @(CGRectGetHeight(value.med_rectValue));
 		} else {
+			NSAssert(value.med_geometryStructType == MEDGeometryStructTypeSize, @"Unexpected type of value: %@", value);
 			return @(value.med_sizeValue.height);
 		}
 	}];
