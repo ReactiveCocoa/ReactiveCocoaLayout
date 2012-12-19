@@ -166,6 +166,16 @@
 // Returns a signal of CGRect remainders.
 - (RACSignal *)remainderAfterSlicingAmount:(RACSignal *)amountSignal fromEdge:(CGRectEdge)edge;
 
+// For the given each of each CGRect, adds the given number of points sent from
+// `amountSignal`.
+//
+// edge         - The edge to add to.
+// amountSignal - A signal of CGFloat values, representing the number of points
+//                to add.
+//
+// Returns a signal of enlarged CGRects.
+- (RACSignal *)growEdge:(CGRectEdge)edge byAmount:(RACSignal *)amountSignal;
+
 // Invokes -divideWithAmount:padding:fromEdge: with a constant padding of 0.
 - (RACTuple *)divideWithAmount:(RACSignal *)sliceAmountSignal fromEdge:(CGRectEdge)edge;
 

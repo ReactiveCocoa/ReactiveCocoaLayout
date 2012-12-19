@@ -359,6 +359,14 @@ static RACSignal *combineSignalsWithOperator(RACSignal *a, RACSignal *b, CGFloat
 	}];
 }
 
+- (RACSignal *)growEdge:(CGRectEdge)edge byAmount:(RACSignal *)amountSignal {
+	NSParameterAssert(amountSignal != nil);
+
+	return [RACSignal combineLatest:@[ amountSignal, self ] reduce:^(NSNumber *amount, NSValue *rect) {
+		return MEDBox(CGRectGrow(rect.med_rectValue, amount.doubleValue, edge));
+	}];
+}
+
 - (RACTuple *)divideWithAmount:(RACSignal *)sliceAmountSignal fromEdge:(CGRectEdge)edge {
 	return [self divideWithAmount:sliceAmountSignal padding:[RACSignal return:@0] fromEdge:edge];
 }

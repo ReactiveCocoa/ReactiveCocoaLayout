@@ -180,6 +180,17 @@ describe(@"signal of CGRects", ^{
 		expect(result.sequence).to.equal(expectedRects.rac_sequence);
 	});
 
+	it(@"should grow", ^{
+		RACSignal *result = [signal growEdge:CGRectMaxXEdge byAmount:[RACSignal return:@5]];
+		NSArray *expectedRects = @[
+			MEDBox(CGRectMake(10, 10, 25, 20)),
+			MEDBox(CGRectMake(10, 20, 35, 40)),
+			MEDBox(CGRectMake(25, 15, 50, 35)),
+		];
+
+		expect(result.sequence).to.equal(expectedRects.rac_sequence);
+	});
+
 	it(@"should divide into two rects", ^{
 		RACTupleUnpack(RACSignal *slices, RACSignal *remainders) = [signal divideWithAmount:[RACSignal return:@15] fromEdge:CGRectMinXEdge];
 
