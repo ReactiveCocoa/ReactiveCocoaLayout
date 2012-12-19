@@ -54,6 +54,11 @@
 // Returns a signal of CGPoint values.
 - (RACSignal *)origin;
 
+// Maps CGRect values to their exact center point.
+//
+// Returns a signal of CGPoint values.
+- (RACSignal *)center;
+
 // Constructs points from the given X and Y signals.
 //
 // Returns a signal of CGPoint values.
@@ -78,6 +83,16 @@
 //
 // Returns a signal of CGFloat values.
 - (RACSignal *)minY;
+
+// Maps CGRect values to their center X position.
+//
+// Returns a signal of CGFloat values.
+- (RACSignal *)centerX;
+
+// Maps CGRect values to their center Y position.
+//
+// Returns a signal of CGFloat values.
+- (RACSignal *)centerY;
 
 // Maps CGRect values to their maximum X position.
 //
