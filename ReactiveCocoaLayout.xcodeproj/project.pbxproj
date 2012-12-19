@@ -1137,6 +1137,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = ReactiveCocoaLayout;
+				TEST_AFTER_BUILD = NO;
 			};
 			name = Profile;
 		};
@@ -1208,6 +1209,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = ReactiveCocoaLayout;
+				TEST_AFTER_BUILD = NO;
 			};
 			name = Debug;
 		};
@@ -1230,6 +1232,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = ReactiveCocoaLayout;
+				TEST_AFTER_BUILD = NO;
 			};
 			name = Release;
 		};
