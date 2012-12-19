@@ -117,6 +117,30 @@ static RACSignal *latestNumberMatchingComparisonResult(NSArray *signals, NSCompa
 	}];
 }
 
+- (RACSignal *)minX {
+	return [self map:^(NSValue *value) {
+		return @(CGRectGetMinX(value.med_rectValue));
+	}];
+}
+
+- (RACSignal *)minY {
+	return [self map:^(NSValue *value) {
+		return @(CGRectGetMinY(value.med_rectValue));
+	}];
+}
+
+- (RACSignal *)maxX {
+	return [self map:^(NSValue *value) {
+		return @(CGRectGetMaxX(value.med_rectValue));
+	}];
+}
+
+- (RACSignal *)maxY {
+	return [self map:^(NSValue *value) {
+		return @(CGRectGetMaxY(value.med_rectValue));
+	}];
+}
+
 - (RACSignal *)insetWidth:(RACSignal *)widthSignal height:(RACSignal *)heightSignal {
 	NSParameterAssert(widthSignal != nil);
 	NSParameterAssert(heightSignal != nil);

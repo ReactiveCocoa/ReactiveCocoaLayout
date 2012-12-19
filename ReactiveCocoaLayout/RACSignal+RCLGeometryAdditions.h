@@ -61,6 +61,26 @@
 // Returns a signal of CGFloat values.
 - (RACSignal *)y;
 
+// Maps CGRect values to their minimum X position.
+//
+// Returns a signal of CGFloat values.
+- (RACSignal *)minX;
+
+// Maps CGRect values to their minimum Y position.
+//
+// Returns a signal of CGFloat values.
+- (RACSignal *)minY;
+
+// Maps CGRect values to their maximum X position.
+//
+// Returns a signal of CGFloat values.
+- (RACSignal *)maxX;
+
+// Maps CGRect values to their maximum Y position.
+//
+// Returns a signal of CGFloat values.
+- (RACSignal *)maxY;
+
 // Insets each CGRect by the number of points sent from the given width and
 // height signals.
 //

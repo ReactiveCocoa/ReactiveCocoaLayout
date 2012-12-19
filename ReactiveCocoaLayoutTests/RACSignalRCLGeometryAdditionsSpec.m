@@ -73,6 +73,30 @@ describe(@"signal of CGRects", ^{
 		expect(signal.height.sequence).to.equal(heights);
 	});
 
+	it(@"should map to minX values", ^{
+		expect(signal.minX.sequence).to.equal(xs);
+	});
+
+	it(@"should map to minY values", ^{
+		expect(signal.minY.sequence).to.equal(ys);
+	});
+
+	it(@"should map to maxX values", ^{
+		RACSequence *expected = [RACSequence zip:@[ xs, widths ] reduce:^(NSNumber *x, NSNumber *width) {
+			return @(x.doubleValue + width.doubleValue);
+		}];
+
+		expect(signal.maxX.sequence).to.equal(expected);
+	});
+
+	it(@"should map to maxY values", ^{
+		RACSequence *expected = [RACSequence zip:@[ ys, heights ] reduce:^(NSNumber *y, NSNumber *height) {
+			return @(y.doubleValue + height.doubleValue);
+		}];
+
+		expect(signal.maxY.sequence).to.equal(expected);
+	});
+
 	it(@"should inset", ^{
 		RACSignal *result = [signal insetWidth:[RACSignal return:@3] height:[RACSignal return:@5]];
 		NSArray *expectedRects = @[
