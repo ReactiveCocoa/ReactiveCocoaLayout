@@ -7,19 +7,8 @@
 //
 
 #import "UIView+RCLGeometryAdditions.h"
+#import "EXTScope.h"
 #import "RACSignal+RCLGeometryAdditions.h"
-
-// Returns a signal which sends the offset of the baseline from the view's
-// bottom.
-static RACSignal *baselineOffsetSignal(UIView *view) {
-	return [view.rcl_boundsSignal map:^(NSValue *bounds) {
-		UIView *baselineView = view.viewForBaselineLayout;
-		NSCAssert([baselineView isDescendantOfView:view], @"%@ must be a descendant of %@ to be its viewForBaselineLayout", baselineView, view);
-
-		CGRect topLevelFrame = [baselineView.superview convertRect:baselineView.frame toView:view];
-		return @(CGRectGetMaxY(bounds.med_rectValue) - CGRectGetMaxY(topLevelFrame));
-	}];
-}
 
 @implementation UIView (RCLGeometryAdditions)
 
@@ -33,16 +22,30 @@ static RACSignal *baselineOffsetSignal(UIView *view) {
 	return RACAbleWithStart(self.frame);
 }
 
+- (RACSignal *)rcl_baselineSignal {
+	__weak UIView *originalBaselineView = self.viewForBaselineLayout;
+
+	@weakify(self);
+	return [RACSignal combineLatest:@[ self.rcl_boundsSignal, self.viewForBaselineLayout.rcl_frameSignal ] reduce:^(NSValue *bounds, NSValue *baselineViewFrame) {
+		@strongify(self);
+
+		UIView *baselineView = self.viewForBaselineLayout;
+		NSAssert([baselineView isDescendantOfView:self], @"%@ must be a descendant of %@ to be its viewForBaselineLayout", baselineView, self);
+		NSAssert([baselineView isEqual:originalBaselineView], @"-viewForBaselineLayout for %@ changed from %@ to %@", self, originalBaselineView, baselineView);
+
+		CGRect topLevelFrame = [baselineView.superview convertRect:baselineViewFrame.med_rectValue toView:self];
+		return @(CGRectGetMaxY(bounds.med_rectValue) - CGRectGetMaxY(topLevelFrame));
+	}];
+}
+
 - (RACSignal *)rcl_insetBaseline:(RACSignal *)rectSignal {
 	NSParameterAssert(rectSignal != nil);
-
-	return [rectSignal remainderAfterSlicingAmount:baselineOffsetSignal(self) fromEdge:CGRectMinYEdge];
+	return [rectSignal remainderAfterSlicingAmount:self.rcl_baselineSignal fromEdge:CGRectMinYEdge];
 }
 
 - (RACSignal *)rcl_outsetBaseline:(RACSignal *)rectSignal {
 	NSParameterAssert(rectSignal != nil);
-
-	return [rectSignal growEdge:CGRectMinYEdge byAmount:baselineOffsetSignal(self)];
+	return [rectSignal growEdge:CGRectMinYEdge byAmount:self.rcl_baselineSignal];
 }
 
 @end

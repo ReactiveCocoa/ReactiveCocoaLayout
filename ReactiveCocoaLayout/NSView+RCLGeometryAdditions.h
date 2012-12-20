@@ -26,6 +26,15 @@
 // Returns a signal which sends the current and all future values for `frame`.
 - (RACSignal *)rcl_frameSignal;
 
+// Sends the receiver's -baselineOffsetFromBottom.
+//
+// This is mostly useful for code compatibility with -[UIView
+// rcl_baselineSignal].
+//
+// Returns a signal which sends the value returned from
+// -baselineOffsetFromBottom and then completes.
+- (RACSignal *)rcl_baselineSignal;
+
 // Trims the minimum Y edge of each CGRect in the given signal, removing the
 // part of the rect that would lie below the baseline in the receiver (i.e., the
 // space for any descenders).

@@ -36,18 +36,18 @@
 		startWith:[NSValue valueWithRect:self.frame]];
 }
 
+- (RACSignal *)rcl_baselineSignal {
+	return [RACSignal return:@(self.baselineOffsetFromBottom)];
+}
+
 - (RACSignal *)rcl_insetBaseline:(RACSignal *)rectSignal {
 	NSParameterAssert(rectSignal != nil);
-
-	RACSignal *baseline = [RACSignal return:@(self.baselineOffsetFromBottom)];
-	return [rectSignal remainderAfterSlicingAmount:baseline fromEdge:CGRectMinYEdge];
+	return [rectSignal remainderAfterSlicingAmount:self.rcl_baselineSignal fromEdge:CGRectMinYEdge];
 }
 
 - (RACSignal *)rcl_outsetBaseline:(RACSignal *)rectSignal {
 	NSParameterAssert(rectSignal != nil);
-
-	RACSignal *baseline = [RACSignal return:@(self.baselineOffsetFromBottom)];
-	return [rectSignal growEdge:CGRectMinYEdge byAmount:baseline];
+	return [rectSignal growEdge:CGRectMinYEdge byAmount:self.rcl_baselineSignal];
 }
 
 @end

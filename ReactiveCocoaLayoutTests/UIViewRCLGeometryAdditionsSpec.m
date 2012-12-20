@@ -37,6 +37,10 @@ describe(@"UILabel", ^{
 			signal = [RACSignal return:MEDBox(CGRectMake(10, 20, 30, 40))];
 		});
 
+		it(@"should send the baseline", ^{
+			expect([[label.rcl_baselineSignal first] doubleValue]).to.equal(baseline);
+		});
+
 		it(@"should inset by the baseline", ^{
 			RACSignal *insetSignal = [label rcl_insetBaseline:signal];
 			expect(insetSignal).notTo.beNil();

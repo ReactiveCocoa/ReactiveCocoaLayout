@@ -20,7 +20,7 @@ describe(@"NSTextField", ^{
 		expect(field).notTo.beNil();
 	});
 
-	describe(@"baseline adjustments", ^{
+	describe(@"baseline", ^{
 		__block CGFloat baseline;
 		__block RACSignal *signal;
 
@@ -29,6 +29,10 @@ describe(@"NSTextField", ^{
 			expect(baseline).to.beGreaterThan(0);
 
 			signal = [RACSignal return:MEDBox(CGRectMake(10, 20, 30, 40))];
+		});
+
+		it(@"should send the baseline", ^{
+			expect([[field.rcl_baselineSignal first] doubleValue]).to.equal(baseline);
 		});
 
 		it(@"should inset by the baseline", ^{
