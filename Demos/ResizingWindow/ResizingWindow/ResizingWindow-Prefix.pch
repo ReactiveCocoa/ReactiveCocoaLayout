@@ -4,6 +4,7 @@
 
 #ifdef __OBJC__
 	#import <Cocoa/Cocoa.h>
+	#import <Archimedes/Archimedes.h>
 	#import <ReactiveCocoa/ReactiveCocoa.h>
 	#import <ReactiveCocoaLayout/ReactiveCocoaLayout.h>
 #endif
