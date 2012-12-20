@@ -7,6 +7,7 @@
 //
 
 #import "RACSignal+RCLGeometryAdditions.h"
+#import "RACSignal+RCLWritingDirectionAdditions.h"
 
 // Animates the given signal.
 //
@@ -140,19 +141,35 @@ static RACSignal *latestNumberMatchingComparisonResult(NSArray *signals, NSCompa
 
 - (RACSignal *)width {
 	return [self map:^(NSValue *value) {
-		return @(value.med_sizeValue.width);
+		if (value.med_geometryStructType == MEDGeometryStructTypeRect) {
+			return @(CGRectGetWidth(value.med_rectValue));
+		} else {
+			NSAssert(value.med_geometryStructType == MEDGeometryStructTypeSize, @"Unexpected type of value: %@", value);
+			return @(value.med_sizeValue.width);
+		}
 	}];
 }
 
 - (RACSignal *)height {
 	return [self map:^(NSValue *value) {
-		return @(value.med_sizeValue.height);
+		if (value.med_geometryStructType == MEDGeometryStructTypeRect) {
+			return @(CGRectGetHeight(value.med_rectValue));
+		} else {
+			NSAssert(value.med_geometryStructType == MEDGeometryStructTypeSize, @"Unexpected type of value: %@", value);
+			return @(value.med_sizeValue.height);
+		}
 	}];
 }
 
 - (RACSignal *)origin {
 	return [self map:^(NSValue *value) {
 		return MEDBox(value.med_rectValue.origin);
+	}];
+}
+
+- (RACSignal *)center {
+	return [self map:^(NSValue *value) {
+		return MEDBox(CGRectCenterPoint(value.med_rectValue));
 	}];
 }
 
@@ -175,6 +192,76 @@ static RACSignal *latestNumberMatchingComparisonResult(NSArray *signals, NSCompa
 	return [self map:^(NSValue *value) {
 		return @(value.med_pointValue.y);
 	}];
+}
+
+- (RACSignal *)minX {
+	return [self positionOfEdge:[RACSignal return:@(CGRectMinXEdge)]];
+}
+
+- (RACSignal *)minY {
+	return [self positionOfEdge:[RACSignal return:@(CGRectMinYEdge)]];
+}
+
+- (RACSignal *)centerX {
+	return [self map:^(NSValue *value) {
+		return @(CGRectGetMidX(value.med_rectValue));
+	}];
+}
+
+- (RACSignal *)centerY {
+	return [self map:^(NSValue *value) {
+		return @(CGRectGetMidY(value.med_rectValue));
+	}];
+}
+
+- (RACSignal *)maxX {
+	return [self positionOfEdge:[RACSignal return:@(CGRectMaxXEdge)]];
+}
+
+- (RACSignal *)maxY {
+	return [self positionOfEdge:[RACSignal return:@(CGRectMaxYEdge)]];
+}
+
+- (RACSignal *)positionOfEdge:(RACSignal *)edgeSignal {
+	NSParameterAssert(edgeSignal != nil);
+
+	RACReplaySubject *edgeSubject = [RACReplaySubject replaySubjectWithCapacity:1];
+	[[edgeSignal multicast:edgeSubject] connect];
+
+	// Terminates edgeSubject when the receiver completes.
+	RACSignal *selfTerminatingEdge = [self doCompleted:^{
+		[edgeSubject sendCompleted];
+	}];
+
+	return [RACSignal combineLatest:@[ edgeSubject, selfTerminatingEdge ] reduce:^ id (NSNumber *edge, NSValue *value) {
+		CGRect rect = value.med_rectValue;
+
+		switch (edge.unsignedIntegerValue) {
+			case CGRectMinXEdge:
+				return @(CGRectGetMinX(rect));
+
+			case CGRectMinYEdge:
+				return @(CGRectGetMinY(rect));
+
+			case CGRectMaxXEdge:
+				return @(CGRectGetMaxX(rect));
+
+			case CGRectMaxYEdge:
+				return @(CGRectGetMaxY(rect));
+
+			default:
+				NSAssert(NO, @"Unrecognized edge: %@", edge);
+				return nil;
+		}
+	}];
+}
+
+- (RACSignal *)leading {
+	return [self positionOfEdge:RACSignal.leadingEdgeSignal];
+}
+
+- (RACSignal *)trailing {
+	return [self positionOfEdge:RACSignal.trailingEdgeSignal];
 }
 
 - (RACSignal *)insetWidth:(RACSignal *)widthSignal height:(RACSignal *)heightSignal {

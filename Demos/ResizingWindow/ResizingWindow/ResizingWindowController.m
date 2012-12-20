@@ -34,14 +34,14 @@
 	NSTextField *nameLabel = [self labelWithString:NSLocalizedString(@"Name", @"")];
 	NSTextField *emailLabel = [self labelWithString:NSLocalizedString(@"Email Address", @"")];
 
-	RACSignal *labelWidth = [RACSignal max:@[ nameLabel.rcl_boundsSignal.size.width, emailLabel.rcl_boundsSignal.size.width ]];
+	RACSignal *labelWidth = [RACSignal max:@[ nameLabel.rcl_boundsSignal.width, emailLabel.rcl_boundsSignal.width ]];
 
 	NSTextField *nameField = [self textFieldWithString:@""];
 	NSTextField *emailField = [self textFieldWithString:@""];
 
 	RACTupleUnpack(RACSignal *nameRect, RACSignal *emailRect) = [[self.contentView.rcl_frameSignal
 		insetWidth:[RACSignal return:@32] height:[RACSignal return:@16]]
-		divideWithAmount:nameField.rcl_boundsSignal.size.height padding:[RACSignal return:@8] fromEdge:CGRectMaxYEdge];
+		divideWithAmount:nameField.rcl_boundsSignal.height padding:[RACSignal return:@8] fromEdge:CGRectMaxYEdge];
 
 	RACTuple *nameTuple = [[nameRect animateWithDuration:0.5] divideWithAmount:labelWidth padding:[RACSignal return:@8] fromEdge:CGRectMinXEdge];
 	RAC(nameLabel, frame) = nameTuple[0];
@@ -55,7 +55,7 @@
 	}];
 
 	RACTuple *emailTuple = [[emailRect
-		sliceWithAmount:emailField.rcl_boundsSignal.size.height fromEdge:CGRectMaxYEdge]
+		sliceWithAmount:emailField.rcl_boundsSignal.height fromEdge:CGRectMaxYEdge]
 		divideWithAmount:labelWidth padding:[RACSignal return:@8] fromEdge:CGRectMinXEdge];
 
 	RAC(emailLabel, frame) = emailTuple[0];

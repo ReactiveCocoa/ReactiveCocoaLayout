@@ -60,12 +60,12 @@
 // Returns a signal of CGSize values.
 + (RACSignal *)sizesWithWidth:(RACSignal *)widthSignal height:(RACSignal *)heightSignal;
 
-// Maps CGSize values to their `width` fields.
+// Maps CGRect or CGSize values to their widths.
 //
 // Returns a signal of CGFloat values.
 - (RACSignal *)width;
 
-// Maps CGSize values to their `height` fields.
+// Maps CGRect or CGSize values to their heights.
 //
 // Returns a signal of CGFloat values.
 - (RACSignal *)height;
@@ -74,6 +74,11 @@
 //
 // Returns a signal of CGPoint values.
 - (RACSignal *)origin;
+
+// Maps CGRect values to their exact center point.
+//
+// Returns a signal of CGPoint values.
+- (RACSignal *)center;
 
 // Constructs points from the given X and Y signals.
 //
@@ -89,6 +94,60 @@
 //
 // Returns a signal of CGFloat values.
 - (RACSignal *)y;
+
+// Maps CGRect values to their minimum X position.
+//
+// Returns a signal of CGFloat values.
+- (RACSignal *)minX;
+
+// Maps CGRect values to their minimum Y position.
+//
+// Returns a signal of CGFloat values.
+- (RACSignal *)minY;
+
+// Maps CGRect values to their center X position.
+//
+// Returns a signal of CGFloat values.
+- (RACSignal *)centerX;
+
+// Maps CGRect values to their center Y position.
+//
+// Returns a signal of CGFloat values.
+- (RACSignal *)centerY;
+
+// Maps CGRect values to their maximum X position.
+//
+// Returns a signal of CGFloat values.
+- (RACSignal *)maxX;
+
+// Maps CGRect values to their maximum Y position.
+//
+// Returns a signal of CGFloat values.
+- (RACSignal *)maxY;
+
+// Maps CGRect values to the position of the edge sent from the given signal.
+//
+// edgeSignal - A signal of NSNumber-boxed CGRectEdge values, representing the
+//              side to get the position of.
+//
+// Returns a signal of CGFloat values.
+- (RACSignal *)positionOfEdge:(RACSignal *)edgeSignal;
+
+// Maps CGRect values to their leading X position.
+//
+// This signal will automatically re-send when the user's current locale
+// changes.
+//
+// Returns a signal of CGFloat values.
+- (RACSignal *)leading;
+
+// Maps CGRect values to their trailing X position.
+//
+// This signal will automatically re-send when the user's current locale
+// changes.
+//
+// Returns a signal of CGFloat values.
+- (RACSignal *)trailing;
 
 // Insets each CGRect by the number of points sent from the given width and
 // height signals.
