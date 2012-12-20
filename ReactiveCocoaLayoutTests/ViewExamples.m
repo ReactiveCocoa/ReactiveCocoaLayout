@@ -102,12 +102,18 @@ sharedExamplesFor(ViewExamples, ^{
 		expect(lastValue.med_rectValue).to.equal(CGRectMake(11, 22, 28, 36));
 	});
 
-	it(@"should bind the alignment rect", ^{
+	it(@"should read rcl_alignmentRect", ^{
+		expect(view.rcl_alignmentRect).to.equal(CGRectMake(101, 202, 298, 396));
+
+		CGRect newFrame = CGRectMake(10, 20, 30, 40);
+		view.frame = newFrame;
+		expect(view.rcl_alignmentRect).to.equal(CGRectMake(11, 22, 28, 36));
+	});
+
+	it(@"should bind rcl_alignmentRect", ^{
 		RACSubject *subject = [RACSubject subject];
 
-		RACDisposable *disposable = [view rcl_bindAlignmentRectToSignal:subject];
-		expect(disposable).notTo.beNil();
-
+		RAC(view, rcl_alignmentRect) = subject;
 		expect(view.frame).to.equal(initialFrame);
 
 		[subject sendNext:MEDBox(CGRectMake(1, 2, 8, 6))];

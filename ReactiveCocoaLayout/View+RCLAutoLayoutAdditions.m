@@ -7,6 +7,7 @@
 //
 
 #import "View+RCLAutoLayoutAdditions.h"
+#import "EXTScope.h"
 #import "RACSignal+RCLGeometryAdditions.h"
 #import <objc/runtime.h>
 
@@ -54,18 +55,19 @@ static void newInvalidateIntrinsicContentSize(id self, SEL _cmd) {
 	return [RACSignal rectsWithSize:self.rcl_intrinsicContentSizeSignal];
 }
 
-- (RACSignal *)rcl_alignmentRectSignal {
-	return [self.rcl_frameSignal map:^(NSValue *frame) {
-		CGRect alignmentRect = [self alignmentRectForFrame:frame.med_rectValue];
-		return MEDBox(alignmentRect);
-	}];
+- (CGRect)rcl_alignmentRect {
+	return [self alignmentRectForFrame:self.frame];
 }
 
-- (RACDisposable *)rcl_bindAlignmentRectToSignal:(RACSignal *)alignmentRectSignal {
-	NSParameterAssert(alignmentRectSignal != nil);
+- (void)setRcl_alignmentRect:(CGRect)rect {
+	self.frame = [self frameForAlignmentRect:rect];
+}
 
-	return [alignmentRectSignal subscribeNext:^(NSValue *alignmentRect) {
-		self.frame = [self frameForAlignmentRect:alignmentRect.med_rectValue];
+- (RACSignal *)rcl_alignmentRectSignal {
+	@unsafeify(self);
+	return [self.rcl_frameSignal map:^(id _) {
+		@strongify(self);
+		return MEDBox(self.rcl_alignmentRect);
 	}];
 }
 

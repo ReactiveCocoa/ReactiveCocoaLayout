@@ -33,17 +33,20 @@
 // Like -rcl_intrinsicContentSizeSignal, but sends rectangles originating at (0, 0).
 - (RACSignal *)rcl_intrinsicBoundsSignal;
 
+// The alignment rect for the receiver's current frame.
+//
+// Setting this property will adjust the receiver's frame such that the
+// alignment rect matches the new value.
+//
+// This property may have `RAC()` bindings applied to it, but it is not
+// KVO-compliant. Use -rcl_alignmentRectSignal for observing changes instead.
+@property (nonatomic, assign) CGRect rcl_alignmentRect;
+
 // Observes the receiver's alignment rect for changes.
 //
 // Returns a signal which sends the current alignment rect, and a new CGRect
 // every time the view's frame changes in a way that might affect the alignment
 // rect.
 - (RACSignal *)rcl_alignmentRectSignal;
-
-// Every time the given signal sends a new CGRect, adjusts the receiver's frame
-// such that the receiver's alignment rect matches the sent value.
-//
-// Returns a disposable which can be used to terminate the binding.
-- (RACDisposable *)rcl_bindAlignmentRectToSignal:(RACSignal *)alignmentRectSignal;
 
 @end
