@@ -12,11 +12,11 @@
 
 // FIXME: These properties aren't actually declared as KVO-compliant by UIKit.
 // Here be dragons?
-- (id)rcl_boundsSignal {
+- (RACSignal *)rcl_boundsSignal {
 	return RACAbleWithStart(self.bounds);
 }
 
-- (id)rcl_frameSignal {
+- (RACSignal *)rcl_frameSignal {
 	return RACAbleWithStart(self.frame);
 }
 

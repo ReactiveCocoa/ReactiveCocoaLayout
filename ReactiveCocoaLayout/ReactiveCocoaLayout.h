@@ -6,10 +6,7 @@
 //  Copyright (c) 2012 GitHub. All rights reserved.
 //
 
-#import <ReactiveCocoa/ReactiveCocoa.h>
-
-#import "RACSignal+RCLSignalAdditions.h"
-#import "RCLSignal.h"
+#import "RACSignal+RCLGeometryAdditions.h"
 #import "View+RCLAutoLayoutObservationAdditions.h"
 
 #ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
