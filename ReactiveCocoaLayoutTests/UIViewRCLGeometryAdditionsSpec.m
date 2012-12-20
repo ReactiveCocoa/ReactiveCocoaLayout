@@ -20,7 +20,7 @@ describe(@"UILabel", ^{
 		expect(label).notTo.beNil();
 	});
 
-	describe(@"baseline adjustments", ^{
+	describe(@"baseline", ^{
 		__block CGFloat baseline;
 		__block RACSignal *signal;
 
@@ -39,28 +39,6 @@ describe(@"UILabel", ^{
 
 		it(@"should send the baseline", ^{
 			expect([[label.rcl_baselineSignal first] doubleValue]).to.equal(baseline);
-		});
-
-		it(@"should inset by the baseline", ^{
-			RACSignal *insetSignal = [label rcl_insetBaseline:signal];
-			expect(insetSignal).notTo.beNil();
-
-			NSValue *rect = [insetSignal first];
-			expect(rect).notTo.beNil();
-
-			CGRect expected = CGRectMake(10, 20 + baseline, 30, 40 - baseline);
-			expect(rect.med_rectValue).to.equal(expected);
-		});
-
-		it(@"should outset by the baseline", ^{
-			RACSignal *outsetSignal = [label rcl_outsetBaseline:signal];
-			expect(outsetSignal).notTo.beNil();
-
-			NSValue *rect = [outsetSignal first];
-			expect(rect).notTo.beNil();
-
-			CGRect expected = CGRectMake(10, 20 - baseline, 30, 40 + baseline);
-			expect(rect.med_rectValue).to.equal(expected);
 		});
 	});
 });

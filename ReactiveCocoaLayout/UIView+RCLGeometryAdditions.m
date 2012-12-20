@@ -38,14 +38,4 @@
 	}];
 }
 
-- (RACSignal *)rcl_insetBaseline:(RACSignal *)rectSignal {
-	NSParameterAssert(rectSignal != nil);
-	return [rectSignal remainderAfterSlicingAmount:self.rcl_baselineSignal fromEdge:CGRectMinYEdge];
-}
-
-- (RACSignal *)rcl_outsetBaseline:(RACSignal *)rectSignal {
-	NSParameterAssert(rectSignal != nil);
-	return [rectSignal growEdge:CGRectMinYEdge byAmount:self.rcl_baselineSignal];
-}
-
 @end

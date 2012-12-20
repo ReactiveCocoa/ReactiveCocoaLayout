@@ -35,17 +35,4 @@
 // -baselineOffsetFromBottom and then completes.
 - (RACSignal *)rcl_baselineSignal;
 
-// Trims the minimum Y edge of each CGRect in the given signal, removing the
-// part of the rect that would lie below the baseline in the receiver (i.e., the
-// space for any descenders).
-//
-// Returns a signal of adjusted CGRect values.
-- (RACSignal *)rcl_insetBaseline:(RACSignal *)rectSignal;
-
-// Grows the minimum Y edge of each CGRect in the given signal, adding space for
-// descenders based on the receiver's -baselineOffsetFromBottom method.
-//
-// Returns a signal of adjusted CGRect values.
-- (RACSignal *)rcl_outsetBaseline:(RACSignal *)rectSignal;
-
 @end

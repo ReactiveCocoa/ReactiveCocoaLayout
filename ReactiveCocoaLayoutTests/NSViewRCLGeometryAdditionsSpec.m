@@ -34,28 +34,6 @@ describe(@"NSTextField", ^{
 		it(@"should send the baseline", ^{
 			expect([[field.rcl_baselineSignal first] doubleValue]).to.equal(baseline);
 		});
-
-		it(@"should inset by the baseline", ^{
-			RACSignal *insetSignal = [field rcl_insetBaseline:signal];
-			expect(insetSignal).notTo.beNil();
-
-			NSValue *rect = [insetSignal first];
-			expect(rect).notTo.beNil();
-
-			CGRect expected = CGRectMake(10, 20 + baseline, 30, 40 - baseline);
-			expect(rect.med_rectValue).to.equal(expected);
-		});
-
-		it(@"should outset by the baseline", ^{
-			RACSignal *outsetSignal = [field rcl_outsetBaseline:signal];
-			expect(outsetSignal).notTo.beNil();
-
-			NSValue *rect = [outsetSignal first];
-			expect(rect).notTo.beNil();
-
-			CGRect expected = CGRectMake(10, 20 - baseline, 30, 40 + baseline);
-			expect(rect.med_rectValue).to.equal(expected);
-		});
 	});
 });
 
