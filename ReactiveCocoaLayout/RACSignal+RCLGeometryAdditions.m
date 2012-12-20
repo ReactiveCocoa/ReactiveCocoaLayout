@@ -8,6 +8,74 @@
 
 #import "RACSignal+RCLGeometryAdditions.h"
 
+// Animates the given signal.
+//
+// self        - The signal to animate.
+// durationPtr - If not NULL, an explicit duration to specify when starting the
+//				 animation.
+// curve       - The animation curve to use.
+static RACSignal *animateWithDuration (RACSignal *self, NSTimeInterval *durationPtr, RCLAnimationCurve curve) {
+	#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
+		// This seems like a saner default setting for a layout-triggered
+		// animation.
+		UIViewAnimationOptions options = curve | UIViewAnimationOptionLayoutSubviews;
+		if (curve != RCLAnimationCurveDefault) options |= UIViewAnimationOptionOverrideInheritedCurve;
+
+		NSTimeInterval duration = 0.2;
+		if (durationPtr != NULL) {
+			duration = *durationPtr;
+			options |= UIViewAnimationOptionOverrideInheritedDuration;
+		}
+	#elif TARGET_OS_MAC
+		BOOL hasDuration = (durationPtr != NULL);
+		NSTimeInterval duration = (hasDuration ? *durationPtr : 0);
+	#endif
+
+	return (id)[RACSignal createSignal:^(id<RACSubscriber> subscriber) {
+		return [self subscribeNext:^(id value) {
+			#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
+				[UIView animateWithDuration:duration delay:0 options:options animations:^{
+					[subscriber sendNext:value];
+				} completion:NULL];
+			#elif TARGET_OS_MAC
+				[NSAnimationContext beginGrouping];
+				if (hasDuration) NSAnimationContext.currentContext.duration = duration;
+
+				switch (curve) {
+					case RCLAnimationCurveEaseInOut:
+						NSAnimationContext.currentContext.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+						break;
+
+					case RCLAnimationCurveEaseIn:
+						NSAnimationContext.currentContext.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseIn];
+						break;
+
+					case RCLAnimationCurveEaseOut:
+						NSAnimationContext.currentContext.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut];
+						break;
+
+					case RCLAnimationCurveLinear:
+						NSAnimationContext.currentContext.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
+						break;
+
+					case RCLAnimationCurveDefault:
+						break;
+
+					default:
+						NSCAssert(NO, @"Unrecognized animation curve: %i", (int)curve);
+				}
+
+				[subscriber sendNext:value];
+				[NSAnimationContext endGrouping];
+			#endif
+		} error:^(NSError *error) {
+			[subscriber sendError:error];
+		} completed:^{
+			[subscriber sendCompleted];
+		}];
+	}];
+}
+
 // When any signal sends an NSNumber, if -compare: invoked against the previous
 // value (and passed the new value) returns `result`, the new value is sent on
 // the returned signal.
@@ -160,6 +228,18 @@ static RACSignal *latestNumberMatchingComparisonResult(NSArray *signals, NSCompa
 
 + (RACSignal *)min:(NSArray *)signals {
 	return latestNumberMatchingComparisonResult(signals, NSOrderedDescending);
+}
+
+- (RACSignal *)animate {
+	return animateWithDuration(self, NULL, RCLAnimationCurveDefault);
+}
+
+- (RACSignal *)animateWithDuration:(NSTimeInterval)duration {
+	return [self animateWithDuration:duration curve:RCLAnimationCurveDefault];
+}
+
+- (RACSignal *)animateWithDuration:(NSTimeInterval)duration curve:(RCLAnimationCurve)curve {
+	return animateWithDuration(self, &duration, RCLAnimationCurveDefault);
 }
 
 @end

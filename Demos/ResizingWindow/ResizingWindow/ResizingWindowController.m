@@ -43,9 +43,16 @@
 		insetWidth:[RACSignal return:@32] height:[RACSignal return:@16]]
 		divideWithAmount:nameField.rcl_boundsSignal.size.height padding:[RACSignal return:@8] fromEdge:CGRectMaxYEdge];
 
-	RACTuple *nameTuple = [nameRect divideWithAmount:labelWidth padding:[RACSignal return:@8] fromEdge:CGRectMinXEdge];
+	RACTuple *nameTuple = [[nameRect animateWithDuration:0.5] divideWithAmount:labelWidth padding:[RACSignal return:@8] fromEdge:CGRectMinXEdge];
 	RAC(nameLabel, frame) = nameTuple[0];
-	RAC(nameField, frame) = nameTuple[1];
+
+	// Don't animate setting the initial frame.
+	RAC(nameField, frame) = [nameTuple[1] take:1];
+
+	[[nameTuple[1] skip:1] subscribeNext:^(NSValue *frame) {
+		// Can't lift this because lolappkit.
+		[nameField.animator setFrame:frame.med_rectValue];
+	}];
 
 	RACTuple *emailTuple = [[emailRect
 		sliceWithAmount:emailField.rcl_boundsSignal.size.height fromEdge:CGRectMaxYEdge]
@@ -66,6 +73,10 @@
 	label.stringValue = string;
 	[label sizeToFit];
 
+	// We don't actually use autoresizing to move these views, but rather to
+	// keep them pinned in the absence of any movement.
+	label.autoresizingMask = NSViewMaxXMargin | NSViewMinYMargin;
+
 	[self.contentView addSubview:label];
 	return label;
 }
@@ -74,6 +85,10 @@
 	NSTextField *textField = [[NSTextField alloc] initWithFrame:NSZeroRect];
 	textField.stringValue = string;
 	[textField sizeToFit];
+
+	// We don't actually use autoresizing to move these views, but rather to
+	// keep them pinned in the absence of any movement.
+	textField.autoresizingMask = NSViewMaxXMargin | NSViewMinYMargin;
 
 	[self.contentView addSubview:textField];
 	return textField;

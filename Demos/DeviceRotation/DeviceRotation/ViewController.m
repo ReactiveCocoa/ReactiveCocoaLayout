@@ -53,7 +53,13 @@
 	self.nameTextView = [[UITextView alloc] initWithFrame:CGRectZero];
 	[self.view addSubview:self.nameTextView];
 
-	RAC(self.nameTextView.frame) = [insetBounds divideWithAmount:self.nameLabel.rcl_frameSignal.size.width padding:[RACSignal return:@8] fromEdge:CGRectMinXEdge][1];
+	RACSignal *textViewBounds = [insetBounds divideWithAmount:self.nameLabel.rcl_frameSignal.size.width padding:[RACSignal return:@8] fromEdge:CGRectMinXEdge][1];
+
+	// Animate the initial appearance of the text view, but not any changes due
+	// to rotation.
+	RAC(self.nameTextView.frame) = [[[[textViewBounds animateWithDuration:1 curve:RCLAnimationCurveEaseOut] take:1] delay:1] sequenceNext:^{
+		return textViewBounds;
+	}];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
