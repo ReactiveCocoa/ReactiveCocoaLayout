@@ -25,12 +25,9 @@ describe(@"UILabel", ^{
 
 		beforeEach(^{
 			UIView *baselineView = label.viewForBaselineLayout;
-			expect(baselineView).notTo.beNil();
-			
-			CGRect baselineViewRect = [baselineView.superview convertRect:baselineView.frame toView:label];
-			expect(baselineViewRect).notTo.equal(label.bounds);
+			expect(baselineView).to.equal(label);
 
-			baseline = CGRectGetMaxY(baselineViewRect);
+			baseline = 0;
 		});
 
 		it(@"should send the baseline", ^{

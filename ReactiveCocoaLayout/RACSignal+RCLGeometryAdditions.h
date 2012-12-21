@@ -285,6 +285,9 @@
 
 // Aligns the baseline of each CGRect in the receiver to those of another signal.
 //
+// On iOS, baselines are considered to be relative to the maximum Y edge of the
+// rectangle. On OS X, baselines are relative to the minimum Y edge.
+//
 // baselineSignal          - A signal of CGFloat values, representing baselines
 //                           for the rects sent by the receiver.
 // referenceBaselineSignal - A signal of CGFloat values, representing baselines

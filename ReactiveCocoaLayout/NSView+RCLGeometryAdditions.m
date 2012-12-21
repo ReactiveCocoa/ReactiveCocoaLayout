@@ -40,16 +40,7 @@
 }
 
 - (RACSignal *)rcl_baselineSignal {
-	@unsafeify(self);
-	return [self.rcl_boundsSignal map:^(NSValue *bounds) {
-		@strongify(self);
-
-		CGFloat baseline = self.baselineOffsetFromBottom;
-		if (![self isFlipped]) return @(baseline);
-
-		CGFloat baselineFromMinY = CGRectGetMaxY(bounds.med_rectValue) - baseline;
-		return @(baselineFromMinY);
-	}].distinctUntilChanged;
+	return [RACSignal return:@(self.baselineOffsetFromBottom)];
 }
 
 @end

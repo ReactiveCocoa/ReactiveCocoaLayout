@@ -422,31 +422,33 @@ describe(@"signal of CGRects", ^{
 			signal = [rects signalWithScheduler:RACScheduler.immediateScheduler];
 		});
 
-		it(@"should align to a lower absolute baseline", ^{
-			RACSignal *reference = [RACSignal return:MEDBox(CGRectMake(0, 30, 0, 15))];
-			RACSignal *aligned = [signal alignBaseline:baseline1 toBaseline:baseline2 ofRect:reference];
+		#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
+			it(@"should align to a baseline", ^{
+				RACSignal *reference = [RACSignal return:MEDBox(CGRectMake(0, 30, 0, 15))];
+				RACSignal *aligned = [signal alignBaseline:baseline1 toBaseline:baseline2 ofRect:reference];
 
-			RACSequence *expected = @[
-				MEDBox(CGRectMake(10, 22, 20, 20)),
-				MEDBox(CGRectMake(10, 2, 30, 40)),
-				MEDBox(CGRectMake(25, 7, 45, 35)),
-			].rac_sequence;
+				RACSequence *expected = @[
+					MEDBox(CGRectMake(10, 22, 20, 20)),
+					MEDBox(CGRectMake(10, 2, 30, 40)),
+					MEDBox(CGRectMake(25, 7, 45, 35)),
+				].rac_sequence;
 
-			expect(aligned.sequence).to.equal(expected);
-		});
+				expect(aligned.sequence).to.equal(expected);
+			});
+		#elif TARGET_OS_MAC
+			it(@"should align to a baseline", ^{
+				RACSignal *reference = [RACSignal return:MEDBox(CGRectMake(0, 30, 0, 15))];
+				RACSignal *aligned = [signal alignBaseline:baseline1 toBaseline:baseline2 ofRect:reference];
 
-		it(@"should align to a higher absolute baseline", ^{
-			RACSignal *reference = [RACSignal return:MEDBox(CGRectMake(0, 0, 0, 20))];
-			RACSignal *aligned = [signal alignBaseline:baseline1 toBaseline:baseline2 ofRect:reference];
+				RACSequence *expected = @[
+					MEDBox(CGRectMake(10, 33, 20, 20)),
+					MEDBox(CGRectMake(10, 33, 30, 40)),
+					MEDBox(CGRectMake(25, 33, 45, 35)),
+				].rac_sequence;
 
-			RACSequence *expected = @[
-				MEDBox(CGRectMake(10, -3, 20, 20)),
-				MEDBox(CGRectMake(10, -23, 30, 40)),
-				MEDBox(CGRectMake(25, -18, 45, 35)),
-			].rac_sequence;
-
-			expect(aligned.sequence).to.equal(expected);
-		});
+				expect(aligned.sequence).to.equal(expected);
+			});
+		#endif
 	});
 });
 

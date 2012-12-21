@@ -26,10 +26,6 @@ describe(@"NSTextField", ^{
 		beforeEach(^{
 			baseline = field.baselineOffsetFromBottom;
 			expect(baseline).to.beGreaterThan(0);
-
-			if ([field isFlipped]) {
-				baseline = CGRectGetMaxY(field.bounds) - baseline;
-			}
 		});
 
 		it(@"should send the baseline", ^{

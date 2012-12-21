@@ -24,9 +24,9 @@
 //
 // This observes the bounds of the receiver and the frame of the receiver's
 // -viewForBaselineLayout, and recalculates the offset of the baseline from the
-// minimum Y edge whenever either changes.
+// maximum Y edge whenever either changes.
 //
-// Returns a signal of baseline offsets from the minimum Y edge of the view.
+// Returns a signal of baseline offsets from the maximum Y edge of the view.
 - (RACSignal *)rcl_baselineSignal;
 
 @end

@@ -45,9 +45,11 @@
 		divideWithAmount:nameField.rcl_intrinsicContentSizeSignal.height padding:padding fromEdge:CGRectMaxYEdge];
 
 	RACTupleUnpack(RACSignal *nameLabelRect, RACSignal *nameFieldRect) = [nameRect divideWithAmount:labelWidth padding:padding fromEdge:CGRectMinXEdge];
+	RACTupleUnpack(RACSignal *emailLabelRect, RACSignal *emailFieldRect) = [[emailRect
+		sliceWithAmount:emailField.rcl_intrinsicContentSizeSignal.height fromEdge:CGRectMaxYEdge]
+		divideWithAmount:labelWidth padding:padding fromEdge:CGRectMinXEdge];
 
-	// Don't animate setting the initial frames.
-	RAC(nameLabel, rcl_alignmentRect) = [nameLabelRect alignBaseline:nameLabel.rcl_baselineSignal toBaseline:nameField.rcl_baselineSignal ofRect:nameFieldRect];
+	// Don't animate setting the initial frame.
 	RAC(nameField, frame) = [nameFieldRect take:1];
 
 	[[[nameFieldRect skip:1] animateWithDuration:0.5] subscribeNext:^(NSValue *rect) {
@@ -55,12 +57,13 @@
 		[nameField.animator setFrame:rect.med_rectValue];
 	}];
 
-	RACTupleUnpack(RACSignal *emailLabelRect, RACSignal *emailFieldRect) = [[emailRect
-		sliceWithAmount:emailField.rcl_intrinsicContentSizeSignal.height fromEdge:CGRectMaxYEdge]
-		divideWithAmount:labelWidth padding:padding fromEdge:CGRectMinXEdge];
+	RAC(nameLabel, rcl_alignmentRect) = [[RACSignal rectsWithOrigin:nameLabelRect.origin size:nameLabel.rcl_intrinsicContentSizeSignal]
+		alignBaseline:nameLabel.rcl_baselineSignal toBaseline:nameField.rcl_baselineSignal ofRect:nameFieldRect];
 
-	RAC(emailLabel, rcl_alignmentRect) = [emailLabelRect alignBaseline:emailLabel.rcl_baselineSignal toBaseline:emailField.rcl_baselineSignal ofRect:emailFieldRect];
 	RAC(emailField, rcl_alignmentRect) = emailFieldRect;
+
+	RAC(emailLabel, rcl_alignmentRect) = [[RACSignal rectsWithOrigin:emailLabelRect.origin size:emailLabel.rcl_intrinsicContentSizeSignal]
+		alignBaseline:emailLabel.rcl_baselineSignal toBaseline:emailField.rcl_baselineSignal ofRect:emailFieldRect];
 }
 
 #pragma mark View Creation

@@ -414,14 +414,20 @@ static RACSignal *combineSignalsWithOperator(RACSignal *a, RACSignal *b, CGFloat
 			CGRect referenceRect = referenceRectValue.med_rectValue;
 			CGFloat referenceBaseline = referenceBaselineNum.doubleValue;
 
-			CGRect totalRect = CGRectUnion(rect, referenceRect);
+			#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
+				// Flip the baselines so they're relative to a shared minY.
+				baseline = CGRectGetHeight(rect) - baseline + CGRectGetMinY(rect);
+				referenceBaseline = CGRectGetHeight(referenceRect) - referenceBaseline + CGRectGetMinY(referenceRect);
 
-			// Put both baselines into the same coordinate system (that of
-			// totalRect).
-			baseline += CGRectGetMaxY(totalRect) - CGRectGetMaxY(rect);
-			referenceBaseline += CGRectGetMaxY(totalRect) - CGRectGetMaxY(referenceRect);
+				rect = CGRectOffset(rect, 0, referenceBaseline - baseline);
+			#elif TARGET_OS_MAC
+				// Recalculate the baselines relative to a shared minY.
+				baseline += CGRectGetMinY(rect);
+				referenceBaseline += CGRectGetMinY(referenceRect);
 
-			rect = CGRectOffset(rect, 0, baseline - referenceBaseline);
+				rect = CGRectOffset(rect, 0, referenceBaseline - baseline);
+			#endif
+
 			return MEDBox(rect);
 		}];
 }
