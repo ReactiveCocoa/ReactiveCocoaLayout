@@ -322,7 +322,7 @@ describe(@"signal of CGRects", ^{
 		expect(values).to.equal(expected);
 	});
 
-	describe(@"alignment", ^{
+	describe(@"position alignment", ^{
 		__block RACSignal *position;
 		
 		beforeEach(^{
@@ -403,6 +403,46 @@ describe(@"signal of CGRects", ^{
 				MEDBox(CGRectMake(10, -17, 20, 20)),
 				MEDBox(CGRectMake(10, -37, 30, 40)),
 				MEDBox(CGRectMake(25, -32, 45, 35)),
+			].rac_sequence;
+
+			expect(aligned.sequence).to.equal(expected);
+		});
+	});
+
+	describe(@"baseline alignment", ^{
+		__block RACSignal *baseline1;
+		__block RACSignal *baseline2;
+
+		__block RACSignal *signal;
+
+		beforeEach(^{
+			baseline1 = [RACSignal return:@2];
+			baseline2 = [RACSignal return:@5];
+
+			signal = [rects signalWithScheduler:RACScheduler.immediateScheduler];
+		});
+
+		it(@"should align to a lower absolute baseline", ^{
+			RACSignal *reference = [RACSignal return:MEDBox(CGRectMake(0, 30, 0, 15))];
+			RACSignal *aligned = [signal alignBaseline:baseline1 toBaseline:baseline2 ofRect:reference];
+
+			RACSequence *expected = @[
+				MEDBox(CGRectMake(10, 22, 20, 20)),
+				MEDBox(CGRectMake(10, 2, 30, 40)),
+				MEDBox(CGRectMake(25, 7, 45, 35)),
+			].rac_sequence;
+
+			expect(aligned.sequence).to.equal(expected);
+		});
+
+		it(@"should align to a higher absolute baseline", ^{
+			RACSignal *reference = [RACSignal return:MEDBox(CGRectMake(0, 0, 0, 20))];
+			RACSignal *aligned = [signal alignBaseline:baseline1 toBaseline:baseline2 ofRect:reference];
+
+			RACSequence *expected = @[
+				MEDBox(CGRectMake(10, -3, 20, 20)),
+				MEDBox(CGRectMake(10, -23, 30, 40)),
+				MEDBox(CGRectMake(25, -18, 45, 35)),
 			].rac_sequence;
 
 			expect(aligned.sequence).to.equal(expected);

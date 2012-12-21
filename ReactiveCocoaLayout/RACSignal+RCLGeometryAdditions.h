@@ -283,6 +283,18 @@
 // Returns a signal of aligned CGRect values.
 - (RACSignal *)alignCenterY:(RACSignal *)centerYSignal;
 
+// Aligns the baseline of each CGRect in the receiver to those of another signal.
+//
+// baselineSignal          - A signal of CGFloat values, representing baselines
+//                           for the rects sent by the receiver.
+// referenceBaselineSignal - A signal of CGFloat values, representing baselines
+//                           for the rects sent by `referenceSentSignal`.
+// referenceRectSignal     - A signal of CGRect values, to which the receiver's
+//                           rects should be aligned.
+//
+// Returns a signal of aligned CGRect values.
+- (RACSignal *)alignBaseline:(RACSignal *)baselineSignal toBaseline:(RACSignal *)referenceBaselineSignal ofRect:(RACSignal *)referenceRectSignal;
+
 // Adds the values of the receiver and the given signal.
 //
 // The values may be CGFloats, CGSizes, or CGPoints, but both signals must send

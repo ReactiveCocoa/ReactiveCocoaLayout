@@ -400,6 +400,32 @@ static RACSignal *combineSignalsWithOperator(RACSignal *a, RACSignal *b, CGFloat
 	}];
 }
 
+- (RACSignal *)alignBaseline:(RACSignal *)baselineSignal toBaseline:(RACSignal *)referenceBaselineSignal ofRect:(RACSignal *)referenceRectSignal {
+	NSParameterAssert(baselineSignal != nil);
+	NSParameterAssert(referenceBaselineSignal != nil);
+	NSParameterAssert(referenceRectSignal != nil);
+
+	return [RACSignal
+		combineLatest:@[ referenceBaselineSignal, referenceRectSignal, baselineSignal, self ]
+		reduce:^(NSNumber *referenceBaselineNum, NSValue *referenceRectValue, NSNumber *baselineNum, NSValue *rectValue) {
+			CGRect rect = rectValue.med_rectValue;
+			CGFloat baseline = baselineNum.doubleValue;
+
+			CGRect referenceRect = referenceRectValue.med_rectValue;
+			CGFloat referenceBaseline = referenceBaselineNum.doubleValue;
+
+			CGRect totalRect = CGRectUnion(rect, referenceRect);
+
+			// Put both baselines into the same coordinate system (that of
+			// totalRect).
+			baseline += CGRectGetMaxY(totalRect) - CGRectGetMaxY(rect);
+			referenceBaseline += CGRectGetMaxY(totalRect) - CGRectGetMaxY(referenceRect);
+
+			rect = CGRectOffset(rect, 0, baseline - referenceBaseline);
+			return MEDBox(rect);
+		}];
+}
+
 - (RACSignal *)insetWidth:(RACSignal *)widthSignal height:(RACSignal *)heightSignal {
 	NSParameterAssert(widthSignal != nil);
 	NSParameterAssert(heightSignal != nil);
