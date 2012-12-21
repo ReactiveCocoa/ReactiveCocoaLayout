@@ -71,6 +71,57 @@ sharedExamplesFor(ViewExamples, ^{
 		[view invalidateAndSetIntrinsicContentSize:newSize];
 		expect(lastValue.med_sizeValue).to.equal(newSize);
 	});
+
+	it(@"should send values on rcl_intrinsicBoundsSignal", ^{
+		__block NSValue *lastValue = nil;
+		[view.rcl_intrinsicBoundsSignal subscribeNext:^(NSValue *value) {
+			expect(value).to.beKindOf(NSValue.class);
+			lastValue = value;
+		}];
+
+		expect(lastValue).notTo.beNil();
+		expect(lastValue.med_rectValue).to.equal(CGRectZero);
+
+		CGSize newSize = CGSizeMake(5, 10);
+		[view invalidateAndSetIntrinsicContentSize:newSize];
+		expect(lastValue.med_rectValue).to.equal(CGRectMake(0, 0, 5, 10));
+	});
+
+	it(@"should send values on rcl_alignmentRectSignal", ^{
+		__block NSValue *lastValue = nil;
+		[view.rcl_alignmentRectSignal subscribeNext:^(NSValue *value) {
+			expect(value).to.beKindOf(NSValue.class);
+			lastValue = value;
+		}];
+
+		expect(lastValue).notTo.beNil();
+		expect(lastValue.med_rectValue).to.equal(CGRectMake(101, 202, 298, 396));
+
+		CGRect newFrame = CGRectMake(10, 20, 30, 40);
+		view.frame = newFrame;
+		expect(lastValue.med_rectValue).to.equal(CGRectMake(11, 22, 28, 36));
+	});
+
+	it(@"should read rcl_alignmentRect", ^{
+		expect(view.rcl_alignmentRect).to.equal(CGRectMake(101, 202, 298, 396));
+
+		CGRect newFrame = CGRectMake(10, 20, 30, 40);
+		view.frame = newFrame;
+		expect(view.rcl_alignmentRect).to.equal(CGRectMake(11, 22, 28, 36));
+	});
+
+	it(@"should bind rcl_alignmentRect", ^{
+		RACSubject *subject = [RACSubject subject];
+
+		RAC(view, rcl_alignmentRect) = subject;
+		expect(view.frame).to.equal(initialFrame);
+
+		[subject sendNext:MEDBox(CGRectMake(1, 2, 8, 6))];
+		expect(view.frame).to.equal(CGRectMake(0, 0, 10, 10));
+
+		[subject sendNext:MEDBox(CGRectMake(5, 5, 10, 10))];
+		expect(view.frame).to.equal(CGRectMake(4, 3, 12, 14));
+	});
 });
 
 SharedExampleGroupsEnd

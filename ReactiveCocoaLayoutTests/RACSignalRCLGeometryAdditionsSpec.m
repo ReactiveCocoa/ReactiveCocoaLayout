@@ -180,7 +180,18 @@ describe(@"signal of CGRects", ^{
 		expect(result.sequence).to.equal(expectedRects.rac_sequence);
 	});
 
-	it(@"should divide", ^{
+	it(@"should grow", ^{
+		RACSignal *result = [signal growEdge:CGRectMaxXEdge byAmount:[RACSignal return:@5]];
+		NSArray *expectedRects = @[
+			MEDBox(CGRectMake(10, 10, 25, 20)),
+			MEDBox(CGRectMake(10, 20, 35, 40)),
+			MEDBox(CGRectMake(25, 15, 50, 35)),
+		];
+
+		expect(result.sequence).to.equal(expectedRects.rac_sequence);
+	});
+
+	it(@"should divide into two rects", ^{
 		RACTupleUnpack(RACSignal *slices, RACSignal *remainders) = [signal divideWithAmount:[RACSignal return:@15] fromEdge:CGRectMinXEdge];
 
 		NSArray *expectedSlices = @[
@@ -199,7 +210,7 @@ describe(@"signal of CGRects", ^{
 		expect(remainders.sequence).to.equal(expectedRemainders.rac_sequence);
 	});
 
-	it(@"should divide with padding", ^{
+	it(@"should divide into two rects with padding", ^{
 		RACTupleUnpack(RACSignal *slices, RACSignal *remainders) = [signal divideWithAmount:[RACSignal return:@15] padding:[RACSignal return:@3] fromEdge:CGRectMinXEdge];
 
 		NSArray *expectedSlices = @[
@@ -263,6 +274,181 @@ describe(@"signal of CGRects", ^{
 		];
 
 		expect(values).to.equal(expected);
+	});
+
+	it(@"should be returned from +rectsWithCenter:size:", ^{
+		RACSubject *centerSubject = [RACSubject subject];
+		RACSubject *sizeSubject = [RACSubject subject];
+
+		RACSignal *constructedSignal = [RACSignal rectsWithCenter:centerSubject size:sizeSubject];
+		NSMutableArray *values = [NSMutableArray array];
+
+		[constructedSignal subscribeNext:^(id value) {
+			[values addObject:value];
+		}];
+
+		[centerSubject sendNext:MEDBox(CGPointMake(0, 0))];
+		[sizeSubject sendNext:MEDBox(CGSizeMake(0, 0))];
+		[sizeSubject sendNext:MEDBox(CGSizeMake(2, 2))];
+		[sizeSubject sendNext:MEDBox(CGSizeMake(5, 5))];
+
+		NSArray *expected = @[
+			MEDBox(CGRectMake(0, 0, 0, 0)),
+			MEDBox(CGRectMake(-1, -1, 2, 2)),
+			MEDBox(CGRectMake(-2.5, -2.5, 5, 5)),
+		];
+
+		expect(values).to.equal(expected);
+	});
+
+	it(@"should be returned from +rectsWithSize:", ^{
+		RACSubject *sizeSubject = [RACSubject subject];
+
+		RACSignal *constructedSignal = [RACSignal rectsWithSize:sizeSubject];
+		NSMutableArray *values = [NSMutableArray array];
+
+		[constructedSignal subscribeNext:^(id value) {
+			[values addObject:value];
+		}];
+
+		[sizeSubject sendNext:MEDBox(CGSizeMake(0, 0))];
+		[sizeSubject sendNext:MEDBox(CGSizeMake(5, 5))];
+
+		NSArray *expected = @[
+			MEDBox(CGRectMake(0, 0, 0, 0)),
+			MEDBox(CGRectMake(0, 0, 5, 5)),
+		];
+
+		expect(values).to.equal(expected);
+	});
+
+	describe(@"position alignment", ^{
+		__block RACSignal *position;
+		
+		beforeEach(^{
+			position = [RACSignal return:@3];
+		});
+
+		it(@"should align minX to a specified position", ^{
+			RACSignal *aligned = [signal alignEdge:[RACSignal return:@(CGRectMinXEdge)] toPosition:position];
+			RACSequence *expected = @[
+				MEDBox(CGRectMake(3, 10, 20, 20)),
+				MEDBox(CGRectMake(3, 20, 30, 40)),
+				MEDBox(CGRectMake(3, 15, 45, 35)),
+			].rac_sequence;
+
+			expect(aligned.sequence).to.equal(expected);
+		});
+
+		it(@"should align minY to a specified position", ^{
+			RACSignal *aligned = [signal alignEdge:[RACSignal return:@(CGRectMinYEdge)] toPosition:position];
+			RACSequence *expected = @[
+				MEDBox(CGRectMake(10, 3, 20, 20)),
+				MEDBox(CGRectMake(10, 3, 30, 40)),
+				MEDBox(CGRectMake(25, 3, 45, 35)),
+			].rac_sequence;
+
+			expect(aligned.sequence).to.equal(expected);
+		});
+
+		it(@"should align centerX to a specified position", ^{
+			RACSignal *aligned = [signal alignCenterX:position];
+			RACSequence *expected = @[
+				MEDBox(CGRectMake(-7, 10, 20, 20)),
+				MEDBox(CGRectMake(-12, 20, 30, 40)),
+				MEDBox(CGRectMake(-19.5, 15, 45, 35)),
+			].rac_sequence;
+
+			expect(aligned.sequence).to.equal(expected);
+		});
+
+		it(@"should align centerY to a specified position", ^{
+			RACSignal *aligned = [signal alignCenterY:position];
+			RACSequence *expected = @[
+				MEDBox(CGRectMake(10, -7, 20, 20)),
+				MEDBox(CGRectMake(10, -17, 30, 40)),
+				MEDBox(CGRectMake(25, -14.5, 45, 35)),
+			].rac_sequence;
+
+			expect(aligned.sequence).to.equal(expected);
+		});
+
+		it(@"should align center point to a specified position", ^{
+			CGPoint center = CGPointMake(5, 10);
+			RACSignal *aligned = [signal alignCenter:[RACSignal return:MEDBox(center)]];
+
+			RACSequence *expected = @[
+				MEDBox(CGRectMake(-5, 0, 20, 20)),
+				MEDBox(CGRectMake(-10, -10, 30, 40)),
+				MEDBox(CGRectMake(-17.5, -7.5, 45, 35)),
+			].rac_sequence;
+
+			expect(aligned.sequence).to.equal(expected);
+		});
+
+		it(@"should align maxX to a specified position", ^{
+			RACSignal *aligned = [signal alignEdge:[RACSignal return:@(CGRectMaxXEdge)] toPosition:position];
+			RACSequence *expected = @[
+				MEDBox(CGRectMake(-17, 10, 20, 20)),
+				MEDBox(CGRectMake(-27, 20, 30, 40)),
+				MEDBox(CGRectMake(-42, 15, 45, 35)),
+			].rac_sequence;
+
+			expect(aligned.sequence).to.equal(expected);
+		});
+
+		it(@"should align maxY to a specified position", ^{
+			RACSignal *aligned = [signal alignEdge:[RACSignal return:@(CGRectMaxYEdge)] toPosition:position];
+			RACSequence *expected = @[
+				MEDBox(CGRectMake(10, -17, 20, 20)),
+				MEDBox(CGRectMake(10, -37, 30, 40)),
+				MEDBox(CGRectMake(25, -32, 45, 35)),
+			].rac_sequence;
+
+			expect(aligned.sequence).to.equal(expected);
+		});
+	});
+
+	describe(@"baseline alignment", ^{
+		__block RACSignal *baseline1;
+		__block RACSignal *baseline2;
+
+		__block RACSignal *signal;
+
+		beforeEach(^{
+			baseline1 = [RACSignal return:@2];
+			baseline2 = [RACSignal return:@5];
+
+			signal = [rects signalWithScheduler:RACScheduler.immediateScheduler];
+		});
+
+		#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
+			it(@"should align to a baseline", ^{
+				RACSignal *reference = [RACSignal return:MEDBox(CGRectMake(0, 30, 0, 15))];
+				RACSignal *aligned = [signal alignBaseline:baseline1 toBaseline:baseline2 ofRect:reference];
+
+				RACSequence *expected = @[
+					MEDBox(CGRectMake(10, 22, 20, 20)),
+					MEDBox(CGRectMake(10, 2, 30, 40)),
+					MEDBox(CGRectMake(25, 7, 45, 35)),
+				].rac_sequence;
+
+				expect(aligned.sequence).to.equal(expected);
+			});
+		#elif TARGET_OS_MAC
+			it(@"should align to a baseline", ^{
+				RACSignal *reference = [RACSignal return:MEDBox(CGRectMake(0, 30, 0, 15))];
+				RACSignal *aligned = [signal alignBaseline:baseline1 toBaseline:baseline2 ofRect:reference];
+
+				RACSequence *expected = @[
+					MEDBox(CGRectMake(10, 33, 20, 20)),
+					MEDBox(CGRectMake(10, 33, 30, 40)),
+					MEDBox(CGRectMake(25, 33, 45, 35)),
+				].rac_sequence;
+
+				expect(aligned.sequence).to.equal(expected);
+			});
+		#endif
 	});
 });
 
@@ -362,6 +548,92 @@ describe(@"+min: and +max:", ^{
 		RACSignal *signal = [RACSignal min:signals];
 		NSArray *expected = @[ @20, @20, @20, @10, @10, @10 ];
 		expect(signal.sequence).to.equal(expected.rac_sequence);
+	});
+});
+
+describe(@"mathematical operators", ^{
+	__block RACSignal *numberA;
+	__block RACSignal *numberB;
+
+	__block RACSignal *pointA;
+	__block RACSignal *pointB;
+
+	__block RACSignal *sizeA;
+	__block RACSignal *sizeB;
+
+	beforeEach(^{
+		numberA = [RACSignal return:@5];
+		numberB = [RACSignal return:@2];
+
+		pointA = [RACSignal return:MEDBox(CGPointMake(5, 10))];
+		pointB = [RACSignal return:MEDBox(CGPointMake(1, 2))];
+
+		sizeA = [RACSignal return:MEDBox(CGSizeMake(5, 10))];
+		sizeB = [RACSignal return:MEDBox(CGSizeMake(1, 2))];
+	});
+
+	describe(@"-plus:", ^{
+		it(@"should add two numbers", ^{
+			expect([numberA plus:numberB].sequence).to.equal(@[ @7 ].rac_sequence);
+		});
+
+		it(@"should add two points", ^{
+			CGPoint expected = CGPointMake(6, 12);
+			expect([pointA plus:pointB].sequence).to.equal(@[ MEDBox(expected) ].rac_sequence);
+		});
+
+		it(@"should add two sizes", ^{
+			CGSize expected = CGSizeMake(6, 12);
+			expect([sizeA plus:sizeB].sequence).to.equal(@[ MEDBox(expected) ].rac_sequence);
+		});
+	});
+
+	describe(@"-minus:", ^{
+		it(@"should subtract two numbers", ^{
+			expect([numberA minus:numberB].sequence).to.equal(@[ @3 ].rac_sequence);
+		});
+
+		it(@"should subtract two points", ^{
+			CGPoint expected = CGPointMake(4, 8);
+			expect([pointA minus:pointB].sequence).to.equal(@[ MEDBox(expected) ].rac_sequence);
+		});
+
+		it(@"should subtract two sizes", ^{
+			CGSize expected = CGSizeMake(4, 8);
+			expect([sizeA minus:sizeB].sequence).to.equal(@[ MEDBox(expected) ].rac_sequence);
+		});
+	});
+
+	describe(@"-multipliedBy:", ^{
+		it(@"should multiply two numbers", ^{
+			expect([numberA multipliedBy:numberB].sequence).to.equal(@[ @10 ].rac_sequence);
+		});
+
+		it(@"should multiply two points", ^{
+			CGPoint expected = CGPointMake(5, 20);
+			expect([pointA multipliedBy:pointB].sequence).to.equal(@[ MEDBox(expected) ].rac_sequence);
+		});
+
+		it(@"should multiply two sizes", ^{
+			CGSize expected = CGSizeMake(5, 20);
+			expect([sizeA multipliedBy:sizeB].sequence).to.equal(@[ MEDBox(expected) ].rac_sequence);
+		});
+	});
+
+	describe(@"-dividedBy:", ^{
+		it(@"should divide two numbers", ^{
+			expect([numberA dividedBy:numberB].sequence).to.equal(@[ @2.5 ].rac_sequence);
+		});
+
+		it(@"should divide two points", ^{
+			CGPoint expected = CGPointMake(5, 5);
+			expect([pointA dividedBy:pointB].sequence).to.equal(@[ MEDBox(expected) ].rac_sequence);
+		});
+
+		it(@"should divide two sizes", ^{
+			CGSize expected = CGSizeMake(5, 5);
+			expect([sizeA dividedBy:sizeB].sequence).to.equal(@[ MEDBox(expected) ].rac_sequence);
+		});
 	});
 });
 

@@ -34,32 +34,36 @@
 	NSTextField *nameLabel = [self labelWithString:NSLocalizedString(@"Name", @"")];
 	NSTextField *emailLabel = [self labelWithString:NSLocalizedString(@"Email Address", @"")];
 
-	RACSignal *labelWidth = [RACSignal max:@[ nameLabel.rcl_boundsSignal.width, emailLabel.rcl_boundsSignal.width ]];
+	RACSignal *labelWidth = [RACSignal max:@[ nameLabel.rcl_intrinsicContentSizeSignal.width, emailLabel.rcl_intrinsicContentSizeSignal.width ]];
+	RACSignal *padding = [RACSignal return:@8];
 
 	NSTextField *nameField = [self textFieldWithString:@""];
 	NSTextField *emailField = [self textFieldWithString:@""];
 
 	RACTupleUnpack(RACSignal *nameRect, RACSignal *emailRect) = [[self.contentView.rcl_frameSignal
 		insetWidth:[RACSignal return:@32] height:[RACSignal return:@16]]
-		divideWithAmount:nameField.rcl_boundsSignal.height padding:[RACSignal return:@8] fromEdge:CGRectMaxYEdge];
+		divideWithAmount:nameField.rcl_intrinsicContentSizeSignal.height padding:padding fromEdge:CGRectMaxYEdge];
 
-	RACTuple *nameTuple = [[nameRect animateWithDuration:0.5] divideWithAmount:labelWidth padding:[RACSignal return:@8] fromEdge:CGRectMinXEdge];
-	RAC(nameLabel, frame) = nameTuple[0];
+	RACTupleUnpack(RACSignal *nameLabelRect, RACSignal *nameFieldRect) = [nameRect divideWithAmount:labelWidth padding:padding fromEdge:CGRectMinXEdge];
+	RACTupleUnpack(RACSignal *emailLabelRect, RACSignal *emailFieldRect) = [[emailRect
+		sliceWithAmount:emailField.rcl_intrinsicContentSizeSignal.height fromEdge:CGRectMaxYEdge]
+		divideWithAmount:labelWidth padding:padding fromEdge:CGRectMinXEdge];
 
 	// Don't animate setting the initial frame.
-	RAC(nameField, frame) = [nameTuple[1] take:1];
+	RAC(nameField, frame) = [nameFieldRect take:1];
 
-	[[nameTuple[1] skip:1] subscribeNext:^(NSValue *frame) {
+	[[[nameFieldRect skip:1] animateWithDuration:0.5] subscribeNext:^(NSValue *rect) {
 		// Can't lift this because lolappkit.
-		[nameField.animator setFrame:frame.med_rectValue];
+		[nameField.animator setFrame:rect.med_rectValue];
 	}];
 
-	RACTuple *emailTuple = [[emailRect
-		sliceWithAmount:emailField.rcl_boundsSignal.height fromEdge:CGRectMaxYEdge]
-		divideWithAmount:labelWidth padding:[RACSignal return:@8] fromEdge:CGRectMinXEdge];
+	RAC(nameLabel, rcl_alignmentRect) = [[RACSignal rectsWithOrigin:nameLabelRect.origin size:nameLabel.rcl_intrinsicContentSizeSignal]
+		alignBaseline:nameLabel.rcl_baselineSignal toBaseline:nameField.rcl_baselineSignal ofRect:nameFieldRect];
 
-	RAC(emailLabel, frame) = emailTuple[0];
-	RAC(emailField, frame) = emailTuple[1];
+	RAC(emailField, rcl_alignmentRect) = emailFieldRect;
+
+	RAC(emailLabel, rcl_alignmentRect) = [[RACSignal rectsWithOrigin:emailLabelRect.origin size:emailLabel.rcl_intrinsicContentSizeSignal]
+		alignBaseline:emailLabel.rcl_baselineSignal toBaseline:emailField.rcl_baselineSignal ofRect:emailFieldRect];
 }
 
 #pragma mark View Creation
@@ -71,6 +75,7 @@
 	label.bezeled = NO;
 	label.drawsBackground = NO;
 	label.stringValue = string;
+	label.font = [NSFont systemFontOfSize:8];
 	[label sizeToFit];
 
 	// We don't actually use autoresizing to move these views, but rather to

@@ -1,5 +1,5 @@
 //
-//  NSView+RCLObservationAdditions.h
+//  NSView+RCLGeometryAdditions.h
 //  ReactiveCocoaLayout
 //
 //  Created by Justin Spahr-Summers on 2012-12-12.
@@ -8,9 +8,7 @@
 
 #import <Cocoa/Cocoa.h>
 
-@class RCLSignal;
-
-@interface NSView (RCLObservationAdditions)
+@interface NSView (RCLGeometryAdditions)
 
 // Observes the receiver's `bounds` for changes.
 //
@@ -27,5 +25,10 @@
 //
 // Returns a signal which sends the current and all future values for `frame`.
 - (RACSignal *)rcl_frameSignal;
+
+// Sends the receiver's baseline, relative to the minimum Y edge.
+//
+// Returns a signal of baseline offsets from the minimum Y edge of the receiver.
+- (RACSignal *)rcl_baselineSignal;
 
 @end
