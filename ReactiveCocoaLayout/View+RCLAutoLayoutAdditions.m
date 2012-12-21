@@ -31,6 +31,8 @@ static void newInvalidateIntrinsicContentSize(id self, SEL _cmd) {
 @implementation NSView (RCLAutoLayoutAdditions)
 #endif
 
+#pragma mark Lifecycle
+
 + (void)load {
 	SEL selector = @selector(invalidateIntrinsicContentSize);
 
@@ -40,6 +42,8 @@ static void newInvalidateIntrinsicContentSize(id self, SEL _cmd) {
 	oldInvalidateIntrinsicContentSize = (__typeof__(oldInvalidateIntrinsicContentSize))method_getImplementation(method);
 	class_replaceMethod(self, selector, (IMP)&newInvalidateIntrinsicContentSize, method_getTypeEncoding(method));
 }
+
+#pragma mark Signals
 
 - (RACSignal *)rcl_intrinsicContentSizeSignal {
 	RACSubject *subject = objc_getAssociatedObject(self, IntrinsicContentSizeSubjectKey);
@@ -53,14 +57,6 @@ static void newInvalidateIntrinsicContentSize(id self, SEL _cmd) {
 
 - (RACSignal *)rcl_intrinsicBoundsSignal {
 	return [RACSignal rectsWithSize:self.rcl_intrinsicContentSizeSignal];
-}
-
-- (CGRect)rcl_alignmentRect {
-	return [self alignmentRectForFrame:self.frame];
-}
-
-- (void)setRcl_alignmentRect:(CGRect)rect {
-	self.frame = [self frameForAlignmentRect:rect];
 }
 
 - (RACSignal *)rcl_alignmentRectSignal {
