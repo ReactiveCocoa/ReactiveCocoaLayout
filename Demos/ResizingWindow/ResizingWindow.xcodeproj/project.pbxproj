@@ -462,6 +462,30 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		D055F2B616846EA900B9338C /* Profile */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = D0BB253716787D24005E9371 /* Profile.xcconfig */;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				HEADER_SEARCH_PATHS = ../../External/Archimedes;
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
+			};
+			name = Profile;
+		};
+		D055F2B716846EA900B9338C /* Profile */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = D0BB254116787D24005E9371 /* Mac-Application.xcconfig */;
+			buildSettings = {
+				GCC_PREFIX_HEADER = "ResizingWindow/ResizingWindow-Prefix.pch";
+				INFOPLIST_FILE = "ResizingWindow/ResizingWindow-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Profile;
+		};
 		D0BB251216787D04005E9371 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = D0BB253616787D24005E9371 /* Debug.xcconfig */;
@@ -518,6 +542,7 @@
 			buildConfigurations = (
 				D0BB251216787D04005E9371 /* Debug */,
 				D0BB251316787D04005E9371 /* Release */,
+				D055F2B616846EA900B9338C /* Profile */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -527,6 +552,7 @@
 			buildConfigurations = (
 				D0BB251516787D04005E9371 /* Debug */,
 				D0BB251616787D04005E9371 /* Release */,
+				D055F2B716846EA900B9338C /* Profile */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
