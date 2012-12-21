@@ -17,7 +17,7 @@
 @property (nonatomic, strong, readonly) RACSignal *rotationSignal;
 
 @property (nonatomic, strong) UILabel *nameLabel;
-@property (nonatomic, strong) UITextView *nameTextView;
+@property (nonatomic, strong) UITextField *nameTextField;
 
 @end
 
@@ -39,26 +39,34 @@
 
 	self.view.backgroundColor = UIColor.lightGrayColor;
 
-	RACSignal *insetBounds = [self.view.rcl_boundsSignal insetWidth:[RACSignal return:@16] height:[RACSignal return:@16]];
-
 	self.nameLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+	self.nameLabel.font = [UIFont systemFontOfSize:30];
+
+	self.nameTextField = [[UITextField alloc] initWithFrame:CGRectZero];
+	self.nameTextField.text = @"Some sample text";
+	self.nameTextField.backgroundColor = UIColor.whiteColor;
+	self.nameTextField.borderStyle = UITextBorderStyleRoundedRect;
+
 	[self.view addSubview:self.nameLabel];
+	[self.view addSubview:self.nameTextField];
+
+	RACSignal *insetRect = [self.view.rcl_boundsSignal insetWidth:[RACSignal return:@16] height:[RACSignal return:@24]];
 
 	RAC(self.nameLabel.text) = [self.rotationSignal map:^(NSNumber *orientation) {
 		return (UIInterfaceOrientationIsPortrait(orientation.integerValue) ? NSLocalizedString(@"Portrait!", @"") : NSLocalizedString(@"Landscape awww yeaahhh", @""));
 	}];
 
-	RAC(self.nameLabel.frame) = [RACSignal rectsWithOrigin:insetBounds.origin size:self.nameLabel.rcl_intrinsicContentSizeSignal];
+	RACTupleUnpack(RACSignal *labelRect, RACSignal *textFieldRect) = [insetRect divideWithAmount:self.nameLabel.rcl_intrinsicContentSizeSignal.width padding:[RACSignal return:@8] fromEdge:CGRectMinXEdge];
 
-	self.nameTextView = [[UITextView alloc] initWithFrame:CGRectZero];
-	[self.view addSubview:self.nameTextView];
+	textFieldRect = [textFieldRect sliceWithAmount:[RACSignal return:@28] fromEdge:CGRectMinYEdge];
 
-	RACSignal *textViewBounds = [insetBounds divideWithAmount:self.nameLabel.rcl_frameSignal.width padding:[RACSignal return:@8] fromEdge:CGRectMinXEdge][1];
+	RAC(self.nameLabel.rcl_alignmentRect) = [[RACSignal rectsWithOrigin:labelRect.origin size:self.nameLabel.rcl_intrinsicContentSizeSignal]
+		alignBaseline:self.nameLabel.rcl_baselineSignal toBaseline:self.nameTextField.rcl_baselineSignal ofRect:self.nameTextField.rcl_alignmentRectSignal];
 
 	// Animate the initial appearance of the text view, but not any changes due
 	// to rotation.
-	RAC(self.nameTextView.frame) = [[[[textViewBounds animateWithDuration:1 curve:RCLAnimationCurveEaseOut] take:1] delay:1] sequenceNext:^{
-		return textViewBounds;
+	RAC(self.nameTextField.rcl_alignmentRect) = [[[[textFieldRect animateWithDuration:1 curve:RCLAnimationCurveEaseOut] take:1] delay:1] sequenceNext:^{
+		return textFieldRect;
 	}];
 }
 
