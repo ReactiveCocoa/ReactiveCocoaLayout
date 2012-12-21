@@ -99,6 +99,53 @@ static RACSignal *latestNumberMatchingComparisonResult(NSArray *signals, NSCompa
 		}];
 }
 
+// Combines the values of the two signals using the given operator.
+//
+// The values may be CGFloats, CGSizes, or CGPoints, but both signals must send
+// values of the same type.
+//
+// Returns a signal of results, using the same type as the input values.
+static RACSignal *combineSignalsWithOperator(RACSignal *a, RACSignal *b, CGFloat (^operator)(CGFloat, CGFloat)) {
+	NSCParameterAssert(a != nil);
+	NSCParameterAssert(b != nil);
+	NSCParameterAssert(operator != nil);
+
+	return [RACSignal combineLatest:@[ a, b ] reduce:^ id (id valueA, id valueB) {
+		if ([valueA isKindOfClass:NSNumber.class]) {
+			NSCAssert([valueB isKindOfClass:NSNumber.class], @"%@ is a number, but %@ is not", valueA, valueB);
+
+			return @(operator([valueA doubleValue], [valueB doubleValue]));
+		}
+
+		NSCAssert([valueA isKindOfClass:NSValue.class], @"%@ is not a number, so it should be an NSValue", valueA);
+		NSCAssert([valueB isKindOfClass:NSValue.class], @"%@ is an NSValue, but %@ is not", valueA, valueB);
+		NSCAssert([valueA med_geometryStructType] == [valueB med_geometryStructType], @"Values do not contain the same type of geometry structure: %@, %@", valueA, valueB);
+
+		switch ([valueA med_geometryStructType]) {
+			case MEDGeometryStructTypePoint: {
+				CGPoint pointA = [valueA med_pointValue];
+				CGPoint pointB = [valueB med_pointValue];
+
+				CGPoint result = CGPointMake(operator(pointA.x, pointB.x), operator(pointA.y, pointB.y));
+				return MEDBox(result);
+			}
+
+			case MEDGeometryStructTypeSize: {
+				CGSize sizeA = [valueA med_sizeValue];
+				CGSize sizeB = [valueB med_sizeValue];
+
+				CGSize result = CGSizeMake(operator(sizeA.width, sizeB.width), operator(sizeA.height, sizeB.height));
+				return MEDBox(result);
+			}
+
+			case MEDGeometryStructTypeRect:
+			default:
+				NSCAssert(NO, @"Values must contain CGSizes or CGPoints: %@, %@", valueA, valueB);
+				return nil;
+		}
+	}];
+}
+
 @implementation RACSignal (RCLGeometryAdditions)
 
 + (RACSignal *)rectsWithX:(RACSignal *)xSignal Y:(RACSignal *)ySignal width:(RACSignal *)widthSignal height:(RACSignal *)heightSignal {
@@ -122,6 +169,24 @@ static RACSignal *latestNumberMatchingComparisonResult(NSArray *signals, NSCompa
 
 		return MEDBox(CGRectMake(p.x, p.y, s.width, s.height));
 	}];
+}
+
++ (RACSignal *)rectsWithCenter:(RACSignal *)centerSignal size:(RACSignal *)sizeSignal {
+	NSParameterAssert(centerSignal != nil);
+	NSParameterAssert(sizeSignal != nil);
+
+	return [RACSignal combineLatest:@[ centerSignal, sizeSignal ] reduce:^(NSValue *center, NSValue *size) {
+		CGPoint p = center.med_pointValue;
+		CGSize s = size.med_sizeValue;
+
+		return MEDBox(CGRectMake(p.x - s.width / 2, p.y - s.height / 2, s.width, s.height));
+	}];
+}
+
++ (RACSignal *)rectsWithSize:(RACSignal *)sizeSignal {
+	// CGPointZero apparently isn't typed (for MEDBox), so manually create it.
+	RACSignal *originSignal = [RACSignal return:MEDBox(CGPointMake(0, 0))];
+	return [self rectsWithOrigin:originSignal size:sizeSignal];
 }
 
 - (RACSignal *)size {
@@ -264,6 +329,109 @@ static RACSignal *latestNumberMatchingComparisonResult(NSArray *signals, NSCompa
 	return [self positionOfEdge:RACSignal.trailingEdgeSignal];
 }
 
+- (RACSignal *)alignEdge:(RACSignal *)edgeSignal toPosition:(RACSignal *)positionSignal {
+	NSParameterAssert(edgeSignal != nil);
+	NSParameterAssert(positionSignal != nil);
+
+	RACReplaySubject *edgeSubject = [RACReplaySubject replaySubjectWithCapacity:1];
+	[[edgeSignal multicast:edgeSubject] connect];
+
+	// Terminates edgeSubject when the receiver completes.
+	RACSignal *selfTerminatingEdge = [self doCompleted:^{
+		[edgeSubject sendCompleted];
+	}];
+
+	return [RACSignal combineLatest:@[ edgeSubject, positionSignal, selfTerminatingEdge ] reduce:^ id (NSNumber *edge, NSNumber *position, NSValue *value) {
+		CGRect rect = value.med_rectValue;
+
+		switch (edge.unsignedIntegerValue) {
+			case CGRectMinXEdge:
+				rect.origin.x = position.doubleValue;
+				break;
+
+			case CGRectMinYEdge:
+				rect.origin.y = position.doubleValue;
+				break;
+
+			case CGRectMaxXEdge:
+				rect.origin.x = position.doubleValue - CGRectGetWidth(rect);
+				break;
+
+			case CGRectMaxYEdge:
+				rect.origin.y = position.doubleValue - CGRectGetHeight(rect);
+				break;
+
+			default:
+				NSAssert(NO, @"Unrecognized edge: %@", edge);
+				return nil;
+		}
+
+		return MEDBox(rect);
+	}];
+}
+
+- (RACSignal *)alignCenter:(RACSignal *)centerSignal {
+	NSParameterAssert(centerSignal != nil);
+
+	return [RACSignal combineLatest:@[ centerSignal, self ] reduce:^(NSValue *center, NSValue *value) {
+		CGFloat x = center.med_pointValue.x;
+		CGFloat y = center.med_pointValue.y;
+
+		CGRect rect = value.med_rectValue;
+		return MEDBox(CGRectMake(x - CGRectGetWidth(rect) / 2, y - CGRectGetHeight(rect) / 2, CGRectGetWidth(rect), CGRectGetHeight(rect)));
+	}];
+}
+
+- (RACSignal *)alignCenterX:(RACSignal *)centerXSignal {
+	NSParameterAssert(centerXSignal != nil);
+
+	return [RACSignal combineLatest:@[ centerXSignal, self ] reduce:^(NSNumber *position, NSValue *value) {
+		CGRect rect = value.med_rectValue;
+		return MEDBox(CGRectMake(position.doubleValue - CGRectGetWidth(rect) / 2, CGRectGetMinY(rect), CGRectGetWidth(rect), CGRectGetHeight(rect)));
+	}];
+}
+
+- (RACSignal *)alignCenterY:(RACSignal *)centerYSignal {
+	NSParameterAssert(centerYSignal != nil);
+
+	return [RACSignal combineLatest:@[ centerYSignal, self ] reduce:^(NSNumber *position, NSValue *value) {
+		CGRect rect = value.med_rectValue;
+		return MEDBox(CGRectMake(CGRectGetMinX(rect), position.doubleValue - CGRectGetHeight(rect) / 2, CGRectGetWidth(rect), CGRectGetHeight(rect)));
+	}];
+}
+
+- (RACSignal *)alignBaseline:(RACSignal *)baselineSignal toBaseline:(RACSignal *)referenceBaselineSignal ofRect:(RACSignal *)referenceRectSignal {
+	NSParameterAssert(baselineSignal != nil);
+	NSParameterAssert(referenceBaselineSignal != nil);
+	NSParameterAssert(referenceRectSignal != nil);
+
+	return [RACSignal
+		combineLatest:@[ referenceBaselineSignal, referenceRectSignal, baselineSignal, self ]
+		reduce:^(NSNumber *referenceBaselineNum, NSValue *referenceRectValue, NSNumber *baselineNum, NSValue *rectValue) {
+			CGRect rect = rectValue.med_rectValue;
+			CGFloat baseline = baselineNum.doubleValue;
+
+			CGRect referenceRect = referenceRectValue.med_rectValue;
+			CGFloat referenceBaseline = referenceBaselineNum.doubleValue;
+
+			#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
+				// Flip the baselines so they're relative to a shared minY.
+				baseline = CGRectGetHeight(rect) - baseline + CGRectGetMinY(rect);
+				referenceBaseline = CGRectGetHeight(referenceRect) - referenceBaseline + CGRectGetMinY(referenceRect);
+
+				rect = CGRectOffset(rect, 0, referenceBaseline - baseline);
+			#elif TARGET_OS_MAC
+				// Recalculate the baselines relative to a shared minY.
+				baseline += CGRectGetMinY(rect);
+				referenceBaseline += CGRectGetMinY(referenceRect);
+
+				rect = CGRectOffset(rect, 0, referenceBaseline - baseline);
+			#endif
+
+			return MEDBox(rect);
+		}];
+}
+
 - (RACSignal *)insetWidth:(RACSignal *)widthSignal height:(RACSignal *)heightSignal {
 	NSParameterAssert(widthSignal != nil);
 	NSParameterAssert(heightSignal != nil);
@@ -291,6 +459,14 @@ static RACSignal *latestNumberMatchingComparisonResult(NSArray *signals, NSCompa
 	}];
 }
 
+- (RACSignal *)growEdge:(CGRectEdge)edge byAmount:(RACSignal *)amountSignal {
+	NSParameterAssert(amountSignal != nil);
+
+	return [RACSignal combineLatest:@[ amountSignal, self ] reduce:^(NSNumber *amount, NSValue *rect) {
+		return MEDBox(CGRectGrow(rect.med_rectValue, amount.doubleValue, edge));
+	}];
+}
+
 - (RACTuple *)divideWithAmount:(RACSignal *)sliceAmountSignal fromEdge:(CGRectEdge)edge {
 	return [self divideWithAmount:sliceAmountSignal padding:[RACSignal return:@0] fromEdge:edge];
 }
@@ -315,6 +491,30 @@ static RACSignal *latestNumberMatchingComparisonResult(NSArray *signals, NSCompa
 
 + (RACSignal *)min:(NSArray *)signals {
 	return latestNumberMatchingComparisonResult(signals, NSOrderedDescending);
+}
+
+- (RACSignal *)plus:(RACSignal *)addendSignal {
+	return combineSignalsWithOperator(self, addendSignal, ^(CGFloat a, CGFloat b) {
+		return a + b;
+	});
+}
+
+- (RACSignal *)minus:(RACSignal *)subtrahendSignal {
+	return combineSignalsWithOperator(self, subtrahendSignal, ^(CGFloat a, CGFloat b) {
+		return a - b;
+	});
+}
+
+- (RACSignal *)multipliedBy:(RACSignal *)factorSignal {
+	return combineSignalsWithOperator(self, factorSignal, ^(CGFloat a, CGFloat b) {
+		return a * b;
+	});
+}
+
+- (RACSignal *)dividedBy:(RACSignal *)denominatorSignal {
+	return combineSignalsWithOperator(self, denominatorSignal, ^(CGFloat a, CGFloat b) {
+		return a / b;
+	});
 }
 
 - (RACSignal *)animate {

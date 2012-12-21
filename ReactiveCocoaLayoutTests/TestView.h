@@ -18,6 +18,9 @@
 
 #endif
 
+// Insets the given frame by 1 point horizontally and 2 points vertically.
+- (CGRect)alignmentRectForFrame:(CGRect)frame;
+
 - (void)invalidateAndSetIntrinsicContentSize:(CGSize)size;
 
 @end

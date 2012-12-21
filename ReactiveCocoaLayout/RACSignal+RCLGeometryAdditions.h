@@ -50,6 +50,19 @@
 // Returns a signal of CGRect values.
 + (RACSignal *)rectsWithOrigin:(RACSignal *)originSignal size:(RACSignal *)sizeSignal;
 
+// Constructs rects from the given center and size signals.
+//
+// Returns a signal of CGRect values.
++ (RACSignal *)rectsWithCenter:(RACSignal *)centerSignal size:(RACSignal *)sizeSignal;
+
+// Constructs rects from the given size signal. All of the rectangles will
+// originate at (0, 0).
+//
+// This is useful for calculating bounds rectangles.
+//
+// Returns a signal of CGRect values.
++ (RACSignal *)rectsWithSize:(RACSignal *)sizeSignal;
+
 // Maps CGRect values to their `size` fields.
 //
 // Returns a signal of CGSize values.
@@ -182,6 +195,16 @@
 // Returns a signal of CGRect remainders.
 - (RACSignal *)remainderAfterSlicingAmount:(RACSignal *)amountSignal fromEdge:(CGRectEdge)edge;
 
+// For the given each of each CGRect, adds the given number of points sent from
+// `amountSignal`.
+//
+// edge         - The edge to add to.
+// amountSignal - A signal of CGFloat values, representing the number of points
+//                to add.
+//
+// Returns a signal of enlarged CGRects.
+- (RACSignal *)growEdge:(CGRectEdge)edge byAmount:(RACSignal *)amountSignal;
+
 // Invokes -divideWithAmount:padding:fromEdge: with a constant padding of 0.
 - (RACTuple *)divideWithAmount:(RACSignal *)sliceAmountSignal fromEdge:(CGRectEdge)edge;
 
@@ -222,6 +245,90 @@
 //
 // Returns a signal which sends NSNumber minimum values.
 + (RACSignal *)min:(NSArray *)signals;
+
+// Aligns a specific edge of each CGRect to the positions sent from the given
+// signal.
+//
+// edgeSignal     - A signal of NSNumber-boxed CGRectEdge values, representing
+//                  the side of the CGRect to align.
+// positionSignal - A signal of CGFloat values, representing the position to
+//                  align the specified edge to.
+//
+// Returns a signal of aligned CGRect values.
+- (RACSignal *)alignEdge:(RACSignal *)edgeSignal toPosition:(RACSignal *)positionSignal;
+
+// Aligns the center of each CGRect to the CGPoints sent from the given signal.
+//
+// centerSignal - A signal of CGPoint values, representing the new center of the
+//                rect.
+//
+// Returns a signal of aligned CGRect values.
+- (RACSignal *)alignCenter:(RACSignal *)centerSignal;
+
+// Aligns the center X position of each CGRect to the values sent from the given
+// signal.
+//
+// centerXSignal - A signal of CGFloat values, representing the position to align
+//                 the horizontal center to.
+//
+// Returns a signal of aligned CGRect values.
+- (RACSignal *)alignCenterX:(RACSignal *)centerXSignal;
+
+// Aligns the center Y position of each CGRect to the values sent from the given
+// signal.
+//
+// centerYSignal - A signal of CGFloat values, representing the position to align
+//                 the vertical center to.
+//
+// Returns a signal of aligned CGRect values.
+- (RACSignal *)alignCenterY:(RACSignal *)centerYSignal;
+
+// Aligns the baseline of each CGRect in the receiver to those of another signal.
+//
+// On iOS, baselines are considered to be relative to the maximum Y edge of the
+// rectangle. On OS X, baselines are relative to the minimum Y edge.
+//
+// baselineSignal          - A signal of CGFloat values, representing baselines
+//                           for the rects sent by the receiver.
+// referenceBaselineSignal - A signal of CGFloat values, representing baselines
+//                           for the rects sent by `referenceSentSignal`.
+// referenceRectSignal     - A signal of CGRect values, to which the receiver's
+//                           rects should be aligned.
+//
+// Returns a signal of aligned CGRect values.
+- (RACSignal *)alignBaseline:(RACSignal *)baselineSignal toBaseline:(RACSignal *)referenceBaselineSignal ofRect:(RACSignal *)referenceRectSignal;
+
+// Adds the values of the receiver and the given signal.
+//
+// The values may be CGFloats, CGSizes, or CGPoints, but both signals must send
+// values of the same type.
+//
+// Returns a signal of sums, using the same type as the input values.
+- (RACSignal *)plus:(RACSignal *)addendSignal;
+
+// Subtracts the values of the given signal from those of the receiver.
+//
+// The values may be CGFloats, CGSizes, or CGPoints, but both signals must send
+// values of the same type.
+//
+// Returns a signal of differences, using the same type as the input values.
+- (RACSignal *)minus:(RACSignal *)subtrahendSignal;
+
+// Multiplies the values of the receiver and the given signal.
+//
+// The values may be CGFloats, CGSizes, or CGPoints, but both signals must send
+// values of the same type.
+//
+// Returns a signal of products, using the same type as the input values.
+- (RACSignal *)multipliedBy:(RACSignal *)factorSignal;
+
+// Divides the values of the receiver by those of the given signal.
+//
+// The values may be CGFloats, CGSizes, or CGPoints, but both signals must send
+// values of the same type.
+//
+// Returns a signal of quotients, using the same type as the input values.
+- (RACSignal *)dividedBy:(RACSignal *)denominatorSignal;
 
 // Wraps every next in an animation block, using the default duration and
 // animation curve.
