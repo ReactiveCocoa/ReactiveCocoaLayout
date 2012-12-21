@@ -23,15 +23,14 @@
 }
 
 - (RACSignal *)rcl_baselineSignal {
-	__weak UIView *originalBaselineView = self.viewForBaselineLayout;
+	__weak UIView *baselineView = self.viewForBaselineLayout;
 
 	@weakify(self);
 	return [RACSignal combineLatest:@[ self.rcl_boundsSignal, self.viewForBaselineLayout.rcl_frameSignal ] reduce:^(NSValue *bounds, NSValue *baselineViewFrame) {
 		@strongify(self);
 
-		UIView *baselineView = self.viewForBaselineLayout;
+		NSAssert([baselineView isEqual:self.viewForBaselineLayout], @"-viewForBaselineLayout for %@ changed from %@ to %@", self, baselineView, baselineView);
 		NSAssert([baselineView isDescendantOfView:self], @"%@ must be a descendant of %@ to be its viewForBaselineLayout", baselineView, self);
-		NSAssert([baselineView isEqual:originalBaselineView], @"-viewForBaselineLayout for %@ changed from %@ to %@", self, originalBaselineView, baselineView);
 
 		CGRect topLevelFrame = [baselineView.superview convertRect:baselineViewFrame.med_rectValue toView:self];
 		return @(CGRectGetMaxY(bounds.med_rectValue) - CGRectGetMaxY(topLevelFrame));
