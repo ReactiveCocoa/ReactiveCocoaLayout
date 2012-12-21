@@ -33,7 +33,7 @@
 		NSAssert([baselineView isDescendantOfView:self], @"%@ must be a descendant of %@ to be its viewForBaselineLayout", baselineView, self);
 
 		CGRect topLevelFrame = [baselineView.superview convertRect:baselineViewFrame.med_rectValue toView:self];
-		return @(CGRectGetMaxY(bounds.med_rectValue) - CGRectGetMaxY(topLevelFrame));
+		return @(CGRectGetMaxY(topLevelFrame));
 	}];
 }
 

@@ -22,7 +22,6 @@ describe(@"UILabel", ^{
 
 	describe(@"baseline", ^{
 		__block CGFloat baseline;
-		__block RACSignal *signal;
 
 		beforeEach(^{
 			UIView *baselineView = label.viewForBaselineLayout;
@@ -31,10 +30,7 @@ describe(@"UILabel", ^{
 			CGRect baselineViewRect = [baselineView.superview convertRect:baselineView.frame toView:label];
 			expect(baselineViewRect).notTo.equal(label.bounds);
 
-			baseline = 20 - CGRectGetMaxY(baselineViewRect);
-			expect(baseline).to.beGreaterThan(0);
-
-			signal = [RACSignal return:MEDBox(CGRectMake(10, 20, 30, 40))];
+			baseline = CGRectGetMaxY(baselineViewRect);
 		});
 
 		it(@"should send the baseline", ^{

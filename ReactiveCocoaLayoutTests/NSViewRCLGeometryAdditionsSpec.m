@@ -22,13 +22,14 @@ describe(@"NSTextField", ^{
 
 	describe(@"baseline", ^{
 		__block CGFloat baseline;
-		__block RACSignal *signal;
 
 		beforeEach(^{
 			baseline = field.baselineOffsetFromBottom;
 			expect(baseline).to.beGreaterThan(0);
 
-			signal = [RACSignal return:MEDBox(CGRectMake(10, 20, 30, 40))];
+			if ([field isFlipped]) {
+				baseline = CGRectGetMaxY(field.bounds) - baseline;
+			}
 		});
 
 		it(@"should send the baseline", ^{
