@@ -20,7 +20,13 @@
 }
 
 - (void)setRcl_alignmentRect:(CGRect)rect {
-	self.frame = [self frameForAlignmentRect:rect];
+	CGRect frame = [self frameForAlignmentRect:rect];
+
+	if (RCLIsInAnimatedSignal()) {
+		[self.animator setFrame:frame];
+	} else {
+		self.frame = frame;
+	}
 }
 
 #pragma mark Signals

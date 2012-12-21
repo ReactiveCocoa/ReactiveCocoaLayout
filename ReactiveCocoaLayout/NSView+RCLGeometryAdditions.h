@@ -13,7 +13,8 @@
 // The alignment rect for the receiver's current frame.
 //
 // Setting this property will adjust the receiver's frame such that the
-// alignment rect matches the new value.
+// alignment rect matches the new value. If set from within an animated signal,
+// the receiver's -animator proxy is automatically used.
 //
 // This property may have `RAC()` bindings applied to it, but it is not
 // KVO-compliant. Use -rcl_alignmentRectSignal for observing changes instead.

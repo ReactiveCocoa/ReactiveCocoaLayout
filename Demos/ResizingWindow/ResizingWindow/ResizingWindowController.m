@@ -50,12 +50,8 @@
 		divideWithAmount:labelWidth padding:padding fromEdge:CGRectMinXEdge];
 
 	// Don't animate setting the initial frame.
-	RAC(nameField, frame) = [nameFieldRect take:1];
-
-	[[[nameFieldRect skip:1] animateWithDuration:0.5] subscribeNext:^(NSValue *rect) {
-		// Can't lift this because lolappkit.
-		[nameField.animator setFrame:rect.med_rectValue];
-	}];
+	RAC(nameField, rcl_alignmentRect) = [[nameFieldRect take:1]
+		concat:[[nameFieldRect skip:1] animateWithDuration:0.5]];
 
 	RAC(nameLabel, rcl_alignmentRect) = [[RACSignal rectsWithOrigin:nameLabelRect.origin size:nameLabel.rcl_intrinsicContentSizeSignal]
 		alignBaseline:nameLabel.rcl_baselineSignal toBaseline:nameField.rcl_baselineSignal ofRect:nameFieldRect];
