@@ -37,6 +37,15 @@
     } RCLAnimationCurve;
 #endif
 
+// Determines whether the calling code is running from within -animate (or
+// a variant thereof).
+//
+// This can be used to conditionalize behavior based on whether a signal
+// somewhere in the chain is supposed to be animated.
+//
+// This function is thread-safe.
+extern BOOL RCLIsInAnimatedSignal(void);
+
 // Adds geometry functions to RACSignal.
 @interface RACSignal (RCLGeometryAdditions)
 
