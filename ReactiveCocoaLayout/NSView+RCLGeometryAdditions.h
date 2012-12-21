@@ -29,6 +29,15 @@
 // KVO-compliant. Use -rcl_frameSignal for observing changes instead.
 @property (nonatomic, assign) CGRect rcl_frame;
 
+// The receiver's current bounds.
+//
+// If set from within an animated signal, the receiver's -animator proxy is
+// automatically used.
+//
+// This property may have `RAC()` bindings applied to it, but it is not
+// KVO-compliant. Use -rcl_boundsSignal for observing changes instead.
+@property (nonatomic, assign) CGRect rcl_bounds;
+
 // Observes the receiver's `bounds` for changes.
 //
 // This method may enable `postsBoundsChangedNotifications` to ensure that

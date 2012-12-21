@@ -35,6 +35,18 @@
 	}
 }
 
+- (CGRect)rcl_bounds {
+	return self.bounds;
+}
+
+- (void)setRcl_bounds:(CGRect)bounds {
+	if (RCLIsInAnimatedSignal()) {
+		[self.animator setBounds:bounds];
+	} else {
+		self.bounds = bounds;
+	}
+}
+
 #pragma mark Signals
 
 - (RACSignal *)rcl_boundsSignal {
