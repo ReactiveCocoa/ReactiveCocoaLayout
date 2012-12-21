@@ -12,14 +12,28 @@
 
 @implementation UIView (RCLGeometryAdditions)
 
-// FIXME: These properties aren't actually declared as KVO-compliant by UIKit.
-// Here be dragons?
+// FIXME: These properties aren't actually declared as KVO-compliant by Core
+// Animation. Here be dragons?
 - (RACSignal *)rcl_boundsSignal {
-	return RACAbleWithStart(self.bounds).distinctUntilChanged;
+	@weakify(self);
+
+	return [[RACAbleWithStart(self.layer.bounds)
+		map:^(id _) {
+			@strongify(self);
+			return MEDBox(self.bounds);
+		}]
+		distinctUntilChanged];
 }
 
 - (RACSignal *)rcl_frameSignal {
-	return RACAbleWithStart(self.frame).distinctUntilChanged;
+	@weakify(self);
+
+	return [[[RACSignal merge:@[ self.rcl_boundsSignal, RACAbleWithStart(self.layer.position) ]]
+		map:^(id _) {
+			@strongify(self);
+			return MEDBox(self.frame);
+		}]
+		distinctUntilChanged];
 }
 
 - (RACSignal *)rcl_baselineSignal {
