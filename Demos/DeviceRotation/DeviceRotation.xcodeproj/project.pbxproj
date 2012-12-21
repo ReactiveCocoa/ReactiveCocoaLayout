@@ -498,6 +498,35 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		D055F28B16846E9600B9338C /* Profile */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = D0FD5AD31679E97F003C3210 /* Profile.xcconfig */;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				HEADER_SEARCH_PATHS = (
+					../..,
+					"../../External/ReactiveCocoa/ReactiveCocoaFramework/**",
+					../../External/Archimedes,
+				);
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				OTHER_LDFLAGS = "-ObjC";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Profile;
+		};
+		D055F28C16846E9600B9338C /* Profile */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = D0FD5AD91679E97F003C3210 /* iOS-Application.xcconfig */;
+			buildSettings = {
+				GCC_PREFIX_HEADER = "DeviceRotation/DeviceRotation-Prefix.pch";
+				INFOPLIST_FILE = "DeviceRotation/DeviceRotation-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Profile;
+		};
 		D0FD5AC91679E96D003C3210 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = D0FD5AD21679E97F003C3210 /* Debug.xcconfig */;
@@ -564,6 +593,7 @@
 			buildConfigurations = (
 				D0FD5AC91679E96D003C3210 /* Debug */,
 				D0FD5ACA1679E96D003C3210 /* Release */,
+				D055F28B16846E9600B9338C /* Profile */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -573,6 +603,7 @@
 			buildConfigurations = (
 				D0FD5ACC1679E96D003C3210 /* Debug */,
 				D0FD5ACD1679E96D003C3210 /* Release */,
+				D055F28C16846E9600B9338C /* Profile */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
