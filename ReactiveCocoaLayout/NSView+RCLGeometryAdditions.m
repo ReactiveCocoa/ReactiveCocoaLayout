@@ -13,6 +13,18 @@
 
 @implementation NSView (RCLGeometryAdditions)
 
+#pragma mark Properties
+
+- (CGRect)rcl_alignmentRect {
+	return [self alignmentRectForFrame:self.frame];
+}
+
+- (void)setRcl_alignmentRect:(CGRect)rect {
+	self.frame = [self frameForAlignmentRect:rect];
+}
+
+#pragma mark Signals
+
 - (RACSignal *)rcl_boundsSignal {
 	// TODO: This only needs to be enabled when we actually start watching for
 	// the notification (i.e., after the startWith:).

@@ -12,6 +12,18 @@
 
 @implementation UIView (RCLGeometryAdditions)
 
+#pragma mark Properties
+
+- (CGRect)rcl_alignmentRect {
+	return [self alignmentRectForFrame:self.frame];
+}
+
+- (void)setRcl_alignmentRect:(CGRect)rect {
+	self.frame = [self frameForAlignmentRect:rect];
+}
+
+#pragma mark Signals
+
 // FIXME: These properties aren't actually declared as KVO-compliant by Core
 // Animation. Here be dragons?
 - (RACSignal *)rcl_boundsSignal {
