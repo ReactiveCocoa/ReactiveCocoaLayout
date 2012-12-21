@@ -10,6 +10,15 @@
 
 @interface UIView (RCLGeometryAdditions)
 
+// The alignment rect for the receiver's current frame.
+//
+// Setting this property will adjust the receiver's frame such that the
+// alignment rect matches the new value.
+//
+// This property may have `RAC()` bindings applied to it, but it is not
+// KVO-compliant. Use -rcl_alignmentRectSignal for observing changes instead.
+@property (nonatomic, assign) CGRect rcl_alignmentRect;
+
 // Observes the receiver's `bounds` for changes.
 //
 // Returns a signal which sends the current and all future values for `bounds`.

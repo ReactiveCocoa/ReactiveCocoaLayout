@@ -7,7 +7,19 @@
 //
 
 #import "RACSignal+RCLGeometryAdditions.h"
+#import "EXTScope.h"
 #import "RACSignal+RCLWritingDirectionAdditions.h"
+
+// The number of animated signals in the current chain.
+//
+// This should only be used while on the main thread.
+static NSUInteger RCLSignalAnimationLevel = 0;
+
+BOOL RCLIsInAnimatedSignal (void) {
+	if (![NSThread isMainThread]) return NO;
+
+	return RCLSignalAnimationLevel > 0;
+}
 
 // Animates the given signal.
 //
@@ -32,8 +44,14 @@ static RACSignal *animateWithDuration (RACSignal *self, NSTimeInterval *duration
 		NSTimeInterval duration = (hasDuration ? *durationPtr : 0);
 	#endif
 
-	return (id)[RACSignal createSignal:^(id<RACSubscriber> subscriber) {
+	return [RACSignal createSignal:^(id<RACSubscriber> subscriber) {
 		return [self subscribeNext:^(id value) {
+			++RCLSignalAnimationLevel;
+			@onExit {
+				NSCAssert(RCLSignalAnimationLevel > 0, @"Unbalanced decrement of RCLSignalAnimationLevel");
+				--RCLSignalAnimationLevel;
+			};
+
 			#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
 				[UIView animateWithDuration:duration delay:0 options:options animations:^{
 					[subscriber sendNext:value];
