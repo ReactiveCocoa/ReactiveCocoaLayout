@@ -15,11 +15,11 @@
 // FIXME: These properties aren't actually declared as KVO-compliant by UIKit.
 // Here be dragons?
 - (RACSignal *)rcl_boundsSignal {
-	return RACAbleWithStart(self.bounds);
+	return RACAbleWithStart(self.bounds).distinctUntilChanged;
 }
 
 - (RACSignal *)rcl_frameSignal {
-	return RACAbleWithStart(self.frame);
+	return RACAbleWithStart(self.frame).distinctUntilChanged;
 }
 
 - (RACSignal *)rcl_baselineSignal {
@@ -34,7 +34,7 @@
 
 		CGRect topLevelFrame = [baselineView.superview convertRect:baselineViewFrame.med_rectValue toView:self];
 		return @(CGRectGetMaxY(topLevelFrame));
-	}];
+	}].distinctUntilChanged;
 }
 
 @end

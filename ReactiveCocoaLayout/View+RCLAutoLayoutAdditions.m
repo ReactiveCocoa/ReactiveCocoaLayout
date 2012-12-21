@@ -48,7 +48,7 @@ static void newInvalidateIntrinsicContentSize(id self, SEL _cmd) {
 		objc_setAssociatedObject(self, IntrinsicContentSizeSubjectKey, subject, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 	}
 
-	return [subject startWith:MEDBox(self.intrinsicContentSize)];
+	return [subject startWith:MEDBox(self.intrinsicContentSize)].distinctUntilChanged;
 }
 
 - (RACSignal *)rcl_intrinsicBoundsSignal {
@@ -68,7 +68,7 @@ static void newInvalidateIntrinsicContentSize(id self, SEL _cmd) {
 	return [self.rcl_frameSignal map:^(id _) {
 		@strongify(self);
 		return MEDBox(self.rcl_alignmentRect);
-	}];
+	}].distinctUntilChanged;
 }
 
 @end
