@@ -20,8 +20,14 @@
 }
 
 - (void)setRcl_alignmentRect:(CGRect)rect {
-	CGRect frame = [self frameForAlignmentRect:rect];
+	self.rcl_frame = [self frameForAlignmentRect:rect];
+}
 
+- (CGRect)rcl_frame {
+	return self.frame;
+}
+
+- (void)setRcl_frame:(CGRect)frame {
 	if (RCLIsInAnimatedSignal()) {
 		[self.animator setFrame:frame];
 	} else {
