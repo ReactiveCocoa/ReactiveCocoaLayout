@@ -213,6 +213,10 @@ static RACSignal *combineSignalsWithOperator(RACSignal *a, RACSignal *b, CGFloat
 	}];
 }
 
+- (RACSignal *)replaceSize:(RACSignal *)sizeSignal {
+	return [self.class rectsWithOrigin:self.origin size:sizeSignal];
+}
+
 + (RACSignal *)sizesWithWidth:(RACSignal *)widthSignal height:(RACSignal *)heightSignal {
 	NSParameterAssert(widthSignal != nil);
 	NSParameterAssert(heightSignal != nil);
@@ -233,6 +237,24 @@ static RACSignal *combineSignalsWithOperator(RACSignal *a, RACSignal *b, CGFloat
 	}];
 }
 
+- (RACSignal *)replaceWidth:(RACSignal *)widthSignal {
+	NSParameterAssert(widthSignal != nil);
+
+	return [RACSignal combineLatest:@[ widthSignal, self ] reduce:^(NSNumber *width, NSValue *value) {
+		if (value.med_geometryStructType == MEDGeometryStructTypeRect) {
+			CGRect rect = value.med_rectValue;
+			rect.size.width = width.doubleValue;
+			return MEDBox(rect);
+		} else {
+			NSAssert(value.med_geometryStructType == MEDGeometryStructTypeSize, @"Unexpected type of value: %@", value);
+
+			CGSize size = value.med_sizeValue;
+			size.width = width.doubleValue;
+			return MEDBox(size);
+		}
+	}];
+}
+
 - (RACSignal *)height {
 	return [self map:^(NSValue *value) {
 		if (value.med_geometryStructType == MEDGeometryStructTypeRect) {
@@ -244,10 +266,32 @@ static RACSignal *combineSignalsWithOperator(RACSignal *a, RACSignal *b, CGFloat
 	}];
 }
 
+- (RACSignal *)replaceHeight:(RACSignal *)heightSignal {
+	NSParameterAssert(heightSignal != nil);
+
+	return [RACSignal combineLatest:@[ heightSignal, self ] reduce:^(NSNumber *height, NSValue *value) {
+		if (value.med_geometryStructType == MEDGeometryStructTypeRect) {
+			CGRect rect = value.med_rectValue;
+			rect.size.height = height.doubleValue;
+			return MEDBox(rect);
+		} else {
+			NSAssert(value.med_geometryStructType == MEDGeometryStructTypeSize, @"Unexpected type of value: %@", value);
+
+			CGSize size = value.med_sizeValue;
+			size.height = height.doubleValue;
+			return MEDBox(size);
+		}
+	}];
+}
+
 - (RACSignal *)origin {
 	return [self map:^(NSValue *value) {
 		return MEDBox(value.med_rectValue.origin);
 	}];
+}
+
+- (RACSignal *)replaceOrigin:(RACSignal *)originSignal {
+	return [self.class rectsWithOrigin:originSignal size:self.size];
 }
 
 - (RACSignal *)center {
@@ -269,12 +313,20 @@ static RACSignal *combineSignalsWithOperator(RACSignal *a, RACSignal *b, CGFloat
 	return [self map:^(NSValue *value) {
 		return @(value.med_pointValue.x);
 	}];
+} 
+
+- (RACSignal *)replaceX:(RACSignal *)xSignal {
+	return [self.class pointsWithX:xSignal Y:self.y];
 }
 
 - (RACSignal *)y {
 	return [self map:^(NSValue *value) {
 		return @(value.med_pointValue.y);
 	}];
+}
+
+- (RACSignal *)replaceY:(RACSignal *)ySignal {
+	return [self.class pointsWithX:self.x Y:ySignal];
 }
 
 - (RACSignal *)minX {
