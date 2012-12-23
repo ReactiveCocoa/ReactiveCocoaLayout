@@ -262,12 +262,16 @@ static RACSignal *combineSignalsWithOperator(RACSignal *a, RACSignal *b, CGFloat
 
 - (RACSignal *)origin {
 	return [self map:^(NSValue *value) {
+		NSAssert([value isKindOfClass:NSValue.class] && value.med_geometryStructType == MEDGeometryStructTypeRect, @"Value sent by %@ is not a CGRect: %@", self, value);
+
 		return MEDBox(value.med_rectValue.origin);
 	}];
 }
 
 - (RACSignal *)center {
 	return [self map:^(NSValue *value) {
+		NSAssert([value isKindOfClass:NSValue.class] && value.med_geometryStructType == MEDGeometryStructTypeRect, @"Value sent by %@ is not a CGRect: %@", self, value);
+
 		return MEDBox(CGRectCenterPoint(value.med_rectValue));
 	}];
 }
@@ -277,18 +281,25 @@ static RACSignal *combineSignalsWithOperator(RACSignal *a, RACSignal *b, CGFloat
 	NSParameterAssert(ySignal != nil);
 
 	return [RACSignal combineLatest:@[ xSignal, ySignal ] reduce:^(NSNumber *x, NSNumber *y) {
+		NSAssert([x isKindOfClass:NSNumber.class], @"Value sent by %@ is not a number: %@", xSignal, x);
+		NSAssert([y isKindOfClass:NSNumber.class], @"Value sent by %@ is not a number: %@", ySignal, y);
+
 		return MEDBox(CGPointMake(x.doubleValue, y.doubleValue));
 	}];
 }
 
 - (RACSignal *)x {
 	return [self map:^(NSValue *value) {
+		NSAssert([value isKindOfClass:NSValue.class] && value.med_geometryStructType == MEDGeometryStructTypePoint, @"Value sent by %@ is not a CGPoint: %@", self, value);
+
 		return @(value.med_pointValue.x);
 	}];
 }
 
 - (RACSignal *)y {
 	return [self map:^(NSValue *value) {
+		NSAssert([value isKindOfClass:NSValue.class] && value.med_geometryStructType == MEDGeometryStructTypePoint, @"Value sent by %@ is not a CGPoint: %@", self, value);
+
 		return @(value.med_pointValue.y);
 	}];
 }
