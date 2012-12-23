@@ -12,6 +12,12 @@
 
 @property (nonatomic, strong, readonly) NSView *contentView;
 
+@property (nonatomic, weak) NSTextField *emailLabel;
+@property (nonatomic, weak) NSTextField *emailField;
+
+@property (nonatomic, weak) NSTextField *nameLabel;
+@property (nonatomic, weak) NSTextField *nameField;
+
 @end
 
 @implementation ResizingWindowController
@@ -31,32 +37,32 @@
 - (void)windowDidLoad {
 	[super windowDidLoad];
 
-	NSTextField *emailLabel = [self labelWithString:NSLocalizedString(@"Email Address", @"")];
-	NSTextField *nameLabel = [self labelWithString:NSLocalizedString(@"Name", @"")];
+	self.emailLabel = [self labelWithString:NSLocalizedString(@"Email Address", @"")];
+	self.nameLabel = [self labelWithString:NSLocalizedString(@"Name", @"")];
 
-	NSTextField *emailField = [self textFieldWithString:@""];
-	NSTextField *nameField = [self textFieldWithString:@""];
+	self.emailField = [self textFieldWithString:@""];
+	self.nameField = [self textFieldWithString:@""];
 
-	RACSignal *labelWidth = [RACSignal max:@[ nameLabel.rcl_intrinsicContentSizeSignal.width, emailLabel.rcl_intrinsicContentSizeSignal.width ]];
+	RACSignal *labelWidth = [RACSignal max:@[ self.nameLabel.rcl_intrinsicContentSizeSignal.width, self.emailLabel.rcl_intrinsicContentSizeSignal.width ]];
 	RACSignal *padding = [RACSignal return:@8];
 
 	RACTupleUnpack(RACSignal *emailRect, RACSignal *nameRect) = [[self.contentView.rcl_frameSignal
 		insetWidth:[RACSignal return:@32] height:[RACSignal return:@16]]
-		divideWithAmount:emailField.rcl_intrinsicContentSizeSignal.height padding:padding fromEdge:CGRectMaxYEdge];
+		divideWithAmount:self.emailField.rcl_intrinsicContentSizeSignal.height padding:padding fromEdge:CGRectMaxYEdge];
 
 	RACTupleUnpack(RACSignal *emailLabelRect, RACSignal *emailFieldRect) = [emailRect divideWithAmount:labelWidth padding:padding fromEdge:CGRectMinXEdge];
 
-	RAC(emailField, rcl_alignmentRect) = emailFieldRect;
-	RAC(emailLabel, rcl_alignmentRect) = [[emailLabelRect replaceSize:emailLabel.rcl_intrinsicContentSizeSignal]
-		alignBaseline:emailLabel.rcl_baselineSignal toBaseline:emailField.rcl_baselineSignal ofRect:emailFieldRect];
+	RAC(self.emailField.rcl_alignmentRect) = emailFieldRect;
+	RAC(self.emailLabel.rcl_alignmentRect) = [[emailLabelRect replaceSize:self.emailLabel.rcl_intrinsicContentSizeSignal]
+		alignBaseline:self.emailLabel.rcl_baselineSignal toBaseline:self.emailField.rcl_baselineSignal ofRect:emailFieldRect];
 
 	RACTupleUnpack(RACSignal *nameLabelRect, RACSignal *nameFieldRect) = [[nameRect
-		sliceWithAmount:nameField.rcl_intrinsicContentSizeSignal.height fromEdge:CGRectMaxYEdge]
+		sliceWithAmount:self.nameField.rcl_intrinsicContentSizeSignal.height fromEdge:CGRectMaxYEdge]
 		divideWithAmount:labelWidth padding:padding fromEdge:CGRectMinXEdge];
 
-	RAC(nameField, rcl_alignmentRect) = nameFieldRect;
-	RAC(nameLabel, rcl_alignmentRect) = [[nameLabelRect replaceSize:nameLabel.rcl_intrinsicContentSizeSignal]
-		alignBaseline:nameLabel.rcl_baselineSignal toBaseline:nameField.rcl_baselineSignal ofRect:nameFieldRect];
+	RAC(self.nameField.rcl_alignmentRect) = nameFieldRect;
+	RAC(self.nameLabel.rcl_alignmentRect) = [[nameLabelRect replaceSize:self.nameLabel.rcl_intrinsicContentSizeSignal]
+		alignBaseline:self.nameLabel.rcl_baselineSignal toBaseline:self.nameField.rcl_baselineSignal ofRect:nameFieldRect];
 }
 
 #pragma mark View Creation
