@@ -509,6 +509,10 @@ static RACSignal *combineSignalsWithOperator(RACSignal *a, RACSignal *b, CGFloat
 	// Subscribe to self last so that we don't skip any values sent
 	// immediately. See https://github.com/github/ReactiveCocoa/issues/192.
 	return [RACSignal combineLatest:@[ widthSignal, heightSignal, self ] reduce:^(NSNumber *width, NSNumber *height, NSValue *rect) {
+		NSAssert([width isKindOfClass:NSNumber.class], @"Value sent by %@ is not a number: %@", widthSignal, width);
+		NSAssert([height isKindOfClass:NSNumber.class], @"Value sent by %@ is not a number: %@", heightSignal, height);
+		NSAssert([rect isKindOfClass:NSValue.class] && rect.med_geometryStructType == MEDGeometryStructTypeRect, @"Value sent by %@ is not a CGRect: %@", self, rect);
+
 		return MEDBox(CGRectInset(rect.med_rectValue, width.doubleValue, height.doubleValue));
 	}];
 }
@@ -517,6 +521,9 @@ static RACSignal *combineSignalsWithOperator(RACSignal *a, RACSignal *b, CGFloat
 	NSParameterAssert(amountSignal != nil);
 
 	return [RACSignal combineLatest:@[ amountSignal, self ] reduce:^(NSNumber *amount, NSValue *rect) {
+		NSAssert([amount isKindOfClass:NSNumber.class], @"Value sent by %@ is not a number: %@", amountSignal, amount);
+		NSAssert([rect isKindOfClass:NSValue.class] && rect.med_geometryStructType == MEDGeometryStructTypeRect, @"Value sent by %@ is not a CGRect: %@", self, rect);
+
 		return MEDBox(CGRectSlice(rect.med_rectValue, amount.doubleValue, edge));
 	}];
 }
@@ -525,6 +532,9 @@ static RACSignal *combineSignalsWithOperator(RACSignal *a, RACSignal *b, CGFloat
 	NSParameterAssert(amountSignal != nil);
 
 	return [RACSignal combineLatest:@[ amountSignal, self ] reduce:^(NSNumber *amount, NSValue *rect) {
+		NSAssert([amount isKindOfClass:NSNumber.class], @"Value sent by %@ is not a number: %@", amountSignal, amount);
+		NSAssert([rect isKindOfClass:NSValue.class] && rect.med_geometryStructType == MEDGeometryStructTypeRect, @"Value sent by %@ is not a CGRect: %@", self, rect);
+
 		return MEDBox(CGRectRemainder(rect.med_rectValue, amount.doubleValue, edge));
 	}];
 }
@@ -533,6 +543,9 @@ static RACSignal *combineSignalsWithOperator(RACSignal *a, RACSignal *b, CGFloat
 	NSParameterAssert(amountSignal != nil);
 
 	return [RACSignal combineLatest:@[ amountSignal, self ] reduce:^(NSNumber *amount, NSValue *rect) {
+		NSAssert([amount isKindOfClass:NSNumber.class], @"Value sent by %@ is not a number: %@", amountSignal, amount);
+		NSAssert([rect isKindOfClass:NSValue.class] && rect.med_geometryStructType == MEDGeometryStructTypeRect, @"Value sent by %@ is not a CGRect: %@", self, rect);
+
 		return MEDBox(CGRectGrow(rect.med_rectValue, amount.doubleValue, edge));
 	}];
 }
@@ -546,6 +559,9 @@ static RACSignal *combineSignalsWithOperator(RACSignal *a, RACSignal *b, CGFloat
 	NSParameterAssert(paddingSignal != nil);
 
 	RACSignal *amountPlusPadding = [RACSignal combineLatest:@[ sliceAmountSignal, paddingSignal ] reduce:^(NSNumber *amount, NSNumber *padding) {
+		NSAssert([amount isKindOfClass:NSNumber.class], @"Value sent by %@ is not a number: %@", sliceAmountSignal, amount);
+		NSAssert([padding isKindOfClass:NSNumber.class], @"Value sent by %@ is not a number: %@", paddingSignal, padding);
+
 		return @(amount.doubleValue + padding.doubleValue);
 	}];
 
