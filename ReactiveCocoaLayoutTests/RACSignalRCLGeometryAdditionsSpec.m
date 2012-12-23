@@ -158,6 +158,17 @@ describe(@"signal of CGRects", ^{
 		expect(result.sequence).to.equal(expectedRects.rac_sequence);
 	});
 
+	it(@"should offset", ^{
+		RACSignal *result = [signal offsetX:[RACSignal return:@3] Y:[RACSignal return:@5]];
+		NSArray *expectedRects = @[
+			MEDBox(CGRectMake(13, 15, 20, 20)),
+			MEDBox(CGRectMake(13, 25, 30, 40)),
+			MEDBox(CGRectMake(28, 20, 45, 35)),
+		];
+
+		expect(result.sequence).to.equal(expectedRects.rac_sequence);
+	});
+
 	it(@"should slice", ^{
 		RACSignal *result = [signal sliceWithAmount:[RACSignal return:@5] fromEdge:CGRectMinXEdge];
 		NSArray *expectedRects = @[
@@ -525,6 +536,17 @@ describe(@"signal of CGPoints", ^{
 		];
 
 		expect(values).to.equal(expected);
+	});
+
+	it(@"should offset", ^{
+		RACSignal *result = [signal offsetX:[RACSignal return:@3] Y:[RACSignal return:@5]];
+		NSArray *expected = @[
+			MEDBox(CGPointMake(13, 15)),
+			MEDBox(CGPointMake(13, 25)),
+			MEDBox(CGPointMake(28, 20)),
+		];
+
+		expect(result.sequence).to.equal(expected.rac_sequence);
 	});
 });
 
