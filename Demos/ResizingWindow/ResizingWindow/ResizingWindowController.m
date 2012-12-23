@@ -133,6 +133,8 @@
 	[self layoutField:self.nameField label:self.nameLabel fromSignal:nameRect];
 }
 
+#pragma mark Layout
+
 - (void)layoutField:(NSTextField *)field label:(NSTextField *)label fromSignal:(RACSignal *)signal {
 	// Split the rect horizontally, into a rect for the label and a rect for the
 	// text field.
