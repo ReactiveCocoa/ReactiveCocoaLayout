@@ -220,6 +220,8 @@ static RACSignal *combineSignalsWithOperator(RACSignal *a, RACSignal *b, CGFloat
 
 - (RACSignal *)size {
 	return [self map:^(NSValue *value) {
+		NSAssert([value isKindOfClass:NSValue.class] && value.med_geometryStructType == MEDGeometryStructTypeRect, @"Value sent by %@ is not a CGRect: %@", self, value);
+
 		return MEDBox(value.med_rectValue.size);
 	}];
 }
@@ -229,6 +231,9 @@ static RACSignal *combineSignalsWithOperator(RACSignal *a, RACSignal *b, CGFloat
 	NSParameterAssert(heightSignal != nil);
 
 	return [RACSignal combineLatest:@[ widthSignal, heightSignal ] reduce:^(NSNumber *width, NSNumber *height) {
+		NSAssert([width isKindOfClass:NSNumber.class], @"Value sent by %@ is not a number: %@", widthSignal, width);
+		NSAssert([height isKindOfClass:NSNumber.class], @"Value sent by %@ is not a number: %@", heightSignal, height);
+
 		return MEDBox(CGSizeMake(width.doubleValue, height.doubleValue));
 	}];
 }
