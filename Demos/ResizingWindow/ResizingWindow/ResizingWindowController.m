@@ -61,6 +61,13 @@
 		return @(str.length > 0);
 	}];
 
+	// Start with an alpha of 0, and then animate any changes thereafter.
+	RACSignal *confirmAlpha = [[RACSignal return:@0]
+		concat:[RACAbleWithStart(self.confirmEmailVisible) animate]];
+
+	RAC(self.confirmEmailLabel.rcl_alphaValue) = confirmAlpha;
+	RAC(self.confirmEmailField.rcl_alphaValue) = confirmAlpha;
+
 	RAC(self.labelWidth) = [RACSignal max:@[
 		self.nameLabel.rcl_intrinsicContentSizeSignal.width,
 		self.emailLabel.rcl_intrinsicContentSizeSignal.width,
@@ -75,7 +82,7 @@
 
 	[self layoutField:self.emailField label:self.emailLabel fromSignal:emailRect];
 
-	RACSignal *confirmHeightPlusPadding = [[RACAbleWithStart(self.confirmEmailVisible)
+	RACSignal *confirmHeightPlusPadding = [[[RACAbleWithStart(self.confirmEmailVisible)
 		map:^(NSNumber *visible) {
 			@strongify(self);
 
@@ -85,7 +92,8 @@
 				return [RACSignal return:@0];
 			}
 		}]
-		switch];
+		switch]
+		animate];
 
 	RACTupleUnpack(RACSignal *confirmEmailRect, RACSignal *nameRect) = [possibleConfirmEmailRect divideWithAmount:confirmHeightPlusPadding fromEdge:CGRectMaxYEdge];
 
