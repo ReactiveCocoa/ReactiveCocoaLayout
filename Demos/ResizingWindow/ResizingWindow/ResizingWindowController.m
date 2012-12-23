@@ -41,7 +41,9 @@
 	NSTextField *emailField = [self textFieldWithString:@""];
 
 	RACTupleUnpack(RACSignal *nameRect, RACSignal *emailRect) = [[self.contentView.rcl_frameSignal
-		insetWidth:[RACSignal return:@32] height:[RACSignal return:@16]]
+		// Purposely misaligned to demonstrate automatic pixel alignment when
+		// binding to RCL's NSView properties.
+		insetWidth:[RACSignal return:@32.25] height:[RACSignal return:@16.75]]
 		divideWithAmount:nameField.rcl_intrinsicContentSizeSignal.height padding:padding fromEdge:CGRectMaxYEdge];
 
 	RACTupleUnpack(RACSignal *nameLabelRect, RACSignal *nameFieldRect) = [nameRect divideWithAmount:labelWidth padding:padding fromEdge:CGRectMinXEdge];
