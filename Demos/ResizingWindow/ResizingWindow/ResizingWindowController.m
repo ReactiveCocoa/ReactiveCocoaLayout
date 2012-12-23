@@ -69,6 +69,7 @@
 
 - (NSTextField *)labelWithString:(NSString *)string {
 	NSTextField *label = [[NSTextField alloc] initWithFrame:NSZeroRect];
+	label.wantsLayer = YES;
 	label.editable = NO;
 	label.selectable = NO;
 	label.bezeled = NO;
@@ -87,6 +88,7 @@
 
 - (NSTextField *)textFieldWithString:(NSString *)string {
 	NSTextField *textField = [[NSTextField alloc] initWithFrame:NSZeroRect];
+	textField.wantsLayer = YES;
 	textField.stringValue = string;
 	[textField sizeToFit];
 
