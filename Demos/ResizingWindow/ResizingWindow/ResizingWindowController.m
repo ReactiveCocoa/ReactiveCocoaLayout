@@ -53,12 +53,12 @@
 	RAC(nameField, rcl_alignmentRect) = [[nameFieldRect take:1]
 		concat:[[nameFieldRect skip:1] animateWithDuration:0.5]];
 
-	RAC(nameLabel, rcl_alignmentRect) = [[RACSignal rectsWithOrigin:nameLabelRect.origin size:nameLabel.rcl_intrinsicContentSizeSignal]
+	RAC(nameLabel, rcl_alignmentRect) = [[nameLabelRect replaceSize:nameLabel.rcl_intrinsicContentSizeSignal]
 		alignBaseline:nameLabel.rcl_baselineSignal toBaseline:nameField.rcl_baselineSignal ofRect:nameFieldRect];
 
 	RAC(emailField, rcl_alignmentRect) = emailFieldRect;
 
-	RAC(emailLabel, rcl_alignmentRect) = [[RACSignal rectsWithOrigin:emailLabelRect.origin size:emailLabel.rcl_intrinsicContentSizeSignal]
+	RAC(emailLabel, rcl_alignmentRect) = [[emailLabelRect replaceSize:emailLabel.rcl_intrinsicContentSizeSignal]
 		alignBaseline:emailLabel.rcl_baselineSignal toBaseline:emailField.rcl_baselineSignal ofRect:emailFieldRect];
 }
 
