@@ -15,6 +15,9 @@
 
 @property (nonatomic, assign) CGFloat labelWidth;
 
+@property (nonatomic, strong, readonly) RACSignal *horizontalPadding;
+@property (nonatomic, strong, readonly) RACSignal *verticalPadding;
+
 @property (nonatomic, weak) NSTextField *emailLabel;
 @property (nonatomic, weak) NSTextField *emailField;
 @property (nonatomic, copy) NSString *email;
@@ -38,6 +41,14 @@
 
 - (NSView *)contentView {
 	return self.window.contentView;
+}
+
+- (RACSignal *)horizontalPadding {
+	return [RACSignal return:@8];
+}
+
+- (RACSignal *)verticalPadding {
+	return [RACSignal return:@8];
 }
 
 #pragma mark Lifecycle
@@ -84,13 +95,11 @@
 		self.confirmEmailLabel.rcl_intrinsicContentSizeSignal.width,
 	]];
 
-	RACSignal *verticalPadding = [RACSignal return:@8];
-
 	// Inset the available rect, then cut out enough space for the email field
 	// vertically.
 	RACTupleUnpack(RACSignal *emailRect, RACSignal *possibleConfirmEmailRect) = [[self.contentView.rcl_frameSignal
 		insetWidth:[RACSignal return:@32] height:[RACSignal return:@16]]
-		divideWithAmount:self.emailField.rcl_intrinsicContentSizeSignal.height padding:verticalPadding fromEdge:CGRectMaxYEdge];
+		divideWithAmount:self.emailField.rcl_intrinsicContentSizeSignal.height padding:self.verticalPadding fromEdge:CGRectMaxYEdge];
 
 	[self layoutField:self.emailField label:self.emailLabel fromSignal:emailRect];
 
@@ -102,7 +111,7 @@
 			@strongify(self);
 
 			if (visible.boolValue) {
-				return [self.confirmEmailField.rcl_intrinsicContentSizeSignal.height plus:verticalPadding];
+				return [self.confirmEmailField.rcl_intrinsicContentSizeSignal.height plus:self.verticalPadding];
 			} else {
 				return [RACSignal return:@0];
 			}
@@ -116,7 +125,7 @@
 	RACTupleUnpack(RACSignal *confirmEmailRect, RACSignal *nameRect) = [possibleConfirmEmailRect divideWithAmount:confirmHeightPlusPadding fromEdge:CGRectMaxYEdge];
 
 	// Remove the padding that we included for the purposes of animation.
-	confirmEmailRect = [confirmEmailRect remainderAfterSlicingAmount:verticalPadding fromEdge:CGRectMinYEdge];
+	confirmEmailRect = [confirmEmailRect remainderAfterSlicingAmount:self.verticalPadding fromEdge:CGRectMinYEdge];
 	[self layoutField:self.confirmEmailField label:self.confirmEmailLabel fromSignal:confirmEmailRect];
 
 	// Only use the height that the name field actually requires.
@@ -125,11 +134,9 @@
 }
 
 - (void)layoutField:(NSTextField *)field label:(NSTextField *)label fromSignal:(RACSignal *)signal {
-	RACSignal *horizontalPadding = [RACSignal return:@8];
-
 	// Split the rect horizontally, into a rect for the label and a rect for the
 	// text field.
-	RACTupleUnpack(RACSignal *labelRect, RACSignal *fieldRect) = [signal divideWithAmount:RACAbleWithStart(self.labelWidth) padding:horizontalPadding fromEdge:CGRectMinXEdge];
+	RACTupleUnpack(RACSignal *labelRect, RACSignal *fieldRect) = [signal divideWithAmount:RACAbleWithStart(self.labelWidth) padding:self.horizontalPadding fromEdge:CGRectMinXEdge];
 
 	RAC(field, rcl_alignmentRect) = fieldRect;
 	RAC(label, rcl_alignmentRect) = [[labelRect replaceSize:label.rcl_intrinsicContentSizeSignal]
