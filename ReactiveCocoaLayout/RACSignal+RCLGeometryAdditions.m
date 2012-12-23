@@ -314,12 +314,16 @@ static RACSignal *combineSignalsWithOperator(RACSignal *a, RACSignal *b, CGFloat
 
 - (RACSignal *)centerX {
 	return [self map:^(NSValue *value) {
+		NSAssert([value isKindOfClass:NSValue.class] && value.med_geometryStructType == MEDGeometryStructTypeRect, @"Value sent by %@ is not a CGRect: %@", self, value);
+
 		return @(CGRectGetMidX(value.med_rectValue));
 	}];
 }
 
 - (RACSignal *)centerY {
 	return [self map:^(NSValue *value) {
+		NSAssert([value isKindOfClass:NSValue.class] && value.med_geometryStructType == MEDGeometryStructTypeRect, @"Value sent by %@ is not a CGRect: %@", self, value);
+
 		return @(CGRectGetMidY(value.med_rectValue));
 	}];
 }
