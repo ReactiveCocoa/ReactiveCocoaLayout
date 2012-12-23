@@ -38,6 +38,15 @@
 // KVO-compliant. Use -rcl_boundsSignal for observing changes instead.
 @property (nonatomic, assign) CGRect rcl_bounds;
 
+// The receiver's current alphaValue.
+//
+// If set from within an animated signal, the receiver's -animator proxy is
+// automatically used.
+//
+// This property may have `RAC()` bindings applied to it, but it is not
+// KVO-compliant.
+@property (nonatomic, assign) CGFloat rcl_alphaValue;
+
 // Observes the receiver's `bounds` for changes.
 //
 // This method may enable `postsBoundsChangedNotifications` to ensure that
