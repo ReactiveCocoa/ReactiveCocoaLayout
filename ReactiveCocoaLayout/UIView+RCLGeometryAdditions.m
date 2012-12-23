@@ -16,7 +16,7 @@ static CGRect backingAlignedRect(UIView *view, CGRect rect) {
 	NSCParameterAssert(view != nil);
 
 	UIScreen *screen = view.window.screen ?: UIScreen.mainScreen;
-	NSCAssert(screen != nil, @"Could not screen for view %@", view);
+	NSCAssert(screen != nil, @"Could not find a screen for view %@", view);
 	NSCAssert(screen.scale > 0, @"Screen has a weird scale: %@", screen);
 
 	rect.origin.x *= screen.scale;
