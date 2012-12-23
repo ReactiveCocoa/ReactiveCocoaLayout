@@ -28,6 +28,15 @@
 }
 
 - (void)setRcl_frame:(CGRect)frame {
+	if (self.superview != nil) {
+		// Matches the behavior of CGRectFloor().
+		NSAlignmentOptions options = NSAlignMinXOutward | NSAlignMinYInward | NSAlignWidthInward | NSAlignHeightInward;
+
+		CGRect windowFrame = [self.superview convertRect:frame toView:nil];
+		CGRect alignedWindowFrame = [self backingAlignedRect:windowFrame options:options];
+		frame = [self.superview convertRect:alignedWindowFrame fromView:nil];
+	}
+
 	if (RCLIsInAnimatedSignal()) {
 		[self.animator setFrame:frame];
 	} else {

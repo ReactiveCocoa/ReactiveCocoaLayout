@@ -13,8 +13,9 @@
 // The alignment rect for the receiver's current frame.
 //
 // Setting this property will adjust the receiver's frame such that the
-// alignment rect matches the new value. If set from within an animated signal,
-// the receiver's -animator proxy is automatically used.
+// alignment rect matches the new value, before the frame is aligned to the
+// receiver's backing store. If set from within an animated signal, the
+// receiver's -animator proxy is automatically used.
 //
 // This property may have `RAC()` bindings applied to it, but it is not
 // KVO-compliant. Use -rcl_alignmentRectSignal for observing changes instead.
@@ -22,8 +23,9 @@
 
 // The receiver's current frame.
 //
-// If set from within an animated signal, the receiver's -animator proxy is
-// automatically used.
+// Setting this property to a given rect will automatically align the rect with
+// the receiver's backing store. If set from within an animated signal, the
+// receiver's -animator proxy is automatically used.
 //
 // This property may have `RAC()` bindings applied to it, but it is not
 // KVO-compliant. Use -rcl_frameSignal for observing changes instead.
@@ -31,8 +33,9 @@
 
 // The receiver's current bounds.
 //
-// If set from within an animated signal, the receiver's -animator proxy is
-// automatically used.
+// Setting this property to a given rect will automatically align the rect with
+// the receiver's backing store. If set from within an animated signal, the
+// receiver's -animator proxy is automatically used.
 //
 // This property may have `RAC()` bindings applied to it, but it is not
 // KVO-compliant. Use -rcl_boundsSignal for observing changes instead.
