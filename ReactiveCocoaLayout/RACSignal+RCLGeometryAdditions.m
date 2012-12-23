@@ -539,36 +539,52 @@ static RACSignal *combineSignalsWithOperator(NSArray *signals, RCLBinaryOperator
 	return latestNumberMatchingComparisonResult(signals, NSOrderedDescending);
 }
 
++ (RACSignal *)add:(NSArray *)signals {
+	return combineSignalsWithOperator(signals, ^(CGFloat a, CGFloat b) {
+		return a + b;
+	});
+}
+
++ (RACSignal *)subtract:(NSArray *)signals {
+	return combineSignalsWithOperator(signals, ^(CGFloat a, CGFloat b) {
+		return a - b;
+	});
+}
+
++ (RACSignal *)multiply:(NSArray *)signals {
+	return combineSignalsWithOperator(signals, ^(CGFloat a, CGFloat b) {
+		return a * b;
+	});
+}
+
++ (RACSignal *)divide:(NSArray *)signals {
+	return combineSignalsWithOperator(signals, ^(CGFloat a, CGFloat b) {
+		return a / b;
+	});
+}
+
 - (RACSignal *)plus:(RACSignal *)addendSignal {
 	NSParameterAssert(addendSignal != nil);
 
-	return combineSignalsWithOperator(@[ self, addendSignal ], ^(CGFloat a, CGFloat b) {
-		return a + b;
-	});
+	return [RACSignal add:@[ self, addendSignal ]];
 }
 
 - (RACSignal *)minus:(RACSignal *)subtrahendSignal {
 	NSParameterAssert(subtrahendSignal != nil);
 
-	return combineSignalsWithOperator(@[ self, subtrahendSignal ], ^(CGFloat a, CGFloat b) {
-		return a - b;
-	});
+	return [RACSignal subtract:@[ self, subtrahendSignal ]];
 }
 
 - (RACSignal *)multipliedBy:(RACSignal *)factorSignal {
 	NSParameterAssert(factorSignal != nil);
 
-	return combineSignalsWithOperator(@[ self, factorSignal ], ^(CGFloat a, CGFloat b) {
-		return a * b;
-	});
+	return [RACSignal multiply:@[ self, factorSignal ]];
 }
 
 - (RACSignal *)dividedBy:(RACSignal *)denominatorSignal {
 	NSParameterAssert(denominatorSignal != nil);
 
-	return combineSignalsWithOperator(@[ self, denominatorSignal ], ^(CGFloat a, CGFloat b) {
-		return a / b;
-	});
+	return [RACSignal divide:@[ self, denominatorSignal ]];
 }
 
 - (RACSignal *)animate {

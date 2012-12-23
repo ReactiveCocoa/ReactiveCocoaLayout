@@ -554,22 +554,44 @@ describe(@"+min: and +max:", ^{
 describe(@"mathematical operators", ^{
 	__block RACSignal *numberA;
 	__block RACSignal *numberB;
+	__block NSArray *threeNumbers;
 
 	__block RACSignal *pointA;
 	__block RACSignal *pointB;
+	__block NSArray *threePoints;
 
 	__block RACSignal *sizeA;
 	__block RACSignal *sizeB;
+	__block NSArray *threeSizes;
 
 	beforeEach(^{
 		numberA = [RACSignal return:@5];
 		numberB = [RACSignal return:@2];
+		threeNumbers = @[ numberA, numberB, [RACSignal return:@3] ];
 
 		pointA = [RACSignal return:MEDBox(CGPointMake(5, 10))];
 		pointB = [RACSignal return:MEDBox(CGPointMake(1, 2))];
+		threePoints = @[ pointA, pointB, [RACSignal return:MEDBox(CGPointMake(2, 1))] ];
 
 		sizeA = [RACSignal return:MEDBox(CGSizeMake(5, 10))];
 		sizeB = [RACSignal return:MEDBox(CGSizeMake(1, 2))];
+		threeSizes = @[ sizeA, sizeB, [RACSignal return:MEDBox(CGSizeMake(2, 1))] ];
+	});
+
+	describe(@"+add:", ^{
+		it(@"should add three numbers", ^{
+			expect([RACSignal add:threeNumbers].sequence).to.equal(@[ @10 ].rac_sequence);
+		});
+
+		it(@"should add three points", ^{
+			CGPoint expected = CGPointMake(8, 13);
+			expect([RACSignal add:threePoints].sequence).to.equal(@[ MEDBox(expected) ].rac_sequence);
+		});
+
+		it(@"should add three sizes", ^{
+			CGSize expected = CGSizeMake(8, 13);
+			expect([RACSignal add:threeSizes].sequence).to.equal(@[ MEDBox(expected) ].rac_sequence);
+		});
 	});
 
 	describe(@"-plus:", ^{
@@ -585,6 +607,22 @@ describe(@"mathematical operators", ^{
 		it(@"should add two sizes", ^{
 			CGSize expected = CGSizeMake(6, 12);
 			expect([sizeA plus:sizeB].sequence).to.equal(@[ MEDBox(expected) ].rac_sequence);
+		});
+	});
+
+	describe(@"+subtract:", ^{
+		it(@"should subtract three numbers", ^{
+			expect([RACSignal subtract:threeNumbers].sequence).to.equal(@[ @0 ].rac_sequence);
+		});
+
+		it(@"should subtract three points", ^{
+			CGPoint expected = CGPointMake(2, 7);
+			expect([RACSignal subtract:threePoints].sequence).to.equal(@[ MEDBox(expected) ].rac_sequence);
+		});
+
+		it(@"should subtract three sizes", ^{
+			CGSize expected = CGSizeMake(2, 7);
+			expect([RACSignal subtract:threeSizes].sequence).to.equal(@[ MEDBox(expected) ].rac_sequence);
 		});
 	});
 
@@ -604,6 +642,22 @@ describe(@"mathematical operators", ^{
 		});
 	});
 
+	describe(@"+multiply:", ^{
+		it(@"should multiply three numbers", ^{
+			expect([RACSignal multiply:threeNumbers].sequence).to.equal(@[ @30 ].rac_sequence);
+		});
+
+		it(@"should multiply three points", ^{
+			CGPoint expected = CGPointMake(10, 20);
+			expect([RACSignal multiply:threePoints].sequence).to.equal(@[ MEDBox(expected) ].rac_sequence);
+		});
+
+		it(@"should multiply three sizes", ^{
+			CGSize expected = CGSizeMake(10, 20);
+			expect([RACSignal multiply:threeSizes].sequence).to.equal(@[ MEDBox(expected) ].rac_sequence);
+		});
+	});
+
 	describe(@"-multipliedBy:", ^{
 		it(@"should multiply two numbers", ^{
 			expect([numberA multipliedBy:numberB].sequence).to.equal(@[ @10 ].rac_sequence);
@@ -617,6 +671,23 @@ describe(@"mathematical operators", ^{
 		it(@"should multiply two sizes", ^{
 			CGSize expected = CGSizeMake(5, 20);
 			expect([sizeA multipliedBy:sizeB].sequence).to.equal(@[ MEDBox(expected) ].rac_sequence);
+		});
+	});
+
+	describe(@"+divide:", ^{
+		it(@"should divide three numbers", ^{
+			CGFloat result = [[[RACSignal divide:threeNumbers] first] doubleValue];
+			expect(result).to.beCloseTo(5.0 / 2 / 3);
+		});
+
+		it(@"should divide three points", ^{
+			CGPoint expected = CGPointMake(2.5, 5);
+			expect([RACSignal divide:threePoints].sequence).to.equal(@[ MEDBox(expected) ].rac_sequence);
+		});
+
+		it(@"should divide three sizes", ^{
+			CGSize expected = CGSizeMake(2.5, 5);
+			expect([RACSignal divide:threeSizes].sequence).to.equal(@[ MEDBox(expected) ].rac_sequence);
 		});
 	});
 
