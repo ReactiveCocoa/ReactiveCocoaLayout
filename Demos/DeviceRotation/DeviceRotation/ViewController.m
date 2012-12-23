@@ -50,7 +50,9 @@
 	[self.view addSubview:self.nameLabel];
 	[self.view addSubview:self.nameTextField];
 
-	RACSignal *insetRect = [self.view.rcl_boundsSignal insetWidth:[RACSignal return:@16] height:[RACSignal return:@24]];
+	// Purposely misaligned to demonstrate automatic pixel alignment when
+	// binding to RCL's UIView properties.
+	RACSignal *insetRect = [self.view.rcl_boundsSignal insetWidth:[RACSignal return:@16.25] height:[RACSignal return:@24.75]];
 
 	RAC(self.nameLabel.text) = [self.rotationSignal map:^(NSNumber *orientation) {
 		return (UIInterfaceOrientationIsPortrait(orientation.integerValue) ? NSLocalizedString(@"Portrait!", @"") : NSLocalizedString(@"Landscape awww yeaahhh", @""));
