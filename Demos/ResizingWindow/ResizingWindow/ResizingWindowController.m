@@ -49,9 +49,7 @@
 		sliceWithAmount:emailField.rcl_intrinsicContentSizeSignal.height fromEdge:CGRectMaxYEdge]
 		divideWithAmount:labelWidth padding:padding fromEdge:CGRectMinXEdge];
 
-	// Don't animate setting the initial frame.
-	RAC(nameField, rcl_alignmentRect) = [[nameFieldRect take:1]
-		concat:[[nameFieldRect skip:1] animateWithDuration:0.5]];
+	RAC(nameField, rcl_alignmentRect) = nameFieldRect;
 
 	RAC(nameLabel, rcl_alignmentRect) = [[nameLabelRect replaceSize:nameLabel.rcl_intrinsicContentSizeSignal]
 		alignBaseline:nameLabel.rcl_baselineSignal toBaseline:nameField.rcl_baselineSignal ofRect:nameFieldRect];
