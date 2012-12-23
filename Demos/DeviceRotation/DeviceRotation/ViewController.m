@@ -60,7 +60,7 @@
 
 	textFieldRect = [textFieldRect sliceWithAmount:[RACSignal return:@28] fromEdge:CGRectMinYEdge];
 
-	RAC(self.nameLabel.rcl_alignmentRect) = [[RACSignal rectsWithOrigin:labelRect.origin size:self.nameLabel.rcl_intrinsicContentSizeSignal]
+	RAC(self.nameLabel.rcl_alignmentRect) = [[labelRect replaceSize:self.nameLabel.rcl_intrinsicContentSizeSignal]
 		alignBaseline:self.nameLabel.rcl_baselineSignal toBaseline:self.nameTextField.rcl_baselineSignal ofRect:self.nameTextField.rcl_alignmentRectSignal];
 
 	// Animate the initial appearance of the text view, but not any changes due
