@@ -29,6 +29,15 @@
 // KVO-compliant. Use -rcl_frameSignal for observing changes instead.
 @property (nonatomic, assign) CGRect rcl_frame;
 
+// The receiver's current bounds.
+//
+// Setting this property to a given rect will automatically align the rect with
+// pixels on the screen.
+//
+// This property may have `RAC()` bindings applied to it, but it is not
+// KVO-compliant. Use -rcl_boundsSignal for observing changes instead.
+@property (nonatomic, assign) CGRect rcl_bounds;
+
 // Observes the receiver's `bounds` for changes.
 //
 // Returns a signal which sends the current and all future values for `bounds`.

@@ -54,6 +54,14 @@ static CGRect backingAlignedRect(UIView *view, CGRect rect) {
 	self.frame = backingAlignedRect(self, frame);
 }
 
+- (CGRect)rcl_bounds {
+	return self.bounds;
+}
+
+- (void)setRcl_bounds:(CGRect)bounds {
+	self.bounds = backingAlignedRect(self, bounds);
+}
+
 #pragma mark Signals
 
 // FIXME: These properties aren't actually declared as KVO-compliant by Core
