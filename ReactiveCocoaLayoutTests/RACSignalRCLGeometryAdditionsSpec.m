@@ -76,7 +76,7 @@ describe(@"signal of CGRects", ^{
 	__block RACSignal *signal;
 
 	beforeEach(^{
-		signal = [rects signalWithScheduler:RACScheduler.immediateScheduler];
+		signal = rects.signal;
 	});
 
 	it(@"should map to sizes", ^{
@@ -413,13 +413,9 @@ describe(@"signal of CGRects", ^{
 		__block RACSignal *baseline1;
 		__block RACSignal *baseline2;
 
-		__block RACSignal *signal;
-
 		beforeEach(^{
 			baseline1 = [RACSignal return:@2];
 			baseline2 = [RACSignal return:@5];
-
-			signal = [rects signalWithScheduler:RACScheduler.immediateScheduler];
 		});
 
 		#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
@@ -456,7 +452,7 @@ describe(@"signal of CGSizes", ^{
 	__block RACSignal *signal;
 
 	beforeEach(^{
-		signal = [sizes signalWithScheduler:RACScheduler.immediateScheduler];
+		signal = sizes.signal;
 	});
 
 	it(@"should map to widths", ^{
@@ -494,7 +490,7 @@ describe(@"signal of CGPoints", ^{
 	__block RACSignal *signal;
 
 	beforeEach(^{
-		signal = [points signalWithScheduler:RACScheduler.immediateScheduler];
+		signal = points.signal;
 	});
 
 	it(@"should map to minXs", ^{
