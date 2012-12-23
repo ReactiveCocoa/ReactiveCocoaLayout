@@ -106,6 +106,8 @@ static RACSignal *latestNumberMatchingComparisonResult(NSArray *signals, NSCompa
 			if (previous == nil) return next;
 			if (next == nil) return previous;
 
+			NSCAssert([next isKindOfClass:NSNumber.class], @"Value sent is not a number: %@", next);
+
 			if ([previous compare:next] == result) {
 				return next;
 			} else {
