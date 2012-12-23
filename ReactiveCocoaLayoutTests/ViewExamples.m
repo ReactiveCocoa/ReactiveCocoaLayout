@@ -57,34 +57,61 @@ sharedExamplesFor(ViewExamples, ^{
 		expect(lastValue.med_rectValue).to.equal(newFrame);
 	});
 
-	it(@"should send values on rcl_intrinsicContentSizeSignal", ^{
-		__block NSValue *lastValue = nil;
-		[view.rcl_intrinsicContentSizeSignal subscribeNext:^(NSValue *value) {
-			expect(value).to.beKindOf(NSValue.class);
-			lastValue = value;
-		}];
+	describe(@"intrinsic size signals", ^{
+		__block id lastValue;
+		__block void (^subscribeToSignal)(RACSignal *);
 
-		expect(lastValue).notTo.beNil();
-		expect(lastValue.med_sizeValue).to.equal(CGSizeZero);
+		__block CGSize newSize;
+		__block void (^setNewSize)(void);
 
-		CGSize newSize = CGSizeMake(5, 10);
-		[view invalidateAndSetIntrinsicContentSize:newSize];
-		expect(lastValue.med_sizeValue).to.equal(newSize);
-	});
+		beforeEach(^{
+			lastValue = nil;
 
-	it(@"should send values on rcl_intrinsicBoundsSignal", ^{
-		__block NSValue *lastValue = nil;
-		[view.rcl_intrinsicBoundsSignal subscribeNext:^(NSValue *value) {
-			expect(value).to.beKindOf(NSValue.class);
-			lastValue = value;
-		}];
+			subscribeToSignal = [^(RACSignal *signal) {
+				[signal subscribeNext:^(id value) {
+					lastValue = value;
+				}];
 
-		expect(lastValue).notTo.beNil();
-		expect(lastValue.med_rectValue).to.equal(CGRectZero);
+				expect(lastValue).notTo.beNil();
+			} copy];
 
-		CGSize newSize = CGSizeMake(5, 10);
-		[view invalidateAndSetIntrinsicContentSize:newSize];
-		expect(lastValue.med_rectValue).to.equal(CGRectMake(0, 0, 5, 10));
+			newSize = CGSizeMake(5, 10);
+			setNewSize = [^{
+				[view invalidateAndSetIntrinsicContentSize:newSize];
+			} copy];
+		});
+
+		it(@"should send values on rcl_intrinsicContentSizeSignal", ^{
+			subscribeToSignal(view.rcl_intrinsicContentSizeSignal);
+			expect([lastValue med_sizeValue]).to.equal(CGSizeZero);
+
+			setNewSize();
+			expect([lastValue med_sizeValue]).to.equal(newSize);
+		});
+
+		it(@"should send values on rcl_intrinsicBoundsSignal", ^{
+			subscribeToSignal(view.rcl_intrinsicBoundsSignal);
+			expect([lastValue med_rectValue]).to.equal(CGRectZero);
+
+			setNewSize();
+			expect([lastValue med_rectValue]).to.equal(CGRectMake(0, 0, newSize.width, newSize.height));
+		});
+
+		it(@"should send values on rcl_intrinsicWidthSignal", ^{
+			subscribeToSignal(view.rcl_intrinsicWidthSignal);
+			expect(lastValue).to.equal(@0);
+
+			setNewSize();
+			expect([lastValue doubleValue]).to.beCloseTo(newSize.width);
+		});
+
+		it(@"should send values on rcl_intrinsicHeightSignal", ^{
+			subscribeToSignal(view.rcl_intrinsicHeightSignal);
+			expect(lastValue).to.equal(@0);
+
+			setNewSize();
+			expect([lastValue doubleValue]).to.beCloseTo(newSize.height);
+		});
 	});
 
 	it(@"should send values on rcl_alignmentRectSignal", ^{
