@@ -49,6 +49,13 @@
 }
 
 - (void)setRcl_bounds:(CGRect)bounds {
+	// Matches the behavior of CGRectFloor().
+	NSAlignmentOptions options = NSAlignMinXOutward | NSAlignMinYInward | NSAlignWidthInward | NSAlignHeightInward;
+
+	CGRect windowRect = [self convertRect:bounds toView:nil];
+	CGRect alignedWindowRect = [self backingAlignedRect:windowRect options:options];
+	bounds = [self convertRect:alignedWindowRect fromView:nil];
+
 	if (RCLIsInAnimatedSignal()) {
 		[self.animator setBounds:bounds];
 	} else {
