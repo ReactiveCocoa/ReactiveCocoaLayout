@@ -322,6 +322,20 @@ extern BOOL RCLIsInAnimatedSignal(void);
 // re-send when the user's current locale changes.
 - (RACSignal *)alignTrailing:(RACSignal *)positionSignal;
 
+// Matches the width of each CGRect to the values sent from the given signal.
+//
+// amountSignal - A signal of CGFloat values, representing the new width.
+//
+// Returns a signal of resized CGRect values.
+- (RACSignal *)alignWidth:(RACSignal *)amountSignal;
+
+// Matches the height of each CGRect to the values sent from the given signal.
+//
+// amountSignal - A signal of CGFloat values, representing the new height.
+//
+// Returns a signal of resized CGRect values.
+- (RACSignal *)alignHeight:(RACSignal *)amountSignal;
+
 // Aligns the center X position of each CGRect to the values sent from the given
 // signal.
 //

@@ -533,6 +533,14 @@ static RACSignal *combineAttributeWithRects(NSLayoutAttribute attribute, NSArray
 	return [self alignAttribute:NSLayoutAttributeTrailing to:positionSignal];
 }
 
+- (RACSignal *)alignWidth:(RACSignal *)amountSignal {
+	return [self alignAttribute:NSLayoutAttributeWidth to:amountSignal];
+}
+
+- (RACSignal *)alignHeight:(RACSignal *)amountSignal {
+	return [self alignAttribute:NSLayoutAttributeHeight to:amountSignal];
+}
+
 - (RACSignal *)alignCenterX:(RACSignal *)positionSignal {
 	return [self alignAttribute:NSLayoutAttributeCenterX to:positionSignal];
 }

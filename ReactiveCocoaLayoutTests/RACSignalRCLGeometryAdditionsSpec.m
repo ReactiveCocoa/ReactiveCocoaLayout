@@ -458,6 +458,28 @@ describe(@"signal of CGRects", ^{
 			#endif
 		});
 
+		it(@"should align width to a specified value", ^{
+			RACSequence *expected = @[
+				MEDBox(CGRectMake(10, 10, 3, 20)),
+				MEDBox(CGRectMake(10, 20, 3, 40)),
+				MEDBox(CGRectMake(25, 15, 3, 35)),
+			].rac_sequence;
+
+			expect([signal alignAttribute:NSLayoutAttributeWidth to:value].sequence).to.equal(expected);
+			expect([signal alignWidth:value].sequence).to.equal(expected);
+		});
+
+		it(@"should align height to a specified value", ^{
+			RACSequence *expected = @[
+				MEDBox(CGRectMake(10, 10, 20, 3)),
+				MEDBox(CGRectMake(10, 20, 30, 3)),
+				MEDBox(CGRectMake(25, 15, 45, 3)),
+			].rac_sequence;
+
+			expect([signal alignAttribute:NSLayoutAttributeHeight to:value].sequence).to.equal(expected);
+			expect([signal alignHeight:value].sequence).to.equal(expected);
+		});
+
 		it(@"should align center X to a specified value", ^{
 			RACSequence *expected = @[
 				MEDBox(CGRectMake(-7, 10, 20, 20)),
