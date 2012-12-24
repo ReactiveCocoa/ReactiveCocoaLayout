@@ -164,24 +164,28 @@ static RACSignal *combineSignalsWithOperator(RACSignal *a, RACSignal *b, CGFloat
 	}];
 }
 
-// Combines the CGRectEdge corresponding to a layout attribute, and the CGRects
-// from a given signal.
+// Combines the CGRectEdge corresponding to a layout attribute, and the values
+// from the given signals.
 //
 // attribute   - The layout attribute to retrieve the edge for. If the layout
 //				 attribute does not describe one of the edges of a rectangle, no
 //				 `edge` will be provided to the `reduceBlock`. Must not be
 //				 NSLayoutAttributeBaseline.
-// rectSignal  - A signal of CGRects.
+// signals	   - The signals to combine the values of. This must contain at
+//				 least one signal.
 // reduceBlock - A block which combines the NSNumber-boxed CGRectEdge (if
 //				 `attribute` corresponds to one), or `nil` (if it does not) and
-//				 a CGRect.
+//				 the values of each signal in the `signals` array.
 //
 // Returns a signal of reduced values.
-static RACSignal *combineAttributeWithRects(NSLayoutAttribute attribute, RACSignal *rectSignal, id (^reduceBlock)(NSNumber *edge, CGRect rect)) {
+static RACSignal *combineAttributeWithRects(NSLayoutAttribute attribute, NSArray *signals, id reduceBlock) {
 	NSCParameterAssert(attribute != NSLayoutAttributeBaseline);
 	NSCParameterAssert(attribute != NSLayoutAttributeNotAnAttribute);
+	NSCParameterAssert(signals.count > 0);
 
 	RACSignal *edgeSignal = nil;
+	NSMutableArray *mutableSignals = [signals mutableCopy];
+
 	switch (attribute) {
 		// TODO: Consider modified view coordinate systems?
 		case NSLayoutAttributeLeft:
@@ -217,8 +221,9 @@ static RACSignal *combineAttributeWithRects(NSLayoutAttribute attribute, RACSign
 			RACSignal *baseSignal = (attribute == NSLayoutAttributeLeading ? RACSignal.leadingEdgeSignal : RACSignal.trailingEdgeSignal);
 			edgeSignal = [[baseSignal multicast:edgeSubject] autoconnect];
 
-			// Terminate edgeSubject when rectSignal completes.
-			rectSignal = [rectSignal doCompleted:^{
+			// Terminate edgeSubject when one of the given signals completes
+			// (doesn't really matter which one).
+			mutableSignals[0] = [mutableSignals[0] doCompleted:^{
 				[edgeSubject sendCompleted];
 			}];
 
@@ -238,11 +243,8 @@ static RACSignal *combineAttributeWithRects(NSLayoutAttribute attribute, RACSign
 			return nil;
 	}
 
-	return [RACSignal combineLatest:@[ edgeSignal, rectSignal ] reduce:^(NSNumber *edge, NSValue *value) {
-		NSCAssert([value isKindOfClass:NSValue.class] && value.med_geometryStructType == MEDGeometryStructTypeRect, @"Value sent by %@ is not a CGRect: %@", rectSignal, value);
-
-		return reduceBlock(edge, value.med_rectValue);
-	}];
+	[mutableSignals insertObject:edgeSignal atIndex:0];
+	return [RACSignal combineLatest:mutableSignals reduce:reduceBlock];
 }
 
 @implementation RACSignal (RCLGeometryAdditions)
@@ -359,7 +361,10 @@ static RACSignal *combineAttributeWithRects(NSLayoutAttribute attribute, RACSign
 }
 
 - (RACSignal *)valueForAttribute:(NSLayoutAttribute)attribute {
-	return combineAttributeWithRects(attribute, self, ^ id (NSNumber *edge, CGRect rect) {
+	return combineAttributeWithRects(attribute, @[ self ], ^ id (NSNumber *edge, NSValue *value) {
+		NSAssert([value isKindOfClass:NSValue.class] && value.med_geometryStructType == MEDGeometryStructTypeRect, @"Value sent by %@ is not a CGRect: %@", self, value);
+
+		CGRect rect = value.med_rectValue;
 		if (edge == nil) {
 			switch (attribute) {
 				case NSLayoutAttributeWidth:
@@ -393,7 +398,7 @@ static RACSignal *combineAttributeWithRects(NSLayoutAttribute attribute, RACSign
 					return @(CGRectGetMaxY(rect));
 
 				default:
-					NSAssert(NO, @"Unrecognized CGRectEdge: %lu", (unsigned long)edge);
+					NSAssert(NO, @"Unrecognized CGRectEdge: %@", edge);
 					return nil;
 			}
 		}
