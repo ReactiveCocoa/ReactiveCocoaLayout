@@ -118,13 +118,13 @@ extern BOOL RCLIsInAnimatedSignal(void);
 // Returns a signal of CGFloat values.
 - (RACSignal *)y;
 
-// Maps CGRect values to the position of the specified layout attribute.
+// Maps CGRect values to the value of the specified layout attribute.
 //
-// attribute - The part of the rectangle to retrieve the position of. This
+// attribute - The part of the rectangle to retrieve the value of. This
 //             must not be NSLayoutAttributeBaseline.
 //
 // Returns a signal of CGFloat values.
-- (RACSignal *)positionOfAttribute:(NSLayoutAttribute)attribute;
+- (RACSignal *)valueForAttribute:(NSLayoutAttribute)attribute;
 
 // Maps CGRect values to the position of their left side.
 //

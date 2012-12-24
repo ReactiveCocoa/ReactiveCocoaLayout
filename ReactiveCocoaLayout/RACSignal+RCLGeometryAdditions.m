@@ -358,7 +358,7 @@ static RACSignal *combineAttributeWithRects(NSLayoutAttribute attribute, RACSign
 	}];
 }
 
-- (RACSignal *)positionOfAttribute:(NSLayoutAttribute)attribute {
+- (RACSignal *)valueForAttribute:(NSLayoutAttribute)attribute {
 	return combineAttributeWithRects(attribute, self, ^ id (NSNumber *edge, CGRect rect) {
 		if (edge == nil) {
 			switch (attribute) {
@@ -401,35 +401,35 @@ static RACSignal *combineAttributeWithRects(NSLayoutAttribute attribute, RACSign
 }
 
 - (RACSignal *)left {
-	return [self positionOfAttribute:NSLayoutAttributeLeft];
+	return [self valueForAttribute:NSLayoutAttributeLeft];
 }
 
 - (RACSignal *)right {
-	return [self positionOfAttribute:NSLayoutAttributeRight];
+	return [self valueForAttribute:NSLayoutAttributeRight];
 }
 
 - (RACSignal *)top {
-	return [self positionOfAttribute:NSLayoutAttributeTop];
+	return [self valueForAttribute:NSLayoutAttributeTop];
 }
 
 - (RACSignal *)bottom {
-	return [self positionOfAttribute:NSLayoutAttributeBottom];
+	return [self valueForAttribute:NSLayoutAttributeBottom];
 }
 
 - (RACSignal *)leading {
-	return [self positionOfAttribute:NSLayoutAttributeLeading];
+	return [self valueForAttribute:NSLayoutAttributeLeading];
 }
 
 - (RACSignal *)trailing {
-	return [self positionOfAttribute:NSLayoutAttributeTrailing];
+	return [self valueForAttribute:NSLayoutAttributeTrailing];
 }
 
 - (RACSignal *)centerX {
-	return [self positionOfAttribute:NSLayoutAttributeCenterX];
+	return [self valueForAttribute:NSLayoutAttributeCenterX];
 }
 
 - (RACSignal *)centerY {
-	return [self positionOfAttribute:NSLayoutAttributeCenterY];
+	return [self valueForAttribute:NSLayoutAttributeCenterY];
 }
 
 - (RACSignal *)alignEdge:(RACSignal *)edgeSignal toPosition:(RACSignal *)positionSignal {

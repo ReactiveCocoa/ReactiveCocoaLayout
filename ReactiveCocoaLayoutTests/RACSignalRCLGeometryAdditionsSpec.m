@@ -95,7 +95,7 @@ describe(@"signal of CGRects", ^{
 		expect(signal.center.sequence).to.equal(expected);
 	});
 
-	describe(@"getting attribute positions", ^{
+	describe(@"getting attribute values", ^{
 		__block RACSequence *tops;
 		__block RACSequence *bottoms;
 		__block RACSequence *leadings;
@@ -123,70 +123,70 @@ describe(@"signal of CGRects", ^{
 		});
 
 		it(@"should map to NSLayoutAttributeLeft", ^{
-			RACSignal *result = [signal positionOfAttribute:NSLayoutAttributeLeft];
+			RACSignal *result = [signal valueForAttribute:NSLayoutAttributeLeft];
 			expect(result.sequence).to.equal(minXs);
 
 			expect(signal.left.sequence).to.equal(minXs);
 		});
 
 		it(@"should map to NSLayoutAttributeRight", ^{
-			RACSignal *result = [signal positionOfAttribute:NSLayoutAttributeRight];
+			RACSignal *result = [signal valueForAttribute:NSLayoutAttributeRight];
 			expect(result.sequence).to.equal(maxXs);
 
 			expect(signal.right.sequence).to.equal(maxXs);
 		});
 
 		it(@"should map to NSLayoutAttributeTop", ^{
-			RACSignal *result = [signal positionOfAttribute:NSLayoutAttributeTop];
+			RACSignal *result = [signal valueForAttribute:NSLayoutAttributeTop];
 			expect(result.sequence).to.equal(tops);
 
 			expect(signal.top.sequence).to.equal(tops);
 		});
 
 		it(@"should map to NSLayoutAttributeBottom", ^{
-			RACSignal *result = [signal positionOfAttribute:NSLayoutAttributeBottom];
+			RACSignal *result = [signal valueForAttribute:NSLayoutAttributeBottom];
 			expect(result.sequence).to.equal(bottoms);
 
 			expect(signal.bottom.sequence).to.equal(bottoms);
 		});
 
 		it(@"should map to NSLayoutAttributeWidth", ^{
-			RACSignal *result = [signal positionOfAttribute:NSLayoutAttributeWidth];
+			RACSignal *result = [signal valueForAttribute:NSLayoutAttributeWidth];
 			expect(result.sequence).to.equal(widths);
 
 			expect(signal.width.sequence).to.equal(widths);
 		});
 
 		it(@"should map to NSLayoutAttributeHeight", ^{
-			RACSignal *result = [signal positionOfAttribute:NSLayoutAttributeHeight];
+			RACSignal *result = [signal valueForAttribute:NSLayoutAttributeHeight];
 			expect(result.sequence).to.equal(heights);
 
 			expect(signal.height.sequence).to.equal(heights);
 		});
 
 		it(@"should map to NSLayoutAttributeCenterX", ^{
-			RACSignal *result = [signal positionOfAttribute:NSLayoutAttributeCenterX];
+			RACSignal *result = [signal valueForAttribute:NSLayoutAttributeCenterX];
 			expect(result.sequence).to.equal(centerXs);
 
 			expect(signal.centerX.sequence).to.equal(centerXs);
 		});
 
 		it(@"should map to NSLayoutAttributeCenterY", ^{
-			RACSignal *result = [signal positionOfAttribute:NSLayoutAttributeCenterY];
+			RACSignal *result = [signal valueForAttribute:NSLayoutAttributeCenterY];
 			expect(result.sequence).to.equal(centerYs);
 
 			expect(signal.centerY.sequence).to.equal(centerYs);
 		});
 
 		it(@"should map to NSLayoutAttributeLeading", ^{
-			RACSignal *result = [signal positionOfAttribute:NSLayoutAttributeLeading];
+			RACSignal *result = [signal valueForAttribute:NSLayoutAttributeLeading];
 			expect(result.sequence).to.equal(leadings);
 
 			expect(signal.leading.sequence).to.equal(leadings);
 		});
 
 		it(@"should map to NSLayoutAttributeTrailing", ^{
-			RACSignal *result = [signal positionOfAttribute:NSLayoutAttributeTrailing];
+			RACSignal *result = [signal valueForAttribute:NSLayoutAttributeTrailing];
 			expect(result.sequence).to.equal(trailings);
 
 			expect(signal.trailing.sequence).to.equal(trailings);
