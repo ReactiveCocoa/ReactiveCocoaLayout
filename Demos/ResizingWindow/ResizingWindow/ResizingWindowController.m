@@ -68,8 +68,6 @@
 	self.confirmEmailField = [self textFieldWithString:@""];
 	self.nameField = [self textFieldWithString:@""];
 
-	@unsafeify(self);
-
 	// Work around NSControl.stringValue not being documented as KVO-compliant by
 	// binding to our own KVO-compliant property instead.
 	[self.emailField rac_bind:NSValueBinding toObject:self withKeyPath:@keypath(self.email) nilValue:@""];
@@ -105,20 +103,12 @@
 
 	// Make the height of the confirmation email field depend on whether it's
 	// supposed to be visible.
-	RACSignal *confirmHeightPlusPadding = [[[RACAbleWithStart(self.confirmEmailVisible)
-		// First, map from the visible BOOL to a signal…
-		map:^(NSNumber *visible) {
-			@strongify(self);
-
-			if (visible.boolValue) {
-				return [self.confirmEmailField.rcl_intrinsicContentSizeSignal.height plus:self.verticalPadding];
-			} else {
-				return [RACSignal return:@0];
-			}
-		}]
-		// Then, only pass through values from the latest signal…
-		switch]
-		// And animate all changes.
+	//
+	// First, choose the appropriate signal based on the BOOL…
+	RACSignal *confirmHeightPlusPadding = [[RACSignal if:RACAbleWithStart(self.confirmEmailVisible)
+		then:[self.confirmEmailField.rcl_intrinsicContentSizeSignal.height plus:self.verticalPadding]
+		else:[RACSignal return:@0]]
+		// Then animate all changes.
 		animate];
 
 	// Cut out space for the confirmation email field.
