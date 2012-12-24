@@ -148,18 +148,14 @@ extern BOOL RCLIsInAnimatedSignal(void);
 
 // Maps CGRect values to their leading X position.
 //
-// This signal will automatically re-send when the user's current locale
-// changes.
-//
-// Returns a signal of CGFloat values.
+// Returns a signal of CGFloat values. The signal will automatically re-send
+// when the user's current locale changes.
 - (RACSignal *)leading;
 
 // Maps CGRect values to their trailing X position.
 //
-// This signal will automatically re-send when the user's current locale
-// changes.
-//
-// Returns a signal of CGFloat values.
+// Returns a signal of CGFloat values. The signal will automatically re-send
+// when the user's current locale changes.
 - (RACSignal *)trailing;
 
 // Maps CGRect values to their center X position.
@@ -256,16 +252,17 @@ extern BOOL RCLIsInAnimatedSignal(void);
 // Returns a signal which sends NSNumber minimum values.
 + (RACSignal *)min:(NSArray *)signals;
 
-// Aligns a specific edge of each CGRect to the positions sent from the given
-// signal.
+// Aligns the specified layout attribute of each CGRect to the values sent from
+// the given signal.
 //
-// edgeSignal     - A signal of NSNumber-boxed CGRectEdge values, representing
-//                  the side of the CGRect to align.
-// positionSignal - A signal of CGFloat values, representing the position to
-//                  align the specified edge to.
+// attribute   - The part of the rectangle to align. This must not be
+//               NSLayoutAttributeBaseline (for which
+//               -alignBaseline:toBaseline:ofRect: should be used instead).
+// valueSignal - A signal of CGFloat values, representing the value to match the
+//               specified attribute to.
 //
 // Returns a signal of aligned CGRect values.
-- (RACSignal *)alignEdge:(RACSignal *)edgeSignal toPosition:(RACSignal *)positionSignal;
+- (RACSignal *)alignAttribute:(NSLayoutAttribute)attribute to:(RACSignal *)valueSignal;
 
 // Aligns the center of each CGRect to the CGPoints sent from the given signal.
 //
@@ -275,23 +272,73 @@ extern BOOL RCLIsInAnimatedSignal(void);
 // Returns a signal of aligned CGRect values.
 - (RACSignal *)alignCenter:(RACSignal *)centerSignal;
 
+// Aligns the left side of each CGRect to the values sent from the given signal.
+//
+// positionSignal - A signal of CGFloat values, representing the position to align
+//                  the left side to.
+//
+// Returns a signal of aligned CGRect values.
+- (RACSignal *)alignLeft:(RACSignal *)positionSignal;
+
+// Aligns the right side of each CGRect to the values sent from the given signal.
+//
+// positionSignal - A signal of CGFloat values, representing the position to align
+//                  the right side to.
+//
+// Returns a signal of aligned CGRect values.
+- (RACSignal *)alignRight:(RACSignal *)positionSignal;
+
+// Aligns the top side of each CGRect to the values sent from the given signal.
+//
+// positionSignal - A signal of CGFloat values, representing the position to align
+//                  the top side to.
+//
+// Returns a signal of aligned CGRect values.
+- (RACSignal *)alignTop:(RACSignal *)positionSignal;
+
+// Aligns the bottom side of each CGRect to the values sent from the given signal.
+//
+// positionSignal - A signal of CGFloat values, representing the position to align
+//                  the bottom side to.
+//
+// Returns a signal of aligned CGRect values.
+- (RACSignal *)alignBottom:(RACSignal *)positionSignal;
+
+// Aligns the leading side of each CGRect to the values sent from the given signal.
+//
+// positionSignal - A signal of CGFloat values, representing the position to align
+//                  the leading side to.
+//
+// Returns a signal of aligned CGRect values. The signal will automatically
+// re-send when the user's current locale changes.
+- (RACSignal *)alignLeading:(RACSignal *)positionSignal;
+
+// Aligns the trailing side of each CGRect to the values sent from the given signal.
+//
+// positionSignal - A signal of CGFloat values, representing the position to align
+//                  the trailing side to.
+//
+// Returns a signal of aligned CGRect values. The signal will automatically
+// re-send when the user's current locale changes.
+- (RACSignal *)alignTrailing:(RACSignal *)positionSignal;
+
 // Aligns the center X position of each CGRect to the values sent from the given
 // signal.
 //
-// centerXSignal - A signal of CGFloat values, representing the position to align
-//                 the horizontal center to.
+// positionSignal - A signal of CGFloat values, representing the position to align
+//                  the horizontal center to.
 //
 // Returns a signal of aligned CGRect values.
-- (RACSignal *)alignCenterX:(RACSignal *)centerXSignal;
+- (RACSignal *)alignCenterX:(RACSignal *)positionSignal;
 
 // Aligns the center Y position of each CGRect to the values sent from the given
 // signal.
 //
-// centerYSignal - A signal of CGFloat values, representing the position to align
-//                 the vertical center to.
+// positionSignal - A signal of CGFloat values, representing the position to align
+//                  the vertical center to.
 //
 // Returns a signal of aligned CGRect values.
-- (RACSignal *)alignCenterY:(RACSignal *)centerYSignal;
+- (RACSignal *)alignCenterY:(RACSignal *)positionSignal;
 
 // Aligns the baseline of each CGRect in the receiver to those of another signal.
 //

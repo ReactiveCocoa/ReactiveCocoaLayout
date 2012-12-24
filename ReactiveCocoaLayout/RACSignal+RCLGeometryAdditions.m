@@ -437,45 +437,64 @@ static RACSignal *combineAttributeWithRects(NSLayoutAttribute attribute, NSArray
 	return [self valueForAttribute:NSLayoutAttributeCenterY];
 }
 
-- (RACSignal *)alignEdge:(RACSignal *)edgeSignal toPosition:(RACSignal *)positionSignal {
-	NSParameterAssert(edgeSignal != nil);
-	NSParameterAssert(positionSignal != nil);
+- (RACSignal *)alignAttribute:(NSLayoutAttribute)attribute to:(RACSignal *)valueSignal {
+	NSParameterAssert(valueSignal != nil);
 
-	RACReplaySubject *edgeSubject = [RACReplaySubject replaySubjectWithCapacity:1];
-	[[edgeSignal multicast:edgeSubject] connect];
+	return combineAttributeWithRects(attribute, @[ valueSignal, self ], ^ id (NSNumber *edge, NSNumber *num, NSValue *value) {
+		NSAssert([num isKindOfClass:NSNumber.class], @"Value sent by %@ is not a number: %@", valueSignal, num);
+		NSAssert([value isKindOfClass:NSValue.class] && value.med_geometryStructType == MEDGeometryStructTypeRect, @"Value sent by %@ is not a CGRect: %@", self, value);
 
-	// Terminates edgeSubject when the receiver completes.
-	RACSignal *selfTerminatingEdge = [self doCompleted:^{
-		[edgeSubject sendCompleted];
-	}];
-
-	return [RACSignal combineLatest:@[ edgeSubject, positionSignal, selfTerminatingEdge ] reduce:^ id (NSNumber *edge, NSNumber *position, NSValue *value) {
+		CGFloat n = num.doubleValue;
 		CGRect rect = value.med_rectValue;
 
-		switch (edge.unsignedIntegerValue) {
-			case CGRectMinXEdge:
-				rect.origin.x = position.doubleValue;
-				break;
+		if (edge == nil) {
+			switch (attribute) {
+				case NSLayoutAttributeWidth:
+					rect.size.width = n;
+					break;
 
-			case CGRectMinYEdge:
-				rect.origin.y = position.doubleValue;
-				break;
+				case NSLayoutAttributeHeight:
+					rect.size.height = n;
+					break;
 
-			case CGRectMaxXEdge:
-				rect.origin.x = position.doubleValue - CGRectGetWidth(rect);
-				break;
+				case NSLayoutAttributeCenterX:
+					rect.origin.x = n - CGRectGetWidth(rect) / 2;
+					break;
 
-			case CGRectMaxYEdge:
-				rect.origin.y = position.doubleValue - CGRectGetHeight(rect);
-				break;
+				case NSLayoutAttributeCenterY:
+					rect.origin.y = n - CGRectGetHeight(rect) / 2;
+					break;
 
-			default:
-				NSAssert(NO, @"Unrecognized edge: %@", edge);
-				return nil;
+				default:
+					NSAssert(NO, @"NSLayoutAttribute should have had a CGRectEdge: %li", (long)attribute);
+					return nil;
+			}
+		} else {
+			switch (edge.unsignedIntegerValue) {
+				case CGRectMinXEdge:
+					rect.origin.x = n;
+					break;
+
+				case CGRectMinYEdge:
+					rect.origin.y = n;
+					break;
+
+				case CGRectMaxXEdge:
+					rect.origin.x = n - CGRectGetWidth(rect);
+					break;
+
+				case CGRectMaxYEdge:
+					rect.origin.y = n - CGRectGetHeight(rect);
+					break;
+
+				default:
+					NSAssert(NO, @"Unrecognized CGRectEdge: %@", edge);
+					return nil;
+			}
 		}
 
-		return MEDBox(rect);
-	}];
+		return MEDBox(CGRectStandardize(rect));
+	});
 }
 
 - (RACSignal *)alignCenter:(RACSignal *)centerSignal {
@@ -490,22 +509,36 @@ static RACSignal *combineAttributeWithRects(NSLayoutAttribute attribute, NSArray
 	}];
 }
 
-- (RACSignal *)alignCenterX:(RACSignal *)centerXSignal {
-	NSParameterAssert(centerXSignal != nil);
-
-	return [RACSignal combineLatest:@[ centerXSignal, self ] reduce:^(NSNumber *position, NSValue *value) {
-		CGRect rect = value.med_rectValue;
-		return MEDBox(CGRectMake(position.doubleValue - CGRectGetWidth(rect) / 2, CGRectGetMinY(rect), CGRectGetWidth(rect), CGRectGetHeight(rect)));
-	}];
+- (RACSignal *)alignLeft:(RACSignal *)positionSignal {
+	return [self alignAttribute:NSLayoutAttributeLeft to:positionSignal];
 }
 
-- (RACSignal *)alignCenterY:(RACSignal *)centerYSignal {
-	NSParameterAssert(centerYSignal != nil);
+- (RACSignal *)alignRight:(RACSignal *)positionSignal {
+	return [self alignAttribute:NSLayoutAttributeRight to:positionSignal];
+}
 
-	return [RACSignal combineLatest:@[ centerYSignal, self ] reduce:^(NSNumber *position, NSValue *value) {
-		CGRect rect = value.med_rectValue;
-		return MEDBox(CGRectMake(CGRectGetMinX(rect), position.doubleValue - CGRectGetHeight(rect) / 2, CGRectGetWidth(rect), CGRectGetHeight(rect)));
-	}];
+- (RACSignal *)alignTop:(RACSignal *)positionSignal {
+	return [self alignAttribute:NSLayoutAttributeTop to:positionSignal];
+}
+
+- (RACSignal *)alignBottom:(RACSignal *)positionSignal {
+	return [self alignAttribute:NSLayoutAttributeBottom to:positionSignal];
+}
+
+- (RACSignal *)alignLeading:(RACSignal *)positionSignal {
+	return [self alignAttribute:NSLayoutAttributeLeading to:positionSignal];
+}
+
+- (RACSignal *)alignTrailing:(RACSignal *)positionSignal {
+	return [self alignAttribute:NSLayoutAttributeTrailing to:positionSignal];
+}
+
+- (RACSignal *)alignCenterX:(RACSignal *)positionSignal {
+	return [self alignAttribute:NSLayoutAttributeCenterX to:positionSignal];
+}
+
+- (RACSignal *)alignCenterY:(RACSignal *)positionSignal {
+	return [self alignAttribute:NSLayoutAttributeCenterY to:positionSignal];
 }
 
 - (RACSignal *)alignBaseline:(RACSignal *)baselineSignal toBaseline:(RACSignal *)referenceBaselineSignal ofRect:(RACSignal *)referenceRectSignal {
