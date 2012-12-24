@@ -7,6 +7,7 @@
 //
 
 #import <ReactiveCocoa/ReactiveCocoa.h>
+#import "View+RCLAutoLayoutAdditions.h"
 
 // Defines the curve (timing function) for an animation.
 //
@@ -117,43 +118,33 @@ extern BOOL RCLIsInAnimatedSignal(void);
 // Returns a signal of CGFloat values.
 - (RACSignal *)y;
 
-// Maps CGRect values to their minimum X position.
+// Maps CGRect values to the position of the specified layout attribute.
+//
+// attribute - The part of the rectangle to retrieve the position of. This
+//             must not be NSLayoutAttributeBaseline.
 //
 // Returns a signal of CGFloat values.
-- (RACSignal *)minX;
+- (RACSignal *)positionOfAttribute:(NSLayoutAttribute)attribute;
 
-// Maps CGRect values to their minimum Y position.
+// Maps CGRect values to the position of their left side.
 //
 // Returns a signal of CGFloat values.
-- (RACSignal *)minY;
+- (RACSignal *)left;
 
-// Maps CGRect values to their center X position.
+// Maps CGRect values to the position of their right side.
 //
 // Returns a signal of CGFloat values.
-- (RACSignal *)centerX;
+- (RACSignal *)right;
 
-// Maps CGRect values to their center Y position.
+// Maps CGRect values to the position of their top side.
 //
 // Returns a signal of CGFloat values.
-- (RACSignal *)centerY;
+- (RACSignal *)top;
 
-// Maps CGRect values to their maximum X position.
+// Maps CGRect values to the position of their bottom side.
 //
 // Returns a signal of CGFloat values.
-- (RACSignal *)maxX;
-
-// Maps CGRect values to their maximum Y position.
-//
-// Returns a signal of CGFloat values.
-- (RACSignal *)maxY;
-
-// Maps CGRect values to the position of the edge sent from the given signal.
-//
-// edgeSignal - A signal of NSNumber-boxed CGRectEdge values, representing the
-//              side to get the position of.
-//
-// Returns a signal of CGFloat values.
-- (RACSignal *)positionOfEdge:(RACSignal *)edgeSignal;
+- (RACSignal *)bottom;
 
 // Maps CGRect values to their leading X position.
 //
@@ -170,6 +161,16 @@ extern BOOL RCLIsInAnimatedSignal(void);
 //
 // Returns a signal of CGFloat values.
 - (RACSignal *)trailing;
+
+// Maps CGRect values to their center X position.
+//
+// Returns a signal of CGFloat values.
+- (RACSignal *)centerX;
+
+// Maps CGRect values to their center Y position.
+//
+// Returns a signal of CGFloat values.
+- (RACSignal *)centerY;
 
 // Insets each CGRect by the number of points sent from the given width and
 // height signals.

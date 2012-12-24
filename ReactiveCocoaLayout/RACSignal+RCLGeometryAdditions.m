@@ -277,74 +277,110 @@ static RACSignal *combineSignalsWithOperator(RACSignal *a, RACSignal *b, CGFloat
 	}];
 }
 
-- (RACSignal *)minX {
-	return [self positionOfEdge:[RACSignal return:@(CGRectMinXEdge)]];
-}
+- (RACSignal *)positionOfAttribute:(NSLayoutAttribute)attribute {
+	NSParameterAssert(attribute != NSLayoutAttributeBaseline);
+	NSParameterAssert(attribute != NSLayoutAttributeNotAnAttribute);
 
-- (RACSignal *)minY {
-	return [self positionOfEdge:[RACSignal return:@(CGRectMinYEdge)]];
-}
+	RACSignal *writingEdgeSignal = [RACSignal return:nil];
+	RACSignal *rectSignal = self;
 
-- (RACSignal *)centerX {
-	return [self map:^(NSValue *value) {
-		return @(CGRectGetMidX(value.med_rectValue));
-	}];
-}
+	if (attribute == NSLayoutAttributeLeading || attribute == NSLayoutAttributeTrailing) {
+		RACReplaySubject *edgeSubject = [RACReplaySubject replaySubjectWithCapacity:1];
 
-- (RACSignal *)centerY {
-	return [self map:^(NSValue *value) {
-		return @(CGRectGetMidY(value.med_rectValue));
-	}];
-}
+		RACSignal *baseSignal = (attribute == NSLayoutAttributeLeading ? RACSignal.leadingEdgeSignal : RACSignal.trailingEdgeSignal);
+		writingEdgeSignal = [[baseSignal multicast:edgeSubject] autoconnect];
 
-- (RACSignal *)maxX {
-	return [self positionOfEdge:[RACSignal return:@(CGRectMaxXEdge)]];
-}
+		// Terminates edgeSubject when the receiver completes.
+		rectSignal = [self doCompleted:^{
+			[edgeSubject sendCompleted];
+		}];
+	}
 
-- (RACSignal *)maxY {
-	return [self positionOfEdge:[RACSignal return:@(CGRectMaxYEdge)]];
-}
-
-- (RACSignal *)positionOfEdge:(RACSignal *)edgeSignal {
-	NSParameterAssert(edgeSignal != nil);
-
-	RACReplaySubject *edgeSubject = [RACReplaySubject replaySubjectWithCapacity:1];
-	[[edgeSignal multicast:edgeSubject] connect];
-
-	// Terminates edgeSubject when the receiver completes.
-	RACSignal *selfTerminatingEdge = [self doCompleted:^{
-		[edgeSubject sendCompleted];
-	}];
-
-	return [RACSignal combineLatest:@[ edgeSubject, selfTerminatingEdge ] reduce:^ id (NSNumber *edge, NSValue *value) {
+	return [RACSignal combineLatest:@[ writingEdgeSignal, rectSignal ] reduce:^ id (NSNumber *edge, NSValue *value) {
 		CGRect rect = value.med_rectValue;
 
-		switch (edge.unsignedIntegerValue) {
-			case CGRectMinXEdge:
+		// TODO: Consider modified view coordinate systems?
+		switch (attribute) {
+			case NSLayoutAttributeLeft:
 				return @(CGRectGetMinX(rect));
 
-			case CGRectMinYEdge:
-				return @(CGRectGetMinY(rect));
-
-			case CGRectMaxXEdge:
+			case NSLayoutAttributeRight:
 				return @(CGRectGetMaxX(rect));
 
-			case CGRectMaxYEdge:
+		#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
+			case NSLayoutAttributeTop:
+				return @(CGRectGetMinY(rect));
+
+			case NSLayoutAttributeBottom:
+				return @(CGRectGetMaxY(rect));
+		#elif TARGET_OS_MAC
+			case NSLayoutAttributeTop:
 				return @(CGRectGetMaxY(rect));
 
+			case NSLayoutAttributeBottom:
+				return @(CGRectGetMinY(rect));
+		#endif
+
+			// The difference between these two attributes was already handled
+			// when we set up a signal for the edge they refer to.
+			case NSLayoutAttributeLeading:
+			case NSLayoutAttributeTrailing:
+				NSAssert(edge != nil, @"CGRectEdge should not be nil");
+				if (edge.unsignedIntegerValue == CGRectMinXEdge) {
+					return @(CGRectGetMinX(rect));
+				} else {
+					return @(CGRectGetMaxX(rect));
+				}
+
+			case NSLayoutAttributeWidth:
+				return @(CGRectGetWidth(rect));
+
+			case NSLayoutAttributeHeight:
+				return @(CGRectGetHeight(rect));
+
+			case NSLayoutAttributeCenterX:
+				return @(CGRectGetMidX(rect));
+
+			case NSLayoutAttributeCenterY:
+				return @(CGRectGetMidY(rect));
+
 			default:
-				NSAssert(NO, @"Unrecognized edge: %@", edge);
+				NSAssert(NO, @"Unrecognized NSLayoutAttribute: %li", (long)attribute);
 				return nil;
 		}
 	}];
 }
 
+- (RACSignal *)left {
+	return [self positionOfAttribute:NSLayoutAttributeLeft];
+}
+
+- (RACSignal *)right {
+	return [self positionOfAttribute:NSLayoutAttributeRight];
+}
+
+- (RACSignal *)top {
+	return [self positionOfAttribute:NSLayoutAttributeTop];
+}
+
+- (RACSignal *)bottom {
+	return [self positionOfAttribute:NSLayoutAttributeBottom];
+}
+
 - (RACSignal *)leading {
-	return [self positionOfEdge:RACSignal.leadingEdgeSignal];
+	return [self positionOfAttribute:NSLayoutAttributeLeading];
 }
 
 - (RACSignal *)trailing {
-	return [self positionOfEdge:RACSignal.trailingEdgeSignal];
+	return [self positionOfAttribute:NSLayoutAttributeTrailing];
+}
+
+- (RACSignal *)centerX {
+	return [self positionOfAttribute:NSLayoutAttributeCenterX];
+}
+
+- (RACSignal *)centerY {
+	return [self positionOfAttribute:NSLayoutAttributeCenterY];
 }
 
 - (RACSignal *)alignEdge:(RACSignal *)edgeSignal toPosition:(RACSignal *)positionSignal {

@@ -95,56 +95,102 @@ describe(@"signal of CGRects", ^{
 		expect(signal.center.sequence).to.equal(expected);
 	});
 
-	it(@"should map to widths", ^{
-		expect(signal.width.sequence).to.equal(widths);
-	});
+	describe(@"getting attribute positions", ^{
+		__block RACSequence *tops;
+		__block RACSequence *bottoms;
+		__block RACSequence *leadings;
+		__block RACSequence *trailings;
 
-	it(@"should map to heights", ^{
-		expect(signal.height.sequence).to.equal(heights);
-	});
+		beforeEach(^{
+			NSNumber *leadingEdge = [RACSignal.leadingEdgeSignal first];
+			expect(leadingEdge).notTo.beNil();
 
-	it(@"should map to positions of a specific edge", ^{
-		RACSignal *minX = [signal positionOfEdge:[RACSignal return:@(CGRectMinXEdge)]];
-		expect(minX.sequence).to.equal(minXs);
+			if (leadingEdge.unsignedIntegerValue == CGRectMinXEdge) {
+				leadings = minXs;
+				trailings = maxXs;
+			} else {
+				leadings = maxXs;
+				trailings = minXs;
+			}
 
-		RACSignal *minY = [signal positionOfEdge:[RACSignal return:@(CGRectMinYEdge)]];
-		expect(minY.sequence).to.equal(minYs);
-	});
+			#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
+			tops = minYs;
+			bottoms = maxYs;
+			#elif TARGET_OS_MAC
+			tops = maxYs;
+			bottoms = minYs;
+			#endif
+		});
 
-	it(@"should map to minX values", ^{
-		expect(signal.minX.sequence).to.equal(minXs);
-	});
+		it(@"should map to NSLayoutAttributeLeft", ^{
+			RACSignal *result = [signal positionOfAttribute:NSLayoutAttributeLeft];
+			expect(result.sequence).to.equal(minXs);
 
-	it(@"should map to minY values", ^{
-		expect(signal.minY.sequence).to.equal(minYs);
-	});
+			expect(signal.left.sequence).to.equal(minXs);
+		});
 
-	it(@"should map to centerX values", ^{
-		expect(signal.centerX.sequence).to.equal(centerXs);
-	});
+		it(@"should map to NSLayoutAttributeRight", ^{
+			RACSignal *result = [signal positionOfAttribute:NSLayoutAttributeRight];
+			expect(result.sequence).to.equal(maxXs);
 
-	it(@"should map to centerY values", ^{
-		expect(signal.centerY.sequence).to.equal(centerYs);
-	});
+			expect(signal.right.sequence).to.equal(maxXs);
+		});
 
-	it(@"should map to maxX values", ^{
-		expect(signal.maxX.sequence).to.equal(maxXs);
-	});
+		it(@"should map to NSLayoutAttributeTop", ^{
+			RACSignal *result = [signal positionOfAttribute:NSLayoutAttributeTop];
+			expect(result.sequence).to.equal(tops);
 
-	it(@"should map to maxY values", ^{
-		expect(signal.maxY.sequence).to.equal(maxYs);
-	});
+			expect(signal.top.sequence).to.equal(tops);
+		});
 
-	it(@"should map to leading and trailing", ^{
-		RACSequence *leading = signal.leading.sequence;
-		RACSequence *trailing = signal.trailing.sequence;
+		it(@"should map to NSLayoutAttributeBottom", ^{
+			RACSignal *result = [signal positionOfAttribute:NSLayoutAttributeBottom];
+			expect(result.sequence).to.equal(bottoms);
 
-		if ([leading isEqual:minXs]) {
-			expect(trailing).to.equal(maxXs);
-		} else {
-			expect(leading).to.equal(maxXs);
-			expect(trailing).to.equal(minXs);
-		}
+			expect(signal.bottom.sequence).to.equal(bottoms);
+		});
+
+		it(@"should map to NSLayoutAttributeWidth", ^{
+			RACSignal *result = [signal positionOfAttribute:NSLayoutAttributeWidth];
+			expect(result.sequence).to.equal(widths);
+
+			expect(signal.width.sequence).to.equal(widths);
+		});
+
+		it(@"should map to NSLayoutAttributeHeight", ^{
+			RACSignal *result = [signal positionOfAttribute:NSLayoutAttributeHeight];
+			expect(result.sequence).to.equal(heights);
+
+			expect(signal.height.sequence).to.equal(heights);
+		});
+
+		it(@"should map to NSLayoutAttributeCenterX", ^{
+			RACSignal *result = [signal positionOfAttribute:NSLayoutAttributeCenterX];
+			expect(result.sequence).to.equal(centerXs);
+
+			expect(signal.centerX.sequence).to.equal(centerXs);
+		});
+
+		it(@"should map to NSLayoutAttributeCenterY", ^{
+			RACSignal *result = [signal positionOfAttribute:NSLayoutAttributeCenterY];
+			expect(result.sequence).to.equal(centerYs);
+
+			expect(signal.centerY.sequence).to.equal(centerYs);
+		});
+
+		it(@"should map to NSLayoutAttributeLeading", ^{
+			RACSignal *result = [signal positionOfAttribute:NSLayoutAttributeLeading];
+			expect(result.sequence).to.equal(leadings);
+
+			expect(signal.leading.sequence).to.equal(leadings);
+		});
+
+		it(@"should map to NSLayoutAttributeTrailing", ^{
+			RACSignal *result = [signal positionOfAttribute:NSLayoutAttributeTrailing];
+			expect(result.sequence).to.equal(trailings);
+
+			expect(signal.trailing.sequence).to.equal(trailings);
+		});
 	});
 
 	it(@"should inset", ^{
