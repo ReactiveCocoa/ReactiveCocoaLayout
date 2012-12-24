@@ -164,6 +164,87 @@ static RACSignal *combineSignalsWithOperator(RACSignal *a, RACSignal *b, CGFloat
 	}];
 }
 
+// Combines the CGRectEdge corresponding to a layout attribute, and the CGRects
+// from a given signal.
+//
+// attribute   - The layout attribute to retrieve the edge for. If the layout
+//				 attribute does not describe one of the edges of a rectangle, no
+//				 `edge` will be provided to the `reduceBlock`. Must not be
+//				 NSLayoutAttributeBaseline.
+// rectSignal  - A signal of CGRects.
+// reduceBlock - A block which combines the NSNumber-boxed CGRectEdge (if
+//				 `attribute` corresponds to one), or `nil` (if it does not) and
+//				 a CGRect.
+//
+// Returns a signal of reduced values.
+static RACSignal *combineAttributeWithRects(NSLayoutAttribute attribute, RACSignal *rectSignal, id (^reduceBlock)(NSNumber *edge, CGRect rect)) {
+	NSCParameterAssert(attribute != NSLayoutAttributeBaseline);
+	NSCParameterAssert(attribute != NSLayoutAttributeNotAnAttribute);
+
+	RACSignal *edgeSignal = nil;
+	switch (attribute) {
+		// TODO: Consider modified view coordinate systems?
+		case NSLayoutAttributeLeft:
+			edgeSignal = [RACSignal return:@(CGRectMinXEdge)];
+			break;
+
+		case NSLayoutAttributeRight:
+			edgeSignal = [RACSignal return:@(CGRectMaxXEdge)];
+			break;
+
+	#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
+		case NSLayoutAttributeTop:
+			edgeSignal = [RACSignal return:@(CGRectMinYEdge)];
+			break;
+
+		case NSLayoutAttributeBottom:
+			edgeSignal = [RACSignal return:@(CGRectMaxYEdge)];
+			break;
+	#elif TARGET_OS_MAC
+		case NSLayoutAttributeTop:
+			edgeSignal = [RACSignal return:@(CGRectMaxYEdge)];
+			break;
+
+		case NSLayoutAttributeBottom:
+			edgeSignal = [RACSignal return:@(CGRectMinYEdge)];
+			break;
+	#endif
+
+		case NSLayoutAttributeLeading:
+		case NSLayoutAttributeTrailing: {
+			RACReplaySubject *edgeSubject = [RACReplaySubject replaySubjectWithCapacity:1];
+
+			RACSignal *baseSignal = (attribute == NSLayoutAttributeLeading ? RACSignal.leadingEdgeSignal : RACSignal.trailingEdgeSignal);
+			edgeSignal = [[baseSignal multicast:edgeSubject] autoconnect];
+
+			// Terminate edgeSubject when rectSignal completes.
+			rectSignal = [rectSignal doCompleted:^{
+				[edgeSubject sendCompleted];
+			}];
+
+			break;
+		}
+
+		case NSLayoutAttributeWidth:
+		case NSLayoutAttributeHeight:
+		case NSLayoutAttributeCenterX:
+		case NSLayoutAttributeCenterY:
+			// No sensical edge for these attributes.
+			edgeSignal = [RACSignal return:nil];
+			break;
+
+		default:
+			NSCAssert(NO, @"Unrecognized NSLayoutAttribute: %li", (long)attribute);
+			return nil;
+	}
+
+	return [RACSignal combineLatest:@[ edgeSignal, rectSignal ] reduce:^(NSNumber *edge, NSValue *value) {
+		NSCAssert([value isKindOfClass:NSValue.class] && value.med_geometryStructType == MEDGeometryStructTypeRect, @"Value sent by %@ is not a CGRect: %@", rectSignal, value);
+
+		return reduceBlock(edge, value.med_rectValue);
+	}];
+}
+
 @implementation RACSignal (RCLGeometryAdditions)
 
 + (RACSignal *)rectsWithX:(RACSignal *)xSignal Y:(RACSignal *)ySignal width:(RACSignal *)widthSignal height:(RACSignal *)heightSignal {
@@ -278,77 +359,45 @@ static RACSignal *combineSignalsWithOperator(RACSignal *a, RACSignal *b, CGFloat
 }
 
 - (RACSignal *)positionOfAttribute:(NSLayoutAttribute)attribute {
-	NSParameterAssert(attribute != NSLayoutAttributeBaseline);
-	NSParameterAssert(attribute != NSLayoutAttributeNotAnAttribute);
+	return combineAttributeWithRects(attribute, self, ^ id (NSNumber *edge, CGRect rect) {
+		if (edge == nil) {
+			switch (attribute) {
+				case NSLayoutAttributeWidth:
+					return @(CGRectGetWidth(rect));
 
-	RACSignal *writingEdgeSignal = [RACSignal return:nil];
-	RACSignal *rectSignal = self;
+				case NSLayoutAttributeHeight:
+					return @(CGRectGetHeight(rect));
 
-	if (attribute == NSLayoutAttributeLeading || attribute == NSLayoutAttributeTrailing) {
-		RACReplaySubject *edgeSubject = [RACReplaySubject replaySubjectWithCapacity:1];
+				case NSLayoutAttributeCenterX:
+					return @(CGRectGetMidX(rect));
 
-		RACSignal *baseSignal = (attribute == NSLayoutAttributeLeading ? RACSignal.leadingEdgeSignal : RACSignal.trailingEdgeSignal);
-		writingEdgeSignal = [[baseSignal multicast:edgeSubject] autoconnect];
+				case NSLayoutAttributeCenterY:
+					return @(CGRectGetMidY(rect));
 
-		// Terminates edgeSubject when the receiver completes.
-		rectSignal = [self doCompleted:^{
-			[edgeSubject sendCompleted];
-		}];
-	}
-
-	return [RACSignal combineLatest:@[ writingEdgeSignal, rectSignal ] reduce:^ id (NSNumber *edge, NSValue *value) {
-		CGRect rect = value.med_rectValue;
-
-		// TODO: Consider modified view coordinate systems?
-		switch (attribute) {
-			case NSLayoutAttributeLeft:
-				return @(CGRectGetMinX(rect));
-
-			case NSLayoutAttributeRight:
-				return @(CGRectGetMaxX(rect));
-
-		#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
-			case NSLayoutAttributeTop:
-				return @(CGRectGetMinY(rect));
-
-			case NSLayoutAttributeBottom:
-				return @(CGRectGetMaxY(rect));
-		#elif TARGET_OS_MAC
-			case NSLayoutAttributeTop:
-				return @(CGRectGetMaxY(rect));
-
-			case NSLayoutAttributeBottom:
-				return @(CGRectGetMinY(rect));
-		#endif
-
-			// The difference between these two attributes was already handled
-			// when we set up a signal for the edge they refer to.
-			case NSLayoutAttributeLeading:
-			case NSLayoutAttributeTrailing:
-				NSAssert(edge != nil, @"CGRectEdge should not be nil");
-				if (edge.unsignedIntegerValue == CGRectMinXEdge) {
+				default:
+					NSAssert(NO, @"NSLayoutAttribute should have had a CGRectEdge: %li", (long)attribute);
+					return nil;
+			}
+		} else {
+			switch (edge.unsignedIntegerValue) {
+				case CGRectMinXEdge:
 					return @(CGRectGetMinX(rect));
-				} else {
+
+				case CGRectMaxXEdge:
 					return @(CGRectGetMaxX(rect));
-				}
 
-			case NSLayoutAttributeWidth:
-				return @(CGRectGetWidth(rect));
+				case CGRectMinYEdge:
+					return @(CGRectGetMinY(rect));
 
-			case NSLayoutAttributeHeight:
-				return @(CGRectGetHeight(rect));
+				case CGRectMaxYEdge:
+					return @(CGRectGetMaxY(rect));
 
-			case NSLayoutAttributeCenterX:
-				return @(CGRectGetMidX(rect));
-
-			case NSLayoutAttributeCenterY:
-				return @(CGRectGetMidY(rect));
-
-			default:
-				NSAssert(NO, @"Unrecognized NSLayoutAttribute: %li", (long)attribute);
-				return nil;
+				default:
+					NSAssert(NO, @"Unrecognized CGRectEdge: %lu", (unsigned long)edge);
+					return nil;
+			}
 		}
-	}];
+	});
 }
 
 - (RACSignal *)left {
