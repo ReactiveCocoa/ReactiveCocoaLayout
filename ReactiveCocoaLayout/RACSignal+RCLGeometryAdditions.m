@@ -608,12 +608,46 @@ static RACSignal *combineAttributeWithRects(NSLayoutAttribute attribute, NSArray
 	}];
 }
 
-- (RACSignal *)growEdge:(CGRectEdge)edge byAmount:(RACSignal *)amountSignal {
+- (RACSignal *)extendAttribute:(NSLayoutAttribute)attribute byAmount:(RACSignal *)amountSignal {
 	NSParameterAssert(amountSignal != nil);
 
-	return [RACSignal combineLatest:@[ amountSignal, self ] reduce:^(NSNumber *amount, NSValue *rect) {
-		return MEDBox(CGRectGrow(rect.med_rectValue, amount.doubleValue, edge));
-	}];
+	return combineAttributeWithRects(attribute, @[ amountSignal, self ], ^ id (NSNumber *edge, NSNumber *amount, NSValue *value) {
+		NSAssert([amount isKindOfClass:NSNumber.class], @"Value sent by %@ is not a number: %@", amountSignal, amount);
+		NSAssert([value isKindOfClass:NSValue.class] && value.med_geometryStructType == MEDGeometryStructTypeRect, @"Value sent by %@ is not a CGRect: %@", self, value);
+
+		CGFloat n = amount.doubleValue;
+		CGRect rect = value.med_rectValue;
+
+		if (edge == nil) {
+			switch (attribute) {
+				case NSLayoutAttributeWidth:
+					rect.size.width += n;
+					rect.origin.x -= n / 2;
+					break;
+
+				case NSLayoutAttributeHeight:
+					rect.size.height += n;
+					rect.origin.y -= n / 2;
+					break;
+
+				case NSLayoutAttributeCenterX:
+					rect.origin.x += n;
+					break;
+
+				case NSLayoutAttributeCenterY:
+					rect.origin.y += n;
+					break;
+
+				default:
+					NSAssert(NO, @"NSLayoutAttribute should have had a CGRectEdge: %li", (long)attribute);
+					return nil;
+			}
+		} else {
+			rect = CGRectGrow(rect, n, (CGRectEdge)edge.unsignedIntegerValue);
+		}
+
+		return MEDBox(CGRectStandardize(rect));
+	});
 }
 
 - (RACTuple *)divideWithAmount:(RACSignal *)sliceAmountSignal fromEdge:(CGRectEdge)edge {

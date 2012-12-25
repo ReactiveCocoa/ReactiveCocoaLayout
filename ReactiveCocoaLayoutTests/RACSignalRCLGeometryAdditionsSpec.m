@@ -229,15 +229,124 @@ describe(@"signal of CGRects", ^{
 		expect(result.sequence).to.equal(expectedRects.rac_sequence);
 	});
 
-	it(@"should grow", ^{
-		RACSignal *result = [signal growEdge:CGRectMaxXEdge byAmount:[RACSignal return:@5]];
-		NSArray *expectedRects = @[
-			MEDBox(CGRectMake(10, 10, 25, 20)),
-			MEDBox(CGRectMake(10, 20, 35, 40)),
-			MEDBox(CGRectMake(25, 15, 50, 35)),
-		];
+	describe(@"extending attributes", ^{
+		__block RACSignal *value;
+		
+		__block RACSequence *extendedMinX;
+		__block RACSequence *extendedMaxX;
+		__block RACSequence *extendedMinY;
+		__block RACSequence *extendedMaxY;
 
-		expect(result.sequence).to.equal(expectedRects.rac_sequence);
+		__block RACSequence *extendedLeading;
+		__block RACSequence *extendedTrailing;
+		
+		beforeEach(^{
+			value = [RACSignal return:@-5];
+
+			extendedMinX = @[
+				MEDBox(CGRectMake(15, 10, 15, 20)),
+				MEDBox(CGRectMake(15, 20, 25, 40)),
+				MEDBox(CGRectMake(30, 15, 40, 35)),
+			].rac_sequence;
+
+			extendedMaxX = @[
+				MEDBox(CGRectMake(10, 10, 15, 20)),
+				MEDBox(CGRectMake(10, 20, 25, 40)),
+				MEDBox(CGRectMake(25, 15, 40, 35)),
+			].rac_sequence;
+
+			extendedMinY = @[
+				MEDBox(CGRectMake(10, 15, 20, 15)),
+				MEDBox(CGRectMake(10, 25, 30, 35)),
+				MEDBox(CGRectMake(25, 20, 45, 30)),
+			].rac_sequence;
+
+			extendedMaxY = @[
+				MEDBox(CGRectMake(10, 10, 20, 15)),
+				MEDBox(CGRectMake(10, 20, 30, 35)),
+				MEDBox(CGRectMake(25, 15, 45, 30)),
+			].rac_sequence;
+
+			if (leadingEdge == CGRectMinXEdge) {
+				extendedLeading = extendedMinX;
+				extendedTrailing = extendedMaxX;
+			} else {
+				extendedLeading = extendedMaxX;
+				extendedTrailing = extendedMinX;
+			}
+		});
+
+		it(@"should extend left side", ^{
+			expect([signal extendAttribute:NSLayoutAttributeLeft byAmount:value].sequence).to.equal(extendedMinX);
+		});
+
+		it(@"should extend right side", ^{
+			expect([signal extendAttribute:NSLayoutAttributeRight byAmount:value].sequence).to.equal(extendedMaxX);
+		});
+
+		it(@"should extend leading side", ^{
+			expect([signal extendAttribute:NSLayoutAttributeLeading byAmount:value].sequence).to.equal(extendedLeading);
+		});
+
+		it(@"should extend trailing side", ^{
+			expect([signal extendAttribute:NSLayoutAttributeTrailing byAmount:value].sequence).to.equal(extendedTrailing);
+		});
+
+		it(@"should extend top", ^{
+			#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
+				expect([signal extendAttribute:NSLayoutAttributeTop byAmount:value].sequence).to.equal(extendedMinY);
+			#elif TARGET_OS_MAC
+				expect([signal extendAttribute:NSLayoutAttributeTop byAmount:value].sequence).to.equal(extendedMaxY);
+			#endif
+		});
+
+		it(@"should extend bottom", ^{
+			#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
+				expect([signal extendAttribute:NSLayoutAttributeBottom byAmount:value].sequence).to.equal(extendedMaxY);
+			#elif TARGET_OS_MAC
+				expect([signal extendAttribute:NSLayoutAttributeBottom byAmount:value].sequence).to.equal(extendedMinY);
+			#endif
+		});
+
+		it(@"should extend width", ^{
+			RACSequence *expected = @[
+				MEDBox(CGRectMake(12.5, 10, 15, 20)),
+				MEDBox(CGRectMake(12.5, 20, 25, 40)),
+				MEDBox(CGRectMake(27.5, 15, 40, 35)),
+			].rac_sequence;
+
+			expect([signal extendAttribute:NSLayoutAttributeWidth byAmount:value].sequence).to.equal(expected);
+		});
+
+		it(@"should extend height", ^{
+			RACSequence *expected = @[
+				MEDBox(CGRectMake(10, 12.5, 20, 15)),
+				MEDBox(CGRectMake(10, 22.5, 30, 35)),
+				MEDBox(CGRectMake(25, 17.5, 45, 30)),
+			].rac_sequence;
+
+			expect([signal extendAttribute:NSLayoutAttributeHeight byAmount:value].sequence).to.equal(expected);
+		});
+
+		it(@"should extend center X", ^{
+			RACSequence *expected = @[
+				MEDBox(CGRectMake(5, 10, 20, 20)),
+				MEDBox(CGRectMake(5, 20, 30, 40)),
+				MEDBox(CGRectMake(20, 15, 45, 35)),
+			].rac_sequence;
+
+			expect([signal extendAttribute:NSLayoutAttributeCenterX byAmount:value].sequence).to.equal(expected);
+		});
+
+		it(@"should extend center Y", ^{
+			RACSequence *expected = @[
+				MEDBox(CGRectMake(10, 5, 20, 20)),
+				MEDBox(CGRectMake(10, 15, 30, 40)),
+				MEDBox(CGRectMake(25, 10, 45, 35)),
+			].rac_sequence;
+
+			expect([signal extendAttribute:NSLayoutAttributeCenterY byAmount:value].sequence).to.equal(expected);
+		});
 	});
 
 	it(@"should divide into two rects", ^{

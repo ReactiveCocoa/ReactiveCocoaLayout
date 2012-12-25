@@ -201,15 +201,20 @@ extern BOOL RCLIsInAnimatedSignal(void);
 // Returns a signal of CGRect remainders.
 - (RACSignal *)remainderAfterSlicingAmount:(RACSignal *)amountSignal fromEdge:(CGRectEdge)edge;
 
-// For the given each of each CGRect, adds the given number of points sent from
-// `amountSignal`.
+// Extends the given layout attribute of each CGRect by the given number of points
+// sent from `amountSignal`.
 //
-// edge         - The edge to add to.
+// attribute    - The attribute to extend. Extending an edge will grow it
+//                outward, and keep the positions of all other edges constant.
+//                Extending NSLayoutAttributeWidth or NSLayoutAttributeHeight will split
+//                the added points between both of the edges that intersect that
+//                axis. This must not be NSLayoutAttributeBaseline.
 // amountSignal - A signal of CGFloat values, representing the number of points
-//                to add.
+//                to extend by. This signal may send negative values to instead
+//                remove points.
 //
-// Returns a signal of enlarged CGRects.
-- (RACSignal *)growEdge:(CGRectEdge)edge byAmount:(RACSignal *)amountSignal;
+// Returns a signal of resized CGRects.
+- (RACSignal *)extendAttribute:(NSLayoutAttribute)attribute byAmount:(RACSignal *)amountSignal;
 
 // Invokes -divideWithAmount:padding:fromEdge: with a constant padding of 0.
 - (RACTuple *)divideWithAmount:(RACSignal *)sliceAmountSignal fromEdge:(CGRectEdge)edge;
