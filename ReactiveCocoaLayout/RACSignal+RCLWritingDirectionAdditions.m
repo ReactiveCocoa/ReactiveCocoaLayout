@@ -9,23 +9,23 @@
 #import "RACSignal+RCLWritingDirectionAdditions.h"
 #import "NSNotificationCenter+RACSupport.h"
 
-// Returns a signal which sends the line direction for the current language,
+// Returns a signal which sends the character direction for the current language,
 // and automatically re-sends it any time the current locale changes.
-static RACSignal *lineDirectionSignal(void) {
+static RACSignal *characterDirectionSignal(void) {
 	return [[[[NSNotificationCenter.defaultCenter rac_addObserverForName:NSCurrentLocaleDidChangeNotification object:nil]
 		startWith:nil]
 		map:^(id _) {
 			return [NSLocale.currentLocale objectForKey:NSLocaleLanguageCode];
 		}]
 		map:^(NSString *languageCode) {
-			return @([NSLocale lineDirectionForLanguage:languageCode]);
+			return @([NSLocale characterDirectionForLanguage:languageCode]);
 		}];
 }
 
 @implementation RACSignal (RCLWritingDirectionAdditions)
 
 + (RACSignal *)leadingEdgeSignal {
-	return [lineDirectionSignal() map:^(NSNumber *direction) {
+	return [characterDirectionSignal() map:^(NSNumber *direction) {
 		if (direction.unsignedIntegerValue == NSLocaleLanguageDirectionRightToLeft) {
 			return @(CGRectMaxXEdge);
 		} else {
@@ -35,7 +35,7 @@ static RACSignal *lineDirectionSignal(void) {
 }
 
 + (RACSignal *)trailingEdgeSignal {
-	return [lineDirectionSignal() map:^(NSNumber *direction) {
+	return [characterDirectionSignal() map:^(NSNumber *direction) {
 		if (direction.unsignedIntegerValue == NSLocaleLanguageDirectionRightToLeft) {
 			return @(CGRectMinXEdge);
 		} else {
