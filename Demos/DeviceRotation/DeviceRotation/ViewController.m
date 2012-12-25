@@ -56,9 +56,9 @@
 		return (UIInterfaceOrientationIsPortrait(orientation.integerValue) ? NSLocalizedString(@"Portrait!", @"") : NSLocalizedString(@"Landscape awww yeaahhh", @""));
 	}];
 
-	RACTupleUnpack(RACSignal *labelRect, RACSignal *textFieldRect) = [insetRect divideWithAmount:self.nameLabel.rcl_intrinsicContentSizeSignal.width padding:[RACSignal return:@8] fromEdge:CGRectMinXEdge];
+	RACTupleUnpack(RACSignal *labelRect, RACSignal *textFieldRect) = [insetRect divideWithAmount:self.nameLabel.rcl_intrinsicContentSizeSignal.width padding:[RACSignal return:@8] fromEdge:NSLayoutAttributeLeading];
 
-	textFieldRect = [textFieldRect sliceWithAmount:[RACSignal return:@28] fromEdge:CGRectMinYEdge];
+	textFieldRect = [textFieldRect sliceWithAmount:[RACSignal return:@28] fromEdge:NSLayoutAttributeTop];
 
 	RAC(self.nameLabel.rcl_alignmentRect) = [[RACSignal rectsWithOrigin:labelRect.origin size:self.nameLabel.rcl_intrinsicContentSizeSignal]
 		alignBaseline:self.nameLabel.rcl_baselineSignal toBaseline:self.nameTextField.rcl_baselineSignal ofRect:self.nameTextField.rcl_alignmentRectSignal];

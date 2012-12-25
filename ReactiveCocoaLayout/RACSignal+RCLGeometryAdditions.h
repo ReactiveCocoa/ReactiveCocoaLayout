@@ -179,28 +179,6 @@ extern BOOL RCLIsInAnimatedSignal(void);
 // Returns a signal of new, inset CGRect values.
 - (RACSignal *)insetWidth:(RACSignal *)widthSignal height:(RACSignal *)heightSignal;
 
-// Trims each CGRect to the number of points sent from `amountSignal`, as
-// measured starting from the given edge.
-//
-// amountSignal - A signal of CGFloat values, representing the number of points
-//                to include in the slice. If greater than the size of a given
-//                rectangle, the result will be the entire rectangle.
-// edge         - The edge from which to start including points in the slice.
-//
-// Returns a signal of CGRect slices.
-- (RACSignal *)sliceWithAmount:(RACSignal *)amountSignal fromEdge:(CGRectEdge)edge;
-
-// From the given edge of each CGRect, trims the number of points sent from
-// `amountSignal`.
-//
-// amountSignal - A signal of CGFloat values, representing the number of points
-//                to remove. If greater than the size of a given rectangle, the
-//                result will be CGRectZero.
-// edge         - The edge from which to trim.
-//
-// Returns a signal of CGRect remainders.
-- (RACSignal *)remainderAfterSlicingAmount:(RACSignal *)amountSignal fromEdge:(CGRectEdge)edge;
-
 // Extends the given layout attribute of each CGRect by the given number of points
 // sent from `amountSignal`.
 //
@@ -216,28 +194,63 @@ extern BOOL RCLIsInAnimatedSignal(void);
 // Returns a signal of resized CGRects.
 - (RACSignal *)extendAttribute:(NSLayoutAttribute)attribute byAmount:(RACSignal *)amountSignal;
 
+// Trims each CGRect to the number of points sent from `amountSignal`, as
+// measured starting from the given edge.
+//
+// amountSignal  - A signal of CGFloat values, representing the number of points
+//                 to include in the slice. If greater than the size of a given
+//                 rectangle, the result will be the entire rectangle.
+// edgeAttribute - A layout attribute representing the edge from which to start
+//                 including points in the slice, proceeding toward the opposite
+//                 edge. This must be NSLayoutAttributeLeft,
+//                 NSLayoutAttributeRight, NSLayoutAttributeTop,
+//                 NSLayoutAttributeBottom, NSLayoutAttributeLeading, or
+//                 NSLayoutAttributeTrailing.
+//
+// Returns a signal of CGRect slices.
+- (RACSignal *)sliceWithAmount:(RACSignal *)amountSignal fromEdge:(NSLayoutAttribute)edgeAttribute;
+
+// From the given edge of each CGRect, trims the number of points sent from
+// `amountSignal`.
+//
+// amountSignal  - A signal of CGFloat values, representing the number of points
+//                 to remove. If greater than the size of a given rectangle, the
+//                 result will be CGRectZero.
+// edgeAttribute - A layout attribute representing the edge from which to start
+//                 trimming, proceeding toward the opposite edge. This must be
+//                 NSLayoutAttributeLeft, NSLayoutAttributeRight,
+//                 NSLayoutAttributeTop, NSLayoutAttributeBottom,
+//                 NSLayoutAttributeLeading, or NSLayoutAttributeTrailing.
+//
+// Returns a signal of CGRect remainders.
+- (RACSignal *)remainderAfterSlicingAmount:(RACSignal *)amountSignal fromEdge:(NSLayoutAttribute)edgeAttribute;
+
 // Invokes -divideWithAmount:padding:fromEdge: with a constant padding of 0.
-- (RACTuple *)divideWithAmount:(RACSignal *)sliceAmountSignal fromEdge:(CGRectEdge)edge;
+- (RACTuple *)divideWithAmount:(RACSignal *)sliceAmountSignal fromEdge:(NSLayoutAttribute)edgeAttribute;
 
 // Divides each CGRect into two component rectangles, skipping an amount of
 // padding between them.
 //
 // sliceAmountSignal - A signal of CGFloat values, representing the number of
 //                     points to include in the slice rectangle, starting from
-//                     `edge`. If greater than the size of a given rectangle,
-//                     the slice will be the entire rectangle, and the remainder
-//                     will be CGRectZero.
+//                     `edgeAttribute`. If greater than the size of a given
+//                     rectangle, the slice will be the entire rectangle, and
+//                     the remainder will be CGRectZero.
 // paddingSignal     - A signal of CGFloat values, representing the number of
 //                     points of padding to omit between the slice and remainder
 //                     rectangles. If the padding plus the slice amount is
 //                     greater than or equal to the size of a given rectangle,
 //                     the remainder will be CGRectZero. 
-// edge              - The edge from which division begins, proceeding toward the
-//                     opposite edge.
+// edgeAttribute     - A layout attribute representing the edge from which
+//                     division begins, proceeding toward the opposite edge.
+//                     This must be NSLayoutAttributeLeft,
+//                     NSLayoutAttributeRight, NSLayoutAttributeTop,
+//                     NSLayoutAttributeBottom, NSLayoutAttributeLeading, or
+//                     NSLayoutAttributeTrailing.
 //
 // Returns a RACTuple containing two signals, which will send the slices and
 // remainders, respectively.
-- (RACTuple *)divideWithAmount:(RACSignal *)sliceAmountSignal padding:(RACSignal *)paddingSignal fromEdge:(CGRectEdge)edge;
+- (RACTuple *)divideWithAmount:(RACSignal *)sliceAmountSignal padding:(RACSignal *)paddingSignal fromEdge:(NSLayoutAttribute)edgeAttribute;
 
 // Sends the maximum value sent by any of the given signals.
 //

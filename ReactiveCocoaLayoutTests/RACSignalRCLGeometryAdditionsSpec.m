@@ -208,7 +208,7 @@ describe(@"signal of CGRects", ^{
 	});
 
 	it(@"should slice", ^{
-		RACSignal *result = [signal sliceWithAmount:[RACSignal return:@5] fromEdge:CGRectMinXEdge];
+		RACSignal *result = [signal sliceWithAmount:[RACSignal return:@5] fromEdge:NSLayoutAttributeLeft];
 		NSArray *expectedRects = @[
 			MEDBox(CGRectMake(10, 10, 5, 20)),
 			MEDBox(CGRectMake(10, 20, 5, 40)),
@@ -219,11 +219,11 @@ describe(@"signal of CGRects", ^{
 	});
 
 	it(@"should return a remainder", ^{
-		RACSignal *result = [signal remainderAfterSlicingAmount:[RACSignal return:@5] fromEdge:CGRectMinYEdge];
+		RACSignal *result = [signal remainderAfterSlicingAmount:[RACSignal return:@5] fromEdge:NSLayoutAttributeLeft];
 		NSArray *expectedRects = @[
-			MEDBox(CGRectMake(10, 15, 20, 15)),
-			MEDBox(CGRectMake(10, 25, 30, 35)),
-			MEDBox(CGRectMake(25, 20, 45, 30)),
+			MEDBox(CGRectMake(15, 10, 15, 20)),
+			MEDBox(CGRectMake(15, 20, 25, 40)),
+			MEDBox(CGRectMake(30, 15, 40, 35)),
 		];
 
 		expect(result.sequence).to.equal(expectedRects.rac_sequence);
@@ -350,7 +350,7 @@ describe(@"signal of CGRects", ^{
 	});
 
 	it(@"should divide into two rects", ^{
-		RACTupleUnpack(RACSignal *slices, RACSignal *remainders) = [signal divideWithAmount:[RACSignal return:@15] fromEdge:CGRectMinXEdge];
+		RACTupleUnpack(RACSignal *slices, RACSignal *remainders) = [signal divideWithAmount:[RACSignal return:@15] fromEdge:NSLayoutAttributeLeft];
 
 		NSArray *expectedSlices = @[
 			MEDBox(CGRectMake(10, 10, 15, 20)),
@@ -369,7 +369,7 @@ describe(@"signal of CGRects", ^{
 	});
 
 	it(@"should divide into two rects with padding", ^{
-		RACTupleUnpack(RACSignal *slices, RACSignal *remainders) = [signal divideWithAmount:[RACSignal return:@15] padding:[RACSignal return:@3] fromEdge:CGRectMinXEdge];
+		RACTupleUnpack(RACSignal *slices, RACSignal *remainders) = [signal divideWithAmount:[RACSignal return:@15] padding:[RACSignal return:@3] fromEdge:NSLayoutAttributeLeft];
 
 		NSArray *expectedSlices = @[
 			MEDBox(CGRectMake(10, 10, 15, 20)),

@@ -592,22 +592,6 @@ static RACSignal *combineAttributeWithRects(NSLayoutAttribute attribute, NSArray
 	}];
 }
 
-- (RACSignal *)sliceWithAmount:(RACSignal *)amountSignal fromEdge:(CGRectEdge)edge {
-	NSParameterAssert(amountSignal != nil);
-
-	return [RACSignal combineLatest:@[ amountSignal, self ] reduce:^(NSNumber *amount, NSValue *rect) {
-		return MEDBox(CGRectSlice(rect.med_rectValue, amount.doubleValue, edge));
-	}];
-}
-
-- (RACSignal *)remainderAfterSlicingAmount:(RACSignal *)amountSignal fromEdge:(CGRectEdge)edge {
-	NSParameterAssert(amountSignal != nil);
-
-	return [RACSignal combineLatest:@[ amountSignal, self ] reduce:^(NSNumber *amount, NSValue *rect) {
-		return MEDBox(CGRectRemainder(rect.med_rectValue, amount.doubleValue, edge));
-	}];
-}
-
 - (RACSignal *)extendAttribute:(NSLayoutAttribute)attribute byAmount:(RACSignal *)amountSignal {
 	NSParameterAssert(amountSignal != nil);
 
@@ -650,20 +634,45 @@ static RACSignal *combineAttributeWithRects(NSLayoutAttribute attribute, NSArray
 	});
 }
 
-- (RACTuple *)divideWithAmount:(RACSignal *)sliceAmountSignal fromEdge:(CGRectEdge)edge {
-	return [self divideWithAmount:sliceAmountSignal padding:[RACSignal return:@0] fromEdge:edge];
+- (RACSignal *)sliceWithAmount:(RACSignal *)amountSignal fromEdge:(NSLayoutAttribute)edgeAttribute {
+	return [self divideWithAmount:amountSignal fromEdge:edgeAttribute][0];
 }
 
-- (RACTuple *)divideWithAmount:(RACSignal *)sliceAmountSignal padding:(RACSignal *)paddingSignal fromEdge:(CGRectEdge)edge {
-	NSParameterAssert(sliceAmountSignal != nil);
+- (RACSignal *)remainderAfterSlicingAmount:(RACSignal *)amountSignal fromEdge:(NSLayoutAttribute)edgeAttribute {
+	return [self divideWithAmount:amountSignal fromEdge:edgeAttribute][1];
+}
+
+- (RACTuple *)divideWithAmount:(RACSignal *)sliceAmountSignal fromEdge:(NSLayoutAttribute)edgeAttribute {
+	return [self divideWithAmount:sliceAmountSignal padding:[RACSignal return:@0] fromEdge:edgeAttribute];
+}
+
+- (RACTuple *)divideWithAmount:(RACSignal *)amountSignal padding:(RACSignal *)paddingSignal fromEdge:(NSLayoutAttribute)edgeAttribute {
+	NSParameterAssert(amountSignal != nil);
 	NSParameterAssert(paddingSignal != nil);
 
-	RACSignal *amountPlusPadding = [RACSignal combineLatest:@[ sliceAmountSignal, paddingSignal ] reduce:^(NSNumber *amount, NSNumber *padding) {
-		return @(amount.doubleValue + padding.doubleValue);
+	RACSignal *combinedSignal = combineAttributeWithRects(edgeAttribute, @[ amountSignal, paddingSignal, self ], ^ id (NSNumber *edge, NSNumber *amount, NSNumber *padding, NSValue *value) {
+		NSAssert(edge != nil, @"NSLayoutAttribute does not represent an edge: %li", (long)edgeAttribute);
+		NSAssert([amount isKindOfClass:NSNumber.class], @"Value sent by %@ is not a number: %@", amountSignal, amount);
+		NSAssert([padding isKindOfClass:NSNumber.class], @"Value sent by %@ is not a number: %@", paddingSignal, padding);
+		NSAssert([value isKindOfClass:NSValue.class] && value.med_geometryStructType == MEDGeometryStructTypeRect, @"Value sent by %@ is not a CGRect: %@", self, value);
+
+		CGRect rect = value.med_rectValue;
+
+		CGRect slice = CGRectZero;
+		CGRect remainder = CGRectZero;
+		CGRectDivideWithPadding(rect, &slice, &remainder, amount.doubleValue, padding.doubleValue, (CGRectEdge)edge.unsignedIntegerValue);
+
+		return [RACTuple tupleWithObjects:MEDBox(slice), MEDBox(remainder), nil];
+	});
+
+	// Now, convert Signal[(Rect, Rect)] into (Signal[Rect], Signal[Rect]).
+	RACSignal *sliceSignal = [combinedSignal map:^(RACTuple *tuple) {
+		return tuple[0];
 	}];
 
-	RACSignal *sliceSignal = [self sliceWithAmount:sliceAmountSignal fromEdge:edge];
-	RACSignal *remainderSignal = [self remainderAfterSlicingAmount:amountPlusPadding fromEdge:edge];
+	RACSignal *remainderSignal = [combinedSignal map:^(RACTuple *tuple) {
+		return tuple[1];
+	}];
 
 	return [RACTuple tupleWithObjects:sliceSignal, remainderSignal, nil];
 }

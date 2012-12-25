@@ -42,12 +42,12 @@
 
 	RACTupleUnpack(RACSignal *nameRect, RACSignal *emailRect) = [[self.contentView.rcl_frameSignal
 		insetWidth:[RACSignal return:@32] height:[RACSignal return:@16]]
-		divideWithAmount:nameField.rcl_intrinsicContentSizeSignal.height padding:padding fromEdge:CGRectMaxYEdge];
+		divideWithAmount:nameField.rcl_intrinsicContentSizeSignal.height padding:padding fromEdge:NSLayoutAttributeTop];
 
-	RACTupleUnpack(RACSignal *nameLabelRect, RACSignal *nameFieldRect) = [nameRect divideWithAmount:labelWidth padding:padding fromEdge:CGRectMinXEdge];
+	RACTupleUnpack(RACSignal *nameLabelRect, RACSignal *nameFieldRect) = [nameRect divideWithAmount:labelWidth padding:padding fromEdge:NSLayoutAttributeLeading];
 	RACTupleUnpack(RACSignal *emailLabelRect, RACSignal *emailFieldRect) = [[emailRect
-		sliceWithAmount:emailField.rcl_intrinsicContentSizeSignal.height fromEdge:CGRectMaxYEdge]
-		divideWithAmount:labelWidth padding:padding fromEdge:CGRectMinXEdge];
+		sliceWithAmount:emailField.rcl_intrinsicContentSizeSignal.height fromEdge:NSLayoutAttributeTop]
+		divideWithAmount:labelWidth padding:padding fromEdge:NSLayoutAttributeLeading];
 
 	// Don't animate setting the initial frame.
 	RAC(nameField, rcl_alignmentRect) = [[nameFieldRect take:1]
