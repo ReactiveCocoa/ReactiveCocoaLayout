@@ -15,7 +15,8 @@ static RACSignal *characterDirectionSignal(void) {
 	return [[[[NSNotificationCenter.defaultCenter rac_addObserverForName:NSCurrentLocaleDidChangeNotification object:nil]
 		startWith:nil]
 		map:^(id _) {
-			return [NSLocale.currentLocale objectForKey:NSLocaleLanguageCode];
+			NSArray *preferredLanguages = NSLocale.preferredLanguages;
+			return (preferredLanguages.count > 0 ? preferredLanguages[0] : [NSLocale.currentLocale objectForKey:NSLocaleLanguageCode]);
 		}]
 		map:^(NSString *languageCode) {
 			return @([NSLocale characterDirectionForLanguage:languageCode]);
