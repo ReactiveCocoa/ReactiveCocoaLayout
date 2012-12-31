@@ -47,6 +47,18 @@
 	}
 }
 
+- (CGFloat)rcl_alphaValue {
+	return self.alphaValue;
+}
+
+- (void)setRcl_alphaValue:(CGFloat)alphaValue {
+	if (RCLIsInAnimatedSignal()) {
+		[self.animator setAlphaValue:alphaValue];
+	} else {
+		self.alphaValue = alphaValue;
+	}
+}
+
 - (BOOL)rcl_isHidden {
 	return [self isHidden];
 }
