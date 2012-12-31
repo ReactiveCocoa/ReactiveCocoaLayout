@@ -470,7 +470,10 @@
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
-				HEADER_SEARCH_PATHS = ../../External/Archimedes;
+				HEADER_SEARCH_PATHS = (
+					../../External/Archimedes,
+					../../External/ReactiveCocoa/ReactiveCocoaFramework/ReactiveCocoa/libextobjc/extobjc,
+				);
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
 			};
 			name = Profile;
@@ -494,7 +497,10 @@
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
-				HEADER_SEARCH_PATHS = ../../External/Archimedes;
+				HEADER_SEARCH_PATHS = (
+					../../External/Archimedes,
+					../../External/ReactiveCocoa/ReactiveCocoaFramework/ReactiveCocoa/libextobjc/extobjc,
+				);
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
 			};
 			name = Debug;
@@ -507,7 +513,10 @@
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
-				HEADER_SEARCH_PATHS = ../../External/Archimedes;
+				HEADER_SEARCH_PATHS = (
+					../../External/Archimedes,
+					../../External/ReactiveCocoa/ReactiveCocoaFramework/ReactiveCocoa/libextobjc/extobjc,
+				);
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
 			};
 			name = Release;

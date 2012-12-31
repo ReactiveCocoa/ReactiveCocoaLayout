@@ -106,6 +106,8 @@ static RACSignal *latestNumberMatchingComparisonResult(NSArray *signals, NSCompa
 			if (previous == nil) return next;
 			if (next == nil) return previous;
 
+			NSCAssert([next isKindOfClass:NSNumber.class], @"Value sent is not a number: %@", next);
+
 			if ([previous compare:next] == result) {
 				return next;
 			} else {
@@ -117,51 +119,79 @@ static RACSignal *latestNumberMatchingComparisonResult(NSArray *signals, NSCompa
 		}];
 }
 
-// Combines the values of the two signals using the given operator.
+// A binary operator accepting two numbers and returning a number.
+typedef CGFloat (^RCLBinaryOperator)(CGFloat, CGFloat);
+
+// Used from combineSignalsWithOperator() to combine two numbers using an
+// arbitrary binary operator.
+static NSNumber *combineNumbersWithOperator(NSNumber *a, NSNumber *b, RCLBinaryOperator operator) {
+	NSCAssert([a isKindOfClass:NSNumber.class], @"Expected a number, not %@", a);
+	NSCAssert([b isKindOfClass:NSNumber.class], @"Expected a number, not %@", b);
+
+	return @(operator(a.doubleValue, b.doubleValue));
+}
+
+// Used from combineSignalsWithOperator() to combine two values using an
+// arbitrary binary operator.
+static NSValue *combineValuesWithOperator(NSValue *a, NSValue *b, RCLBinaryOperator operator) {
+	NSCAssert([a isKindOfClass:NSValue.class], @"Expected a value, not %@", a);
+	NSCAssert([b isKindOfClass:NSValue.class], @"Expected a value, not %@", b);
+	NSCAssert(a.med_geometryStructType == b.med_geometryStructType, @"Values do not contain the same type of geometry structure: %@, %@", a, b);
+
+	switch (a.med_geometryStructType) {
+		case MEDGeometryStructTypePoint: {
+			CGPoint pointA = a.med_pointValue;
+			CGPoint pointB = b.med_pointValue;
+
+			CGPoint result = CGPointMake(operator(pointA.x, pointB.x), operator(pointA.y, pointB.y));
+			return MEDBox(result);
+		}
+
+		case MEDGeometryStructTypeSize: {
+			CGSize sizeA = a.med_sizeValue;
+			CGSize sizeB = b.med_sizeValue;
+
+			CGSize result = CGSizeMake(operator(sizeA.width, sizeB.width), operator(sizeA.height, sizeB.height));
+			return MEDBox(result);
+		}
+
+		case MEDGeometryStructTypeRect:
+		default:
+			NSCAssert(NO, @"Values must contain CGSizes or CGPoints: %@, %@", a, b);
+			return nil;
+	}
+}
+
+// Combines the values of the given signals using the given binary operator,
+// applied left-to-right across the signal values.
 //
-// The values may be CGFloats, CGSizes, or CGPoints, but both signals must send
+// The values may be CGFloats, CGSizes, or CGPoints, but all signals must send
 // values of the same type.
 //
 // Returns a signal of results, using the same type as the input values.
-static RACSignal *combineSignalsWithOperator(RACSignal *a, RACSignal *b, CGFloat (^operator)(CGFloat, CGFloat)) {
-	NSCParameterAssert(a != nil);
-	NSCParameterAssert(b != nil);
+static RACSignal *combineSignalsWithOperator(NSArray *signals, RCLBinaryOperator operator) {
+	NSCParameterAssert(signals != nil);
+	NSCParameterAssert(signals.count > 0);
 	NSCParameterAssert(operator != nil);
 
-	return [RACSignal combineLatest:@[ a, b ] reduce:^ id (id valueA, id valueB) {
-		if ([valueA isKindOfClass:NSNumber.class]) {
-			NSCAssert([valueB isKindOfClass:NSNumber.class], @"%@ is a number, but %@ is not", valueA, valueB);
+	return [[[RACSignal combineLatest:signals]
+		map:^(RACTuple *values) {
+			return values.allObjects.rac_sequence;
+		}]
+		map:^(RACSequence *values) {
+			id result = values.head;
+			BOOL isNumber = [result isKindOfClass:NSNumber.class];
 
-			return @(operator([valueA doubleValue], [valueB doubleValue]));
-		}
-
-		NSCAssert([valueA isKindOfClass:NSValue.class], @"%@ is not a number, so it should be an NSValue", valueA);
-		NSCAssert([valueB isKindOfClass:NSValue.class], @"%@ is an NSValue, but %@ is not", valueA, valueB);
-		NSCAssert([valueA med_geometryStructType] == [valueB med_geometryStructType], @"Values do not contain the same type of geometry structure: %@, %@", valueA, valueB);
-
-		switch ([valueA med_geometryStructType]) {
-			case MEDGeometryStructTypePoint: {
-				CGPoint pointA = [valueA med_pointValue];
-				CGPoint pointB = [valueB med_pointValue];
-
-				CGPoint result = CGPointMake(operator(pointA.x, pointB.x), operator(pointA.y, pointB.y));
-				return MEDBox(result);
+			for (id value in values.tail) {
+				if (isNumber) {
+					result = combineNumbersWithOperator(result, value, operator);
+				} else {
+					result = combineValuesWithOperator(result, value, operator);
+				}
 			}
 
-			case MEDGeometryStructTypeSize: {
-				CGSize sizeA = [valueA med_sizeValue];
-				CGSize sizeB = [valueB med_sizeValue];
-
-				CGSize result = CGSizeMake(operator(sizeA.width, sizeB.width), operator(sizeA.height, sizeB.height));
-				return MEDBox(result);
-			}
-
-			case MEDGeometryStructTypeRect:
-			default:
-				NSCAssert(NO, @"Values must contain CGSizes or CGPoints: %@, %@", valueA, valueB);
-				return nil;
-		}
-	}];
+			return result;
+		}];
 }
 
 // Combines the CGRectEdge corresponding to a layout attribute, and the values
@@ -256,6 +286,11 @@ static RACSignal *combineAttributeWithRects(NSLayoutAttribute attribute, NSArray
 	NSParameterAssert(heightSignal != nil);
 
 	return [RACSignal combineLatest:@[ xSignal, ySignal, widthSignal, heightSignal ] reduce:^(NSNumber *x, NSNumber *y, NSNumber *width, NSNumber *height) {
+		NSAssert([x isKindOfClass:NSNumber.class], @"Value sent by %@ is not a number: %@", xSignal, x);
+		NSAssert([y isKindOfClass:NSNumber.class], @"Value sent by %@ is not a number: %@", ySignal, y);
+		NSAssert([width isKindOfClass:NSNumber.class], @"Value sent by %@ is not a number: %@", widthSignal, width);
+		NSAssert([height isKindOfClass:NSNumber.class], @"Value sent by %@ is not a number: %@", heightSignal, height);
+
 		return MEDBox(CGRectMake(x.doubleValue, y.doubleValue, width.doubleValue, height.doubleValue));
 	}];
 }
@@ -265,6 +300,9 @@ static RACSignal *combineAttributeWithRects(NSLayoutAttribute attribute, NSArray
 	NSParameterAssert(sizeSignal != nil);
 
 	return [RACSignal combineLatest:@[ originSignal, sizeSignal ] reduce:^(NSValue *origin, NSValue *size) {
+		NSAssert([origin isKindOfClass:NSValue.class] && origin.med_geometryStructType == MEDGeometryStructTypePoint, @"Value sent by %@ is not a CGPoint: %@", originSignal, origin);
+		NSAssert([size isKindOfClass:NSValue.class] && size.med_geometryStructType == MEDGeometryStructTypeSize, @"Value sent by %@ is not a CGSize: %@", sizeSignal, size);
+
 		CGPoint p = origin.med_pointValue;
 		CGSize s = size.med_sizeValue;
 
@@ -277,6 +315,9 @@ static RACSignal *combineAttributeWithRects(NSLayoutAttribute attribute, NSArray
 	NSParameterAssert(sizeSignal != nil);
 
 	return [RACSignal combineLatest:@[ centerSignal, sizeSignal ] reduce:^(NSValue *center, NSValue *size) {
+		NSAssert([center isKindOfClass:NSValue.class] && center.med_geometryStructType == MEDGeometryStructTypePoint, @"Value sent by %@ is not a CGPoint: %@", centerSignal, center);
+		NSAssert([size isKindOfClass:NSValue.class] && size.med_geometryStructType == MEDGeometryStructTypeSize, @"Value sent by %@ is not a CGSize: %@", sizeSignal, size);
+
 		CGPoint p = center.med_pointValue;
 		CGSize s = size.med_sizeValue;
 
@@ -292,8 +333,14 @@ static RACSignal *combineAttributeWithRects(NSLayoutAttribute attribute, NSArray
 
 - (RACSignal *)size {
 	return [self map:^(NSValue *value) {
+		NSAssert([value isKindOfClass:NSValue.class] && value.med_geometryStructType == MEDGeometryStructTypeRect, @"Value sent by %@ is not a CGRect: %@", self, value);
+
 		return MEDBox(value.med_rectValue.size);
 	}];
+}
+
+- (RACSignal *)replaceSize:(RACSignal *)sizeSignal {
+	return [self.class rectsWithOrigin:self.origin size:sizeSignal];
 }
 
 + (RACSignal *)sizesWithWidth:(RACSignal *)widthSignal height:(RACSignal *)heightSignal {
@@ -301,6 +348,9 @@ static RACSignal *combineAttributeWithRects(NSLayoutAttribute attribute, NSArray
 	NSParameterAssert(heightSignal != nil);
 
 	return [RACSignal combineLatest:@[ widthSignal, heightSignal ] reduce:^(NSNumber *width, NSNumber *height) {
+		NSAssert([width isKindOfClass:NSNumber.class], @"Value sent by %@ is not a number: %@", widthSignal, width);
+		NSAssert([height isKindOfClass:NSNumber.class], @"Value sent by %@ is not a number: %@", heightSignal, height);
+
 		return MEDBox(CGSizeMake(width.doubleValue, height.doubleValue));
 	}];
 }
@@ -316,6 +366,24 @@ static RACSignal *combineAttributeWithRects(NSLayoutAttribute attribute, NSArray
 	}];
 }
 
+- (RACSignal *)replaceWidth:(RACSignal *)widthSignal {
+	NSParameterAssert(widthSignal != nil);
+
+	return [RACSignal combineLatest:@[ widthSignal, self ] reduce:^(NSNumber *width, NSValue *value) {
+		if (value.med_geometryStructType == MEDGeometryStructTypeRect) {
+			CGRect rect = value.med_rectValue;
+			rect.size.width = width.doubleValue;
+			return MEDBox(rect);
+		} else {
+			NSAssert(value.med_geometryStructType == MEDGeometryStructTypeSize, @"Unexpected type of value: %@", value);
+
+			CGSize size = value.med_sizeValue;
+			size.width = width.doubleValue;
+			return MEDBox(size);
+		}
+	}];
+}
+
 - (RACSignal *)height {
 	return [self map:^(NSValue *value) {
 		if (value.med_geometryStructType == MEDGeometryStructTypeRect) {
@@ -327,14 +395,40 @@ static RACSignal *combineAttributeWithRects(NSLayoutAttribute attribute, NSArray
 	}];
 }
 
+- (RACSignal *)replaceHeight:(RACSignal *)heightSignal {
+	NSParameterAssert(heightSignal != nil);
+
+	return [RACSignal combineLatest:@[ heightSignal, self ] reduce:^(NSNumber *height, NSValue *value) {
+		if (value.med_geometryStructType == MEDGeometryStructTypeRect) {
+			CGRect rect = value.med_rectValue;
+			rect.size.height = height.doubleValue;
+			return MEDBox(rect);
+		} else {
+			NSAssert(value.med_geometryStructType == MEDGeometryStructTypeSize, @"Unexpected type of value: %@", value);
+
+			CGSize size = value.med_sizeValue;
+			size.height = height.doubleValue;
+			return MEDBox(size);
+		}
+	}];
+}
+
 - (RACSignal *)origin {
 	return [self map:^(NSValue *value) {
+		NSAssert([value isKindOfClass:NSValue.class] && value.med_geometryStructType == MEDGeometryStructTypeRect, @"Value sent by %@ is not a CGRect: %@", self, value);
+
 		return MEDBox(value.med_rectValue.origin);
 	}];
 }
 
+- (RACSignal *)replaceOrigin:(RACSignal *)originSignal {
+	return [self.class rectsWithOrigin:originSignal size:self.size];
+}
+
 - (RACSignal *)center {
 	return [self map:^(NSValue *value) {
+		NSAssert([value isKindOfClass:NSValue.class] && value.med_geometryStructType == MEDGeometryStructTypeRect, @"Value sent by %@ is not a CGRect: %@", self, value);
+
 		return MEDBox(CGRectCenterPoint(value.med_rectValue));
 	}];
 }
@@ -344,20 +438,35 @@ static RACSignal *combineAttributeWithRects(NSLayoutAttribute attribute, NSArray
 	NSParameterAssert(ySignal != nil);
 
 	return [RACSignal combineLatest:@[ xSignal, ySignal ] reduce:^(NSNumber *x, NSNumber *y) {
+		NSAssert([x isKindOfClass:NSNumber.class], @"Value sent by %@ is not a number: %@", xSignal, x);
+		NSAssert([y isKindOfClass:NSNumber.class], @"Value sent by %@ is not a number: %@", ySignal, y);
+
 		return MEDBox(CGPointMake(x.doubleValue, y.doubleValue));
 	}];
 }
 
 - (RACSignal *)x {
 	return [self map:^(NSValue *value) {
+		NSAssert([value isKindOfClass:NSValue.class] && value.med_geometryStructType == MEDGeometryStructTypePoint, @"Value sent by %@ is not a CGPoint: %@", self, value);
+
 		return @(value.med_pointValue.x);
 	}];
+} 
+
+- (RACSignal *)replaceX:(RACSignal *)xSignal {
+	return [self.class pointsWithX:xSignal Y:self.y];
 }
 
 - (RACSignal *)y {
 	return [self map:^(NSValue *value) {
+		NSAssert([value isKindOfClass:NSValue.class] && value.med_geometryStructType == MEDGeometryStructTypePoint, @"Value sent by %@ is not a CGPoint: %@", self, value);
+
 		return @(value.med_pointValue.y);
 	}];
+}
+
+- (RACSignal *)replaceY:(RACSignal *)ySignal {
+	return [self.class pointsWithX:self.x Y:ySignal];
 }
 
 - (RACSignal *)valueForAttribute:(NSLayoutAttribute)attribute {
@@ -501,6 +610,9 @@ static RACSignal *combineAttributeWithRects(NSLayoutAttribute attribute, NSArray
 	NSParameterAssert(centerSignal != nil);
 
 	return [RACSignal combineLatest:@[ centerSignal, self ] reduce:^(NSValue *center, NSValue *value) {
+		NSAssert([center isKindOfClass:NSValue.class] && center.med_geometryStructType == MEDGeometryStructTypePoint, @"Value sent by %@ is not a CGPoint: %@", centerSignal, center);
+		NSAssert([value isKindOfClass:NSValue.class] && value.med_geometryStructType == MEDGeometryStructTypeRect, @"Value sent by %@ is not a CGRect: %@", self, value);
+
 		CGFloat x = center.med_pointValue.x;
 		CGFloat y = center.med_pointValue.y;
 
@@ -557,6 +669,11 @@ static RACSignal *combineAttributeWithRects(NSLayoutAttribute attribute, NSArray
 	return [RACSignal
 		combineLatest:@[ referenceBaselineSignal, referenceRectSignal, baselineSignal, self ]
 		reduce:^(NSNumber *referenceBaselineNum, NSValue *referenceRectValue, NSNumber *baselineNum, NSValue *rectValue) {
+			NSAssert([referenceBaselineNum isKindOfClass:NSNumber.class], @"Value sent by %@ is not a number: %@", referenceBaselineSignal, referenceBaselineNum);
+			NSAssert([referenceRectValue isKindOfClass:NSValue.class] && referenceRectValue.med_geometryStructType == MEDGeometryStructTypeRect, @"Value sent by %@ is not a CGRect: %@", referenceRectSignal, referenceRectValue);
+			NSAssert([baselineNum isKindOfClass:NSNumber.class], @"Value sent by %@ is not a number: %@", baselineSignal, baselineNum);
+			NSAssert([rectValue isKindOfClass:NSValue.class] && rectValue.med_geometryStructType == MEDGeometryStructTypeRect, @"Value sent by %@ is not a CGRect: %@", self, rectValue);
+
 			CGRect rect = rectValue.med_rectValue;
 			CGFloat baseline = baselineNum.doubleValue;
 
@@ -588,7 +705,30 @@ static RACSignal *combineAttributeWithRects(NSLayoutAttribute attribute, NSArray
 	// Subscribe to self last so that we don't skip any values sent
 	// immediately. See https://github.com/github/ReactiveCocoa/issues/192.
 	return [RACSignal combineLatest:@[ widthSignal, heightSignal, self ] reduce:^(NSNumber *width, NSNumber *height, NSValue *rect) {
+		NSAssert([width isKindOfClass:NSNumber.class], @"Value sent by %@ is not a number: %@", widthSignal, width);
+		NSAssert([height isKindOfClass:NSNumber.class], @"Value sent by %@ is not a number: %@", heightSignal, height);
+		NSAssert([rect isKindOfClass:NSValue.class] && rect.med_geometryStructType == MEDGeometryStructTypeRect, @"Value sent by %@ is not a CGRect: %@", self, rect);
+
 		return MEDBox(CGRectInset(rect.med_rectValue, width.doubleValue, height.doubleValue));
+	}];
+}
+
+- (RACSignal *)offsetX:(RACSignal *)xSignal Y:(RACSignal *)ySignal {
+	NSParameterAssert(xSignal != nil);
+	NSParameterAssert(ySignal != nil);
+
+	return [RACSignal combineLatest:@[ xSignal, ySignal, self ] reduce:^(NSNumber *x, NSNumber *y, NSValue *value) {
+		NSAssert([x isKindOfClass:NSNumber.class], @"Value sent by %@ is not a number: %@", xSignal, x);
+		NSAssert([y isKindOfClass:NSNumber.class], @"Value sent by %@ is not a number: %@", ySignal, y);
+	
+		if (value.med_geometryStructType == MEDGeometryStructTypeRect) {
+			return MEDBox(CGRectOffset(value.med_rectValue, x.doubleValue, y.doubleValue));
+		} else {
+			NSAssert(value.med_geometryStructType == MEDGeometryStructTypePoint, @"Unexpected type of value: %@", value);
+
+			CGPoint offset = CGPointMake(x.doubleValue, y.doubleValue);
+			return MEDBox(CGPointAdd(value.med_pointValue, offset));
+		}
 	}];
 }
 
@@ -685,28 +825,52 @@ static RACSignal *combineAttributeWithRects(NSLayoutAttribute attribute, NSArray
 	return latestNumberMatchingComparisonResult(signals, NSOrderedDescending);
 }
 
-- (RACSignal *)plus:(RACSignal *)addendSignal {
-	return combineSignalsWithOperator(self, addendSignal, ^(CGFloat a, CGFloat b) {
++ (RACSignal *)add:(NSArray *)signals {
+	return combineSignalsWithOperator(signals, ^(CGFloat a, CGFloat b) {
 		return a + b;
 	});
 }
 
-- (RACSignal *)minus:(RACSignal *)subtrahendSignal {
-	return combineSignalsWithOperator(self, subtrahendSignal, ^(CGFloat a, CGFloat b) {
++ (RACSignal *)subtract:(NSArray *)signals {
+	return combineSignalsWithOperator(signals, ^(CGFloat a, CGFloat b) {
 		return a - b;
 	});
 }
 
-- (RACSignal *)multipliedBy:(RACSignal *)factorSignal {
-	return combineSignalsWithOperator(self, factorSignal, ^(CGFloat a, CGFloat b) {
++ (RACSignal *)multiply:(NSArray *)signals {
+	return combineSignalsWithOperator(signals, ^(CGFloat a, CGFloat b) {
 		return a * b;
 	});
 }
 
-- (RACSignal *)dividedBy:(RACSignal *)denominatorSignal {
-	return combineSignalsWithOperator(self, denominatorSignal, ^(CGFloat a, CGFloat b) {
++ (RACSignal *)divide:(NSArray *)signals {
+	return combineSignalsWithOperator(signals, ^(CGFloat a, CGFloat b) {
 		return a / b;
 	});
+}
+
+- (RACSignal *)plus:(RACSignal *)addendSignal {
+	NSParameterAssert(addendSignal != nil);
+
+	return [RACSignal add:@[ self, addendSignal ]];
+}
+
+- (RACSignal *)minus:(RACSignal *)subtrahendSignal {
+	NSParameterAssert(subtrahendSignal != nil);
+
+	return [RACSignal subtract:@[ self, subtrahendSignal ]];
+}
+
+- (RACSignal *)multipliedBy:(RACSignal *)factorSignal {
+	NSParameterAssert(factorSignal != nil);
+
+	return [RACSignal multiply:@[ self, factorSignal ]];
+}
+
+- (RACSignal *)dividedBy:(RACSignal *)denominatorSignal {
+	NSParameterAssert(denominatorSignal != nil);
+
+	return [RACSignal divide:@[ self, denominatorSignal ]];
 }
 
 - (RACSignal *)animate {
