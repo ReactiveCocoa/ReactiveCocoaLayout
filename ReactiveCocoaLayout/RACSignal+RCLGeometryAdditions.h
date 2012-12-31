@@ -77,6 +77,13 @@ extern BOOL RCLIsInAnimatedSignal(void);
 // Returns a signal of CGSize values.
 - (RACSignal *)size;
 
+// Replaces the `size` field of each CGRect.
+//
+// sizeSignal - A signal of CGSize values, representing the new sizes.
+//
+// Returns a signal of new CGRect values.
+- (RACSignal *)replaceSize:(RACSignal *)sizeSignal;
+
 // Constructs sizes from the given width and height signals.
 //
 // Returns a signal of CGSize values.
@@ -87,15 +94,36 @@ extern BOOL RCLIsInAnimatedSignal(void);
 // Returns a signal of CGFloat values.
 - (RACSignal *)width;
 
+// Replaces the width of each CGRect or CGSize.
+//
+// widthSignal - A signal of CGFloat values, representing the new widths.
+//
+// Returns a signal of new CGRect values.
+- (RACSignal *)replaceWidth:(RACSignal *)widthSignal;
+
 // Maps CGRect or CGSize values to their heights.
 //
 // Returns a signal of CGFloat values.
 - (RACSignal *)height;
 
+// Replaces the height of each CGRect or CGSize.
+//
+// heightSignal - A signal of CGFloat values, representing the new heights.
+//
+// Returns a signal of new CGRect values.
+- (RACSignal *)replaceHeight:(RACSignal *)heightSignal;
+
 // Maps CGRect values to their `origin` fields.
 //
 // Returns a signal of CGPoint values.
 - (RACSignal *)origin;
+
+// Replaces the `origin` field of each CGRect.
+//
+// originSignal - A signal of CGPoint values, representing the new origins.
+//
+// Returns a signal of new CGRect values.
+- (RACSignal *)replaceOrigin:(RACSignal *)originSignal;
 
 // Maps CGRect values to their exact center point.
 //
@@ -112,10 +140,24 @@ extern BOOL RCLIsInAnimatedSignal(void);
 // Returns a signal of CGFloat values.
 - (RACSignal *)x;
 
+// Replaces the X position of each CGPoint.
+//
+// xSignal - A signal of CGFloat values, representing the new X positions.
+//
+// Returns a signal of new CGPoint values.
+- (RACSignal *)replaceX:(RACSignal *)xSignal;
+
 // Maps CGPoint values to their `y` fields.
 //
 // Returns a signal of CGFloat values.
 - (RACSignal *)y;
+
+// Replaces the Y position of each CGPoint.
+//
+// ySignal - A signal of CGFloat values, representing the new Y positions.
+//
+// Returns a signal of new CGPoint values.
+- (RACSignal *)replaceY:(RACSignal *)ySignal;
 
 // Maps CGRect values to their minimum X position.
 //
@@ -181,6 +223,18 @@ extern BOOL RCLIsInAnimatedSignal(void);
 //
 // Returns a signal of new, inset CGRect values.
 - (RACSignal *)insetWidth:(RACSignal *)widthSignal height:(RACSignal *)heightSignal;
+
+// Offsets each CGPoint or CGRect by the number of points sent from the given
+// X and Y signals.
+//
+// xSignal - A signal of CGFloat values, representing the number of points to
+//           offset the X position by.
+// ySignal - A signal of CGFloat values, representing the number of points to
+//           offset the Y position by.
+//
+// Returns a signal of offset points or rects, using the same type as the input
+// values.
+- (RACSignal *)offsetX:(RACSignal *)xSignal Y:(RACSignal *)ySignal;
 
 // Trims each CGRect to the number of points sent from `amountSignal`, as
 // measured starting from the given edge.
@@ -306,6 +360,40 @@ extern BOOL RCLIsInAnimatedSignal(void);
 //
 // Returns a signal of aligned CGRect values.
 - (RACSignal *)alignBaseline:(RACSignal *)baselineSignal toBaseline:(RACSignal *)referenceBaselineSignal ofRect:(RACSignal *)referenceRectSignal;
+
+// Adds the values of the given signals.
+//
+// signals - An array of at least one signal sending CGFloat, CGSize, or CGPoint
+//           values. All signals in the array must send values of the same type.
+//
+// Returns a signal of sums, using the same type as the input values.
++ (RACSignal *)add:(NSArray *)signals;
+
+// Subtracts the values of the given signals, in the order that they appear in
+// the array.
+//
+// signals - An array of at least one signal sending CGFloat, CGSize, or CGPoint
+//           values. All signals in the array must send values of the same type.
+//
+// Returns a signal of differences, using the same type as the input values.
++ (RACSignal *)subtract:(NSArray *)signals;
+
+// Multiplies the values of the given signals.
+//
+// signals - An array of at least one signal sending CGFloat, CGSize, or CGPoint
+//           values. All signals in the array must send values of the same type.
+//
+// Returns a signal of products, using the same type as the input values.
++ (RACSignal *)multiply:(NSArray *)signals;
+
+// Divides the values of the given signals, in the order that they appear in
+// the array.
+//
+// signals - An array of at least one signal sending CGFloat, CGSize, or CGPoint
+//           values. All signals in the array must send values of the same type.
+//
+// Returns a signal of quotients, using the same type as the input values.
++ (RACSignal *)divide:(NSArray *)signals;
 
 // Adds the values of the receiver and the given signal.
 //
