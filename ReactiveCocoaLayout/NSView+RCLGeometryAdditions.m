@@ -28,7 +28,7 @@
 }
 
 - (void)setRcl_frame:(CGRect)frame {
-	if (self.superview != nil) {
+	if (self.superview != nil && self.window != nil) {
 		// Matches the behavior of CGRectFloor().
 		NSAlignmentOptions options = NSAlignMinXOutward | NSAlignMinYInward | NSAlignWidthInward | NSAlignHeightInward;
 
@@ -49,12 +49,14 @@
 }
 
 - (void)setRcl_bounds:(CGRect)bounds {
-	// Matches the behavior of CGRectFloor().
-	NSAlignmentOptions options = NSAlignMinXOutward | NSAlignMinYInward | NSAlignWidthInward | NSAlignHeightInward;
+	if (self.window != nil) {
+		// Matches the behavior of CGRectFloor().
+		NSAlignmentOptions options = NSAlignMinXOutward | NSAlignMinYInward | NSAlignWidthInward | NSAlignHeightInward;
 
-	CGRect windowRect = [self convertRect:bounds toView:nil];
-	CGRect alignedWindowRect = [self backingAlignedRect:windowRect options:options];
-	bounds = [self convertRect:alignedWindowRect fromView:nil];
+		CGRect windowRect = [self convertRect:bounds toView:nil];
+		CGRect alignedWindowRect = [self backingAlignedRect:windowRect options:options];
+		bounds = [self convertRect:alignedWindowRect fromView:nil];
+	}
 
 	if (RCLIsInAnimatedSignal()) {
 		[self.animator setBounds:bounds];
