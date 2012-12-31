@@ -10,6 +10,30 @@
 #import "EXTScope.h"
 #import "RACSignal+RCLGeometryAdditions.h"
 
+// Aligns the given rectangle to the pixels on the view's screen, or the main
+// screen if the view is not attached to a screen yet.
+static CGRect backingAlignedRect(UIView *view, CGRect rect) {
+	NSCParameterAssert(view != nil);
+
+	UIScreen *screen = view.window.screen ?: UIScreen.mainScreen;
+	NSCAssert(screen != nil, @"Could not find a screen for view %@", view);
+	NSCAssert(screen.scale > 0, @"Screen has a weird scale: %@", screen);
+
+	rect.origin.x *= screen.scale;
+	rect.origin.y *= screen.scale;
+	rect.size.width *= screen.scale;
+	rect.size.height *= screen.scale;
+
+	rect = CGRectFloor(rect);
+
+	rect.origin.x /= screen.scale;
+	rect.origin.y /= screen.scale;
+	rect.size.width /= screen.scale;
+	rect.size.height /= screen.scale;
+
+	return rect;
+}
+
 @implementation UIView (RCLGeometryAdditions)
 
 #pragma mark Properties
@@ -19,7 +43,23 @@
 }
 
 - (void)setRcl_alignmentRect:(CGRect)rect {
-	self.frame = [self frameForAlignmentRect:rect];
+	self.rcl_frame = [self frameForAlignmentRect:rect];
+}
+
+- (CGRect)rcl_frame {
+	return self.frame;
+}
+
+- (void)setRcl_frame:(CGRect)frame {
+	self.frame = backingAlignedRect(self, frame);
+}
+
+- (CGRect)rcl_bounds {
+	return self.bounds;
+}
+
+- (void)setRcl_bounds:(CGRect)bounds {
+	self.bounds = backingAlignedRect(self, bounds);
 }
 
 #pragma mark Signals

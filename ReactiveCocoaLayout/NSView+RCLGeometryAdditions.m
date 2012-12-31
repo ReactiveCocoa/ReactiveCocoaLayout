@@ -28,6 +28,15 @@
 }
 
 - (void)setRcl_frame:(CGRect)frame {
+	if (self.superview != nil && self.window != nil) {
+		// Matches the behavior of CGRectFloor().
+		NSAlignmentOptions options = NSAlignMinXOutward | NSAlignMinYInward | NSAlignWidthInward | NSAlignHeightInward;
+
+		CGRect windowFrame = [self.superview convertRect:frame toView:nil];
+		CGRect alignedWindowFrame = [self backingAlignedRect:windowFrame options:options];
+		frame = [self.superview convertRect:alignedWindowFrame fromView:nil];
+	}
+
 	if (RCLIsInAnimatedSignal()) {
 		[self.animator setFrame:frame];
 	} else {
@@ -40,6 +49,15 @@
 }
 
 - (void)setRcl_bounds:(CGRect)bounds {
+	if (self.window != nil) {
+		// Matches the behavior of CGRectFloor().
+		NSAlignmentOptions options = NSAlignMinXOutward | NSAlignMinYInward | NSAlignWidthInward | NSAlignHeightInward;
+
+		CGRect windowRect = [self convertRect:bounds toView:nil];
+		CGRect alignedWindowRect = [self backingAlignedRect:windowRect options:options];
+		bounds = [self convertRect:alignedWindowRect fromView:nil];
+	}
+
 	if (RCLIsInAnimatedSignal()) {
 		[self.animator setBounds:bounds];
 	} else {

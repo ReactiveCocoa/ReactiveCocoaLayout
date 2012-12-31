@@ -885,4 +885,33 @@ static RACSignal *combineAttributeWithRects(NSLayoutAttribute attribute, NSArray
 	return animateWithDuration(self, &duration, RCLAnimationCurveDefault);
 }
 
+- (RACSignal *)floor {
+	return [self map:^ id (id value) {
+		if ([value isKindOfClass:NSNumber.class]) {
+			return @(floor([value doubleValue]));
+		}
+
+		NSAssert([value isKindOfClass:NSValue.class], @"Expected a number or value, got %@", value);
+
+		switch ([value med_geometryStructType]) {
+			case MEDGeometryStructTypeRect:
+				return MEDBox(CGRectFloor([value med_rectValue]));
+
+			case MEDGeometryStructTypePoint:
+				return MEDBox(CGPointFloor([value med_pointValue]));
+
+			case MEDGeometryStructTypeSize: {
+				CGSize size = [value med_sizeValue];
+				size.width = floor(size.width);
+				size.height = floor(size.height);
+				return MEDBox(size);
+			}
+
+			default:
+				NSAssert(NO, @"Unsupported type of value to floor: %@", value);
+				return nil;
+		}
+	}];
+}
+
 @end

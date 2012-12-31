@@ -96,7 +96,9 @@
 	// Inset the available rect, then cut out enough space for the email field
 	// vertically.
 	RACTupleUnpack(RACSignal *emailRect, RACSignal *possibleConfirmEmailRect) = [[self.contentView.rcl_frameSignal
-		insetWidth:[RACSignal return:@32] height:[RACSignal return:@16]]
+		// Purposely misaligned to demonstrate automatic pixel alignment when
+		// binding to RCL's NSView properties.
+		insetWidth:[RACSignal return:@32.25] height:[RACSignal return:@16.75]]
 		divideWithAmount:self.emailField.rcl_intrinsicHeightSignal padding:self.verticalPadding fromEdge:NSLayoutAttributeTop];
 
 	[self layoutField:self.emailField label:self.emailLabel fromSignal:emailRect];

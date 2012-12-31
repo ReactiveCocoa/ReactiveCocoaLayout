@@ -13,11 +13,30 @@
 // The alignment rect for the receiver's current frame.
 //
 // Setting this property will adjust the receiver's frame such that the
-// alignment rect matches the new value.
+// alignment rect matches the new value, before the frame is aligned to the
+// receiver's backing store.
 //
 // This property may have `RAC()` bindings applied to it, but it is not
 // KVO-compliant. Use -rcl_alignmentRectSignal for observing changes instead.
 @property (nonatomic, assign) CGRect rcl_alignmentRect;
+
+// The receiver's current frame.
+//
+// Setting this property to a given rect will automatically align the rect with
+// pixels on the screen.
+//
+// This property may have `RAC()` bindings applied to it, but it is not
+// KVO-compliant. Use -rcl_frameSignal for observing changes instead.
+@property (nonatomic, assign) CGRect rcl_frame;
+
+// The receiver's current bounds.
+//
+// Setting this property to a given rect will automatically align the rect with
+// pixels on the screen.
+//
+// This property may have `RAC()` bindings applied to it, but it is not
+// KVO-compliant. Use -rcl_boundsSignal for observing changes instead.
+@property (nonatomic, assign) CGRect rcl_bounds;
 
 // Observes the receiver's `bounds` for changes.
 //

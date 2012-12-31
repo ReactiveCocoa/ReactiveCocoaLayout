@@ -50,8 +50,9 @@
 	[self.view addSubview:self.nameLabel];
 	[self.view addSubview:self.nameTextField];
 
-	// Inset the available bounds.
-	RACSignal *insetRect = [self.view.rcl_boundsSignal insetWidth:[RACSignal return:@16] height:[RACSignal return:@24]];
+	// Purposely misaligned to demonstrate automatic pixel alignment when
+	// binding to RCL's UIView properties.
+	RACSignal *insetRect = [self.view.rcl_boundsSignal insetWidth:[RACSignal return:@16.25] height:[RACSignal return:@24.75]];
 
 	// Dynamically change the text of nameLabel based on the current
 	// orientation.
