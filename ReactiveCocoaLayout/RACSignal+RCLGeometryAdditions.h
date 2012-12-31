@@ -77,6 +77,13 @@ extern BOOL RCLIsInAnimatedSignal(void);
 // Returns a signal of CGSize values.
 - (RACSignal *)size;
 
+// Replaces the `size` field of each CGRect.
+//
+// sizeSignal - A signal of CGSize values, representing the new sizes.
+//
+// Returns a signal of new CGRect values.
+- (RACSignal *)replaceSize:(RACSignal *)sizeSignal;
+
 // Constructs sizes from the given width and height signals.
 //
 // Returns a signal of CGSize values.
@@ -87,15 +94,36 @@ extern BOOL RCLIsInAnimatedSignal(void);
 // Returns a signal of CGFloat values.
 - (RACSignal *)width;
 
+// Replaces the width of each CGRect or CGSize.
+//
+// widthSignal - A signal of CGFloat values, representing the new widths.
+//
+// Returns a signal of new CGRect values.
+- (RACSignal *)replaceWidth:(RACSignal *)widthSignal;
+
 // Maps CGRect or CGSize values to their heights.
 //
 // Returns a signal of CGFloat values.
 - (RACSignal *)height;
 
+// Replaces the height of each CGRect or CGSize.
+//
+// heightSignal - A signal of CGFloat values, representing the new heights.
+//
+// Returns a signal of new CGRect values.
+- (RACSignal *)replaceHeight:(RACSignal *)heightSignal;
+
 // Maps CGRect values to their `origin` fields.
 //
 // Returns a signal of CGPoint values.
 - (RACSignal *)origin;
+
+// Replaces the `origin` field of each CGRect.
+//
+// originSignal - A signal of CGPoint values, representing the new origins.
+//
+// Returns a signal of new CGRect values.
+- (RACSignal *)replaceOrigin:(RACSignal *)originSignal;
 
 // Maps CGRect values to their exact center point.
 //
@@ -112,10 +140,24 @@ extern BOOL RCLIsInAnimatedSignal(void);
 // Returns a signal of CGFloat values.
 - (RACSignal *)x;
 
+// Replaces the X position of each CGPoint.
+//
+// xSignal - A signal of CGFloat values, representing the new X positions.
+//
+// Returns a signal of new CGPoint values.
+- (RACSignal *)replaceX:(RACSignal *)xSignal;
+
 // Maps CGPoint values to their `y` fields.
 //
 // Returns a signal of CGFloat values.
 - (RACSignal *)y;
+
+// Replaces the Y position of each CGPoint.
+//
+// ySignal - A signal of CGFloat values, representing the new Y positions.
+//
+// Returns a signal of new CGPoint values.
+- (RACSignal *)replaceY:(RACSignal *)ySignal;
 
 // Maps CGRect values to their minimum X position.
 //
