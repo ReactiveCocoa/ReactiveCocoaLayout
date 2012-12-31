@@ -47,13 +47,28 @@
 	}
 }
 
+- (BOOL)rcl_isHidden {
+	return [self isHidden];
+}
+
+- (void)setRcl_hidden:(BOOL)hidden {
+	self.hidden = hidden;
+}
+
 #pragma mark Signals
 
 - (RACSignal *)rcl_boundsSignal {
-	// TODO: This only needs to be enabled when we actually start watching for
-	// the notification (i.e., after the startWith:).
+	// TODO: These only need to be enabled when we actually start watching for
+	// the notifications (i.e., after the startWith:).
 	self.postsBoundsChangedNotifications = YES;
-	return [[[[NSNotificationCenter.defaultCenter rac_addObserverForName:NSViewBoundsDidChangeNotification object:self]
+	self.postsFrameChangedNotifications = YES;
+
+	NSArray *signals = @[
+		[NSNotificationCenter.defaultCenter rac_addObserverForName:NSViewBoundsDidChangeNotification object:self],
+		[NSNotificationCenter.defaultCenter rac_addObserverForName:NSViewFrameDidChangeNotification object:self]
+	];
+
+	return [[[[RACSignal merge:signals]
 		map:^(NSNotification *notification) {
 			NSView *view = notification.object;
 			return [NSValue valueWithRect:view.bounds];

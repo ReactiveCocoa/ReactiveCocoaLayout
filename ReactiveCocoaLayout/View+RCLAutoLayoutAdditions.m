@@ -59,6 +59,14 @@ static void newInvalidateIntrinsicContentSize(id self, SEL _cmd) {
 	return [RACSignal rectsWithSize:self.rcl_intrinsicContentSizeSignal];
 }
 
+- (RACSignal *)rcl_intrinsicHeightSignal {
+	return self.rcl_intrinsicContentSizeSignal.height;
+}
+
+- (RACSignal *)rcl_intrinsicWidthSignal {
+	return self.rcl_intrinsicContentSizeSignal.width;
+}
+
 - (RACSignal *)rcl_alignmentRectSignal {
 	@unsafeify(self);
 	return [self.rcl_frameSignal map:^(id _) {
