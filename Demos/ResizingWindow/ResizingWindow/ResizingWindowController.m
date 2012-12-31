@@ -88,16 +88,16 @@
 
 	// We want to align all the text fields with the longest label.
 	RAC(self.labelWidth) = [RACSignal max:@[
-		self.nameLabel.rcl_intrinsicContentSizeSignal.width,
-		self.emailLabel.rcl_intrinsicContentSizeSignal.width,
-		self.confirmEmailLabel.rcl_intrinsicContentSizeSignal.width,
+		self.nameLabel.rcl_intrinsicWidthSignal,
+		self.emailLabel.rcl_intrinsicWidthSignal,
+		self.confirmEmailLabel.rcl_intrinsicWidthSignal,
 	]];
 
 	// Inset the available rect, then cut out enough space for the email field
 	// vertically.
 	RACTupleUnpack(RACSignal *emailRect, RACSignal *possibleConfirmEmailRect) = [[self.contentView.rcl_frameSignal
 		insetWidth:[RACSignal return:@32] height:[RACSignal return:@16]]
-		divideWithAmount:self.emailField.rcl_intrinsicContentSizeSignal.height padding:self.verticalPadding fromEdge:CGRectMaxYEdge];
+		divideWithAmount:self.emailField.rcl_intrinsicHeightSignal padding:self.verticalPadding fromEdge:CGRectMaxYEdge];
 
 	[self layoutField:self.emailField label:self.emailLabel fromSignal:emailRect];
 
@@ -106,7 +106,7 @@
 	//
 	// First, choose the appropriate signal based on the BOOL…
 	RACSignal *confirmHeightPlusPadding = [[RACSignal if:RACAbleWithStart(self.confirmEmailVisible)
-		then:[self.confirmEmailField.rcl_intrinsicContentSizeSignal.height plus:self.verticalPadding]
+		then:[self.confirmEmailField.rcl_intrinsicHeightSignal plus:self.verticalPadding]
 		else:[RACSignal return:@0]]
 		// Then animate all changes.
 		animate];
@@ -119,7 +119,7 @@
 	[self layoutField:self.confirmEmailField label:self.confirmEmailLabel fromSignal:confirmEmailRect];
 
 	// Only use the height that the name field actually requires.
-	nameRect = [nameRect sliceWithAmount:self.nameField.rcl_intrinsicContentSizeSignal.height fromEdge:CGRectMaxYEdge];
+	nameRect = [nameRect sliceWithAmount:self.nameField.rcl_intrinsicHeightSignal fromEdge:CGRectMaxYEdge];
 	[self layoutField:self.nameField label:self.nameLabel fromSignal:nameRect];
 }
 

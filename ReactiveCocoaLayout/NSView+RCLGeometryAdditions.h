@@ -47,6 +47,13 @@
 // KVO-compliant.
 @property (nonatomic, assign) CGFloat rcl_alphaValue;
 
+// Whether the receiver is marked as being hidden.
+//
+// This property is mostly for the convenience of bindings (because -isHidden
+// does not work in a key path), and may have `RAC()` applied to it, but it is
+// not KVO-compliant.
+@property (nonatomic, assign, getter = rcl_isHidden) BOOL rcl_hidden;
+
 // Observes the receiver's `bounds` for changes.
 //
 // This method may enable `postsBoundsChangedNotifications` to ensure that

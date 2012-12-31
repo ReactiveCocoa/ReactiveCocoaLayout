@@ -50,20 +50,30 @@
 	[self.view addSubview:self.nameLabel];
 	[self.view addSubview:self.nameTextField];
 
+	// Inset the available bounds.
 	RACSignal *insetRect = [self.view.rcl_boundsSignal insetWidth:[RACSignal return:@16] height:[RACSignal return:@24]];
 
+	// Dynamically change the text of nameLabel based on the current
+	// orientation.
 	RAC(self.nameLabel.text) = [self.rotationSignal map:^(NSNumber *orientation) {
 		return (UIInterfaceOrientationIsPortrait(orientation.integerValue) ? NSLocalizedString(@"Portrait!", @"") : NSLocalizedString(@"Landscape awww yeaahhh", @""));
 	}];
 
-	RACTupleUnpack(RACSignal *labelRect, RACSignal *textFieldRect) = [insetRect divideWithAmount:self.nameLabel.rcl_intrinsicContentSizeSignal.width padding:[RACSignal return:@8] fromEdge:CGRectMinXEdge];
+	// Horizontally divide the available space into a rect for the label and
+	// a rect for the text field.
+	RACTupleUnpack(RACSignal *labelRect, RACSignal *textFieldRect) = [insetRect divideWithAmount:self.nameLabel.rcl_intrinsicWidthSignal padding:[RACSignal return:@8] fromEdge:CGRectMinXEdge];
 
+	// Make the text field a constant 28 points high.
 	textFieldRect = [textFieldRect sliceWithAmount:[RACSignal return:@28] fromEdge:CGRectMinYEdge];
 
+	// Size the label to its intrinsic size, and align it to the text field.
+	//
+	// FIXME: Baseline alignment is a bit broken for iOS at the moment. See
+	// https://github.com/github/ReactiveCocoaLayout/issues/12.
 	RAC(self.nameLabel.rcl_alignmentRect) = [[labelRect replaceSize:self.nameLabel.rcl_intrinsicContentSizeSignal]
 		alignBaseline:self.nameLabel.rcl_baselineSignal toBaseline:self.nameTextField.rcl_baselineSignal ofRect:self.nameTextField.rcl_alignmentRectSignal];
 
-	// Animate the initial appearance of the text view, but not any changes due
+	// Animate the initial appearance of the text field, but not any changes due
 	// to rotation.
 	RAC(self.nameTextField.rcl_alignmentRect) = [[[[textFieldRect animateWithDuration:1 curve:RCLAnimationCurveEaseOut] take:1] delay:1] sequenceNext:^{
 		return textFieldRect;
