@@ -525,4 +525,15 @@ extern BOOL RCLIsInAnimatedSignal(void);
 // instead of the defaults.
 - (RACSignal *)animateWithDuration:(NSTimeInterval)duration curve:(RCLAnimationCurve)curve;
 
+// Rounds each CGFloat, CGPoint, CGSize, or CGRect to integral values.
+//
+// CGFloat and CGSize values are floored using the floor() function.
+// 
+// CGPoint and CGRect values are floored using Archimedes' CGPointFloor() and
+// CGRectFloor() functions, respectively, such that the coordinates always move
+// up and left.
+//
+// Returns a signal of rounded values, using the same type as the input values.
+- (RACSignal *)floor;
+
 @end

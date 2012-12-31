@@ -1046,4 +1046,64 @@ describe(@"mathematical operators", ^{
 	});
 });
 
+describe(@"-floor", ^{
+	it(@"should floor CGFloats", ^{
+		RACSequence *values = @[ @2, @3.5, @4.75, @5.2 ].rac_sequence;
+		RACSignal *floored = values.signal.floor;
+
+		RACSequence *expected = @[ @2, @3, @4, @5 ].rac_sequence;
+		expect(floored.sequence).to.equal(expected);
+	});
+
+	it(@"should floor CGPoints", ^{
+		RACSequence *values = @[
+			MEDBox(CGPointMake(1, 1)),
+			MEDBox(CGPointMake(2.2, 3.8)),
+			MEDBox(CGPointMake(4.5, 5)),
+		].rac_sequence;
+
+		RACSignal *floored = values.signal.floor;
+
+		RACSequence *expected = [values map:^(NSValue *value) {
+			return MEDBox(CGPointFloor(value.med_pointValue));
+		}];
+
+		expect(floored.sequence).to.equal(expected);
+	});
+
+	it(@"should floor CGSizes", ^{
+		RACSequence *values = @[
+			MEDBox(CGSizeMake(1, 1)),
+			MEDBox(CGSizeMake(2.2, 3.8)),
+			MEDBox(CGSizeMake(4.5, 5)),
+		].rac_sequence;
+
+		RACSignal *floored = values.signal.floor;
+
+		RACSequence *expected = @[
+			MEDBox(CGSizeMake(1, 1)),
+			MEDBox(CGSizeMake(2, 3)),
+			MEDBox(CGSizeMake(4, 5)),
+		].rac_sequence;
+
+		expect(floored.sequence).to.equal(expected);
+	});
+
+	it(@"should floor CGRects", ^{
+		RACSequence *values = @[
+			MEDBox(CGRectMake(1, 1, 2, 3)),
+			MEDBox(CGRectMake(2.2, 3.8, 4.5, 5)),
+			MEDBox(CGRectMake(6, 7, 8.1, 9.3)),
+		].rac_sequence;
+
+		RACSignal *floored = values.signal.floor;
+
+		RACSequence *expected = [values map:^(NSValue *value) {
+			return MEDBox(CGRectFloor(value.med_rectValue));
+		}];
+
+		expect(floored.sequence).to.equal(expected);
+	});
+});
+
 SpecEnd
