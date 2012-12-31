@@ -119,51 +119,79 @@ static RACSignal *latestNumberMatchingComparisonResult(NSArray *signals, NSCompa
 		}];
 }
 
-// Combines the values of the two signals using the given operator.
+// A binary operator accepting two numbers and returning a number.
+typedef CGFloat (^RCLBinaryOperator)(CGFloat, CGFloat);
+
+// Used from combineSignalsWithOperator() to combine two numbers using an
+// arbitrary binary operator.
+static NSNumber *combineNumbersWithOperator(NSNumber *a, NSNumber *b, RCLBinaryOperator operator) {
+	NSCAssert([a isKindOfClass:NSNumber.class], @"Expected a number, not %@", a);
+	NSCAssert([b isKindOfClass:NSNumber.class], @"Expected a number, not %@", b);
+
+	return @(operator(a.doubleValue, b.doubleValue));
+}
+
+// Used from combineSignalsWithOperator() to combine two values using an
+// arbitrary binary operator.
+static NSValue *combineValuesWithOperator(NSValue *a, NSValue *b, RCLBinaryOperator operator) {
+	NSCAssert([a isKindOfClass:NSValue.class], @"Expected a value, not %@", a);
+	NSCAssert([b isKindOfClass:NSValue.class], @"Expected a value, not %@", b);
+	NSCAssert(a.med_geometryStructType == b.med_geometryStructType, @"Values do not contain the same type of geometry structure: %@, %@", a, b);
+
+	switch (a.med_geometryStructType) {
+		case MEDGeometryStructTypePoint: {
+			CGPoint pointA = a.med_pointValue;
+			CGPoint pointB = b.med_pointValue;
+
+			CGPoint result = CGPointMake(operator(pointA.x, pointB.x), operator(pointA.y, pointB.y));
+			return MEDBox(result);
+		}
+
+		case MEDGeometryStructTypeSize: {
+			CGSize sizeA = a.med_sizeValue;
+			CGSize sizeB = b.med_sizeValue;
+
+			CGSize result = CGSizeMake(operator(sizeA.width, sizeB.width), operator(sizeA.height, sizeB.height));
+			return MEDBox(result);
+		}
+
+		case MEDGeometryStructTypeRect:
+		default:
+			NSCAssert(NO, @"Values must contain CGSizes or CGPoints: %@, %@", a, b);
+			return nil;
+	}
+}
+
+// Combines the values of the given signals using the given binary operator,
+// applied left-to-right across the signal values.
 //
-// The values may be CGFloats, CGSizes, or CGPoints, but both signals must send
+// The values may be CGFloats, CGSizes, or CGPoints, but all signals must send
 // values of the same type.
 //
 // Returns a signal of results, using the same type as the input values.
-static RACSignal *combineSignalsWithOperator(RACSignal *a, RACSignal *b, CGFloat (^operator)(CGFloat, CGFloat)) {
-	NSCParameterAssert(a != nil);
-	NSCParameterAssert(b != nil);
+static RACSignal *combineSignalsWithOperator(NSArray *signals, RCLBinaryOperator operator) {
+	NSCParameterAssert(signals != nil);
+	NSCParameterAssert(signals.count > 0);
 	NSCParameterAssert(operator != nil);
 
-	return [RACSignal combineLatest:@[ a, b ] reduce:^ id (id valueA, id valueB) {
-		if ([valueA isKindOfClass:NSNumber.class]) {
-			NSCAssert([valueB isKindOfClass:NSNumber.class], @"%@ is a number, but %@ is not", valueA, valueB);
+	return [[[RACSignal combineLatest:signals]
+		map:^(RACTuple *values) {
+			return values.allObjects.rac_sequence;
+		}]
+		map:^(RACSequence *values) {
+			id result = values.head;
+			BOOL isNumber = [result isKindOfClass:NSNumber.class];
 
-			return @(operator([valueA doubleValue], [valueB doubleValue]));
-		}
-
-		NSCAssert([valueA isKindOfClass:NSValue.class], @"%@ is not a number, so it should be an NSValue", valueA);
-		NSCAssert([valueB isKindOfClass:NSValue.class], @"%@ is an NSValue, but %@ is not", valueA, valueB);
-		NSCAssert([valueA med_geometryStructType] == [valueB med_geometryStructType], @"Values do not contain the same type of geometry structure: %@, %@", valueA, valueB);
-
-		switch ([valueA med_geometryStructType]) {
-			case MEDGeometryStructTypePoint: {
-				CGPoint pointA = [valueA med_pointValue];
-				CGPoint pointB = [valueB med_pointValue];
-
-				CGPoint result = CGPointMake(operator(pointA.x, pointB.x), operator(pointA.y, pointB.y));
-				return MEDBox(result);
+			for (id value in values.tail) {
+				if (isNumber) {
+					result = combineNumbersWithOperator(result, value, operator);
+				} else {
+					result = combineValuesWithOperator(result, value, operator);
+				}
 			}
 
-			case MEDGeometryStructTypeSize: {
-				CGSize sizeA = [valueA med_sizeValue];
-				CGSize sizeB = [valueB med_sizeValue];
-
-				CGSize result = CGSizeMake(operator(sizeA.width, sizeB.width), operator(sizeA.height, sizeB.height));
-				return MEDBox(result);
-			}
-
-			case MEDGeometryStructTypeRect:
-			default:
-				NSCAssert(NO, @"Values must contain CGSizes or CGPoints: %@, %@", valueA, valueB);
-				return nil;
-		}
-	}];
+			return result;
+		}];
 }
 
 @implementation RACSignal (RCLGeometryAdditions)
@@ -600,28 +628,52 @@ static RACSignal *combineSignalsWithOperator(RACSignal *a, RACSignal *b, CGFloat
 	return latestNumberMatchingComparisonResult(signals, NSOrderedDescending);
 }
 
-- (RACSignal *)plus:(RACSignal *)addendSignal {
-	return combineSignalsWithOperator(self, addendSignal, ^(CGFloat a, CGFloat b) {
++ (RACSignal *)add:(NSArray *)signals {
+	return combineSignalsWithOperator(signals, ^(CGFloat a, CGFloat b) {
 		return a + b;
 	});
 }
 
-- (RACSignal *)minus:(RACSignal *)subtrahendSignal {
-	return combineSignalsWithOperator(self, subtrahendSignal, ^(CGFloat a, CGFloat b) {
++ (RACSignal *)subtract:(NSArray *)signals {
+	return combineSignalsWithOperator(signals, ^(CGFloat a, CGFloat b) {
 		return a - b;
 	});
 }
 
-- (RACSignal *)multipliedBy:(RACSignal *)factorSignal {
-	return combineSignalsWithOperator(self, factorSignal, ^(CGFloat a, CGFloat b) {
++ (RACSignal *)multiply:(NSArray *)signals {
+	return combineSignalsWithOperator(signals, ^(CGFloat a, CGFloat b) {
 		return a * b;
 	});
 }
 
-- (RACSignal *)dividedBy:(RACSignal *)denominatorSignal {
-	return combineSignalsWithOperator(self, denominatorSignal, ^(CGFloat a, CGFloat b) {
++ (RACSignal *)divide:(NSArray *)signals {
+	return combineSignalsWithOperator(signals, ^(CGFloat a, CGFloat b) {
 		return a / b;
 	});
+}
+
+- (RACSignal *)plus:(RACSignal *)addendSignal {
+	NSParameterAssert(addendSignal != nil);
+
+	return [RACSignal add:@[ self, addendSignal ]];
+}
+
+- (RACSignal *)minus:(RACSignal *)subtrahendSignal {
+	NSParameterAssert(subtrahendSignal != nil);
+
+	return [RACSignal subtract:@[ self, subtrahendSignal ]];
+}
+
+- (RACSignal *)multipliedBy:(RACSignal *)factorSignal {
+	NSParameterAssert(factorSignal != nil);
+
+	return [RACSignal multiply:@[ self, factorSignal ]];
+}
+
+- (RACSignal *)dividedBy:(RACSignal *)denominatorSignal {
+	NSParameterAssert(denominatorSignal != nil);
+
+	return [RACSignal divide:@[ self, denominatorSignal ]];
 }
 
 - (RACSignal *)animate {
