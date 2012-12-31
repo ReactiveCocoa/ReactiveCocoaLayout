@@ -74,9 +74,15 @@ beforeEach(^{
 
 describe(@"signal of CGRects", ^{
 	__block RACSignal *signal;
+	__block CGRectEdge leadingEdge;
 
 	beforeEach(^{
 		signal = rects.signal;
+
+		NSNumber *leadingEdgeNum = [RACSignal.leadingEdgeSignal first];
+		expect(leadingEdgeNum).notTo.beNil();
+
+		leadingEdge = (CGRectEdge)leadingEdgeNum.unsignedIntegerValue;
 	});
 
 	it(@"should map to sizes", ^{
@@ -95,56 +101,99 @@ describe(@"signal of CGRects", ^{
 		expect(signal.center.sequence).to.equal(expected);
 	});
 
-	it(@"should map to widths", ^{
-		expect(signal.width.sequence).to.equal(widths);
-	});
+	describe(@"getting attribute values", ^{
+		__block RACSequence *tops;
+		__block RACSequence *bottoms;
+		__block RACSequence *leadings;
+		__block RACSequence *trailings;
 
-	it(@"should map to heights", ^{
-		expect(signal.height.sequence).to.equal(heights);
-	});
+		beforeEach(^{
+			if (leadingEdge == CGRectMinXEdge) {
+				leadings = minXs;
+				trailings = maxXs;
+			} else {
+				leadings = maxXs;
+				trailings = minXs;
+			}
 
-	it(@"should map to positions of a specific edge", ^{
-		RACSignal *minX = [signal positionOfEdge:[RACSignal return:@(CGRectMinXEdge)]];
-		expect(minX.sequence).to.equal(minXs);
+			#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
+			tops = minYs;
+			bottoms = maxYs;
+			#elif TARGET_OS_MAC
+			tops = maxYs;
+			bottoms = minYs;
+			#endif
+		});
 
-		RACSignal *minY = [signal positionOfEdge:[RACSignal return:@(CGRectMinYEdge)]];
-		expect(minY.sequence).to.equal(minYs);
-	});
+		it(@"should map to NSLayoutAttributeLeft", ^{
+			RACSignal *result = [signal valueForAttribute:NSLayoutAttributeLeft];
+			expect(result.sequence).to.equal(minXs);
 
-	it(@"should map to minX values", ^{
-		expect(signal.minX.sequence).to.equal(minXs);
-	});
+			expect(signal.left.sequence).to.equal(minXs);
+		});
 
-	it(@"should map to minY values", ^{
-		expect(signal.minY.sequence).to.equal(minYs);
-	});
+		it(@"should map to NSLayoutAttributeRight", ^{
+			RACSignal *result = [signal valueForAttribute:NSLayoutAttributeRight];
+			expect(result.sequence).to.equal(maxXs);
 
-	it(@"should map to centerX values", ^{
-		expect(signal.centerX.sequence).to.equal(centerXs);
-	});
+			expect(signal.right.sequence).to.equal(maxXs);
+		});
 
-	it(@"should map to centerY values", ^{
-		expect(signal.centerY.sequence).to.equal(centerYs);
-	});
+		it(@"should map to NSLayoutAttributeTop", ^{
+			RACSignal *result = [signal valueForAttribute:NSLayoutAttributeTop];
+			expect(result.sequence).to.equal(tops);
 
-	it(@"should map to maxX values", ^{
-		expect(signal.maxX.sequence).to.equal(maxXs);
-	});
+			expect(signal.top.sequence).to.equal(tops);
+		});
 
-	it(@"should map to maxY values", ^{
-		expect(signal.maxY.sequence).to.equal(maxYs);
-	});
+		it(@"should map to NSLayoutAttributeBottom", ^{
+			RACSignal *result = [signal valueForAttribute:NSLayoutAttributeBottom];
+			expect(result.sequence).to.equal(bottoms);
 
-	it(@"should map to leading and trailing", ^{
-		RACSequence *leading = signal.leading.sequence;
-		RACSequence *trailing = signal.trailing.sequence;
+			expect(signal.bottom.sequence).to.equal(bottoms);
+		});
 
-		if ([leading isEqual:minXs]) {
-			expect(trailing).to.equal(maxXs);
-		} else {
-			expect(leading).to.equal(maxXs);
-			expect(trailing).to.equal(minXs);
-		}
+		it(@"should map to NSLayoutAttributeWidth", ^{
+			RACSignal *result = [signal valueForAttribute:NSLayoutAttributeWidth];
+			expect(result.sequence).to.equal(widths);
+
+			expect(signal.width.sequence).to.equal(widths);
+		});
+
+		it(@"should map to NSLayoutAttributeHeight", ^{
+			RACSignal *result = [signal valueForAttribute:NSLayoutAttributeHeight];
+			expect(result.sequence).to.equal(heights);
+
+			expect(signal.height.sequence).to.equal(heights);
+		});
+
+		it(@"should map to NSLayoutAttributeCenterX", ^{
+			RACSignal *result = [signal valueForAttribute:NSLayoutAttributeCenterX];
+			expect(result.sequence).to.equal(centerXs);
+
+			expect(signal.centerX.sequence).to.equal(centerXs);
+		});
+
+		it(@"should map to NSLayoutAttributeCenterY", ^{
+			RACSignal *result = [signal valueForAttribute:NSLayoutAttributeCenterY];
+			expect(result.sequence).to.equal(centerYs);
+
+			expect(signal.centerY.sequence).to.equal(centerYs);
+		});
+
+		it(@"should map to NSLayoutAttributeLeading", ^{
+			RACSignal *result = [signal valueForAttribute:NSLayoutAttributeLeading];
+			expect(result.sequence).to.equal(leadings);
+
+			expect(signal.leading.sequence).to.equal(leadings);
+		});
+
+		it(@"should map to NSLayoutAttributeTrailing", ^{
+			RACSignal *result = [signal valueForAttribute:NSLayoutAttributeTrailing];
+			expect(result.sequence).to.equal(trailings);
+
+			expect(signal.trailing.sequence).to.equal(trailings);
+		});
 	});
 
 	it(@"should inset", ^{
@@ -170,7 +219,7 @@ describe(@"signal of CGRects", ^{
 	});
 
 	it(@"should slice", ^{
-		RACSignal *result = [signal sliceWithAmount:[RACSignal return:@5] fromEdge:CGRectMinXEdge];
+		RACSignal *result = [signal sliceWithAmount:[RACSignal return:@5] fromEdge:NSLayoutAttributeLeft];
 		NSArray *expectedRects = @[
 			MEDBox(CGRectMake(10, 10, 5, 20)),
 			MEDBox(CGRectMake(10, 20, 5, 40)),
@@ -181,29 +230,138 @@ describe(@"signal of CGRects", ^{
 	});
 
 	it(@"should return a remainder", ^{
-		RACSignal *result = [signal remainderAfterSlicingAmount:[RACSignal return:@5] fromEdge:CGRectMinYEdge];
+		RACSignal *result = [signal remainderAfterSlicingAmount:[RACSignal return:@5] fromEdge:NSLayoutAttributeLeft];
 		NSArray *expectedRects = @[
-			MEDBox(CGRectMake(10, 15, 20, 15)),
-			MEDBox(CGRectMake(10, 25, 30, 35)),
-			MEDBox(CGRectMake(25, 20, 45, 30)),
+			MEDBox(CGRectMake(15, 10, 15, 20)),
+			MEDBox(CGRectMake(15, 20, 25, 40)),
+			MEDBox(CGRectMake(30, 15, 40, 35)),
 		];
 
 		expect(result.sequence).to.equal(expectedRects.rac_sequence);
 	});
 
-	it(@"should grow", ^{
-		RACSignal *result = [signal growEdge:CGRectMaxXEdge byAmount:[RACSignal return:@5]];
-		NSArray *expectedRects = @[
-			MEDBox(CGRectMake(10, 10, 25, 20)),
-			MEDBox(CGRectMake(10, 20, 35, 40)),
-			MEDBox(CGRectMake(25, 15, 50, 35)),
-		];
+	describe(@"extending attributes", ^{
+		__block RACSignal *value;
+		
+		__block RACSequence *extendedMinX;
+		__block RACSequence *extendedMaxX;
+		__block RACSequence *extendedMinY;
+		__block RACSequence *extendedMaxY;
 
-		expect(result.sequence).to.equal(expectedRects.rac_sequence);
+		__block RACSequence *extendedLeading;
+		__block RACSequence *extendedTrailing;
+		
+		beforeEach(^{
+			value = [RACSignal return:@-5];
+
+			extendedMinX = @[
+				MEDBox(CGRectMake(15, 10, 15, 20)),
+				MEDBox(CGRectMake(15, 20, 25, 40)),
+				MEDBox(CGRectMake(30, 15, 40, 35)),
+			].rac_sequence;
+
+			extendedMaxX = @[
+				MEDBox(CGRectMake(10, 10, 15, 20)),
+				MEDBox(CGRectMake(10, 20, 25, 40)),
+				MEDBox(CGRectMake(25, 15, 40, 35)),
+			].rac_sequence;
+
+			extendedMinY = @[
+				MEDBox(CGRectMake(10, 15, 20, 15)),
+				MEDBox(CGRectMake(10, 25, 30, 35)),
+				MEDBox(CGRectMake(25, 20, 45, 30)),
+			].rac_sequence;
+
+			extendedMaxY = @[
+				MEDBox(CGRectMake(10, 10, 20, 15)),
+				MEDBox(CGRectMake(10, 20, 30, 35)),
+				MEDBox(CGRectMake(25, 15, 45, 30)),
+			].rac_sequence;
+
+			if (leadingEdge == CGRectMinXEdge) {
+				extendedLeading = extendedMinX;
+				extendedTrailing = extendedMaxX;
+			} else {
+				extendedLeading = extendedMaxX;
+				extendedTrailing = extendedMinX;
+			}
+		});
+
+		it(@"should extend left side", ^{
+			expect([signal extendAttribute:NSLayoutAttributeLeft byAmount:value].sequence).to.equal(extendedMinX);
+		});
+
+		it(@"should extend right side", ^{
+			expect([signal extendAttribute:NSLayoutAttributeRight byAmount:value].sequence).to.equal(extendedMaxX);
+		});
+
+		it(@"should extend leading side", ^{
+			expect([signal extendAttribute:NSLayoutAttributeLeading byAmount:value].sequence).to.equal(extendedLeading);
+		});
+
+		it(@"should extend trailing side", ^{
+			expect([signal extendAttribute:NSLayoutAttributeTrailing byAmount:value].sequence).to.equal(extendedTrailing);
+		});
+
+		it(@"should extend top", ^{
+			#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
+				expect([signal extendAttribute:NSLayoutAttributeTop byAmount:value].sequence).to.equal(extendedMinY);
+			#elif TARGET_OS_MAC
+				expect([signal extendAttribute:NSLayoutAttributeTop byAmount:value].sequence).to.equal(extendedMaxY);
+			#endif
+		});
+
+		it(@"should extend bottom", ^{
+			#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
+				expect([signal extendAttribute:NSLayoutAttributeBottom byAmount:value].sequence).to.equal(extendedMaxY);
+			#elif TARGET_OS_MAC
+				expect([signal extendAttribute:NSLayoutAttributeBottom byAmount:value].sequence).to.equal(extendedMinY);
+			#endif
+		});
+
+		it(@"should extend width", ^{
+			RACSequence *expected = @[
+				MEDBox(CGRectMake(12.5, 10, 15, 20)),
+				MEDBox(CGRectMake(12.5, 20, 25, 40)),
+				MEDBox(CGRectMake(27.5, 15, 40, 35)),
+			].rac_sequence;
+
+			expect([signal extendAttribute:NSLayoutAttributeWidth byAmount:value].sequence).to.equal(expected);
+		});
+
+		it(@"should extend height", ^{
+			RACSequence *expected = @[
+				MEDBox(CGRectMake(10, 12.5, 20, 15)),
+				MEDBox(CGRectMake(10, 22.5, 30, 35)),
+				MEDBox(CGRectMake(25, 17.5, 45, 30)),
+			].rac_sequence;
+
+			expect([signal extendAttribute:NSLayoutAttributeHeight byAmount:value].sequence).to.equal(expected);
+		});
+
+		it(@"should extend center X", ^{
+			RACSequence *expected = @[
+				MEDBox(CGRectMake(5, 10, 20, 20)),
+				MEDBox(CGRectMake(5, 20, 30, 40)),
+				MEDBox(CGRectMake(20, 15, 45, 35)),
+			].rac_sequence;
+
+			expect([signal extendAttribute:NSLayoutAttributeCenterX byAmount:value].sequence).to.equal(expected);
+		});
+
+		it(@"should extend center Y", ^{
+			RACSequence *expected = @[
+				MEDBox(CGRectMake(10, 5, 20, 20)),
+				MEDBox(CGRectMake(10, 15, 30, 40)),
+				MEDBox(CGRectMake(25, 10, 45, 35)),
+			].rac_sequence;
+
+			expect([signal extendAttribute:NSLayoutAttributeCenterY byAmount:value].sequence).to.equal(expected);
+		});
 	});
 
 	it(@"should divide into two rects", ^{
-		RACTupleUnpack(RACSignal *slices, RACSignal *remainders) = [signal divideWithAmount:[RACSignal return:@15] fromEdge:CGRectMinXEdge];
+		RACTupleUnpack(RACSignal *slices, RACSignal *remainders) = [signal divideWithAmount:[RACSignal return:@15] fromEdge:NSLayoutAttributeLeft];
 
 		NSArray *expectedSlices = @[
 			MEDBox(CGRectMake(10, 10, 15, 20)),
@@ -222,7 +380,7 @@ describe(@"signal of CGRects", ^{
 	});
 
 	it(@"should divide into two rects with padding", ^{
-		RACTupleUnpack(RACSignal *slices, RACSignal *remainders) = [signal divideWithAmount:[RACSignal return:@15] padding:[RACSignal return:@3] fromEdge:CGRectMinXEdge];
+		RACTupleUnpack(RACSignal *slices, RACSignal *remainders) = [signal divideWithAmount:[RACSignal return:@15] padding:[RACSignal return:@3] fromEdge:NSLayoutAttributeLeft];
 
 		NSArray *expectedSlices = @[
 			MEDBox(CGRectMake(10, 10, 15, 20)),
@@ -333,58 +491,138 @@ describe(@"signal of CGRects", ^{
 		expect(values).to.equal(expected);
 	});
 
-	describe(@"position alignment", ^{
-		__block RACSignal *position;
+	describe(@"aligning attributes", ^{
+		__block RACSignal *value;
+		
+		__block RACSequence *alignedMinX;
+		__block RACSequence *alignedMaxX;
+		__block RACSequence *alignedMinY;
+		__block RACSequence *alignedMaxY;
+
+		__block RACSequence *alignedLeading;
+		__block RACSequence *alignedTrailing;
 		
 		beforeEach(^{
-			position = [RACSignal return:@3];
-		});
+			value = [RACSignal return:@3];
 
-		it(@"should align minX to a specified position", ^{
-			RACSignal *aligned = [signal alignEdge:[RACSignal return:@(CGRectMinXEdge)] toPosition:position];
-			RACSequence *expected = @[
+			alignedMinX = @[
 				MEDBox(CGRectMake(3, 10, 20, 20)),
 				MEDBox(CGRectMake(3, 20, 30, 40)),
 				MEDBox(CGRectMake(3, 15, 45, 35)),
 			].rac_sequence;
 
-			expect(aligned.sequence).to.equal(expected);
-		});
+			alignedMaxX = @[
+				MEDBox(CGRectMake(-17, 10, 20, 20)),
+				MEDBox(CGRectMake(-27, 20, 30, 40)),
+				MEDBox(CGRectMake(-42, 15, 45, 35)),
+			].rac_sequence;
 
-		it(@"should align minY to a specified position", ^{
-			RACSignal *aligned = [signal alignEdge:[RACSignal return:@(CGRectMinYEdge)] toPosition:position];
-			RACSequence *expected = @[
+			alignedMinY = @[
 				MEDBox(CGRectMake(10, 3, 20, 20)),
 				MEDBox(CGRectMake(10, 3, 30, 40)),
 				MEDBox(CGRectMake(25, 3, 45, 35)),
 			].rac_sequence;
 
-			expect(aligned.sequence).to.equal(expected);
+			alignedMaxY = @[
+				MEDBox(CGRectMake(10, -17, 20, 20)),
+				MEDBox(CGRectMake(10, -37, 30, 40)),
+				MEDBox(CGRectMake(25, -32, 45, 35)),
+			].rac_sequence;
+
+			if (leadingEdge == CGRectMinXEdge) {
+				alignedLeading = alignedMinX;
+				alignedTrailing = alignedMaxX;
+			} else {
+				alignedLeading = alignedMaxX;
+				alignedTrailing = alignedMinX;
+			}
 		});
 
-		it(@"should align centerX to a specified position", ^{
-			RACSignal *aligned = [signal alignCenterX:position];
+		it(@"should align left side to a specified value", ^{
+			expect([signal alignAttribute:NSLayoutAttributeLeft to:value].sequence).to.equal(alignedMinX);
+			expect([signal alignLeft:value].sequence).to.equal(alignedMinX);
+		});
+
+		it(@"should align right side to a specified value", ^{
+			expect([signal alignAttribute:NSLayoutAttributeRight to:value].sequence).to.equal(alignedMaxX);
+			expect([signal alignRight:value].sequence).to.equal(alignedMaxX);
+		});
+
+		it(@"should align leading side to a specified value", ^{
+			expect([signal alignAttribute:NSLayoutAttributeLeading to:value].sequence).to.equal(alignedLeading);
+			expect([signal alignLeading:value].sequence).to.equal(alignedLeading);
+		});
+
+		it(@"should align trailing side to a specified value", ^{
+			expect([signal alignAttribute:NSLayoutAttributeTrailing to:value].sequence).to.equal(alignedTrailing);
+			expect([signal alignTrailing:value].sequence).to.equal(alignedTrailing);
+		});
+
+		it(@"should align top to a specified value", ^{
+			#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
+				expect([signal alignAttribute:NSLayoutAttributeTop to:value].sequence).to.equal(alignedMinY);
+				expect([signal alignTop:value].sequence).to.equal(alignedMinY);
+			#elif TARGET_OS_MAC
+				expect([signal alignAttribute:NSLayoutAttributeTop to:value].sequence).to.equal(alignedMaxY);
+				expect([signal alignTop:value].sequence).to.equal(alignedMaxY);
+			#endif
+		});
+
+		it(@"should align bottom to a specified value", ^{
+			#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
+				expect([signal alignAttribute:NSLayoutAttributeBottom to:value].sequence).to.equal(alignedMaxY);
+				expect([signal alignBottom:value].sequence).to.equal(alignedMaxY);
+			#elif TARGET_OS_MAC
+				expect([signal alignAttribute:NSLayoutAttributeBottom to:value].sequence).to.equal(alignedMinY);
+				expect([signal alignBottom:value].sequence).to.equal(alignedMinY);
+			#endif
+		});
+
+		it(@"should align width to a specified value", ^{
+			RACSequence *expected = @[
+				MEDBox(CGRectMake(10, 10, 3, 20)),
+				MEDBox(CGRectMake(10, 20, 3, 40)),
+				MEDBox(CGRectMake(25, 15, 3, 35)),
+			].rac_sequence;
+
+			expect([signal alignAttribute:NSLayoutAttributeWidth to:value].sequence).to.equal(expected);
+			expect([signal alignWidth:value].sequence).to.equal(expected);
+		});
+
+		it(@"should align height to a specified value", ^{
+			RACSequence *expected = @[
+				MEDBox(CGRectMake(10, 10, 20, 3)),
+				MEDBox(CGRectMake(10, 20, 30, 3)),
+				MEDBox(CGRectMake(25, 15, 45, 3)),
+			].rac_sequence;
+
+			expect([signal alignAttribute:NSLayoutAttributeHeight to:value].sequence).to.equal(expected);
+			expect([signal alignHeight:value].sequence).to.equal(expected);
+		});
+
+		it(@"should align center X to a specified value", ^{
 			RACSequence *expected = @[
 				MEDBox(CGRectMake(-7, 10, 20, 20)),
 				MEDBox(CGRectMake(-12, 20, 30, 40)),
 				MEDBox(CGRectMake(-19.5, 15, 45, 35)),
 			].rac_sequence;
 
-			expect(aligned.sequence).to.equal(expected);
+			expect([signal alignAttribute:NSLayoutAttributeCenterX to:value].sequence).to.equal(expected);
+			expect([signal alignCenterX:value].sequence).to.equal(expected);
 		});
 
-		it(@"should align centerY to a specified position", ^{
-			RACSignal *aligned = [signal alignCenterY:position];
+		it(@"should align center Y to a specified value", ^{
 			RACSequence *expected = @[
 				MEDBox(CGRectMake(10, -7, 20, 20)),
 				MEDBox(CGRectMake(10, -17, 30, 40)),
 				MEDBox(CGRectMake(25, -14.5, 45, 35)),
 			].rac_sequence;
 
-			expect(aligned.sequence).to.equal(expected);
+			expect([signal alignAttribute:NSLayoutAttributeCenterY to:value].sequence).to.equal(expected);
+			expect([signal alignCenterY:value].sequence).to.equal(expected);
 		});
 
-		it(@"should align center point to a specified position", ^{
+		it(@"should align center point to a specified value", ^{
 			CGPoint center = CGPointMake(5, 10);
 			RACSignal *aligned = [signal alignCenter:[RACSignal return:MEDBox(center)]];
 
@@ -392,28 +630,6 @@ describe(@"signal of CGRects", ^{
 				MEDBox(CGRectMake(-5, 0, 20, 20)),
 				MEDBox(CGRectMake(-10, -10, 30, 40)),
 				MEDBox(CGRectMake(-17.5, -7.5, 45, 35)),
-			].rac_sequence;
-
-			expect(aligned.sequence).to.equal(expected);
-		});
-
-		it(@"should align maxX to a specified position", ^{
-			RACSignal *aligned = [signal alignEdge:[RACSignal return:@(CGRectMaxXEdge)] toPosition:position];
-			RACSequence *expected = @[
-				MEDBox(CGRectMake(-17, 10, 20, 20)),
-				MEDBox(CGRectMake(-27, 20, 30, 40)),
-				MEDBox(CGRectMake(-42, 15, 45, 35)),
-			].rac_sequence;
-
-			expect(aligned.sequence).to.equal(expected);
-		});
-
-		it(@"should align maxY to a specified position", ^{
-			RACSignal *aligned = [signal alignEdge:[RACSignal return:@(CGRectMaxYEdge)] toPosition:position];
-			RACSequence *expected = @[
-				MEDBox(CGRectMake(10, -17, 20, 20)),
-				MEDBox(CGRectMake(10, -37, 30, 40)),
-				MEDBox(CGRectMake(25, -32, 45, 35)),
 			].rac_sequence;
 
 			expect(aligned.sequence).to.equal(expected);
