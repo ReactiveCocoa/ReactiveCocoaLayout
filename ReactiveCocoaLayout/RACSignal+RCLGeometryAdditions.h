@@ -182,6 +182,18 @@ extern BOOL RCLIsInAnimatedSignal(void);
 // Returns a signal of new, inset CGRect values.
 - (RACSignal *)insetWidth:(RACSignal *)widthSignal height:(RACSignal *)heightSignal;
 
+// Offsets each CGPoint or CGRect by the number of points sent from the given
+// X and Y signals.
+//
+// xSignal - A signal of CGFloat values, representing the number of points to
+//           offset the X position by.
+// ySignal - A signal of CGFloat values, representing the number of points to
+//           offset the Y position by.
+//
+// Returns a signal of offset points or rects, using the same type as the input
+// values.
+- (RACSignal *)offsetX:(RACSignal *)xSignal Y:(RACSignal *)ySignal;
+
 // Trims each CGRect to the number of points sent from `amountSignal`, as
 // measured starting from the given edge.
 //
