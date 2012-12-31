@@ -47,6 +47,14 @@
 	}
 }
 
+- (BOOL)rcl_isHidden {
+	return [self isHidden];
+}
+
+- (void)setRcl_hidden:(BOOL)hidden {
+	self.hidden = hidden;
+}
+
 #pragma mark Signals
 
 - (RACSignal *)rcl_boundsSignal {
