@@ -37,7 +37,12 @@ sharedExamplesFor(ViewExamples, ^{
 		expect(lastValue).notTo.beNil();
 		expect(lastValue.med_rectValue).to.equal(initialBounds);
 
-		CGRect newBounds = CGRectMake(10, 20, 30, 40);
+		CGRect newBounds = CGRectMake(0, 0, 35, 45);
+		view.frame = CGRectMake(10, 20, 35, 45);
+		expect(view.bounds).to.equal(newBounds);
+		expect(lastValue.med_rectValue).to.equal(newBounds);
+
+		newBounds = CGRectMake(0, 0, 30, 40);
 		view.bounds = newBounds;
 		expect(lastValue.med_rectValue).to.equal(newBounds);
 	});
