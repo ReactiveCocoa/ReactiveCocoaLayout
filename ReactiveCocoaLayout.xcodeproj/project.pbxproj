@@ -42,6 +42,9 @@
 		D096C4EC16917B0D0071C6D6 /* NSControlRCLGeometryAdditionsSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = D096C4EB16917B0D0071C6D6 /* NSControlRCLGeometryAdditionsSpec.m */; };
 		D096C4EF16917B140071C6D6 /* NSControl+RCLGeometryAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = D096C4ED16917B140071C6D6 /* NSControl+RCLGeometryAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D096C4F016917B140071C6D6 /* NSControl+RCLGeometryAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = D096C4EE16917B140071C6D6 /* NSControl+RCLGeometryAdditions.m */; };
+		D096C51816917BA60071C6D6 /* NSCell+RCLGeometryAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = D096C51616917BA60071C6D6 /* NSCell+RCLGeometryAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D096C51916917BA60071C6D6 /* NSCell+RCLGeometryAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = D096C51716917BA60071C6D6 /* NSCell+RCLGeometryAdditions.m */; };
+		D096C51B16917EF30071C6D6 /* NSCellRCLGeometryAdditionsSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = D096C51A16917EF30071C6D6 /* NSCellRCLGeometryAdditionsSpec.m */; };
 		D0BB24751678772C005E9371 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0BB24741678772C005E9371 /* Cocoa.framework */; };
 		D0BB247F1678772C005E9371 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = D0BB247D1678772C005E9371 /* InfoPlist.strings */; };
 		D0BB248B1678772C005E9371 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0BB248A1678772C005E9371 /* SenTestingKit.framework */; };
@@ -281,6 +284,9 @@
 		D096C4EB16917B0D0071C6D6 /* NSControlRCLGeometryAdditionsSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSControlRCLGeometryAdditionsSpec.m; sourceTree = "<group>"; };
 		D096C4ED16917B140071C6D6 /* NSControl+RCLGeometryAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSControl+RCLGeometryAdditions.h"; sourceTree = "<group>"; };
 		D096C4EE16917B140071C6D6 /* NSControl+RCLGeometryAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSControl+RCLGeometryAdditions.m"; sourceTree = "<group>"; };
+		D096C51616917BA60071C6D6 /* NSCell+RCLGeometryAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSCell+RCLGeometryAdditions.h"; sourceTree = "<group>"; };
+		D096C51716917BA60071C6D6 /* NSCell+RCLGeometryAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSCell+RCLGeometryAdditions.m"; sourceTree = "<group>"; };
+		D096C51A16917EF30071C6D6 /* NSCellRCLGeometryAdditionsSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSCellRCLGeometryAdditionsSpec.m; sourceTree = "<group>"; };
 		D0BB24711678772C005E9371 /* ReactiveCocoaLayout.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ReactiveCocoaLayout.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D0BB24741678772C005E9371 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		D0BB24771678772C005E9371 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -410,6 +416,7 @@
 		D06C9E51167D894200276090 /* Specs */ = {
 			isa = PBXGroup;
 			children = (
+				D096C51A16917EF30071C6D6 /* NSCellRCLGeometryAdditionsSpec.m */,
 				D096C4EB16917B0D0071C6D6 /* NSControlRCLGeometryAdditionsSpec.m */,
 				D06C9E5A167D8A9A00276090 /* NSViewRCLGeometryAdditionsSpec.m */,
 				D06C9E52167D896000276090 /* RACSignalRCLGeometryAdditionsSpec.m */,
@@ -596,6 +603,8 @@
 		D0BB24E6167879E6005E9371 /* AppKit Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				D096C51616917BA60071C6D6 /* NSCell+RCLGeometryAdditions.h */,
+				D096C51716917BA60071C6D6 /* NSCell+RCLGeometryAdditions.m */,
 				D096C4ED16917B140071C6D6 /* NSControl+RCLGeometryAdditions.h */,
 				D096C4EE16917B140071C6D6 /* NSControl+RCLGeometryAdditions.m */,
 				D0BB25DE1678847A005E9371 /* NSView+RCLGeometryAdditions.h */,
@@ -658,6 +667,7 @@
 				D0ED89F416814D800041A188 /* RACSignal+RCLWritingDirectionAdditions.h in Headers */,
 				D096C3B816916ECC0071C6D6 /* metamacros.h in Headers */,
 				D096C4EF16917B140071C6D6 /* NSControl+RCLGeometryAdditions.h in Headers */,
+				D096C51816917BA60071C6D6 /* NSCell+RCLGeometryAdditions.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -994,6 +1004,7 @@
 				D096C4C116917A7A0071C6D6 /* EXTRuntimeExtensions.m in Sources */,
 				D096C4C416917A7A0071C6D6 /* EXTScope.m in Sources */,
 				D096C4F016917B140071C6D6 /* NSControl+RCLGeometryAdditions.m in Sources */,
+				D096C51916917BA60071C6D6 /* NSCell+RCLGeometryAdditions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1007,6 +1018,7 @@
 				D0513974167F149F00334374 /* TestView.m in Sources */,
 				D0ED89F8168150030041A188 /* RACSignalRCLWritingDirectionAdditionsSpec.m in Sources */,
 				D096C4EC16917B0D0071C6D6 /* NSControlRCLGeometryAdditionsSpec.m in Sources */,
+				D096C51B16917EF30071C6D6 /* NSCellRCLGeometryAdditionsSpec.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
