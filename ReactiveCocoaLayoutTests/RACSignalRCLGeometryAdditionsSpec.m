@@ -76,7 +76,7 @@ describe(@"signal of CGRects", ^{
 	__block RACSignal *signal;
 
 	beforeEach(^{
-		signal = [rects signalWithScheduler:RACScheduler.immediateScheduler];
+		signal = rects.signal;
 	});
 
 	it(@"should map to sizes", ^{
@@ -424,13 +424,9 @@ describe(@"signal of CGRects", ^{
 		__block RACSignal *baseline1;
 		__block RACSignal *baseline2;
 
-		__block RACSignal *signal;
-
 		beforeEach(^{
 			baseline1 = [RACSignal return:@2];
 			baseline2 = [RACSignal return:@5];
-
-			signal = [rects signalWithScheduler:RACScheduler.immediateScheduler];
 		});
 
 		#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
@@ -461,13 +457,65 @@ describe(@"signal of CGRects", ^{
 			});
 		#endif
 	});
+
+	it(@"should replace size", ^{
+		RACSignal *replacement = [RACSignal return:MEDBox(CGSizeMake(15, 25))];
+		RACSignal *result = [signal replaceSize:replacement];
+
+		RACSequence *expected = @[
+			MEDBox(CGRectMake(10, 10, 15, 25)),
+			MEDBox(CGRectMake(10, 20, 15, 25)),
+			MEDBox(CGRectMake(25, 15, 15, 25)),
+		].rac_sequence;
+
+		expect(result.sequence).to.equal(expected);
+	});
+
+	it(@"should replace width", ^{
+		RACSignal *replacement = [RACSignal return:@5];
+		RACSignal *result = [signal replaceWidth:replacement];
+
+		RACSequence *expected = @[
+			MEDBox(CGRectMake(10, 10, 5, 20)),
+			MEDBox(CGRectMake(10, 20, 5, 40)),
+			MEDBox(CGRectMake(25, 15, 5, 35)),
+		].rac_sequence;
+
+		expect(result.sequence).to.equal(expected);
+	});
+
+	it(@"should replace height", ^{
+		RACSignal *replacement = [RACSignal return:@15];
+		RACSignal *result = [signal replaceHeight:replacement];
+
+		RACSequence *expected = @[
+			MEDBox(CGRectMake(10, 10, 20, 15)),
+			MEDBox(CGRectMake(10, 20, 30, 15)),
+			MEDBox(CGRectMake(25, 15, 45, 15)),
+		].rac_sequence;
+
+		expect(result.sequence).to.equal(expected);
+	});
+
+	it(@"should replace origin", ^{
+		RACSignal *replacement = [RACSignal return:MEDBox(CGPointMake(15, 25))];
+		RACSignal *result = [signal replaceOrigin:replacement];
+
+		RACSequence *expected = @[
+			MEDBox(CGRectMake(15, 25, 20, 20)),
+			MEDBox(CGRectMake(15, 25, 30, 40)),
+			MEDBox(CGRectMake(15, 25, 45, 35)),
+		].rac_sequence;
+
+		expect(result.sequence).to.equal(expected);
+	});
 });
 
 describe(@"signal of CGSizes", ^{
 	__block RACSignal *signal;
 
 	beforeEach(^{
-		signal = [sizes signalWithScheduler:RACScheduler.immediateScheduler];
+		signal = sizes.signal;
 	});
 
 	it(@"should map to widths", ^{
@@ -499,13 +547,39 @@ describe(@"signal of CGSizes", ^{
 
 		expect(values).to.equal(expected);
 	});
+
+	it(@"should replace width", ^{
+		RACSignal *replacement = [RACSignal return:@5];
+		RACSignal *result = [signal replaceWidth:replacement];
+
+		RACSequence *expected = @[
+			MEDBox(CGSizeMake(5, 20)),
+			MEDBox(CGSizeMake(5, 40)),
+			MEDBox(CGSizeMake(5, 35)),
+		].rac_sequence;
+
+		expect(result.sequence).to.equal(expected);
+	});
+
+	it(@"should replace height", ^{
+		RACSignal *replacement = [RACSignal return:@15];
+		RACSignal *result = [signal replaceHeight:replacement];
+
+		RACSequence *expected = @[
+			MEDBox(CGSizeMake(20, 15)),
+			MEDBox(CGSizeMake(30, 15)),
+			MEDBox(CGSizeMake(45, 15)),
+		].rac_sequence;
+
+		expect(result.sequence).to.equal(expected);
+	});
 });
 
 describe(@"signal of CGPoints", ^{
 	__block RACSignal *signal;
 
 	beforeEach(^{
-		signal = [points signalWithScheduler:RACScheduler.immediateScheduler];
+		signal = points.signal;
 	});
 
 	it(@"should map to minXs", ^{
@@ -536,6 +610,32 @@ describe(@"signal of CGPoints", ^{
 		];
 
 		expect(values).to.equal(expected);
+	});
+
+	it(@"should replace X", ^{
+		RACSignal *replacement = [RACSignal return:@5];
+		RACSignal *result = [signal replaceX:replacement];
+
+		RACSequence *expected = @[
+			MEDBox(CGPointMake(5, 10)),
+			MEDBox(CGPointMake(5, 20)),
+			MEDBox(CGPointMake(5, 15)),
+		].rac_sequence;
+
+		expect(result.sequence).to.equal(expected);
+	});
+
+	it(@"should replace Y", ^{
+		RACSignal *replacement = [RACSignal return:@5];
+		RACSignal *result = [signal replaceY:replacement];
+
+		RACSequence *expected = @[
+			MEDBox(CGPointMake(10, 5)),
+			MEDBox(CGPointMake(10, 5)),
+			MEDBox(CGPointMake(25, 5)),
+		].rac_sequence;
+
+		expect(result.sequence).to.equal(expected);
 	});
 
 	it(@"should offset", ^{
