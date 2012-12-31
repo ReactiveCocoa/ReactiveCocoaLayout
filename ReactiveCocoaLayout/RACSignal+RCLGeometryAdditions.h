@@ -7,6 +7,7 @@
 //
 
 #import <ReactiveCocoa/ReactiveCocoa.h>
+#import "View+RCLAutoLayoutAdditions.h"
 
 // Defines the curve (timing function) for an animation.
 //
@@ -159,15 +160,45 @@ extern BOOL RCLIsInAnimatedSignal(void);
 // Returns a signal of new CGPoint values.
 - (RACSignal *)replaceY:(RACSignal *)ySignal;
 
-// Maps CGRect values to their minimum X position.
+// Maps CGRect values to the value of the specified layout attribute.
+//
+// attribute - The part of the rectangle to retrieve the value of. This
+//             must not be NSLayoutAttributeBaseline.
 //
 // Returns a signal of CGFloat values.
-- (RACSignal *)minX;
+- (RACSignal *)valueForAttribute:(NSLayoutAttribute)attribute;
 
-// Maps CGRect values to their minimum Y position.
+// Maps CGRect values to the position of their left side.
 //
 // Returns a signal of CGFloat values.
-- (RACSignal *)minY;
+- (RACSignal *)left;
+
+// Maps CGRect values to the position of their right side.
+//
+// Returns a signal of CGFloat values.
+- (RACSignal *)right;
+
+// Maps CGRect values to the position of their top side.
+//
+// Returns a signal of CGFloat values.
+- (RACSignal *)top;
+
+// Maps CGRect values to the position of their bottom side.
+//
+// Returns a signal of CGFloat values.
+- (RACSignal *)bottom;
+
+// Maps CGRect values to their leading X position.
+//
+// Returns a signal of CGFloat values. The signal will automatically re-send
+// when the user's current locale changes.
+- (RACSignal *)leading;
+
+// Maps CGRect values to their trailing X position.
+//
+// Returns a signal of CGFloat values. The signal will automatically re-send
+// when the user's current locale changes.
+- (RACSignal *)trailing;
 
 // Maps CGRect values to their center X position.
 //
@@ -178,40 +209,6 @@ extern BOOL RCLIsInAnimatedSignal(void);
 //
 // Returns a signal of CGFloat values.
 - (RACSignal *)centerY;
-
-// Maps CGRect values to their maximum X position.
-//
-// Returns a signal of CGFloat values.
-- (RACSignal *)maxX;
-
-// Maps CGRect values to their maximum Y position.
-//
-// Returns a signal of CGFloat values.
-- (RACSignal *)maxY;
-
-// Maps CGRect values to the position of the edge sent from the given signal.
-//
-// edgeSignal - A signal of NSNumber-boxed CGRectEdge values, representing the
-//              side to get the position of.
-//
-// Returns a signal of CGFloat values.
-- (RACSignal *)positionOfEdge:(RACSignal *)edgeSignal;
-
-// Maps CGRect values to their leading X position.
-//
-// This signal will automatically re-send when the user's current locale
-// changes.
-//
-// Returns a signal of CGFloat values.
-- (RACSignal *)leading;
-
-// Maps CGRect values to their trailing X position.
-//
-// This signal will automatically re-send when the user's current locale
-// changes.
-//
-// Returns a signal of CGFloat values.
-- (RACSignal *)trailing;
 
 // Insets each CGRect by the number of points sent from the given width and
 // height signals.
@@ -236,60 +233,78 @@ extern BOOL RCLIsInAnimatedSignal(void);
 // values.
 - (RACSignal *)offsetX:(RACSignal *)xSignal Y:(RACSignal *)ySignal;
 
+// Extends the given layout attribute of each CGRect by the given number of points
+// sent from `amountSignal`.
+//
+// attribute    - The attribute to extend. Extending an edge will grow it
+//                outward, and keep the positions of all other edges constant.
+//                Extending NSLayoutAttributeWidth or NSLayoutAttributeHeight will split
+//                the added points between both of the edges that intersect that
+//                axis. This must not be NSLayoutAttributeBaseline.
+// amountSignal - A signal of CGFloat values, representing the number of points
+//                to extend by. This signal may send negative values to instead
+//                remove points.
+//
+// Returns a signal of resized CGRects.
+- (RACSignal *)extendAttribute:(NSLayoutAttribute)attribute byAmount:(RACSignal *)amountSignal;
+
 // Trims each CGRect to the number of points sent from `amountSignal`, as
 // measured starting from the given edge.
 //
-// amountSignal - A signal of CGFloat values, representing the number of points
-//                to include in the slice. If greater than the size of a given
-//                rectangle, the result will be the entire rectangle.
-// edge         - The edge from which to start including points in the slice.
+// amountSignal  - A signal of CGFloat values, representing the number of points
+//                 to include in the slice. If greater than the size of a given
+//                 rectangle, the result will be the entire rectangle.
+// edgeAttribute - A layout attribute representing the edge from which to start
+//                 including points in the slice, proceeding toward the opposite
+//                 edge. This must be NSLayoutAttributeLeft,
+//                 NSLayoutAttributeRight, NSLayoutAttributeTop,
+//                 NSLayoutAttributeBottom, NSLayoutAttributeLeading, or
+//                 NSLayoutAttributeTrailing.
 //
 // Returns a signal of CGRect slices.
-- (RACSignal *)sliceWithAmount:(RACSignal *)amountSignal fromEdge:(CGRectEdge)edge;
+- (RACSignal *)sliceWithAmount:(RACSignal *)amountSignal fromEdge:(NSLayoutAttribute)edgeAttribute;
 
 // From the given edge of each CGRect, trims the number of points sent from
 // `amountSignal`.
 //
-// amountSignal - A signal of CGFloat values, representing the number of points
-//                to remove. If greater than the size of a given rectangle, the
-//                result will be CGRectZero.
-// edge         - The edge from which to trim.
+// amountSignal  - A signal of CGFloat values, representing the number of points
+//                 to remove. If greater than the size of a given rectangle, the
+//                 result will be CGRectZero.
+// edgeAttribute - A layout attribute representing the edge from which to start
+//                 trimming, proceeding toward the opposite edge. This must be
+//                 NSLayoutAttributeLeft, NSLayoutAttributeRight,
+//                 NSLayoutAttributeTop, NSLayoutAttributeBottom,
+//                 NSLayoutAttributeLeading, or NSLayoutAttributeTrailing.
 //
 // Returns a signal of CGRect remainders.
-- (RACSignal *)remainderAfterSlicingAmount:(RACSignal *)amountSignal fromEdge:(CGRectEdge)edge;
-
-// For the given each of each CGRect, adds the given number of points sent from
-// `amountSignal`.
-//
-// edge         - The edge to add to.
-// amountSignal - A signal of CGFloat values, representing the number of points
-//                to add.
-//
-// Returns a signal of enlarged CGRects.
-- (RACSignal *)growEdge:(CGRectEdge)edge byAmount:(RACSignal *)amountSignal;
+- (RACSignal *)remainderAfterSlicingAmount:(RACSignal *)amountSignal fromEdge:(NSLayoutAttribute)edgeAttribute;
 
 // Invokes -divideWithAmount:padding:fromEdge: with a constant padding of 0.
-- (RACTuple *)divideWithAmount:(RACSignal *)sliceAmountSignal fromEdge:(CGRectEdge)edge;
+- (RACTuple *)divideWithAmount:(RACSignal *)sliceAmountSignal fromEdge:(NSLayoutAttribute)edgeAttribute;
 
 // Divides each CGRect into two component rectangles, skipping an amount of
 // padding between them.
 //
 // sliceAmountSignal - A signal of CGFloat values, representing the number of
 //                     points to include in the slice rectangle, starting from
-//                     `edge`. If greater than the size of a given rectangle,
-//                     the slice will be the entire rectangle, and the remainder
-//                     will be CGRectZero.
+//                     `edgeAttribute`. If greater than the size of a given
+//                     rectangle, the slice will be the entire rectangle, and
+//                     the remainder will be CGRectZero.
 // paddingSignal     - A signal of CGFloat values, representing the number of
 //                     points of padding to omit between the slice and remainder
 //                     rectangles. If the padding plus the slice amount is
 //                     greater than or equal to the size of a given rectangle,
 //                     the remainder will be CGRectZero. 
-// edge              - The edge from which division begins, proceeding toward the
-//                     opposite edge.
+// edgeAttribute     - A layout attribute representing the edge from which
+//                     division begins, proceeding toward the opposite edge.
+//                     This must be NSLayoutAttributeLeft,
+//                     NSLayoutAttributeRight, NSLayoutAttributeTop,
+//                     NSLayoutAttributeBottom, NSLayoutAttributeLeading, or
+//                     NSLayoutAttributeTrailing.
 //
 // Returns a RACTuple containing two signals, which will send the slices and
 // remainders, respectively.
-- (RACTuple *)divideWithAmount:(RACSignal *)sliceAmountSignal padding:(RACSignal *)paddingSignal fromEdge:(CGRectEdge)edge;
+- (RACTuple *)divideWithAmount:(RACSignal *)sliceAmountSignal padding:(RACSignal *)paddingSignal fromEdge:(NSLayoutAttribute)edgeAttribute;
 
 // Sends the maximum value sent by any of the given signals.
 //
@@ -309,16 +324,17 @@ extern BOOL RCLIsInAnimatedSignal(void);
 // Returns a signal which sends NSNumber minimum values.
 + (RACSignal *)min:(NSArray *)signals;
 
-// Aligns a specific edge of each CGRect to the positions sent from the given
-// signal.
+// Aligns the specified layout attribute of each CGRect to the values sent from
+// the given signal.
 //
-// edgeSignal     - A signal of NSNumber-boxed CGRectEdge values, representing
-//                  the side of the CGRect to align.
-// positionSignal - A signal of CGFloat values, representing the position to
-//                  align the specified edge to.
+// attribute   - The part of the rectangle to align. This must not be
+//               NSLayoutAttributeBaseline (for which
+//               -alignBaseline:toBaseline:ofRect: should be used instead).
+// valueSignal - A signal of CGFloat values, representing the value to match the
+//               specified attribute to.
 //
 // Returns a signal of aligned CGRect values.
-- (RACSignal *)alignEdge:(RACSignal *)edgeSignal toPosition:(RACSignal *)positionSignal;
+- (RACSignal *)alignAttribute:(NSLayoutAttribute)attribute to:(RACSignal *)valueSignal;
 
 // Aligns the center of each CGRect to the CGPoints sent from the given signal.
 //
@@ -328,23 +344,87 @@ extern BOOL RCLIsInAnimatedSignal(void);
 // Returns a signal of aligned CGRect values.
 - (RACSignal *)alignCenter:(RACSignal *)centerSignal;
 
+// Aligns the left side of each CGRect to the values sent from the given signal.
+//
+// positionSignal - A signal of CGFloat values, representing the position to align
+//                  the left side to.
+//
+// Returns a signal of aligned CGRect values.
+- (RACSignal *)alignLeft:(RACSignal *)positionSignal;
+
+// Aligns the right side of each CGRect to the values sent from the given signal.
+//
+// positionSignal - A signal of CGFloat values, representing the position to align
+//                  the right side to.
+//
+// Returns a signal of aligned CGRect values.
+- (RACSignal *)alignRight:(RACSignal *)positionSignal;
+
+// Aligns the top side of each CGRect to the values sent from the given signal.
+//
+// positionSignal - A signal of CGFloat values, representing the position to align
+//                  the top side to.
+//
+// Returns a signal of aligned CGRect values.
+- (RACSignal *)alignTop:(RACSignal *)positionSignal;
+
+// Aligns the bottom side of each CGRect to the values sent from the given signal.
+//
+// positionSignal - A signal of CGFloat values, representing the position to align
+//                  the bottom side to.
+//
+// Returns a signal of aligned CGRect values.
+- (RACSignal *)alignBottom:(RACSignal *)positionSignal;
+
+// Aligns the leading side of each CGRect to the values sent from the given signal.
+//
+// positionSignal - A signal of CGFloat values, representing the position to align
+//                  the leading side to.
+//
+// Returns a signal of aligned CGRect values. The signal will automatically
+// re-send when the user's current locale changes.
+- (RACSignal *)alignLeading:(RACSignal *)positionSignal;
+
+// Aligns the trailing side of each CGRect to the values sent from the given signal.
+//
+// positionSignal - A signal of CGFloat values, representing the position to align
+//                  the trailing side to.
+//
+// Returns a signal of aligned CGRect values. The signal will automatically
+// re-send when the user's current locale changes.
+- (RACSignal *)alignTrailing:(RACSignal *)positionSignal;
+
+// Matches the width of each CGRect to the values sent from the given signal.
+//
+// amountSignal - A signal of CGFloat values, representing the new width.
+//
+// Returns a signal of resized CGRect values.
+- (RACSignal *)alignWidth:(RACSignal *)amountSignal;
+
+// Matches the height of each CGRect to the values sent from the given signal.
+//
+// amountSignal - A signal of CGFloat values, representing the new height.
+//
+// Returns a signal of resized CGRect values.
+- (RACSignal *)alignHeight:(RACSignal *)amountSignal;
+
 // Aligns the center X position of each CGRect to the values sent from the given
 // signal.
 //
-// centerXSignal - A signal of CGFloat values, representing the position to align
-//                 the horizontal center to.
+// positionSignal - A signal of CGFloat values, representing the position to align
+//                  the horizontal center to.
 //
 // Returns a signal of aligned CGRect values.
-- (RACSignal *)alignCenterX:(RACSignal *)centerXSignal;
+- (RACSignal *)alignCenterX:(RACSignal *)positionSignal;
 
 // Aligns the center Y position of each CGRect to the values sent from the given
 // signal.
 //
-// centerYSignal - A signal of CGFloat values, representing the position to align
-//                 the vertical center to.
+// positionSignal - A signal of CGFloat values, representing the position to align
+//                  the vertical center to.
 //
 // Returns a signal of aligned CGRect values.
-- (RACSignal *)alignCenterY:(RACSignal *)centerYSignal;
+- (RACSignal *)alignCenterY:(RACSignal *)positionSignal;
 
 // Aligns the baseline of each CGRect in the receiver to those of another signal.
 //

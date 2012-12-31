@@ -97,7 +97,7 @@
 	// vertically.
 	RACTupleUnpack(RACSignal *emailRect, RACSignal *possibleConfirmEmailRect) = [[self.contentView.rcl_frameSignal
 		insetWidth:[RACSignal return:@32] height:[RACSignal return:@16]]
-		divideWithAmount:self.emailField.rcl_intrinsicHeightSignal padding:self.verticalPadding fromEdge:CGRectMaxYEdge];
+		divideWithAmount:self.emailField.rcl_intrinsicHeightSignal padding:self.verticalPadding fromEdge:NSLayoutAttributeTop];
 
 	[self layoutField:self.emailField label:self.emailLabel fromSignal:emailRect];
 
@@ -112,14 +112,14 @@
 		animate];
 
 	// Cut out space for the confirmation email field.
-	RACTupleUnpack(RACSignal *confirmEmailRect, RACSignal *nameRect) = [possibleConfirmEmailRect divideWithAmount:confirmHeightPlusPadding fromEdge:CGRectMaxYEdge];
+	RACTupleUnpack(RACSignal *confirmEmailRect, RACSignal *nameRect) = [possibleConfirmEmailRect divideWithAmount:confirmHeightPlusPadding fromEdge:NSLayoutAttributeTop];
 
 	// Remove the padding that we included for the purposes of animation.
-	confirmEmailRect = [confirmEmailRect remainderAfterSlicingAmount:self.verticalPadding fromEdge:CGRectMinYEdge];
+	confirmEmailRect = [confirmEmailRect remainderAfterSlicingAmount:self.verticalPadding fromEdge:NSLayoutAttributeBottom];
 	[self layoutField:self.confirmEmailField label:self.confirmEmailLabel fromSignal:confirmEmailRect];
 
 	// Only use the height that the name field actually requires.
-	nameRect = [nameRect sliceWithAmount:self.nameField.rcl_intrinsicHeightSignal fromEdge:CGRectMaxYEdge];
+	nameRect = [nameRect sliceWithAmount:self.nameField.rcl_intrinsicHeightSignal fromEdge:NSLayoutAttributeTop];
 	[self layoutField:self.nameField label:self.nameLabel fromSignal:nameRect];
 }
 
@@ -128,7 +128,7 @@
 - (void)layoutField:(NSTextField *)field label:(NSTextField *)label fromSignal:(RACSignal *)signal {
 	// Split the rect horizontally, into a rect for the label and a rect for the
 	// text field.
-	RACTupleUnpack(RACSignal *labelRect, RACSignal *fieldRect) = [signal divideWithAmount:RACAbleWithStart(self.labelWidth) padding:self.horizontalPadding fromEdge:CGRectMinXEdge];
+	RACTupleUnpack(RACSignal *labelRect, RACSignal *fieldRect) = [signal divideWithAmount:RACAbleWithStart(self.labelWidth) padding:self.horizontalPadding fromEdge:NSLayoutAttributeLeading];
 
 	RAC(field, rcl_alignmentRect) = fieldRect;
 	RAC(label, rcl_alignmentRect) = [[labelRect replaceSize:label.rcl_intrinsicContentSizeSignal]
