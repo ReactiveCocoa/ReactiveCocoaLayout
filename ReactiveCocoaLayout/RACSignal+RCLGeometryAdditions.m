@@ -519,6 +519,25 @@ static RACSignal *combineSignalsWithOperator(RACSignal *a, RACSignal *b, CGFloat
 	}];
 }
 
+- (RACSignal *)offsetX:(RACSignal *)xSignal Y:(RACSignal *)ySignal {
+	NSParameterAssert(xSignal != nil);
+	NSParameterAssert(ySignal != nil);
+
+	return [RACSignal combineLatest:@[ xSignal, ySignal, self ] reduce:^(NSNumber *x, NSNumber *y, NSValue *value) {
+		NSAssert([x isKindOfClass:NSNumber.class], @"Value sent by %@ is not a number: %@", xSignal, x);
+		NSAssert([y isKindOfClass:NSNumber.class], @"Value sent by %@ is not a number: %@", ySignal, y);
+	
+		if (value.med_geometryStructType == MEDGeometryStructTypeRect) {
+			return MEDBox(CGRectOffset(value.med_rectValue, x.doubleValue, y.doubleValue));
+		} else {
+			NSAssert(value.med_geometryStructType == MEDGeometryStructTypePoint, @"Unexpected type of value: %@", value);
+
+			CGPoint offset = CGPointMake(x.doubleValue, y.doubleValue);
+			return MEDBox(CGPointAdd(value.med_pointValue, offset));
+		}
+	}];
+}
+
 - (RACSignal *)sliceWithAmount:(RACSignal *)amountSignal fromEdge:(CGRectEdge)edge {
 	NSParameterAssert(amountSignal != nil);
 
