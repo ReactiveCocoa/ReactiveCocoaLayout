@@ -61,10 +61,10 @@
 
 	// Horizontally divide the available space into a rect for the label and
 	// a rect for the text field.
-	RACTupleUnpack(RACSignal *labelRect, RACSignal *textFieldRect) = [insetRect divideWithAmount:self.nameLabel.rcl_intrinsicWidthSignal padding:[RACSignal return:@8] fromEdge:CGRectMinXEdge];
+	RACTupleUnpack(RACSignal *labelRect, RACSignal *textFieldRect) = [insetRect divideWithAmount:self.nameLabel.rcl_intrinsicWidthSignal padding:[RACSignal return:@8] fromEdge:NSLayoutAttributeLeading];
 
 	// Make the text field a constant 28 points high.
-	textFieldRect = [textFieldRect sliceWithAmount:[RACSignal return:@28] fromEdge:CGRectMinYEdge];
+	textFieldRect = [textFieldRect sliceWithAmount:[RACSignal return:@28] fromEdge:NSLayoutAttributeTop];
 
 	// Size the label to its intrinsic size, and align it to the text field.
 	//
