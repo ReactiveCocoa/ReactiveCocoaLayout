@@ -13,5 +13,6 @@
 #ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
 	#import "UIView+RCLGeometryAdditions.h"
 #elif TARGET_OS_MAC
+	#import "NSControl+RCLGeometryAdditions.h"
 	#import "NSView+RCLGeometryAdditions.h"
 #endif
