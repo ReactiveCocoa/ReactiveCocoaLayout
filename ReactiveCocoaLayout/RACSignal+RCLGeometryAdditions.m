@@ -224,9 +224,12 @@ static RACSignal *combineSignalsWithOperator(NSArray *signals, RCLBinaryOperator
 // reduceBlock - A block which combines the NSNumber-boxed CGRectEdge (if
 //				 `attribute` corresponds to one), or `nil` (if it does not) and
 //				 the values of each signal in the `signals` array.
+// nameFormat  - A format string for the name of the resulting signal. This may
+//				 be nil to not set a name.
+// ...         - The arguments to be filled into `nameFormat`.
 //
 // Returns a signal of reduced values.
-static RACSignal *combineAttributeWithRects(NSLayoutAttribute attribute, NSArray *signals, id reduceBlock) {
+static RACSignal *combineAttributeWithRects(NSLayoutAttribute attribute, NSArray *signals, id reduceBlock, NSString *nameFormat, ...) NS_FORMAT_FUNCTION(4, 5) {
 	NSCParameterAssert(attribute != NSLayoutAttributeBaseline);
 	NSCParameterAssert(attribute != NSLayoutAttributeNotAnAttribute);
 	NSCParameterAssert(signals.count > 0);
@@ -292,7 +295,16 @@ static RACSignal *combineAttributeWithRects(NSLayoutAttribute attribute, NSArray
 	}
 
 	[mutableSignals insertObject:edgeSignal atIndex:0];
-	return [RACSignal combineLatest:mutableSignals reduce:reduceBlock];
+	RACSignal *signal = [RACSignal combineLatest:mutableSignals reduce:reduceBlock];
+
+	if (nameFormat != nil) {
+		va_list args;
+		va_start(args, nameFormat);
+		signal.name = [[NSString alloc] initWithFormat:nameFormat arguments:args];
+		va_end(args);
+	}
+
+	return signal;
 }
 
 @implementation RACSignal (RCLGeometryAdditions)
@@ -529,7 +541,7 @@ static RACSignal *combineAttributeWithRects(NSLayoutAttribute attribute, NSArray
 					return nil;
 			}
 		}
-	});
+	}, @"[%@] -valueForAttribute: %li", self.name, (long)attribute);
 }
 
 - (RACSignal *)left {
@@ -621,7 +633,7 @@ static RACSignal *combineAttributeWithRects(NSLayoutAttribute attribute, NSArray
 		}
 
 		return MEDBox(CGRectStandardize(rect));
-	});
+	}, @"[%@] -alignAttribute: %li to: %@", self.name, (long)attribute, valueSignal);
 }
 
 - (RACSignal *)alignCenter:(RACSignal *)centerSignal {
@@ -789,15 +801,19 @@ static RACSignal *combineAttributeWithRects(NSLayoutAttribute attribute, NSArray
 		}
 
 		return MEDBox(CGRectStandardize(rect));
-	});
+	}, @"[%@] -extendAttribute: %li byAmount: %@", self.name, (long)attribute, amountSignal);
 }
 
 - (RACSignal *)sliceWithAmount:(RACSignal *)amountSignal fromEdge:(NSLayoutAttribute)edgeAttribute {
-	return [self divideWithAmount:amountSignal fromEdge:edgeAttribute][0];
+	RACSignal *signal = [self divideWithAmount:amountSignal fromEdge:edgeAttribute][0];
+	signal.name = [NSString stringWithFormat:@"[%@] -sliceWithAmount: %@ fromEdge: %li", self.name, amountSignal, (long)edgeAttribute];
+	return signal;
 }
 
 - (RACSignal *)remainderAfterSlicingAmount:(RACSignal *)amountSignal fromEdge:(NSLayoutAttribute)edgeAttribute {
-	return [self divideWithAmount:amountSignal fromEdge:edgeAttribute][1];
+	RACSignal *signal = [self divideWithAmount:amountSignal fromEdge:edgeAttribute][1];
+	signal.name = [NSString stringWithFormat:@"[%@] -remainderAfterSlicingAmount: %@ fromEdge: %li", self.name, amountSignal, (long)edgeAttribute];
+	return signal;
 }
 
 - (RACTuple *)divideWithAmount:(RACSignal *)sliceAmountSignal fromEdge:(NSLayoutAttribute)edgeAttribute {
@@ -821,7 +837,7 @@ static RACSignal *combineAttributeWithRects(NSLayoutAttribute attribute, NSArray
 		CGRectDivideWithPadding(rect, &slice, &remainder, amount.doubleValue, padding.doubleValue, (CGRectEdge)edge.unsignedIntegerValue);
 
 		return [RACTuple tupleWithObjects:MEDBox(slice), MEDBox(remainder), nil];
-	});
+	}, nil);
 
 	// Now, convert Signal[(Rect, Rect)] into (Signal[Rect], Signal[Rect]).
 	RACSignal *sliceSignal = [combinedSignal map:^(RACTuple *tuple) {
@@ -832,6 +848,10 @@ static RACSignal *combineAttributeWithRects(NSLayoutAttribute attribute, NSArray
 		return tuple[1];
 	}];
 
+	NSString *invocationName = [NSString stringWithFormat:@"-divideWithAmount: %@ padding: %@ fromEdge: %li", amountSignal, paddingSignal, (long)edgeAttribute];
+
+	sliceSignal.name = [NSString stringWithFormat:@"[%@] SLICE OF %@", self.name, invocationName];
+	remainderSignal.name = [NSString stringWithFormat:@"[%@] REMAINDER OF %@", self.name, invocationName];
 	return [RACTuple tupleWithObjects:sliceSignal, remainderSignal, nil];
 }
 
