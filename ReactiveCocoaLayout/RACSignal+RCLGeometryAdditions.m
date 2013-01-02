@@ -169,12 +169,12 @@ static NSValue *combineValuesWithOperator(NSValue *a, NSValue *b, RCLBinaryOpera
 // values of the same type.
 //
 // Returns a signal of results, using the same type as the input values.
-static RACSignal *combineSignalsWithOperator(NSArray *signals, RCLBinaryOperator operator) {
+static RACSignal *combineSignalsWithOperator(NSArray *signals, RCLBinaryOperator operator, NSString *nameFormat, ...) NS_FORMAT_FUNCTION(3, 4) {
 	NSCParameterAssert(signals != nil);
 	NSCParameterAssert(signals.count > 0);
 	NSCParameterAssert(operator != nil);
 
-	return [[[RACSignal combineLatest:signals]
+	RACSignal *signal = [[[RACSignal combineLatest:signals]
 		map:^(RACTuple *values) {
 			return values.allObjects.rac_sequence;
 		}]
@@ -192,6 +192,15 @@ static RACSignal *combineSignalsWithOperator(NSArray *signals, RCLBinaryOperator
 
 			return result;
 		}];
+	
+	if (nameFormat != nil) {
+		va_list args;
+		va_start(args, nameFormat);
+		signal.name = [[NSString alloc] initWithFormat:nameFormat arguments:args];
+		va_end(args);
+	}
+
+	return signal;
 }
 
 // Combines the CGRectEdge corresponding to a layout attribute, and the values
@@ -828,49 +837,57 @@ static RACSignal *combineAttributeWithRects(NSLayoutAttribute attribute, NSArray
 + (RACSignal *)add:(NSArray *)signals {
 	return combineSignalsWithOperator(signals, ^(CGFloat a, CGFloat b) {
 		return a + b;
-	});
+	}, @"+add: %@", signals);
 }
 
 + (RACSignal *)subtract:(NSArray *)signals {
 	return combineSignalsWithOperator(signals, ^(CGFloat a, CGFloat b) {
 		return a - b;
-	});
+	}, @"+subtract: %@", signals);
 }
 
 + (RACSignal *)multiply:(NSArray *)signals {
 	return combineSignalsWithOperator(signals, ^(CGFloat a, CGFloat b) {
 		return a * b;
-	});
+	}, @"+multiply: %@", signals);
 }
 
 + (RACSignal *)divide:(NSArray *)signals {
 	return combineSignalsWithOperator(signals, ^(CGFloat a, CGFloat b) {
 		return a / b;
-	});
+	}, @"+divide: %@", signals);
 }
 
 - (RACSignal *)plus:(RACSignal *)addendSignal {
 	NSParameterAssert(addendSignal != nil);
 
-	return [RACSignal add:@[ self, addendSignal ]];
+	return combineSignalsWithOperator(@[ self, addendSignal ], ^(CGFloat a, CGFloat b) {
+		return a + b;
+	}, @"[%@] -plus: %@", self, addendSignal);
 }
 
 - (RACSignal *)minus:(RACSignal *)subtrahendSignal {
 	NSParameterAssert(subtrahendSignal != nil);
 
-	return [RACSignal subtract:@[ self, subtrahendSignal ]];
+	return combineSignalsWithOperator(@[ self, subtrahendSignal ], ^(CGFloat a, CGFloat b) {
+		return a - b;
+	}, @"[%@] -minus: %@", self, subtrahendSignal);
 }
 
 - (RACSignal *)multipliedBy:(RACSignal *)factorSignal {
 	NSParameterAssert(factorSignal != nil);
 
-	return [RACSignal multiply:@[ self, factorSignal ]];
+	return combineSignalsWithOperator(@[ self, factorSignal ], ^(CGFloat a, CGFloat b) {
+		return a * b;
+	}, @"[%@] -multipliedBy: %@", self, factorSignal);
 }
 
 - (RACSignal *)dividedBy:(RACSignal *)denominatorSignal {
 	NSParameterAssert(denominatorSignal != nil);
 
-	return [RACSignal divide:@[ self, denominatorSignal ]];
+	return combineSignalsWithOperator(@[ self, denominatorSignal ], ^(CGFloat a, CGFloat b) {
+		return a / b;
+	}, @"[%@] -dividedBy: %@", self, denominatorSignal);
 }
 
 - (RACSignal *)animate {

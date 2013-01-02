@@ -1169,6 +1169,7 @@
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = ReactiveCocoaLayout;
 				TEST_AFTER_BUILD = NO;
+				WARNING_CFLAGS = "-Wno-gcc-compat";
 			};
 			name = Profile;
 		};
@@ -1242,6 +1243,7 @@
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = ReactiveCocoaLayout;
 				TEST_AFTER_BUILD = NO;
+				WARNING_CFLAGS = "-Wno-gcc-compat";
 			};
 			name = Debug;
 		};
@@ -1265,6 +1267,7 @@
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = ReactiveCocoaLayout;
 				TEST_AFTER_BUILD = NO;
+				WARNING_CFLAGS = "-Wno-gcc-compat";
 			};
 			name = Release;
 		};
