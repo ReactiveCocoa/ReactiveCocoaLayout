@@ -98,30 +98,39 @@
 		[NSNotificationCenter.defaultCenter rac_addObserverForName:NSViewFrameDidChangeNotification object:self]
 	];
 
-	return [[[[RACSignal merge:signals]
+	RACSignal *signal = [[[[RACSignal merge:signals]
 		map:^(NSNotification *notification) {
 			NSView *view = notification.object;
 			return [NSValue valueWithRect:view.bounds];
 		}]
 		startWith:[NSValue valueWithRect:self.bounds]]
 		distinctUntilChanged];
+	
+	signal.name = [NSString stringWithFormat:@"%@ -rcl_boundsSignal", self];
+	return signal;
 }
 
 - (RACSignal *)rcl_frameSignal {
 	// TODO: This only needs to be enabled when we actually start watching for
 	// the notification (i.e., after the startWith:).
 	self.postsFrameChangedNotifications = YES;
-	return [[[[NSNotificationCenter.defaultCenter rac_addObserverForName:NSViewFrameDidChangeNotification object:self]
+
+	RACSignal *signal = [[[[NSNotificationCenter.defaultCenter rac_addObserverForName:NSViewFrameDidChangeNotification object:self]
 		map:^(NSNotification *notification) {
 			NSView *view = notification.object;
 			return [NSValue valueWithRect:view.frame];
 		}]
 		startWith:[NSValue valueWithRect:self.frame]]
 		distinctUntilChanged];
+	
+	signal.name = [NSString stringWithFormat:@"%@ -rcl_frameSignal", self];
+	return signal;
 }
 
 - (RACSignal *)rcl_baselineSignal {
-	return [RACSignal return:@(self.baselineOffsetFromBottom)];
+	RACSignal *signal = [RACSignal return:@(self.baselineOffsetFromBottom)];
+	signal.name = [NSString stringWithFormat:@"%@ -rcl_baselineSignal", self];
+	return signal;
 }
 
 @end
