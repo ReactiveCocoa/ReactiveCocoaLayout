@@ -92,7 +92,7 @@ static RACSignal *animateWithDuration (RACSignal *self, NSTimeInterval *duration
 		} completed:^{
 			[subscriber sendCompleted];
 		}];
-	}];
+	} name:@"[%@] -animateWithDuration: %f curve: %li", self.name, (double)duration, (long)curve];
 }
 
 // When any signal sends an NSNumber, if -compare: invoked against the previous
