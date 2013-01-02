@@ -98,10 +98,10 @@ static RACSignal *animateWithDuration (RACSignal *self, NSTimeInterval *duration
 // When any signal sends an NSNumber, if -compare: invoked against the previous
 // value (and passed the new value) returns `result`, the new value is sent on
 // the returned signal.
-static RACSignal *latestNumberMatchingComparisonResult(NSArray *signals, NSComparisonResult result) {
+static RACSignal *latestNumberMatchingComparisonResult(NSArray *signals, NSComparisonResult result, NSString *nameFormat, ...) NS_FORMAT_FUNCTION(3, 4) {
 	NSCParameterAssert(signals != nil);
 
-	return [[[RACSignal merge:signals]
+	RACSignal *signal = [[[RACSignal merge:signals]
 		scanWithStart:nil combine:^(NSNumber *previous, NSNumber *next) {
 			if (previous == nil) return next;
 			if (next == nil) return previous;
@@ -117,6 +117,15 @@ static RACSignal *latestNumberMatchingComparisonResult(NSArray *signals, NSCompa
 		filter:^ BOOL (NSNumber *value) {
 			return value != nil;
 		}];
+
+	if (nameFormat != nil) {
+		va_list args;
+		va_start(args, nameFormat);
+		signal.name = [[NSString alloc] initWithFormat:nameFormat arguments:args];
+		va_end(args);
+	}
+
+	return signal;
 }
 
 // A binary operator accepting two numbers and returning a number.
@@ -827,11 +836,11 @@ static RACSignal *combineAttributeWithRects(NSLayoutAttribute attribute, NSArray
 }
 
 + (RACSignal *)max:(NSArray *)signals {
-	return latestNumberMatchingComparisonResult(signals, NSOrderedAscending);
+	return latestNumberMatchingComparisonResult(signals, NSOrderedAscending, @"+max: %@", signals);
 }
 
 + (RACSignal *)min:(NSArray *)signals {
-	return latestNumberMatchingComparisonResult(signals, NSOrderedDescending);
+	return latestNumberMatchingComparisonResult(signals, NSOrderedDescending, @"+min: %@", signals);
 }
 
 + (RACSignal *)add:(NSArray *)signals {
