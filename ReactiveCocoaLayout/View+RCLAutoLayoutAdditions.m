@@ -52,27 +52,39 @@ static void newInvalidateIntrinsicContentSize(id self, SEL _cmd) {
 		objc_setAssociatedObject(self, IntrinsicContentSizeSubjectKey, subject, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 	}
 
-	return [subject startWith:MEDBox(self.intrinsicContentSize)].distinctUntilChanged;
+	RACSignal *signal = [subject startWith:MEDBox(self.intrinsicContentSize)].distinctUntilChanged;
+	signal.name = [NSString stringWithFormat:@"%@ -rcl_intrinsicContentSizeSignal", self];
+	return signal;
 }
 
 - (RACSignal *)rcl_intrinsicBoundsSignal {
-	return [RACSignal rectsWithSize:self.rcl_intrinsicContentSizeSignal];
+	RACSignal *signal = [RACSignal rectsWithSize:self.rcl_intrinsicContentSizeSignal];
+	signal.name = [NSString stringWithFormat:@"%@ -rcl_intrinsicBoundsSignal", self];
+	return signal;
 }
 
 - (RACSignal *)rcl_intrinsicHeightSignal {
-	return self.rcl_intrinsicContentSizeSignal.height;
+	RACSignal *signal = self.rcl_intrinsicContentSizeSignal.height;
+	signal.name = [NSString stringWithFormat:@"%@ -rcl_intrinsicHeightSignal", self];
+	return signal;
 }
 
 - (RACSignal *)rcl_intrinsicWidthSignal {
-	return self.rcl_intrinsicContentSizeSignal.width;
+	RACSignal *signal = self.rcl_intrinsicContentSizeSignal.width;
+	signal.name = [NSString stringWithFormat:@"%@ -rcl_intrinsicWidthSignal", self];
+	return signal;
 }
 
 - (RACSignal *)rcl_alignmentRectSignal {
 	@unsafeify(self);
-	return [self.rcl_frameSignal map:^(id _) {
+
+	RACSignal *signal = [self.rcl_frameSignal map:^(id _) {
 		@strongify(self);
 		return MEDBox(self.rcl_alignmentRect);
 	}].distinctUntilChanged;
+
+	signal.name = [NSString stringWithFormat:@"%@ -rcl_alignmentRectSignal", self];
+	return signal;
 }
 
 @end
