@@ -306,20 +306,24 @@ extern BOOL RCLIsInAnimatedSignal(void);
 // remainders, respectively.
 - (RACTuple *)divideWithAmount:(RACSignal *)sliceAmountSignal padding:(RACSignal *)paddingSignal fromEdge:(NSLayoutAttribute)edgeAttribute;
 
-// Sends the maximum value sent by any of the given signals.
+// Sends the maximum value, calculated using _only_ the most recently sent
+// values of all the given signals.
 //
 // signals - An array of <RACSignal> objects. Each signal should contain
-//           NSNumber values. When any signal sends a value, the returned signal
-//           will send the new maximum.
+//           NSNumber values. When any signal sends a value, the maximum is
+//           recalculated if necessary, and sent on the returned signal if it
+//           changed.
 //
 // Returns a signal which sends NSNumber maximum values.
 + (RACSignal *)max:(NSArray *)signals;
 
-// Sends the minimum value sent by any of the given signals.
+// Sends the minimum value, calculated using _only_ the most recently sent
+// values of all the given signals.
 //
 // signals - An array of <RACSignal> objects. Each signal should contain
-//           NSNumber values. When any signal sends a value, the returned signal
-//           will send the new minimum.
+//           NSNumber values. When any signal sends a value, the minimum is
+//           recalculated if necessary, and sent on the returned signal if it
+//           changed.
 //
 // Returns a signal which sends NSNumber minimum values.
 + (RACSignal *)min:(NSArray *)signals;

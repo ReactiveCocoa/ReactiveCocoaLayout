@@ -95,28 +95,30 @@ static RACSignal *animateWithDuration (RACSignal *self, NSTimeInterval *duration
 	} name:@"[%@] -animateWithDuration: %f curve: %li", self.name, (double)duration, (long)curve];
 }
 
-// When any signal sends an NSNumber, if -compare: invoked against the previous
-// value (and passed the new value) returns `result`, the new value is sent on
-// the returned signal.
-static RACSignal *latestNumberMatchingComparisonResult(NSArray *signals, NSComparisonResult result, NSString *nameFormat, ...) NS_FORMAT_FUNCTION(3, 4) {
+// When any signal sends an NSNumber, sorts the latest values from all of them,
+// and sends either the minimum or the maximum.
+static RACSignal *latestSortedNumber(NSArray *signals, BOOL minimum, NSString *nameFormat, ...) NS_FORMAT_FUNCTION(3, 4) {
 	NSCParameterAssert(signals != nil);
 
-	RACSignal *signal = [[[RACSignal merge:signals]
-		scanWithStart:nil combine:^(NSNumber *previous, NSNumber *next) {
-			if (previous == nil) return next;
-			if (next == nil) return previous;
+	RACSignal *signal = [[[[RACSignal combineLatest:signals]
+		map:^ id (RACTuple *t) {
+			NSMutableArray *values = [t.allObjects mutableCopy];
 
-			NSCAssert([next isKindOfClass:NSNumber.class], @"Value sent is not a number: %@", next);
+			[values removeObject:NSNull.null];
+			if (values.count == 0) return nil;
 
-			if ([previous compare:next] == result) {
-				return next;
+			[values sortUsingSelector:@selector(compare:)];
+
+			if (minimum) {
+				return values[0];
 			} else {
-				return previous;
+				return values.lastObject;
 			}
 		}]
 		filter:^ BOOL (NSNumber *value) {
 			return value != nil;
-		}];
+		}]
+		distinctUntilChanged];
 
 	if (nameFormat != nil) {
 		va_list args;
@@ -955,11 +957,11 @@ static RACSignal *combineAttributeWithRects(NSLayoutAttribute attribute, NSArray
 }
 
 + (RACSignal *)max:(NSArray *)signals {
-	return latestNumberMatchingComparisonResult(signals, NSOrderedAscending, @"+max: %@", signals);
+	return latestSortedNumber(signals, NO, @"+max: %@", signals);
 }
 
 + (RACSignal *)min:(NSArray *)signals {
-	return latestNumberMatchingComparisonResult(signals, NSOrderedDescending, @"+min: %@", signals);
+	return latestSortedNumber(signals, YES, @"+min: %@", signals);
 }
 
 + (RACSignal *)add:(NSArray *)signals {
