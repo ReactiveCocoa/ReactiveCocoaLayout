@@ -533,6 +533,9 @@ extern BOOL RCLIsInAnimatedSignal(void);
 //   CGRectFloor() functions, respectively, such that the coordinates always move
 //   up and left.
 //
+// This is useful for view geometry that needs to be of a precise size, like an
+// image view that should not stretch.
+//
 // Returns a signal of rounded values, using the same type as the input values.
 - (RACSignal *)floor;
 
@@ -543,6 +546,9 @@ extern BOOL RCLIsInAnimatedSignal(void);
 // - CGRect values are rounded using CGRectIntegral().
 // - CGPoint values are rounded using floor(), matching the behavior that
 //   CGRectIntegral() has upon rect origins.
+//
+// This is useful for view geometry that needs to be _at least_ a certain size
+// in order to not clip, like text labels.
 //
 // Returns a signal of rounded values, using the same type as the input values.
 - (RACSignal *)ceil;
