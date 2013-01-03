@@ -866,27 +866,72 @@ describe(@"signal of CGPoints", ^{
 	});
 });
 
-describe(@"+min: and +max:", ^{
-	__block NSArray *signals;
+it(@"should return maximums and minimums", ^{
+	RACSubject *firstSubject = [RACSubject subject];
+	RACSubject *secondSubject = [RACSubject subject];
 
-	beforeEach(^{
-		signals = @[
-			[widths signalWithScheduler:RACScheduler.immediateScheduler],
-			[minYs signalWithScheduler:RACScheduler.immediateScheduler],
-		];
-	});
+	NSMutableArray *receivedMaximums = [NSMutableArray array];
+	[[RACSignal max:@[ firstSubject, secondSubject ]] subscribeNext:^(NSNumber *n) {
+		[receivedMaximums addObject:n];
+	}];
 
-	it(@"should return maximums", ^{
-		RACSignal *signal = [RACSignal max:signals];
-		NSArray *expected = @[ @20, @30, @45, @45, @45, @45 ];
-		expect(signal.sequence).to.equal(expected.rac_sequence);
-	});
+	NSMutableArray *receivedMinimums = [NSMutableArray array];
+	[[RACSignal min:@[ firstSubject, secondSubject ]] subscribeNext:^(NSNumber *n) {
+		[receivedMinimums addObject:n];
+	}];
 
-	it(@"should return minimums", ^{
-		RACSignal *signal = [RACSignal min:signals];
-		NSArray *expected = @[ @20, @20, @20, @10, @10, @10 ];
-		expect(signal.sequence).to.equal(expected.rac_sequence);
-	});
+	NSMutableArray *minimums = [NSMutableArray array];
+	NSMutableArray *maximums = [NSMutableArray array];
+
+	[firstSubject sendNext:@20];
+
+	expect(receivedMinimums).to.equal(minimums);
+	expect(receivedMaximums).to.equal(maximums);
+
+	[secondSubject sendNext:@30];
+	[minimums addObject:@20];
+	[maximums addObject:@30];
+
+	expect(receivedMinimums).to.equal(minimums);
+	expect(receivedMaximums).to.equal(maximums);
+
+	[firstSubject sendNext:@15];
+	[minimums addObject:@15];
+
+	expect(receivedMinimums).to.equal(minimums);
+	expect(receivedMaximums).to.equal(maximums);
+
+	[secondSubject sendNext:@45];
+	[maximums addObject:@45];
+
+	expect(receivedMinimums).to.equal(minimums);
+	expect(receivedMaximums).to.equal(maximums);
+
+	[firstSubject sendNext:@40];
+	[minimums addObject:@40];
+
+	expect(receivedMinimums).to.equal(minimums);
+	expect(receivedMaximums).to.equal(maximums);
+
+	[secondSubject sendNext:@30];
+	[minimums addObject:@30];
+	[maximums addObject:@40];
+
+	expect(receivedMinimums).to.equal(minimums);
+	expect(receivedMaximums).to.equal(maximums);
+
+	[firstSubject sendNext:@35];
+	[maximums addObject:@35];
+
+	expect(receivedMinimums).to.equal(minimums);
+	expect(receivedMaximums).to.equal(maximums);
+
+	[secondSubject sendNext:@50];
+	[minimums addObject:@35];
+	[maximums addObject:@50];
+
+	expect(receivedMinimums).to.equal(minimums);
+	expect(receivedMaximums).to.equal(maximums);
 });
 
 describe(@"mathematical operators", ^{
