@@ -1064,4 +1064,40 @@ static RACSignal *combineAttributeWithRects(NSLayoutAttribute attribute, NSArray
 	return signal;
 }
 
+- (RACSignal *)ceil {
+	RACSignal *signal = [self map:^ id (id value) {
+		if ([value isKindOfClass:NSNumber.class]) {
+			return @(ceil([value doubleValue]));
+		}
+
+		NSAssert([value isKindOfClass:NSValue.class], @"Expected a number or value, got %@", value);
+
+		switch ([value med_geometryStructType]) {
+			case MEDGeometryStructTypeRect:
+				return MEDBox(CGRectIntegral([value med_rectValue]));
+
+			case MEDGeometryStructTypePoint: {
+				CGPoint point = [value med_pointValue];
+				point.x = floor(point.x);
+				point.y = floor(point.y);
+				return MEDBox(point);
+			}
+
+			case MEDGeometryStructTypeSize: {
+				CGSize size = [value med_sizeValue];
+				size.width = ceil(size.width);
+				size.height = ceil(size.height);
+				return MEDBox(size);
+			}
+
+			default:
+				NSAssert(NO, @"Unsupported type of value to ceil: %@", value);
+				return nil;
+		}
+	}];
+
+	signal.name = [NSString stringWithFormat:@"[%@] -ceil", self.name];
+	return signal;
+}
+
 @end

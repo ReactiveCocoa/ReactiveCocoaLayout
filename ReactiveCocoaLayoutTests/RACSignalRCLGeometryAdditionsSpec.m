@@ -1151,4 +1151,66 @@ describe(@"-floor", ^{
 	});
 });
 
+describe(@"-ceil", ^{
+	it(@"should ceil CGFloats", ^{
+		RACSequence *values = @[ @2, @3.5, @4.75, @5.2 ].rac_sequence;
+		RACSignal *ceiled = values.signal.ceil;
+
+		RACSequence *expected = @[ @2, @4, @5, @6 ].rac_sequence;
+		expect(ceiled.sequence).to.equal(expected);
+	});
+
+	it(@"should ceil CGPoints", ^{
+		RACSequence *values = @[
+			MEDBox(CGPointMake(1, 1)),
+			MEDBox(CGPointMake(2.2, 3.8)),
+			MEDBox(CGPointMake(4.5, 5)),
+		].rac_sequence;
+
+		RACSignal *ceiled = values.signal.ceil;
+
+		RACSequence *expected = @[
+			MEDBox(CGPointMake(1, 1)),
+			MEDBox(CGPointMake(2, 3)),
+			MEDBox(CGPointMake(4, 5)),
+		].rac_sequence;
+
+		expect(ceiled.sequence).to.equal(expected);
+	});
+
+	it(@"should ceil CGSizes", ^{
+		RACSequence *values = @[
+			MEDBox(CGSizeMake(1, 1)),
+			MEDBox(CGSizeMake(2.2, 3.8)),
+			MEDBox(CGSizeMake(4.5, 5)),
+		].rac_sequence;
+
+		RACSignal *ceiled = values.signal.ceil;
+
+		RACSequence *expected = @[
+			MEDBox(CGSizeMake(1, 1)),
+			MEDBox(CGSizeMake(3, 4)),
+			MEDBox(CGSizeMake(5, 5)),
+		].rac_sequence;
+
+		expect(ceiled.sequence).to.equal(expected);
+	});
+
+	it(@"should ceil CGRects", ^{
+		RACSequence *values = @[
+			MEDBox(CGRectMake(1, 1, 2, 3)),
+			MEDBox(CGRectMake(2.2, 3.8, 4.5, 5)),
+			MEDBox(CGRectMake(6, 7, 8.1, 9.3)),
+		].rac_sequence;
+
+		RACSignal *ceiled = values.signal.ceil;
+
+		RACSequence *expected = [values map:^(NSValue *value) {
+			return MEDBox(CGRectIntegral(value.med_rectValue));
+		}];
+
+		expect(ceiled.sequence).to.equal(expected);
+	});
+});
+
 SpecEnd

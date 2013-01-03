@@ -529,15 +529,32 @@ extern BOOL RCLIsInAnimatedSignal(void);
 // instead of the defaults.
 - (RACSignal *)animateWithDuration:(NSTimeInterval)duration curve:(RCLAnimationCurve)curve;
 
-// Rounds each CGFloat, CGPoint, CGSize, or CGRect to integral values.
+// Rounds each CGFloat, CGPoint, CGSize, or CGRect to integral values,
+// preferring smaller sizes.
 //
-// CGFloat and CGSize values are floored using the floor() function.
-// 
-// CGPoint and CGRect values are floored using Archimedes' CGPointFloor() and
-// CGRectFloor() functions, respectively, such that the coordinates always move
-// up and left.
+// - CGFloat and CGSize values are rounded using floor().
+// - CGPoint and CGRect values are rounded using Archimedes' CGPointFloor() and
+//   CGRectFloor() functions, respectively, such that the coordinates always move
+//   up and left.
+//
+// This is useful for view geometry that needs to be of a precise size, like an
+// image view that should not stretch.
 //
 // Returns a signal of rounded values, using the same type as the input values.
 - (RACSignal *)floor;
+
+// Rounds each CGFloat, CGPoint, CGSize, or CGRect to integral values,
+// preferring larger sizes.
+//
+// - CGFloat and CGSize values are rounded using ceil().
+// - CGRect values are rounded using CGRectIntegral().
+// - CGPoint values are rounded using floor(), matching the behavior that
+//   CGRectIntegral() has upon rect origins.
+//
+// This is useful for view geometry that needs to be _at least_ a certain size
+// in order to not clip, like text labels.
+//
+// Returns a signal of rounded values, using the same type as the input values.
+- (RACSignal *)ceil;
 
 @end
