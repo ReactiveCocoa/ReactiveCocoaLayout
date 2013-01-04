@@ -66,4 +66,17 @@ extern BOOL RCLIsInAnimatedSignal(void);
 // instead of the defaults.
 - (RACSignal *)animateWithDuration:(NSTimeInterval)duration curve:(RCLAnimationCurve)curve;
 
+// Injects side effects whenever an animation triggered by the receiver
+// completes, or whenever the receiver sends a non-animated value.
+//
+// This is equivalent to -doNext: if applied to a signal that does not animate.
+//
+// block - A block to execute when animations complete or non-animated values
+//         are sent. The block will be passed the non-animated value, or the
+//         value that triggered the animation which is now complete. This block
+//         must not be nil.
+//
+// Returns a signal which forwards all the events of the receiver.
+- (RACSignal *)doAnimationCompleted:(void (^)(id))block;
+
 @end
