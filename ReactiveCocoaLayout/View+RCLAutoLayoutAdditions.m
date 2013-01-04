@@ -52,39 +52,31 @@ static void newInvalidateIntrinsicContentSize(id self, SEL _cmd) {
 		objc_setAssociatedObject(self, IntrinsicContentSizeSubjectKey, subject, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 	}
 
-	RACSignal *signal = [subject startWith:MEDBox(self.intrinsicContentSize)].distinctUntilChanged;
-	signal.name = [NSString stringWithFormat:@"%@ -rcl_intrinsicContentSizeSignal", self];
-	return signal;
+	return [[subject startWith:MEDBox(self.intrinsicContentSize)].distinctUntilChanged setNameWithFormat:@"%@ -rcl_intrinsicContentSizeSignal", self];
 }
 
 - (RACSignal *)rcl_intrinsicBoundsSignal {
-	RACSignal *signal = [RACSignal rectsWithSize:self.rcl_intrinsicContentSizeSignal];
-	signal.name = [NSString stringWithFormat:@"%@ -rcl_intrinsicBoundsSignal", self];
-	return signal;
+	return [[RACSignal rectsWithSize:self.rcl_intrinsicContentSizeSignal] setNameWithFormat:@"%@ -rcl_intrinsicBoundsSignal", self];
 }
 
 - (RACSignal *)rcl_intrinsicHeightSignal {
-	RACSignal *signal = self.rcl_intrinsicContentSizeSignal.height;
-	signal.name = [NSString stringWithFormat:@"%@ -rcl_intrinsicHeightSignal", self];
-	return signal;
+	return [self.rcl_intrinsicContentSizeSignal.height setNameWithFormat:@"%@ -rcl_intrinsicHeightSignal", self];
 }
 
 - (RACSignal *)rcl_intrinsicWidthSignal {
-	RACSignal *signal = self.rcl_intrinsicContentSizeSignal.width;
-	signal.name = [NSString stringWithFormat:@"%@ -rcl_intrinsicWidthSignal", self];
-	return signal;
+	return [self.rcl_intrinsicContentSizeSignal.width setNameWithFormat:@"%@ -rcl_intrinsicWidthSignal", self];
 }
 
 - (RACSignal *)rcl_alignmentRectSignal {
 	@unsafeify(self);
 
-	RACSignal *signal = [self.rcl_frameSignal map:^(id _) {
-		@strongify(self);
-		return MEDBox(self.rcl_alignmentRect);
-	}].distinctUntilChanged;
-
-	signal.name = [NSString stringWithFormat:@"%@ -rcl_alignmentRectSignal", self];
-	return signal;
+	return [[[self.rcl_frameSignal
+		map:^(id _) {
+			@strongify(self);
+			return MEDBox(self.rcl_alignmentRect);
+		}]
+		distinctUntilChanged]
+		setNameWithFormat:@"%@ -rcl_alignmentRectSignal", self];
 }
 
 @end
