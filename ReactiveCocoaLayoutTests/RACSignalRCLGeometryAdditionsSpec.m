@@ -74,19 +74,19 @@ beforeEach(^{
 
 describe(@"zeroes", ^{
 	it(@"should return CGFloat zero", ^{
-		expect([RACSignal.zero first]).to.equal(@0);
+		expect([[RACSignal zero] first]).to.equal(@0);
 	});
 
 	it(@"should return CGRectZero", ^{
-		expect([[RACSignal.zeroRect first] med_rectValue]).to.equal(CGRectZero);
+		expect([[[RACSignal zeroRect] first] med_rectValue]).to.equal(CGRectZero);
 	});
 
 	it(@"should return CGSizeZero", ^{
-		expect([[RACSignal.zeroSize first] med_sizeValue]).to.equal(CGSizeZero);
+		expect([[[RACSignal zeroSize] first] med_sizeValue]).to.equal(CGSizeZero);
 	});
 
 	it(@"should return CGPointZero", ^{
-		expect([[RACSignal.zeroPoint first] med_pointValue]).to.equal(CGPointZero);
+		expect([[[RACSignal zeroPoint] first] med_pointValue]).to.equal(CGPointZero);
 	});
 });
 
