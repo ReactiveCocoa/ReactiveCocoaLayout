@@ -42,7 +42,7 @@ static void newInvalidateIntrinsicContentSizeForCell(NSControl *self, SEL _cmd, 
 	RACSubject *subject = objc_getAssociatedObject(self, IntrinsicContentSizeSubjectKey);
 	if (subject == nil) {
 		subject = [RACSubject subject];
-		subject.name = [NSString stringWithFormat:@"%@ -rcl_cellIntrinsicContentSizeInvalidatedSignal", self];
+		[subject setNameWithFormat:@"%@ -rcl_cellIntrinsicContentSizeInvalidatedSignal", self];
 
 		objc_setAssociatedObject(self, IntrinsicContentSizeSubjectKey, subject, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 	}

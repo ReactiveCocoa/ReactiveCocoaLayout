@@ -69,29 +69,26 @@ static CGRect backingAlignedRect(UIView *view, CGRect rect) {
 - (RACSignal *)rcl_boundsSignal {
 	@weakify(self);
 
-	RACSignal *signal = [[RACAbleWithStart(self.layer.bounds)
+	return [[[RACAbleWithStart(self.layer.bounds)
 		map:^(id _) {
 			@strongify(self);
 			return MEDBox(self.bounds);
 		}]
-		distinctUntilChanged];
-	
-	signal.name = [NSString stringWithFormat:@"%@ -rcl_boundsSignal", self];
-	return signal;
+		distinctUntilChanged]
+		setNameWithFormat:@"%@ -rcl_boundsSignal", self];
 }
 
 - (RACSignal *)rcl_frameSignal {
 	@weakify(self);
 
-	RACSignal *signal = [[[RACSignal merge:@[ self.rcl_boundsSignal, RACAbleWithStart(self.layer.position) ]]
+	return [[[[RACSignal
+		merge:@[ self.rcl_boundsSignal, RACAbleWithStart(self.layer.position) ]]
 		map:^(id _) {
 			@strongify(self);
 			return MEDBox(self.frame);
 		}]
-		distinctUntilChanged];
-	
-	signal.name = [NSString stringWithFormat:@"%@ -rcl_frameSignal", self];
-	return signal;
+		distinctUntilChanged]
+		setNameWithFormat:@"%@ -rcl_frameSignal", self];
 }
 
 - (RACSignal *)rcl_baselineSignal {
@@ -114,8 +111,7 @@ static CGRect backingAlignedRect(UIView *view, CGRect rect) {
 			}].distinctUntilChanged;
 	}
 
-	signal.name = [NSString stringWithFormat:@"%@ -rcl_baselineSignal", self];
-	return signal;
+	return [signal setNameWithFormat:@"%@ -rcl_baselineSignal", self];
 }
 
 @end

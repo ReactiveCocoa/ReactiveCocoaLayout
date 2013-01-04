@@ -31,25 +31,19 @@ static RACSignal *intrinsicContentSizeInvalidatedSignalForCell(NSCell *self) {
 #pragma mark Signals
 
 - (RACSignal *)rcl_sizeSignal {
-	RACSignal *signal = [intrinsicContentSizeInvalidatedSignalForCell(self) map:^(NSCell *cell) {
+	return [[intrinsicContentSizeInvalidatedSignalForCell(self) map:^(NSCell *cell) {
 		return MEDBox(cell.cellSize);
-	}];
-
-	signal.name = [NSString stringWithFormat:@"%@ -rcl_sizeSignal", self];
-	return signal;
+	}] setNameWithFormat:@"%@ -rcl_sizeSignal", self];
 }
 
 - (RACSignal *)rcl_sizeSignalForBounds:(RACSignal *)boundsSignal {
 	NSParameterAssert(boundsSignal != nil);
 
-	RACSignal *signal = [RACSignal combineLatest:@[ boundsSignal, intrinsicContentSizeInvalidatedSignalForCell(self) ] reduce:^(NSValue *value, NSCell *cell) {
+	return [[RACSignal combineLatest:@[ boundsSignal, intrinsicContentSizeInvalidatedSignalForCell(self) ] reduce:^(NSValue *value, NSCell *cell) {
 		NSAssert([value isKindOfClass:NSValue.class] && value.med_geometryStructType == MEDGeometryStructTypeRect, @"Value sent by %@ is not a CGRect: %@", boundsSignal, value);
 
 		return MEDBox([cell cellSizeForBounds:value.med_rectValue]);
-	}];
-
-	signal.name = [NSString stringWithFormat:@"%@ -rcl_sizeSignalForBounds: %@", self, boundsSignal];
-	return signal;
+	}] setNameWithFormat:@"%@ -rcl_sizeSignalForBounds: %@", self, boundsSignal];
 }
 
 @end
