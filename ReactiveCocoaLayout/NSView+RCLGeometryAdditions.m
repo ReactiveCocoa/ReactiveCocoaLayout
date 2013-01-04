@@ -9,7 +9,7 @@
 #import "NSView+RCLGeometryAdditions.h"
 #import "EXTScope.h"
 #import "NSNotificationCenter+RACSupport.h"
-#import "RACSignal+RCLGeometryAdditions.h"
+#import "RACSignal+RCLAnimationAdditions.h"
 
 @implementation NSView (RCLGeometryAdditions)
 

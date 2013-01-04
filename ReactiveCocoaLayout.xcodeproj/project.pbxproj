@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D037FEF41696ED02002D0CBA /* RACSignal+RCLAnimationAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = D037FEF21696ED02002D0CBA /* RACSignal+RCLAnimationAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D037FEF51696ED02002D0CBA /* RACSignal+RCLAnimationAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = D037FEF31696ED02002D0CBA /* RACSignal+RCLAnimationAdditions.m */; };
+		D037FEF61696ED02002D0CBA /* RACSignal+RCLAnimationAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = D037FEF31696ED02002D0CBA /* RACSignal+RCLAnimationAdditions.m */; };
 		D051391B167F108000334374 /* View+RCLAutoLayoutAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = D0513919167F108000334374 /* View+RCLAutoLayoutAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D051391C167F108000334374 /* View+RCLAutoLayoutAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = D051391A167F108000334374 /* View+RCLAutoLayoutAdditions.m */; };
 		D051391D167F108000334374 /* View+RCLAutoLayoutAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = D051391A167F108000334374 /* View+RCLAutoLayoutAdditions.m */; };
@@ -259,6 +262,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		D037FEF21696ED02002D0CBA /* RACSignal+RCLAnimationAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RACSignal+RCLAnimationAdditions.h"; sourceTree = "<group>"; };
+		D037FEF31696ED02002D0CBA /* RACSignal+RCLAnimationAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RACSignal+RCLAnimationAdditions.m"; sourceTree = "<group>"; };
 		D0513919167F108000334374 /* View+RCLAutoLayoutAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "View+RCLAutoLayoutAdditions.h"; sourceTree = "<group>"; };
 		D051391A167F108000334374 /* View+RCLAutoLayoutAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "View+RCLAutoLayoutAdditions.m"; sourceTree = "<group>"; };
 		D051391E167F11FD00334374 /* ViewExamples.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewExamples.m; sourceTree = "<group>"; };
@@ -636,6 +641,8 @@
 		D0BB262F16788758005E9371 /* Signals */ = {
 			isa = PBXGroup;
 			children = (
+				D037FEF21696ED02002D0CBA /* RACSignal+RCLAnimationAdditions.h */,
+				D037FEF31696ED02002D0CBA /* RACSignal+RCLAnimationAdditions.m */,
 				D0BB2630167887C3005E9371 /* RACSignal+RCLGeometryAdditions.h */,
 				D0BB2631167887C3005E9371 /* RACSignal+RCLGeometryAdditions.m */,
 				D0ED89F216814D800041A188 /* RACSignal+RCLWritingDirectionAdditions.h */,
@@ -668,6 +675,7 @@
 				D096C3B816916ECC0071C6D6 /* metamacros.h in Headers */,
 				D096C4EF16917B140071C6D6 /* NSControl+RCLGeometryAdditions.h in Headers */,
 				D096C51816917BA60071C6D6 /* NSCell+RCLGeometryAdditions.h in Headers */,
+				D037FEF41696ED02002D0CBA /* RACSignal+RCLAnimationAdditions.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -977,6 +985,7 @@
 				D08D164A16819DE300FBBA12 /* NSNotificationCenter+RACSupport.m in Sources */,
 				D096C4C216917A7A0071C6D6 /* EXTRuntimeExtensions.m in Sources */,
 				D096C4C516917A7A0071C6D6 /* EXTScope.m in Sources */,
+				D037FEF61696ED02002D0CBA /* RACSignal+RCLAnimationAdditions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1005,6 +1014,7 @@
 				D096C4C416917A7A0071C6D6 /* EXTScope.m in Sources */,
 				D096C4F016917B140071C6D6 /* NSControl+RCLGeometryAdditions.m in Sources */,
 				D096C51916917BA60071C6D6 /* NSCell+RCLGeometryAdditions.m in Sources */,
+				D037FEF51696ED02002D0CBA /* RACSignal+RCLAnimationAdditions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

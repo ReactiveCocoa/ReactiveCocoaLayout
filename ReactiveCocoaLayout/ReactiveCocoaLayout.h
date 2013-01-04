@@ -6,6 +6,7 @@
 //  Copyright (c) 2012 GitHub. All rights reserved.
 //
 
+#import "RACSignal+RCLAnimationAdditions.h"
 #import "RACSignal+RCLGeometryAdditions.h"
 #import "RACSignal+RCLWritingDirectionAdditions.h"
 #import "View+RCLAutoLayoutAdditions.h"
