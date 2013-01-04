@@ -886,7 +886,7 @@ static RACSignal *combineAttributeWithRects(NSLayoutAttribute attribute, NSArray
 }
 
 - (RACSignal *)negate {
-	return [self map:^ id (id value) {
+	return [[self map:^ id (id value) {
 		if ([value isKindOfClass:NSNumber.class]) {
 			return @(-[value doubleValue]);
 		}
@@ -921,7 +921,7 @@ static RACSignal *combineAttributeWithRects(NSLayoutAttribute attribute, NSArray
 				NSAssert(NO, @"Unsupported type of value to negate: %@", value);
 				return nil;
 		}
-	}];
+	}] setNameWithFormat:@"[%@] -negate", self.name];
 }
 
 - (RACSignal *)animate {
