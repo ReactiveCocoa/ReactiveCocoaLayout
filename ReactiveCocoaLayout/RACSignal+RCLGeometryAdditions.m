@@ -311,6 +311,22 @@ static RACSignal *combineAttributeWithRects(NSLayoutAttribute attribute, NSArray
 
 @implementation RACSignal (RCLGeometryAdditions)
 
++ (RACSignal *)zero {
+	return [RACSignal return:@0];
+}
+
++ (RACSignal *)zeroRect {
+	return [RACSignal return:[NSValue med_valueWithRect:CGRectZero]];
+}
+
++ (RACSignal *)zeroSize {
+	return [RACSignal return:[NSValue med_valueWithSize:CGSizeZero]];
+}
+
++ (RACSignal *)zeroPoint {
+	return [RACSignal return:[NSValue med_valueWithPoint:CGPointZero]];
+}
+
 + (RACSignal *)rectsWithX:(RACSignal *)xSignal Y:(RACSignal *)ySignal width:(RACSignal *)widthSignal height:(RACSignal *)heightSignal {
 	NSParameterAssert(xSignal != nil);
 	NSParameterAssert(ySignal != nil);
@@ -367,10 +383,7 @@ static RACSignal *combineAttributeWithRects(NSLayoutAttribute attribute, NSArray
 }
 
 + (RACSignal *)rectsWithSize:(RACSignal *)sizeSignal {
-	// CGPointZero apparently isn't typed (for MEDBox), so manually create it.
-	RACSignal *originSignal = [RACSignal return:MEDBox(CGPointMake(0, 0))];
-
-	RACSignal *signal = [self rectsWithOrigin:originSignal size:sizeSignal];
+	RACSignal *signal = [self rectsWithOrigin:self.zeroPoint size:sizeSignal];
 	signal.name = [NSString stringWithFormat:@"+rectsWithSize: %@", sizeSignal];
 	return signal;
 }

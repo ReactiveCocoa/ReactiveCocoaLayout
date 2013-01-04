@@ -50,6 +50,18 @@ extern BOOL RCLIsInAnimatedSignal(void);
 // Adds geometry functions to RACSignal.
 @interface RACSignal (RCLGeometryAdditions)
 
+// Returns a signal which sends 0 and completes.
++ (RACSignal *)zero;
+
+// Returns a signal which sends CGRectZero and completes.
++ (RACSignal *)zeroRect;
+
+// Returns a signal which sends CGSizeZero and completes.
++ (RACSignal *)zeroSize;
+
+// Returns a signal which sends CGPointZero and completes.
++ (RACSignal *)zeroPoint;
+
 // Constructs rects from the given X, Y, width, and height signals.
 //
 // Returns a signal of CGRect values.
