@@ -523,6 +523,17 @@ extern BOOL RCLIsInAnimatedSignal(void);
 // Returns a signal of quotients, using the same type as the input values.
 - (RACSignal *)dividedBy:(RACSignal *)denominatorSignal;
 
+// Negate each CGFloat, CGSize, CGPoint, or CGRect value.
+//
+// - CGFloat values will be multiplied by -1.
+// - The components of CGSize and CGPoint values will be multiplied by -1.
+// - The components of a CGRect value will be multiplied by -1, such that the
+//   rectangle flips across both the X and Y axes, and then the rect will be
+//   standardized.
+//
+// Returns a signal of negated values, using the same type as the input values.
+- (RACSignal *)negate;
+
 // Wraps every next in an animation block, using the default duration and
 // animation curve.
 //
