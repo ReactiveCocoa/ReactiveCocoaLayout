@@ -76,9 +76,8 @@
 
 	// Animate the initial appearance of the text field, but not any changes due
 	// to rotation.
-	RAC(self.nameTextField.rcl_alignmentRect) = [[[[textFieldRect animateWithDuration:1 curve:RCLAnimationCurveEaseOut] take:1] delay:1] sequenceNext:^{
-		return textFieldRect;
-	}];
+	RACSignal *initialRect = [[textFieldRect take:1] animateWithDuration:1 curve:RCLAnimationCurveEaseOut];
+	RAC(self.nameTextField.rcl_alignmentRect) = [initialRect concat:textFieldRect];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
