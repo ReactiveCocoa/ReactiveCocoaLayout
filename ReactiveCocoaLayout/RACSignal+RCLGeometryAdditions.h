@@ -518,7 +518,7 @@ extern BOOL RCLIsInAnimatedSignal(void);
 // that property (that originate from the signal) being automatically animated.
 //
 // To delay an animation, use -[RACSignal delay:] or -[RACSignal throttle:] on
-// the receiver, before applying -animate. Because the aforementioned methods
+// the receiver _before_ applying -animate. Because the aforementioned methods
 // delay delivery of `next`s, applying them _after_ -animate will cause values
 // to be delivered outside of any animation block.
 //
