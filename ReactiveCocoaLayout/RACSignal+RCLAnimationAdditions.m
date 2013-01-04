@@ -54,37 +54,37 @@ static RACSignal *animateWithDuration (RACSignal *self, NSTimeInterval *duration
 			#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
 				[UIView animateWithDuration:duration delay:0 options:options animations:^{
 					[subscriber sendNext:value];
-				} completion:NULL];
+				} completion:nil];
 			#elif TARGET_OS_MAC
-				[NSAnimationContext beginGrouping];
-				if (hasDuration) NSAnimationContext.currentContext.duration = duration;
+				[NSAnimationContext runAnimationGroup:^(NSAnimationContext *context) {
+					if (hasDuration) context.duration = duration;
 
-				switch (curve) {
-					case RCLAnimationCurveEaseInOut:
-						NSAnimationContext.currentContext.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
-						break;
+					switch (curve) {
+						case RCLAnimationCurveEaseInOut:
+							context.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+							break;
 
-					case RCLAnimationCurveEaseIn:
-						NSAnimationContext.currentContext.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseIn];
-						break;
+						case RCLAnimationCurveEaseIn:
+							context.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseIn];
+							break;
 
-					case RCLAnimationCurveEaseOut:
-						NSAnimationContext.currentContext.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut];
-						break;
+						case RCLAnimationCurveEaseOut:
+							context.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut];
+							break;
 
-					case RCLAnimationCurveLinear:
-						NSAnimationContext.currentContext.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
-						break;
+						case RCLAnimationCurveLinear:
+							context.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
+							break;
 
-					case RCLAnimationCurveDefault:
-						break;
+						case RCLAnimationCurveDefault:
+							break;
 
-					default:
-						NSCAssert(NO, @"Unrecognized animation curve: %i", (int)curve);
-				}
+						default:
+							NSCAssert(NO, @"Unrecognized animation curve: %i", (int)curve);
+					}
 
-				[subscriber sendNext:value];
-				[NSAnimationContext endGrouping];
+					[subscriber sendNext:value];
+				} completionHandler:nil];
 			#endif
 		} error:^(NSError *error) {
 			[subscriber sendError:error];
