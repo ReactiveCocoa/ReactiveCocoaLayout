@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D037FF2D1696F4E3002D0CBA /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D037FF2C1696F4E3002D0CBA /* QuartzCore.framework */; };
 		D0FD5AA91679E96D003C3210 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0FD5AA81679E96D003C3210 /* UIKit.framework */; };
 		D0FD5AAB1679E96D003C3210 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0FD5AAA1679E96D003C3210 /* Foundation.framework */; };
 		D0FD5AAD1679E96D003C3210 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0FD5AAC1679E96D003C3210 /* CoreGraphics.framework */; };
@@ -108,6 +109,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		D037FF2C1696F4E3002D0CBA /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.0.sdk/System/Library/Frameworks/QuartzCore.framework; sourceTree = DEVELOPER_DIR; };
 		D0FD5AA41679E96D003C3210 /* DeviceRotation.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DeviceRotation.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D0FD5AA81679E96D003C3210 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		D0FD5AAA1679E96D003C3210 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -148,6 +150,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D037FF2D1696F4E3002D0CBA /* QuartzCore.framework in Frameworks */,
 				D0FD5B5A1679EF37003C3210 /* libReactiveCocoaLayout iOS.a in Frameworks */,
 				D0FD5AA91679E96D003C3210 /* UIKit.framework in Frameworks */,
 				D0FD5AAB1679E96D003C3210 /* Foundation.framework in Frameworks */,
@@ -185,6 +188,7 @@
 				D0FD5AA81679E96D003C3210 /* UIKit.framework */,
 				D0FD5AAA1679E96D003C3210 /* Foundation.framework */,
 				D0FD5AAC1679E96D003C3210 /* CoreGraphics.framework */,
+				D037FF2C1696F4E3002D0CBA /* QuartzCore.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
