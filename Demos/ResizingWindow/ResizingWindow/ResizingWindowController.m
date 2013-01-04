@@ -80,8 +80,7 @@
 
 	// For the confirmation field, start with an alpha of 0, and then animate
 	// any changes thereafter.
-	RACSignal *confirmAlpha = [[RACSignal return:@0]
-		concat:[RACAbleWithStart(self.confirmEmailVisible) animate]];
+	RACSignal *confirmAlpha = [RACSignal.zero concat:[RACAbleWithStart(self.confirmEmailVisible) animate]];
 
 	RAC(self.confirmEmailLabel.rcl_alphaValue) = confirmAlpha;
 	RAC(self.confirmEmailField.rcl_alphaValue) = confirmAlpha;
@@ -109,7 +108,7 @@
 	// First, choose the appropriate signal based on the BOOL…
 	RACSignal *confirmHeightPlusPadding = [[RACSignal if:RACAbleWithStart(self.confirmEmailVisible)
 		then:[self.confirmEmailField.rcl_intrinsicHeightSignal plus:self.verticalPadding]
-		else:[RACSignal return:@0]]
+		else:RACSignal.zero]
 		// Then animate all changes.
 		animate];
 
