@@ -10,6 +10,10 @@
 		D037FEF41696ED02002D0CBA /* RACSignal+RCLAnimationAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = D037FEF21696ED02002D0CBA /* RACSignal+RCLAnimationAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D037FEF51696ED02002D0CBA /* RACSignal+RCLAnimationAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = D037FEF31696ED02002D0CBA /* RACSignal+RCLAnimationAdditions.m */; };
 		D037FEF61696ED02002D0CBA /* RACSignal+RCLAnimationAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = D037FEF31696ED02002D0CBA /* RACSignal+RCLAnimationAdditions.m */; };
+		D037FEF81696F1FE002D0CBA /* RACSignalRCLAnimationAdditionsSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = D037FEF71696F1FE002D0CBA /* RACSignalRCLAnimationAdditionsSpec.m */; };
+		D037FEF91696F1FE002D0CBA /* RACSignalRCLAnimationAdditionsSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = D037FEF71696F1FE002D0CBA /* RACSignalRCLAnimationAdditionsSpec.m */; };
+		D037FEFB1696F42D002D0CBA /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D037FEFA1696F42D002D0CBA /* QuartzCore.framework */; };
+		D037FEFC1696F438002D0CBA /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D037FEFA1696F42D002D0CBA /* QuartzCore.framework */; };
 		D051391B167F108000334374 /* View+RCLAutoLayoutAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = D0513919167F108000334374 /* View+RCLAutoLayoutAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D051391C167F108000334374 /* View+RCLAutoLayoutAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = D051391A167F108000334374 /* View+RCLAutoLayoutAdditions.m */; };
 		D051391D167F108000334374 /* View+RCLAutoLayoutAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = D051391A167F108000334374 /* View+RCLAutoLayoutAdditions.m */; };
@@ -264,6 +268,8 @@
 /* Begin PBXFileReference section */
 		D037FEF21696ED02002D0CBA /* RACSignal+RCLAnimationAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RACSignal+RCLAnimationAdditions.h"; sourceTree = "<group>"; };
 		D037FEF31696ED02002D0CBA /* RACSignal+RCLAnimationAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RACSignal+RCLAnimationAdditions.m"; sourceTree = "<group>"; };
+		D037FEF71696F1FE002D0CBA /* RACSignalRCLAnimationAdditionsSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RACSignalRCLAnimationAdditionsSpec.m; sourceTree = "<group>"; };
+		D037FEFA1696F42D002D0CBA /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.0.sdk/System/Library/Frameworks/QuartzCore.framework; sourceTree = DEVELOPER_DIR; };
 		D0513919167F108000334374 /* View+RCLAutoLayoutAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "View+RCLAutoLayoutAdditions.h"; sourceTree = "<group>"; };
 		D051391A167F108000334374 /* View+RCLAutoLayoutAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "View+RCLAutoLayoutAdditions.m"; sourceTree = "<group>"; };
 		D051391E167F11FD00334374 /* ViewExamples.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewExamples.m; sourceTree = "<group>"; };
@@ -339,6 +345,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D037FEFB1696F42D002D0CBA /* QuartzCore.framework in Frameworks */,
 				D0FD5A0C1679DFA8003C3210 /* libArchimedes-iOS.a in Frameworks */,
 				D0626A3C167944DA00E951A5 /* libReactiveCocoa-iOS.a in Frameworks */,
 				D0626A3A167944CF00E951A5 /* UIKit.framework in Frameworks */,
@@ -356,6 +363,7 @@
 				D0626A021679440D00E951A5 /* libReactiveCocoaLayout iOS.a in Frameworks */,
 				D06C9E4E167D888B00276090 /* libExpecta-iOS.a in Frameworks */,
 				D06C9E4F167D888B00276090 /* libSpecta-iOS.a in Frameworks */,
+				D037FEFC1696F438002D0CBA /* QuartzCore.framework in Frameworks */,
 				D06C9E57167D89BE00276090 /* UIKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -424,6 +432,7 @@
 				D096C51A16917EF30071C6D6 /* NSCellRCLGeometryAdditionsSpec.m */,
 				D096C4EB16917B0D0071C6D6 /* NSControlRCLGeometryAdditionsSpec.m */,
 				D06C9E5A167D8A9A00276090 /* NSViewRCLGeometryAdditionsSpec.m */,
+				D037FEF71696F1FE002D0CBA /* RACSignalRCLAnimationAdditionsSpec.m */,
 				D06C9E52167D896000276090 /* RACSignalRCLGeometryAdditionsSpec.m */,
 				D0ED89F7168150030041A188 /* RACSignalRCLWritingDirectionAdditionsSpec.m */,
 				D06C9E5D167D8BD900276090 /* UIViewRCLGeometryAdditionsSpec.m */,
@@ -470,6 +479,7 @@
 				D0BB24791678772C005E9371 /* Foundation.framework */,
 				D0626A39167944CF00E951A5 /* UIKit.framework */,
 				D06C9F40167D9AD300276090 /* QuartzCore.framework */,
+				D037FEFA1696F42D002D0CBA /* QuartzCore.framework */,
 				D06C9E58167D89DB00276090 /* CoreGraphics.framework */,
 			);
 			name = Frameworks;
@@ -998,6 +1008,7 @@
 				D0513920167F11FD00334374 /* ViewExamples.m in Sources */,
 				D0513975167F149F00334374 /* TestView.m in Sources */,
 				D0ED89F9168150030041A188 /* RACSignalRCLWritingDirectionAdditionsSpec.m in Sources */,
+				D037FEF91696F1FE002D0CBA /* RACSignalRCLAnimationAdditionsSpec.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1029,6 +1040,7 @@
 				D0ED89F8168150030041A188 /* RACSignalRCLWritingDirectionAdditionsSpec.m in Sources */,
 				D096C4EC16917B0D0071C6D6 /* NSControlRCLGeometryAdditionsSpec.m in Sources */,
 				D096C51B16917EF30071C6D6 /* NSCellRCLGeometryAdditionsSpec.m in Sources */,
+				D037FEF81696F1FE002D0CBA /* RACSignalRCLAnimationAdditionsSpec.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
