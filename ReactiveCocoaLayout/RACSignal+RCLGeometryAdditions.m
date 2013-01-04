@@ -44,7 +44,7 @@ static RACSignal *animateWithDuration (RACSignal *self, NSTimeInterval *duration
 		NSTimeInterval duration = (hasDuration ? *durationPtr : 0);
 	#endif
 
-	return [RACSignal createSignal:^(id<RACSubscriber> subscriber) {
+	return [[RACSignal createSignal:^(id<RACSubscriber> subscriber) {
 		return [self subscribeNext:^(id value) {
 			++RCLSignalAnimationLevel;
 			@onExit {
@@ -92,15 +92,15 @@ static RACSignal *animateWithDuration (RACSignal *self, NSTimeInterval *duration
 		} completed:^{
 			[subscriber sendCompleted];
 		}];
-	} name:@"[%@] -animateWithDuration: %f curve: %li", self.name, (double)duration, (long)curve];
+	}] setNameWithFormat:@"[%@] -animateWithDuration: %f curve: %li", self.name, (double)duration, (long)curve];
 }
 
 // When any signal sends an NSNumber, sorts the latest values from all of them,
 // and sends either the minimum or the maximum.
-static RACSignal *latestSortedNumber(NSArray *signals, BOOL minimum, NSString *nameFormat, ...) NS_FORMAT_FUNCTION(3, 4) {
+static RACSignal *latestSortedNumber(NSArray *signals, BOOL minimum) {
 	NSCParameterAssert(signals != nil);
 
-	RACSignal *signal = [[[[RACSignal combineLatest:signals]
+	return [[[[RACSignal combineLatest:signals]
 		map:^ id (RACTuple *t) {
 			NSMutableArray *values = [t.allObjects mutableCopy];
 
@@ -119,15 +119,6 @@ static RACSignal *latestSortedNumber(NSArray *signals, BOOL minimum, NSString *n
 			return value != nil;
 		}]
 		distinctUntilChanged];
-
-	if (nameFormat != nil) {
-		va_list args;
-		va_start(args, nameFormat);
-		signal.name = [[NSString alloc] initWithFormat:nameFormat arguments:args];
-		va_end(args);
-	}
-
-	return signal;
 }
 
 // A binary operator accepting two numbers and returning a number.
@@ -180,12 +171,12 @@ static NSValue *combineValuesWithOperator(NSValue *a, NSValue *b, RCLBinaryOpera
 // values of the same type.
 //
 // Returns a signal of results, using the same type as the input values.
-static RACSignal *combineSignalsWithOperator(NSArray *signals, RCLBinaryOperator operator, NSString *nameFormat, ...) NS_FORMAT_FUNCTION(3, 4) {
+static RACSignal *combineSignalsWithOperator(NSArray *signals, RCLBinaryOperator operator) {
 	NSCParameterAssert(signals != nil);
 	NSCParameterAssert(signals.count > 0);
 	NSCParameterAssert(operator != nil);
 
-	RACSignal *signal = [[[RACSignal combineLatest:signals]
+	return [[[RACSignal combineLatest:signals]
 		map:^(RACTuple *values) {
 			return values.allObjects.rac_sequence;
 		}]
@@ -203,15 +194,6 @@ static RACSignal *combineSignalsWithOperator(NSArray *signals, RCLBinaryOperator
 
 			return result;
 		}];
-	
-	if (nameFormat != nil) {
-		va_list args;
-		va_start(args, nameFormat);
-		signal.name = [[NSString alloc] initWithFormat:nameFormat arguments:args];
-		va_end(args);
-	}
-
-	return signal;
 }
 
 // Combines the CGRectEdge corresponding to a layout attribute, and the values
@@ -226,12 +208,9 @@ static RACSignal *combineSignalsWithOperator(NSArray *signals, RCLBinaryOperator
 // reduceBlock - A block which combines the NSNumber-boxed CGRectEdge (if
 //				 `attribute` corresponds to one), or `nil` (if it does not) and
 //				 the values of each signal in the `signals` array.
-// nameFormat  - A format string for the name of the resulting signal. This may
-//				 be nil to not set a name.
-// ...         - The arguments to be filled into `nameFormat`.
 //
 // Returns a signal of reduced values.
-static RACSignal *combineAttributeWithRects(NSLayoutAttribute attribute, NSArray *signals, id reduceBlock, NSString *nameFormat, ...) NS_FORMAT_FUNCTION(4, 5) {
+static RACSignal *combineAttributeWithRects(NSLayoutAttribute attribute, NSArray *signals, id reduceBlock) {
 	NSCParameterAssert(attribute != NSLayoutAttributeBaseline);
 	NSCParameterAssert(attribute != NSLayoutAttributeNotAnAttribute);
 	NSCParameterAssert(signals.count > 0);
@@ -297,16 +276,7 @@ static RACSignal *combineAttributeWithRects(NSLayoutAttribute attribute, NSArray
 	}
 
 	[mutableSignals insertObject:edgeSignal atIndex:0];
-	RACSignal *signal = [RACSignal combineLatest:mutableSignals reduce:reduceBlock];
-
-	if (nameFormat != nil) {
-		va_list args;
-		va_start(args, nameFormat);
-		signal.name = [[NSString alloc] initWithFormat:nameFormat arguments:args];
-		va_end(args);
-	}
-
-	return signal;
+	return [RACSignal combineLatest:mutableSignals reduce:reduceBlock];
 }
 
 @implementation RACSignal (RCLGeometryAdditions)
@@ -317,24 +287,21 @@ static RACSignal *combineAttributeWithRects(NSLayoutAttribute attribute, NSArray
 	NSParameterAssert(widthSignal != nil);
 	NSParameterAssert(heightSignal != nil);
 
-	RACSignal *signal = [RACSignal combineLatest:@[ xSignal, ySignal, widthSignal, heightSignal ] reduce:^(NSNumber *x, NSNumber *y, NSNumber *width, NSNumber *height) {
+	return [[RACSignal combineLatest:@[ xSignal, ySignal, widthSignal, heightSignal ] reduce:^(NSNumber *x, NSNumber *y, NSNumber *width, NSNumber *height) {
 		NSAssert([x isKindOfClass:NSNumber.class], @"Value sent by %@ is not a number: %@", xSignal, x);
 		NSAssert([y isKindOfClass:NSNumber.class], @"Value sent by %@ is not a number: %@", ySignal, y);
 		NSAssert([width isKindOfClass:NSNumber.class], @"Value sent by %@ is not a number: %@", widthSignal, width);
 		NSAssert([height isKindOfClass:NSNumber.class], @"Value sent by %@ is not a number: %@", heightSignal, height);
 
 		return MEDBox(CGRectMake(x.doubleValue, y.doubleValue, width.doubleValue, height.doubleValue));
-	}];
-
-	signal.name = [NSString stringWithFormat:@"+rectsWithX: %@ Y: %@ width: %@ height: %@", xSignal, ySignal, widthSignal, heightSignal];
-	return signal;
+	}] setNameWithFormat:@"+rectsWithX: %@ Y: %@ width: %@ height: %@", xSignal, ySignal, widthSignal, heightSignal];
 }
 
 + (RACSignal *)rectsWithOrigin:(RACSignal *)originSignal size:(RACSignal *)sizeSignal {
 	NSParameterAssert(originSignal != nil);
 	NSParameterAssert(sizeSignal != nil);
 
-	RACSignal *signal = [RACSignal combineLatest:@[ originSignal, sizeSignal ] reduce:^(NSValue *origin, NSValue *size) {
+	return [[RACSignal combineLatest:@[ originSignal, sizeSignal ] reduce:^(NSValue *origin, NSValue *size) {
 		NSAssert([origin isKindOfClass:NSValue.class] && origin.med_geometryStructType == MEDGeometryStructTypePoint, @"Value sent by %@ is not a CGPoint: %@", originSignal, origin);
 		NSAssert([size isKindOfClass:NSValue.class] && size.med_geometryStructType == MEDGeometryStructTypeSize, @"Value sent by %@ is not a CGSize: %@", sizeSignal, size);
 
@@ -342,17 +309,14 @@ static RACSignal *combineAttributeWithRects(NSLayoutAttribute attribute, NSArray
 		CGSize s = size.med_sizeValue;
 
 		return MEDBox(CGRectMake(p.x, p.y, s.width, s.height));
-	}];
-
-	signal.name = [NSString stringWithFormat:@"+rectsWithOrigin: %@ size: %@", originSignal, sizeSignal];
-	return signal;
+	}] setNameWithFormat:@"+rectsWithOrigin: %@ size: %@", originSignal, sizeSignal];
 }
 
 + (RACSignal *)rectsWithCenter:(RACSignal *)centerSignal size:(RACSignal *)sizeSignal {
 	NSParameterAssert(centerSignal != nil);
 	NSParameterAssert(sizeSignal != nil);
 
-	RACSignal *signal = [RACSignal combineLatest:@[ centerSignal, sizeSignal ] reduce:^(NSValue *center, NSValue *size) {
+	return [[RACSignal combineLatest:@[ centerSignal, sizeSignal ] reduce:^(NSValue *center, NSValue *size) {
 		NSAssert([center isKindOfClass:NSValue.class] && center.med_geometryStructType == MEDGeometryStructTypePoint, @"Value sent by %@ is not a CGPoint: %@", centerSignal, center);
 		NSAssert([size isKindOfClass:NSValue.class] && size.med_geometryStructType == MEDGeometryStructTypeSize, @"Value sent by %@ is not a CGSize: %@", sizeSignal, size);
 
@@ -360,71 +324,55 @@ static RACSignal *combineAttributeWithRects(NSLayoutAttribute attribute, NSArray
 		CGSize s = size.med_sizeValue;
 
 		return MEDBox(CGRectMake(p.x - s.width / 2, p.y - s.height / 2, s.width, s.height));
-	}];
-
-	signal.name = [NSString stringWithFormat:@"+rectsWithCenter: %@ size: %@", centerSignal, sizeSignal];
-	return signal;
+	}] setNameWithFormat:@"+rectsWithCenter: %@ size: %@", centerSignal, sizeSignal];
 }
 
 + (RACSignal *)rectsWithSize:(RACSignal *)sizeSignal {
 	// CGPointZero apparently isn't typed (for MEDBox), so manually create it.
 	RACSignal *originSignal = [RACSignal return:MEDBox(CGPointMake(0, 0))];
 
-	RACSignal *signal = [self rectsWithOrigin:originSignal size:sizeSignal];
-	signal.name = [NSString stringWithFormat:@"+rectsWithSize: %@", sizeSignal];
-	return signal;
+	return [[self rectsWithOrigin:originSignal size:sizeSignal] setNameWithFormat:@"+rectsWithSize: %@", sizeSignal];
 }
 
 - (RACSignal *)size {
-	RACSignal *signal = [self map:^(NSValue *value) {
+	return [[self map:^(NSValue *value) {
 		NSAssert([value isKindOfClass:NSValue.class] && value.med_geometryStructType == MEDGeometryStructTypeRect, @"Value sent by %@ is not a CGRect: %@", self, value);
 
 		return MEDBox(value.med_rectValue.size);
-	}];
-
-	signal.name = [NSString stringWithFormat:@"[%@] -size", self.name];
-	return signal;
+	}] setNameWithFormat:@"[%@] -size", self.name];
 }
 
 - (RACSignal *)replaceSize:(RACSignal *)sizeSignal {
-	RACSignal *signal = [self.class rectsWithOrigin:self.origin size:sizeSignal];
-	signal.name = [NSString stringWithFormat:@"[%@] -replaceSize: %@", self.name, sizeSignal];
-	return signal;
+	return [[self.class rectsWithOrigin:self.origin size:sizeSignal] setNameWithFormat:@"[%@] -replaceSize: %@", self.name, sizeSignal];
 }
 
 + (RACSignal *)sizesWithWidth:(RACSignal *)widthSignal height:(RACSignal *)heightSignal {
 	NSParameterAssert(widthSignal != nil);
 	NSParameterAssert(heightSignal != nil);
 
-	RACSignal *signal = [RACSignal combineLatest:@[ widthSignal, heightSignal ] reduce:^(NSNumber *width, NSNumber *height) {
+	return [[RACSignal combineLatest:@[ widthSignal, heightSignal ] reduce:^(NSNumber *width, NSNumber *height) {
 		NSAssert([width isKindOfClass:NSNumber.class], @"Value sent by %@ is not a number: %@", widthSignal, width);
 		NSAssert([height isKindOfClass:NSNumber.class], @"Value sent by %@ is not a number: %@", heightSignal, height);
 
 		return MEDBox(CGSizeMake(width.doubleValue, height.doubleValue));
-	}];
-
-	signal.name = [NSString stringWithFormat:@"+sizesWithWidth: %@ height: %@", widthSignal, heightSignal];
-	return signal;
+	}] setNameWithFormat:@"+sizesWithWidth: %@ height: %@", widthSignal, heightSignal];
 }
 
 - (RACSignal *)width {
-	RACSignal *signal = [self map:^(NSValue *value) {
+	return [[self map:^(NSValue *value) {
 		if (value.med_geometryStructType == MEDGeometryStructTypeRect) {
 			return @(CGRectGetWidth(value.med_rectValue));
 		} else {
 			NSAssert(value.med_geometryStructType == MEDGeometryStructTypeSize, @"Unexpected type of value: %@", value);
 			return @(value.med_sizeValue.width);
 		}
-	}];
-
-	signal.name = [NSString stringWithFormat:@"[%@] -width", self.name];
-	return signal;
+	}] setNameWithFormat:@"[%@] -width", self.name];
 }
 
 - (RACSignal *)replaceWidth:(RACSignal *)widthSignal {
 	NSParameterAssert(widthSignal != nil);
 
-	RACSignal *signal = [RACSignal combineLatest:@[ widthSignal, self ] reduce:^(NSNumber *width, NSValue *value) {
+	return [[RACSignal combineLatest:@[ widthSignal, self ] reduce:^(NSNumber *width, NSValue *value) {
 		if (value.med_geometryStructType == MEDGeometryStructTypeRect) {
 			CGRect rect = value.med_rectValue;
 			rect.size.width = width.doubleValue;
@@ -436,30 +384,24 @@ static RACSignal *combineAttributeWithRects(NSLayoutAttribute attribute, NSArray
 			size.width = width.doubleValue;
 			return MEDBox(size);
 		}
-	}];
-
-	signal.name = [NSString stringWithFormat:@"[%@] -replaceWidth: %@", self.name, widthSignal];
-	return signal;
+	}] setNameWithFormat:@"[%@] -replaceWidth: %@", self.name, widthSignal];
 }
 
 - (RACSignal *)height {
-	RACSignal *signal = [self map:^(NSValue *value) {
+	return [[self map:^(NSValue *value) {
 		if (value.med_geometryStructType == MEDGeometryStructTypeRect) {
 			return @(CGRectGetHeight(value.med_rectValue));
 		} else {
 			NSAssert(value.med_geometryStructType == MEDGeometryStructTypeSize, @"Unexpected type of value: %@", value);
 			return @(value.med_sizeValue.height);
 		}
-	}];
-
-	signal.name = [NSString stringWithFormat:@"[%@] -height", self.name];
-	return signal;
+	}] setNameWithFormat:@"[%@] -height", self.name];
 }
 
 - (RACSignal *)replaceHeight:(RACSignal *)heightSignal {
 	NSParameterAssert(heightSignal != nil);
 
-	RACSignal *signal = [RACSignal combineLatest:@[ heightSignal, self ] reduce:^(NSNumber *height, NSValue *value) {
+	return [[RACSignal combineLatest:@[ heightSignal, self ] reduce:^(NSNumber *height, NSValue *value) {
 		if (value.med_geometryStructType == MEDGeometryStructTypeRect) {
 			CGRect rect = value.med_rectValue;
 			rect.size.height = height.doubleValue;
@@ -471,91 +413,67 @@ static RACSignal *combineAttributeWithRects(NSLayoutAttribute attribute, NSArray
 			size.height = height.doubleValue;
 			return MEDBox(size);
 		}
-	}];
-
-	signal.name = [NSString stringWithFormat:@"[%@] -replaceHeight: %@", self.name, heightSignal];
-	return signal;
+	}] setNameWithFormat:@"[%@] -replaceHeight: %@", self.name, heightSignal];
 }
 
 - (RACSignal *)origin {
-	RACSignal *signal = [self map:^(NSValue *value) {
+	return [[self map:^(NSValue *value) {
 		NSAssert([value isKindOfClass:NSValue.class] && value.med_geometryStructType == MEDGeometryStructTypeRect, @"Value sent by %@ is not a CGRect: %@", self, value);
 
 		return MEDBox(value.med_rectValue.origin);
-	}];
-
-	signal.name = [NSString stringWithFormat:@"[%@] -origin", self.name];
-	return signal;
+	}] setNameWithFormat:@"[%@] -origin", self.name];
 }
 
 - (RACSignal *)replaceOrigin:(RACSignal *)originSignal {
-	RACSignal *signal = [self.class rectsWithOrigin:originSignal size:self.size];
-	signal.name = [NSString stringWithFormat:@"[%@] -replaceOrigin: %@", self.name, originSignal];
-	return signal;
+	return [[self.class rectsWithOrigin:originSignal size:self.size] setNameWithFormat:@"[%@] -replaceOrigin: %@", self.name, originSignal];
 }
 
 - (RACSignal *)center {
-	RACSignal *signal = [self map:^(NSValue *value) {
+	return [[self map:^(NSValue *value) {
 		NSAssert([value isKindOfClass:NSValue.class] && value.med_geometryStructType == MEDGeometryStructTypeRect, @"Value sent by %@ is not a CGRect: %@", self, value);
 
 		return MEDBox(CGRectCenterPoint(value.med_rectValue));
-	}];
-
-	signal.name = [NSString stringWithFormat:@"[%@] -center", self.name];
-	return signal;
+	}] setNameWithFormat:@"[%@] -center", self.name];
 }
 
 + (RACSignal *)pointsWithX:(RACSignal *)xSignal Y:(RACSignal *)ySignal {
 	NSParameterAssert(xSignal != nil);
 	NSParameterAssert(ySignal != nil);
 
-	RACSignal *signal = [RACSignal combineLatest:@[ xSignal, ySignal ] reduce:^(NSNumber *x, NSNumber *y) {
+	return [[RACSignal combineLatest:@[ xSignal, ySignal ] reduce:^(NSNumber *x, NSNumber *y) {
 		NSAssert([x isKindOfClass:NSNumber.class], @"Value sent by %@ is not a number: %@", xSignal, x);
 		NSAssert([y isKindOfClass:NSNumber.class], @"Value sent by %@ is not a number: %@", ySignal, y);
 
 		return MEDBox(CGPointMake(x.doubleValue, y.doubleValue));
-	}];
-
-	signal.name = [NSString stringWithFormat:@"+pointsWithX: %@ Y: %@", xSignal, ySignal];
-	return signal;
+	}] setNameWithFormat:@"+pointsWithX: %@ Y: %@", xSignal, ySignal];
 }
 
 - (RACSignal *)x {
-	RACSignal *signal = [self map:^(NSValue *value) {
+	return [[self map:^(NSValue *value) {
 		NSAssert([value isKindOfClass:NSValue.class] && value.med_geometryStructType == MEDGeometryStructTypePoint, @"Value sent by %@ is not a CGPoint: %@", self, value);
 
 		return @(value.med_pointValue.x);
-	}];
-
-	signal.name = [NSString stringWithFormat:@"[%@] -x", self.name];
-	return signal;
+	}] setNameWithFormat:@"[%@] -x", self.name];
 } 
 
 - (RACSignal *)replaceX:(RACSignal *)xSignal {
-	RACSignal *signal = [self.class pointsWithX:xSignal Y:self.y];
-	signal.name = [NSString stringWithFormat:@"[%@] -replaceX: %@", self.name, xSignal];
-	return signal;
+	return [[self.class pointsWithX:xSignal Y:self.y] setNameWithFormat:@"[%@] -replaceX: %@", self.name, xSignal];
 }
 
 - (RACSignal *)y {
-	RACSignal *signal = [self map:^(NSValue *value) {
+	return [[self map:^(NSValue *value) {
 		NSAssert([value isKindOfClass:NSValue.class] && value.med_geometryStructType == MEDGeometryStructTypePoint, @"Value sent by %@ is not a CGPoint: %@", self, value);
 
 		return @(value.med_pointValue.y);
-	}];
-
-	signal.name = [NSString stringWithFormat:@"[%@] -y", self.name];
-	return signal;
+	}] setNameWithFormat:@"[%@] -y", self.name];
 }
 
 - (RACSignal *)replaceY:(RACSignal *)ySignal {
-	RACSignal *signal = [self.class pointsWithX:self.x Y:ySignal];
-	signal.name = [NSString stringWithFormat:@"[%@] -replaceY: %@", self.name, ySignal];
-	return signal;
+	return [[self.class pointsWithX:self.x Y:ySignal] setNameWithFormat:@"[%@] -replaceY: %@", self.name, ySignal];
 }
 
 - (RACSignal *)valueForAttribute:(NSLayoutAttribute)attribute {
-	return combineAttributeWithRects(attribute, @[ self ], ^ id (NSNumber *edge, NSValue *value) {
+	return [combineAttributeWithRects(attribute, @[ self ], ^ id (NSNumber *edge, NSValue *value) {
 		NSAssert([value isKindOfClass:NSValue.class] && value.med_geometryStructType == MEDGeometryStructTypeRect, @"Value sent by %@ is not a CGRect: %@", self, value);
 
 		CGRect rect = value.med_rectValue;
@@ -596,61 +514,45 @@ static RACSignal *combineAttributeWithRects(NSLayoutAttribute attribute, NSArray
 					return nil;
 			}
 		}
-	}, @"[%@] -valueForAttribute: %li", self.name, (long)attribute);
+	}) setNameWithFormat:@"[%@] -valueForAttribute: %li", self.name, (long)attribute];
 }
 
 - (RACSignal *)left {
-	RACSignal *signal = [self valueForAttribute:NSLayoutAttributeLeft];
-	signal.name = [NSString stringWithFormat:@"[%@] -left", self.name];
-	return signal;
+	return [[self valueForAttribute:NSLayoutAttributeLeft] setNameWithFormat:@"[%@] -left", self.name];
 }
 
 - (RACSignal *)right {
-	RACSignal *signal = [self valueForAttribute:NSLayoutAttributeRight];
-	signal.name = [NSString stringWithFormat:@"[%@] -right", self.name];
-	return signal;
+	return [[self valueForAttribute:NSLayoutAttributeRight] setNameWithFormat:@"[%@] -right", self.name];
 }
 
 - (RACSignal *)top {
-	RACSignal *signal = [self valueForAttribute:NSLayoutAttributeTop];
-	signal.name = [NSString stringWithFormat:@"[%@] -top", self.name];
-	return signal;
+	return [[self valueForAttribute:NSLayoutAttributeTop] setNameWithFormat:@"[%@] -top", self.name];
 }
 
 - (RACSignal *)bottom {
-	RACSignal *signal = [self valueForAttribute:NSLayoutAttributeBottom];
-	signal.name = [NSString stringWithFormat:@"[%@] -bottom", self.name];
-	return signal;
+	return [[self valueForAttribute:NSLayoutAttributeBottom] setNameWithFormat:@"[%@] -bottom", self.name];
 }
 
 - (RACSignal *)leading {
-	RACSignal *signal = [self valueForAttribute:NSLayoutAttributeLeading];
-	signal.name = [NSString stringWithFormat:@"[%@] -leading", self.name];
-	return signal;
+	return [[self valueForAttribute:NSLayoutAttributeLeading] setNameWithFormat:@"[%@] -leading", self.name];
 }
 
 - (RACSignal *)trailing {
-	RACSignal *signal = [self valueForAttribute:NSLayoutAttributeTrailing];
-	signal.name = [NSString stringWithFormat:@"[%@] -trailing", self.name];
-	return signal;
+	return [[self valueForAttribute:NSLayoutAttributeTrailing] setNameWithFormat:@"[%@] -trailing", self.name];
 }
 
 - (RACSignal *)centerX {
-	RACSignal *signal = [self valueForAttribute:NSLayoutAttributeCenterX];
-	signal.name = [NSString stringWithFormat:@"[%@] -centerX", self.name];
-	return signal;
+	return [[self valueForAttribute:NSLayoutAttributeCenterX] setNameWithFormat:@"[%@] -centerX", self.name];
 }
 
 - (RACSignal *)centerY {
-	RACSignal *signal = [self valueForAttribute:NSLayoutAttributeCenterY];
-	signal.name = [NSString stringWithFormat:@"[%@] -centerY", self.name];
-	return signal;
+	return [[self valueForAttribute:NSLayoutAttributeCenterY] setNameWithFormat:@"[%@] -centerY", self.name];
 }
 
 - (RACSignal *)alignAttribute:(NSLayoutAttribute)attribute to:(RACSignal *)valueSignal {
 	NSParameterAssert(valueSignal != nil);
 
-	return combineAttributeWithRects(attribute, @[ valueSignal, self ], ^ id (NSNumber *edge, NSNumber *num, NSValue *value) {
+	return [combineAttributeWithRects(attribute, @[ valueSignal, self ], ^ id (NSNumber *edge, NSNumber *num, NSValue *value) {
 		NSAssert([num isKindOfClass:NSNumber.class], @"Value sent by %@ is not a number: %@", valueSignal, num);
 		NSAssert([value isKindOfClass:NSValue.class] && value.med_geometryStructType == MEDGeometryStructTypeRect, @"Value sent by %@ is not a CGRect: %@", self, value);
 
@@ -704,13 +606,13 @@ static RACSignal *combineAttributeWithRects(NSLayoutAttribute attribute, NSArray
 		}
 
 		return MEDBox(CGRectStandardize(rect));
-	}, @"[%@] -alignAttribute: %li to: %@", self.name, (long)attribute, valueSignal);
+	}) setNameWithFormat:@"[%@] -alignAttribute: %li to: %@", self.name, (long)attribute, valueSignal];
 }
 
 - (RACSignal *)alignCenter:(RACSignal *)centerSignal {
 	NSParameterAssert(centerSignal != nil);
 
-	RACSignal *signal = [RACSignal combineLatest:@[ centerSignal, self ] reduce:^(NSValue *center, NSValue *value) {
+	return [[RACSignal combineLatest:@[ centerSignal, self ] reduce:^(NSValue *center, NSValue *value) {
 		NSAssert([center isKindOfClass:NSValue.class] && center.med_geometryStructType == MEDGeometryStructTypePoint, @"Value sent by %@ is not a CGPoint: %@", centerSignal, center);
 		NSAssert([value isKindOfClass:NSValue.class] && value.med_geometryStructType == MEDGeometryStructTypeRect, @"Value sent by %@ is not a CGRect: %@", self, value);
 
@@ -719,70 +621,47 @@ static RACSignal *combineAttributeWithRects(NSLayoutAttribute attribute, NSArray
 
 		CGRect rect = value.med_rectValue;
 		return MEDBox(CGRectMake(x - CGRectGetWidth(rect) / 2, y - CGRectGetHeight(rect) / 2, CGRectGetWidth(rect), CGRectGetHeight(rect)));
-	}];
-
-	signal.name = [NSString stringWithFormat:@"[%@] -alignCenter: %@", self.name, centerSignal];
-	return signal;
+	}] setNameWithFormat:@"[%@] -alignCenter: %@", self.name, centerSignal];
 }
 
 - (RACSignal *)alignLeft:(RACSignal *)positionSignal {
-	RACSignal *signal = [self alignAttribute:NSLayoutAttributeLeft to:positionSignal];
-	signal.name = [NSString stringWithFormat:@"[%@] -alignLeft: %@", self.name, positionSignal];
-	return signal;
+	return [[self alignAttribute:NSLayoutAttributeLeft to:positionSignal] setNameWithFormat:@"[%@] -alignLeft: %@", self.name, positionSignal];
 }
 
 - (RACSignal *)alignRight:(RACSignal *)positionSignal {
-	RACSignal *signal = [self alignAttribute:NSLayoutAttributeRight to:positionSignal];
-	signal.name = [NSString stringWithFormat:@"[%@] -alignRight: %@", self.name, positionSignal];
-	return signal;
+	return [[self alignAttribute:NSLayoutAttributeRight to:positionSignal] setNameWithFormat:@"[%@] -alignRight: %@", self.name, positionSignal];
 }
 
 - (RACSignal *)alignTop:(RACSignal *)positionSignal {
-	RACSignal *signal = [self alignAttribute:NSLayoutAttributeTop to:positionSignal];
-	signal.name = [NSString stringWithFormat:@"[%@] -alignTop: %@", self.name, positionSignal];
-	return signal;
+	return [[self alignAttribute:NSLayoutAttributeTop to:positionSignal] setNameWithFormat:@"[%@] -alignTop: %@", self.name, positionSignal];
 }
 
 - (RACSignal *)alignBottom:(RACSignal *)positionSignal {
-	RACSignal *signal = [self alignAttribute:NSLayoutAttributeBottom to:positionSignal];
-	signal.name = [NSString stringWithFormat:@"[%@] -alignBottom: %@", self.name, positionSignal];
-	return signal;
+	return [[self alignAttribute:NSLayoutAttributeBottom to:positionSignal] setNameWithFormat:@"[%@] -alignBottom: %@", self.name, positionSignal];
 }
 
 - (RACSignal *)alignLeading:(RACSignal *)positionSignal {
-	RACSignal *signal = [self alignAttribute:NSLayoutAttributeLeading to:positionSignal];
-	signal.name = [NSString stringWithFormat:@"[%@] -alignLeading: %@", self.name, positionSignal];
-	return signal;
+	return [[self alignAttribute:NSLayoutAttributeLeading to:positionSignal] setNameWithFormat:@"[%@] -alignLeading: %@", self.name, positionSignal];
 }
 
 - (RACSignal *)alignTrailing:(RACSignal *)positionSignal {
-	RACSignal *signal = [self alignAttribute:NSLayoutAttributeTrailing to:positionSignal];
-	signal.name = [NSString stringWithFormat:@"[%@] -alignTrailing: %@", self.name, positionSignal];
-	return signal;
+	return [[self alignAttribute:NSLayoutAttributeTrailing to:positionSignal] setNameWithFormat:@"[%@] -alignTrailing: %@", self.name, positionSignal];
 }
 
 - (RACSignal *)alignWidth:(RACSignal *)amountSignal {
-	RACSignal *signal = [self alignAttribute:NSLayoutAttributeWidth to:amountSignal];
-	signal.name = [NSString stringWithFormat:@"[%@] -alignWidth: %@", self.name, amountSignal];
-	return signal;
+	return [[self alignAttribute:NSLayoutAttributeWidth to:amountSignal] setNameWithFormat:@"[%@] -alignWidth: %@", self.name, amountSignal];
 }
 
 - (RACSignal *)alignHeight:(RACSignal *)amountSignal {
-	RACSignal *signal = [self alignAttribute:NSLayoutAttributeHeight to:amountSignal];
-	signal.name = [NSString stringWithFormat:@"[%@] -alignHeight: %@", self.name, amountSignal];
-	return signal;
+	return [[self alignAttribute:NSLayoutAttributeHeight to:amountSignal] setNameWithFormat:@"[%@] -alignHeight: %@", self.name, amountSignal];
 }
 
 - (RACSignal *)alignCenterX:(RACSignal *)positionSignal {
-	RACSignal *signal = [self alignAttribute:NSLayoutAttributeCenterX to:positionSignal];
-	signal.name = [NSString stringWithFormat:@"[%@] -alignCenterX: %@", self.name, positionSignal];
-	return signal;
+	return [[self alignAttribute:NSLayoutAttributeCenterX to:positionSignal] setNameWithFormat:@"[%@] -alignCenterX: %@", self.name, positionSignal];
 }
 
 - (RACSignal *)alignCenterY:(RACSignal *)positionSignal {
-	RACSignal *signal = [self alignAttribute:NSLayoutAttributeCenterY to:positionSignal];
-	signal.name = [NSString stringWithFormat:@"[%@] -alignCenterY: %@", self.name, positionSignal];
-	return signal;
+	return [[self alignAttribute:NSLayoutAttributeCenterY to:positionSignal] setNameWithFormat:@"[%@] -alignCenterY: %@", self.name, positionSignal];
 }
 
 - (RACSignal *)alignBaseline:(RACSignal *)baselineSignal toBaseline:(RACSignal *)referenceBaselineSignal ofRect:(RACSignal *)referenceRectSignal {
@@ -790,7 +669,7 @@ static RACSignal *combineAttributeWithRects(NSLayoutAttribute attribute, NSArray
 	NSParameterAssert(referenceBaselineSignal != nil);
 	NSParameterAssert(referenceRectSignal != nil);
 
-	RACSignal *signal = [RACSignal
+	return [[RACSignal
 		combineLatest:@[ referenceBaselineSignal, referenceRectSignal, baselineSignal, self ]
 		reduce:^(NSNumber *referenceBaselineNum, NSValue *referenceRectValue, NSNumber *baselineNum, NSValue *rectValue) {
 			NSAssert([referenceBaselineNum isKindOfClass:NSNumber.class], @"Value sent by %@ is not a number: %@", referenceBaselineSignal, referenceBaselineNum);
@@ -819,33 +698,28 @@ static RACSignal *combineAttributeWithRects(NSLayoutAttribute attribute, NSArray
 			#endif
 
 			return MEDBox(rect);
-		}];
-	
-	signal.name = [NSString stringWithFormat:@"[%@] -alignBaseline: %@ toBaseline: %@ ofRect: %@", self.name, baselineSignal, referenceBaselineSignal, referenceRectSignal];
-	return signal;
+		}]
+		setNameWithFormat:@"[%@] -alignBaseline: %@ toBaseline: %@ ofRect: %@", self.name, baselineSignal, referenceBaselineSignal, referenceRectSignal];
 }
 
 - (RACSignal *)insetWidth:(RACSignal *)widthSignal height:(RACSignal *)heightSignal {
 	NSParameterAssert(widthSignal != nil);
 	NSParameterAssert(heightSignal != nil);
 
-	RACSignal *signal = [RACSignal combineLatest:@[ widthSignal, heightSignal, self ] reduce:^(NSNumber *width, NSNumber *height, NSValue *rect) {
+	return [[RACSignal combineLatest:@[ widthSignal, heightSignal, self ] reduce:^(NSNumber *width, NSNumber *height, NSValue *rect) {
 		NSAssert([width isKindOfClass:NSNumber.class], @"Value sent by %@ is not a number: %@", widthSignal, width);
 		NSAssert([height isKindOfClass:NSNumber.class], @"Value sent by %@ is not a number: %@", heightSignal, height);
 		NSAssert([rect isKindOfClass:NSValue.class] && rect.med_geometryStructType == MEDGeometryStructTypeRect, @"Value sent by %@ is not a CGRect: %@", self, rect);
 
 		return MEDBox(CGRectInset(rect.med_rectValue, width.doubleValue, height.doubleValue));
-	}];
-
-	signal.name = [NSString stringWithFormat:@"[%@] -insetWidth: %@ height: %@", self.name, widthSignal, heightSignal];
-	return signal;
+	}] setNameWithFormat:@"[%@] -insetWidth: %@ height: %@", self.name, widthSignal, heightSignal];
 }
 
 - (RACSignal *)offsetX:(RACSignal *)xSignal Y:(RACSignal *)ySignal {
 	NSParameterAssert(xSignal != nil);
 	NSParameterAssert(ySignal != nil);
 
-	RACSignal *signal = [RACSignal combineLatest:@[ xSignal, ySignal, self ] reduce:^(NSNumber *x, NSNumber *y, NSValue *value) {
+	return [[RACSignal combineLatest:@[ xSignal, ySignal, self ] reduce:^(NSNumber *x, NSNumber *y, NSValue *value) {
 		NSAssert([x isKindOfClass:NSNumber.class], @"Value sent by %@ is not a number: %@", xSignal, x);
 		NSAssert([y isKindOfClass:NSNumber.class], @"Value sent by %@ is not a number: %@", ySignal, y);
 	
@@ -857,16 +731,13 @@ static RACSignal *combineAttributeWithRects(NSLayoutAttribute attribute, NSArray
 			CGPoint offset = CGPointMake(x.doubleValue, y.doubleValue);
 			return MEDBox(CGPointAdd(value.med_pointValue, offset));
 		}
-	}];
-
-	signal.name = [NSString stringWithFormat:@"[%@] -offsetX: %@ Y: %@", self.name, xSignal, ySignal];
-	return signal;
+	}] setNameWithFormat:@"[%@] -offsetX: %@ Y: %@", self.name, xSignal, ySignal];
 }
 
 - (RACSignal *)extendAttribute:(NSLayoutAttribute)attribute byAmount:(RACSignal *)amountSignal {
 	NSParameterAssert(amountSignal != nil);
 
-	return combineAttributeWithRects(attribute, @[ amountSignal, self ], ^ id (NSNumber *edge, NSNumber *amount, NSValue *value) {
+	return [combineAttributeWithRects(attribute, @[ amountSignal, self ], ^ id (NSNumber *edge, NSNumber *amount, NSValue *value) {
 		NSAssert([amount isKindOfClass:NSNumber.class], @"Value sent by %@ is not a number: %@", amountSignal, amount);
 		NSAssert([value isKindOfClass:NSValue.class] && value.med_geometryStructType == MEDGeometryStructTypeRect, @"Value sent by %@ is not a CGRect: %@", self, value);
 
@@ -902,19 +773,15 @@ static RACSignal *combineAttributeWithRects(NSLayoutAttribute attribute, NSArray
 		}
 
 		return MEDBox(CGRectStandardize(rect));
-	}, @"[%@] -extendAttribute: %li byAmount: %@", self.name, (long)attribute, amountSignal);
+	}) setNameWithFormat:@"[%@] -extendAttribute: %li byAmount: %@", self.name, (long)attribute, amountSignal];
 }
 
 - (RACSignal *)sliceWithAmount:(RACSignal *)amountSignal fromEdge:(NSLayoutAttribute)edgeAttribute {
-	RACSignal *signal = [self divideWithAmount:amountSignal fromEdge:edgeAttribute][0];
-	signal.name = [NSString stringWithFormat:@"[%@] -sliceWithAmount: %@ fromEdge: %li", self.name, amountSignal, (long)edgeAttribute];
-	return signal;
+	return [[self divideWithAmount:amountSignal fromEdge:edgeAttribute][0] setNameWithFormat:@"[%@] -sliceWithAmount: %@ fromEdge: %li", self.name, amountSignal, (long)edgeAttribute];
 }
 
 - (RACSignal *)remainderAfterSlicingAmount:(RACSignal *)amountSignal fromEdge:(NSLayoutAttribute)edgeAttribute {
-	RACSignal *signal = [self divideWithAmount:amountSignal fromEdge:edgeAttribute][1];
-	signal.name = [NSString stringWithFormat:@"[%@] -remainderAfterSlicingAmount: %@ fromEdge: %li", self.name, amountSignal, (long)edgeAttribute];
-	return signal;
+	return [[self divideWithAmount:amountSignal fromEdge:edgeAttribute][1] setNameWithFormat:@"[%@] -remainderAfterSlicingAmount: %@ fromEdge: %li", self.name, amountSignal, (long)edgeAttribute];
 }
 
 - (RACTuple *)divideWithAmount:(RACSignal *)sliceAmountSignal fromEdge:(NSLayoutAttribute)edgeAttribute {
@@ -938,86 +805,84 @@ static RACSignal *combineAttributeWithRects(NSLayoutAttribute attribute, NSArray
 		CGRectDivideWithPadding(rect, &slice, &remainder, amount.doubleValue, padding.doubleValue, (CGRectEdge)edge.unsignedIntegerValue);
 
 		return [RACTuple tupleWithObjects:MEDBox(slice), MEDBox(remainder), nil];
-	}, nil);
-
-	// Now, convert Signal[(Rect, Rect)] into (Signal[Rect], Signal[Rect]).
-	RACSignal *sliceSignal = [combinedSignal map:^(RACTuple *tuple) {
-		return tuple[0];
-	}];
-
-	RACSignal *remainderSignal = [combinedSignal map:^(RACTuple *tuple) {
-		return tuple[1];
-	}];
+	});
 
 	NSString *invocationName = [NSString stringWithFormat:@"-divideWithAmount: %@ padding: %@ fromEdge: %li", amountSignal, paddingSignal, (long)edgeAttribute];
 
-	sliceSignal.name = [NSString stringWithFormat:@"[%@] SLICE OF %@", self.name, invocationName];
-	remainderSignal.name = [NSString stringWithFormat:@"[%@] REMAINDER OF %@", self.name, invocationName];
+	// Now, convert Signal[(Rect, Rect)] into (Signal[Rect], Signal[Rect]).
+	RACSignal *sliceSignal = [[combinedSignal map:^(RACTuple *tuple) {
+		return tuple[0];
+	}] setNameWithFormat:@"[%@] SLICE OF %@", self.name, invocationName];
+
+	RACSignal *remainderSignal = [[combinedSignal map:^(RACTuple *tuple) {
+		return tuple[1];
+	}] setNameWithFormat:@"[%@] REMAINDER OF %@", self.name, invocationName];
+
 	return [RACTuple tupleWithObjects:sliceSignal, remainderSignal, nil];
 }
 
 + (RACSignal *)max:(NSArray *)signals {
-	return latestSortedNumber(signals, NO, @"+max: %@", signals);
+	return [latestSortedNumber(signals, NO) setNameWithFormat:@"+max: %@", signals];
 }
 
 + (RACSignal *)min:(NSArray *)signals {
-	return latestSortedNumber(signals, YES, @"+min: %@", signals);
+	return [latestSortedNumber(signals, YES) setNameWithFormat:@"+min: %@", signals];
 }
 
 + (RACSignal *)add:(NSArray *)signals {
-	return combineSignalsWithOperator(signals, ^(CGFloat a, CGFloat b) {
+	return [combineSignalsWithOperator(signals, ^(CGFloat a, CGFloat b) {
 		return a + b;
-	}, @"+add: %@", signals);
+	}) setNameWithFormat:@"+add: %@", signals];
 }
 
 + (RACSignal *)subtract:(NSArray *)signals {
-	return combineSignalsWithOperator(signals, ^(CGFloat a, CGFloat b) {
+	return [combineSignalsWithOperator(signals, ^(CGFloat a, CGFloat b) {
 		return a - b;
-	}, @"+subtract: %@", signals);
+	}) setNameWithFormat:@"+subtract: %@", signals];
 }
 
 + (RACSignal *)multiply:(NSArray *)signals {
-	return combineSignalsWithOperator(signals, ^(CGFloat a, CGFloat b) {
+	return [combineSignalsWithOperator(signals, ^(CGFloat a, CGFloat b) {
 		return a * b;
-	}, @"+multiply: %@", signals);
+	}) setNameWithFormat:@"+multiply: %@", signals];
 }
 
 + (RACSignal *)divide:(NSArray *)signals {
-	return combineSignalsWithOperator(signals, ^(CGFloat a, CGFloat b) {
+	return [combineSignalsWithOperator(signals, ^(CGFloat a, CGFloat b) {
 		return a / b;
-	}, @"+divide: %@", signals);
+	}) setNameWithFormat:@"+divide: %@", signals];
 }
 
 - (RACSignal *)plus:(RACSignal *)addendSignal {
 	NSParameterAssert(addendSignal != nil);
 
-	return combineSignalsWithOperator(@[ self, addendSignal ], ^(CGFloat a, CGFloat b) {
+	return [combineSignalsWithOperator(@[ self, addendSignal ], ^(CGFloat a, CGFloat b) {
 		return a + b;
-	}, @"[%@] -plus: %@", self, addendSignal);
+	}) setNameWithFormat:@"[%@] -plus: %@", self, addendSignal];
 }
 
 - (RACSignal *)minus:(RACSignal *)subtrahendSignal {
 	NSParameterAssert(subtrahendSignal != nil);
 
-	return combineSignalsWithOperator(@[ self, subtrahendSignal ], ^(CGFloat a, CGFloat b) {
+	return [combineSignalsWithOperator(@[ self, subtrahendSignal ], ^(CGFloat a, CGFloat b) {
 		return a - b;
-	}, @"[%@] -minus: %@", self, subtrahendSignal);
+	}) setNameWithFormat:@"[%@] -minus: %@", self, subtrahendSignal];
 }
 
 - (RACSignal *)multipliedBy:(RACSignal *)factorSignal {
 	NSParameterAssert(factorSignal != nil);
 
-	return combineSignalsWithOperator(@[ self, factorSignal ], ^(CGFloat a, CGFloat b) {
+	return [combineSignalsWithOperator(@[ self, factorSignal ], ^(CGFloat a, CGFloat b) {
 		return a * b;
-	}, @"[%@] -multipliedBy: %@", self, factorSignal);
+	}) setNameWithFormat:@"[%@] -multipliedBy: %@", self, factorSignal];
 }
 
 - (RACSignal *)dividedBy:(RACSignal *)denominatorSignal {
 	NSParameterAssert(denominatorSignal != nil);
 
-	return combineSignalsWithOperator(@[ self, denominatorSignal ], ^(CGFloat a, CGFloat b) {
+	return [combineSignalsWithOperator(@[ self, denominatorSignal ], ^(CGFloat a, CGFloat b) {
 		return a / b;
-	}, @"[%@] -dividedBy: %@", self, denominatorSignal);
+	}) setNameWithFormat:@"[%@] -dividedBy: %@", self, denominatorSignal];
 }
 
 - (RACSignal *)animate {
@@ -1033,7 +898,7 @@ static RACSignal *combineAttributeWithRects(NSLayoutAttribute attribute, NSArray
 }
 
 - (RACSignal *)floor {
-	RACSignal *signal = [self map:^ id (id value) {
+	return [[self map:^ id (id value) {
 		if ([value isKindOfClass:NSNumber.class]) {
 			return @(floor([value doubleValue]));
 		}
@@ -1058,14 +923,11 @@ static RACSignal *combineAttributeWithRects(NSLayoutAttribute attribute, NSArray
 				NSAssert(NO, @"Unsupported type of value to floor: %@", value);
 				return nil;
 		}
-	}];
-
-	signal.name = [NSString stringWithFormat:@"[%@] -floor", self.name];
-	return signal;
+	}] setNameWithFormat:@"[%@] -floor", self.name];
 }
 
 - (RACSignal *)ceil {
-	RACSignal *signal = [self map:^ id (id value) {
+	return [[self map:^ id (id value) {
 		if ([value isKindOfClass:NSNumber.class]) {
 			return @(ceil([value doubleValue]));
 		}
@@ -1094,10 +956,7 @@ static RACSignal *combineAttributeWithRects(NSLayoutAttribute attribute, NSArray
 				NSAssert(NO, @"Unsupported type of value to ceil: %@", value);
 				return nil;
 		}
-	}];
-
-	signal.name = [NSString stringWithFormat:@"[%@] -ceil", self.name];
-	return signal;
+	}] setNameWithFormat:@"[%@] -ceil", self.name];
 }
 
 @end

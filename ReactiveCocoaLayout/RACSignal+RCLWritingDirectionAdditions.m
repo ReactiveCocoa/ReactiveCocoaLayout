@@ -26,29 +26,23 @@ static RACSignal *characterDirectionSignal(void) {
 @implementation RACSignal (RCLWritingDirectionAdditions)
 
 + (RACSignal *)leadingEdgeSignal {
-	RACSignal *signal = [characterDirectionSignal() map:^(NSNumber *direction) {
+	return [[characterDirectionSignal() map:^(NSNumber *direction) {
 		if (direction.unsignedIntegerValue == NSLocaleLanguageDirectionRightToLeft) {
 			return @(CGRectMaxXEdge);
 		} else {
 			return @(CGRectMinXEdge);
 		}
-	}];
-
-	signal.name = @"+leadingEdgeSignal";
-	return signal;
+	}] setNameWithFormat:@"+leadingEdgeSignal"];
 }
 
 + (RACSignal *)trailingEdgeSignal {
-	RACSignal *signal = [characterDirectionSignal() map:^(NSNumber *direction) {
+	return [[characterDirectionSignal() map:^(NSNumber *direction) {
 		if (direction.unsignedIntegerValue == NSLocaleLanguageDirectionRightToLeft) {
 			return @(CGRectMinXEdge);
 		} else {
 			return @(CGRectMaxXEdge);
 		}
-	}];
-
-	signal.name = @"+trailingEdgeSignal";
-	return signal;
+	}] setNameWithFormat:@"+trailingEdgeSignal"];
 }
 
 @end
