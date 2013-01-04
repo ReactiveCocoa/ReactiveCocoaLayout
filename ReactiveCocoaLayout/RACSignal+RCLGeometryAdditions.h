@@ -517,6 +517,11 @@ extern BOOL RCLIsInAnimatedSignal(void);
 // Binding the resulting signal to a view property will result in updates to
 // that property (that originate from the signal) being automatically animated.
 //
+// To delay an animation, use -[RACSignal delay:] or -[RACSignal throttle:] on
+// the receiver, before applying -animate. Because the aforementioned methods
+// delay delivery of `next`s, applying them _after_ -animate will cause values
+// to be delivered outside of any animation block.
+//
 // Returns a signal which animates the sending of its values. Deferring the
 // signal's events or having them delivered on another thread is considered
 // undefined behavior.
