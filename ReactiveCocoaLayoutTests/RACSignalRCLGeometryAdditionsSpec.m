@@ -743,6 +743,18 @@ describe(@"signal of CGRects", ^{
 
 		expect(result.sequence).to.equal(expected);
 	});
+
+	it(@"should be negated", ^{
+		RACSignal *result = [signal negate];
+
+		RACSequence *expected = @[
+			MEDBox(CGRectStandardize(CGRectMake(-10, -10, -20, -20))),
+			MEDBox(CGRectStandardize(CGRectMake(-10, -20, -30, -40))),
+			MEDBox(CGRectStandardize(CGRectMake(-25, -15, -45, -35))),
+		].rac_sequence;
+
+		expect(result.sequence).to.equal(expected);
+	});
 });
 
 describe(@"signal of CGSizes", ^{
@@ -803,6 +815,18 @@ describe(@"signal of CGSizes", ^{
 			MEDBox(CGSizeMake(20, 15)),
 			MEDBox(CGSizeMake(30, 15)),
 			MEDBox(CGSizeMake(45, 15)),
+		].rac_sequence;
+
+		expect(result.sequence).to.equal(expected);
+	});
+
+	it(@"should be negated", ^{
+		RACSignal *result = [signal negate];
+
+		RACSequence *expected = @[
+			MEDBox(CGSizeMake(-20, -20)),
+			MEDBox(CGSizeMake(-30, -40)),
+			MEDBox(CGSizeMake(-45, -35)),
 		].rac_sequence;
 
 		expect(result.sequence).to.equal(expected);
@@ -881,6 +905,38 @@ describe(@"signal of CGPoints", ^{
 		];
 
 		expect(result.sequence).to.equal(expected.rac_sequence);
+	});
+
+	it(@"should be negated", ^{
+		RACSignal *result = [signal negate];
+
+		RACSequence *expected = @[
+			MEDBox(CGPointMake(-10, -10)),
+			MEDBox(CGPointMake(-10, -20)),
+			MEDBox(CGPointMake(-25, -15)),
+		].rac_sequence;
+
+		expect(result.sequence).to.equal(expected);
+	});
+});
+
+describe(@"signal of CGFloats", ^{
+	__block RACSignal *signal;
+
+	beforeEach(^{
+		signal = widths.signal;
+	});
+
+	it(@"should be negated", ^{
+		RACSignal *result = [signal negate];
+
+		RACSequence *expected = @[
+			@(-20),
+			@(-30),
+			@(-45),
+		].rac_sequence;
+
+		expect(result.sequence).to.equal(expected);
 	});
 });
 

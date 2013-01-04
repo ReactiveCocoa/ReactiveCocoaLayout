@@ -898,6 +898,45 @@ static RACSignal *combineAttributeWithRects(NSLayoutAttribute attribute, NSArray
 	}) setNameWithFormat:@"[%@] -dividedBy: %@", self, denominatorSignal];
 }
 
+- (RACSignal *)negate {
+	return [[self map:^ id (id value) {
+		if ([value isKindOfClass:NSNumber.class]) {
+			return @(-[value doubleValue]);
+		}
+
+		NSAssert([value isKindOfClass:NSValue.class], @"Expected a number or value, got %@", value);
+
+		switch ([value med_geometryStructType]) {
+			case MEDGeometryStructTypeRect: {
+				CGRect rect = [value med_rectValue];
+				rect.origin.x *= -1;
+				rect.origin.y *= -1;
+				rect.size.width *= -1;
+				rect.size.height *= -1;
+				return MEDBox(CGRectStandardize(rect));
+			}
+
+			case MEDGeometryStructTypePoint: {
+				CGPoint point = [value med_pointValue];
+				point.x *= -1;
+				point.y *= -1;
+				return MEDBox(point);
+			}
+
+			case MEDGeometryStructTypeSize: {
+				CGSize size = [value med_sizeValue];
+				size.width *= -1;
+				size.height *= -1;
+				return MEDBox(size);
+			}
+
+			default:
+				NSAssert(NO, @"Unsupported type of value to negate: %@", value);
+				return nil;
+		}
+	}] setNameWithFormat:@"[%@] -negate", self.name];
+}
+
 - (RACSignal *)animate {
 	return animateWithDuration(self, NULL, RCLAnimationCurveDefault);
 }
