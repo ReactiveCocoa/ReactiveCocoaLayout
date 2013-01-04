@@ -107,11 +107,18 @@
 	// supposed to be visible.
 	//
 	// First, choose the appropriate signal based on the BOOL…
-	RACSignal *confirmHeightPlusPadding = [[RACSignal if:RACAbleWithStart(self.confirmEmailVisible)
+	RACSignal *confirmHeightPlusPadding = [[[[[RACSignal if:RACAbleWithStart(self.confirmEmailVisible)
 		then:[self.confirmEmailField.rcl_intrinsicHeightSignal plus:self.verticalPadding]
 		else:[RACSignal return:@0]]
 		// Then animate all changes.
-		animate];
+		animate]
+		doNext:^(NSNumber *height) {
+			NSLog(@"Animating confirmEmailField to height %@", height);
+		}]
+		doAnimationCompleted:^(NSNumber *height) {
+			NSLog(@"confirmEmailField is now at height %@", height);
+		}]
+		replayLast];
 
 	// Cut out space for the confirmation email field.
 	RACTupleUnpack(RACSignal *confirmEmailRect, RACSignal *nameRect) = [possibleConfirmEmailRect divideWithAmount:confirmHeightPlusPadding fromEdge:NSLayoutAttributeTop];
