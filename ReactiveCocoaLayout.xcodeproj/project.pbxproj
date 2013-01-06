@@ -1181,8 +1181,6 @@
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_PREFIX_HEADER = "ReactiveCocoaLayout/ReactiveCocoaLayout-Prefix.pch";
 				HEADER_SEARCH_PATHS = (
-					External/Archimedes,
-					"External/ReactiveCocoa/ReactiveCocoaFramework/**",
 					External/ReactiveCocoa/external/specta/src,
 					"External/ReactiveCocoa/external/expecta/src/**",
 				);
@@ -1253,8 +1251,6 @@
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_PREFIX_HEADER = "ReactiveCocoaLayout/ReactiveCocoaLayout-Prefix.pch";
 				HEADER_SEARCH_PATHS = (
-					External/Archimedes,
-					"External/ReactiveCocoa/ReactiveCocoaFramework/**",
 					External/ReactiveCocoa/external/specta/src,
 					"External/ReactiveCocoa/external/expecta/src/**",
 				);
@@ -1275,8 +1271,6 @@
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_PREFIX_HEADER = "ReactiveCocoaLayout/ReactiveCocoaLayout-Prefix.pch";
 				HEADER_SEARCH_PATHS = (
-					External/Archimedes,
-					"External/ReactiveCocoa/ReactiveCocoaFramework/**",
 					External/ReactiveCocoa/external/specta/src,
 					"External/ReactiveCocoa/external/expecta/src/**",
 				);
