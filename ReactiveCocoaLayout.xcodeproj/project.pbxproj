@@ -1190,8 +1190,6 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = ReactiveCocoaLayout;
-				TEST_AFTER_BUILD = NO;
-				WARNING_CFLAGS = "-Wno-gcc-compat";
 			};
 			name = Profile;
 		};
@@ -1264,8 +1262,6 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = ReactiveCocoaLayout;
-				TEST_AFTER_BUILD = NO;
-				WARNING_CFLAGS = "-Wno-gcc-compat";
 			};
 			name = Debug;
 		};
@@ -1288,8 +1284,6 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = ReactiveCocoaLayout;
-				TEST_AFTER_BUILD = NO;
-				WARNING_CFLAGS = "-Wno-gcc-compat";
 			};
 			name = Release;
 		};
