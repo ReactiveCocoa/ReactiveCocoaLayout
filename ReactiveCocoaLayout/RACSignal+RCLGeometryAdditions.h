@@ -7,7 +7,7 @@
 //
 
 #import <ReactiveCocoa/ReactiveCocoa.h>
-#import "View+RCLAutoLayoutAdditions.h"
+#import <ReactiveCocoaLayout/View+RCLAutoLayoutAdditions.h>
 
 // Adds geometry functions to RACSignal.
 @interface RACSignal (RCLGeometryAdditions)

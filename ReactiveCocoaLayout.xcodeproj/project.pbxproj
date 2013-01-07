@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D005A2CE169A3C8200A9D2DB /* ReactiveCocoaLayout.h in Headers */ = {isa = PBXBuildFile; fileRef = D0BB24811678772C005E9371 /* ReactiveCocoaLayout.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D005A2CF169A3C8C00A9D2DB /* RACSignal+RCLAnimationAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = D037FEF21696ED02002D0CBA /* RACSignal+RCLAnimationAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D005A2D0169A3C8C00A9D2DB /* RACSignal+RCLGeometryAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = D0BB2630167887C3005E9371 /* RACSignal+RCLGeometryAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D005A2D1169A3C8C00A9D2DB /* RACSignal+RCLWritingDirectionAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = D0ED89F216814D800041A188 /* RACSignal+RCLWritingDirectionAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D005A2D2169A3C8C00A9D2DB /* View+RCLAutoLayoutAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = D0513919167F108000334374 /* View+RCLAutoLayoutAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D005A2D6169A3C8C00A9D2DB /* UIView+RCLGeometryAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = D0FD5A961679E7AF003C3210 /* UIView+RCLGeometryAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D037FEF41696ED02002D0CBA /* RACSignal+RCLAnimationAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = D037FEF21696ED02002D0CBA /* RACSignal+RCLAnimationAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D037FEF51696ED02002D0CBA /* RACSignal+RCLAnimationAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = D037FEF31696ED02002D0CBA /* RACSignal+RCLAnimationAdditions.m */; };
 		D037FEF61696ED02002D0CBA /* RACSignal+RCLAnimationAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = D037FEF31696ED02002D0CBA /* RACSignal+RCLAnimationAdditions.m */; };
@@ -252,18 +258,6 @@
 			remoteInfo = "Archimedes Mac";
 		};
 /* End PBXContainerItemProxy section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		D06269EB1679440C00E951A5 /* CopyFiles */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "include/${PRODUCT_NAME}";
-			dstSubfolderSpec = 16;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		D037FEF21696ED02002D0CBA /* RACSignal+RCLAnimationAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RACSignal+RCLAnimationAdditions.h"; sourceTree = "<group>"; };
@@ -673,6 +667,19 @@
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
+		D005A2CD169A3C7700A9D2DB /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D005A2CE169A3C8200A9D2DB /* ReactiveCocoaLayout.h in Headers */,
+				D005A2CF169A3C8C00A9D2DB /* RACSignal+RCLAnimationAdditions.h in Headers */,
+				D005A2D0169A3C8C00A9D2DB /* RACSignal+RCLGeometryAdditions.h in Headers */,
+				D005A2D1169A3C8C00A9D2DB /* RACSignal+RCLWritingDirectionAdditions.h in Headers */,
+				D005A2D2169A3C8C00A9D2DB /* View+RCLAutoLayoutAdditions.h in Headers */,
+				D005A2D6169A3C8C00A9D2DB /* UIView+RCLGeometryAdditions.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		D0BB246E1678772C005E9371 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
@@ -698,7 +705,7 @@
 			buildPhases = (
 				D06269E91679440C00E951A5 /* Sources */,
 				D06269EA1679440C00E951A5 /* Frameworks */,
-				D06269EB1679440C00E951A5 /* CopyFiles */,
+				D005A2CD169A3C7700A9D2DB /* Headers */,
 			);
 			buildRules = (
 			);
@@ -1126,6 +1133,7 @@
 				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = NO;
 				DSTROOT = /tmp/ReactiveCocoaLayout.dst;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PUBLIC_HEADERS_FOLDER_PATH = include/ReactiveCocoaLayout;
 			};
 			name = Debug;
 		};
@@ -1136,6 +1144,7 @@
 				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = NO;
 				DSTROOT = /tmp/ReactiveCocoaLayout.dst;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PUBLIC_HEADERS_FOLDER_PATH = include/ReactiveCocoaLayout;
 			};
 			name = Release;
 		};
@@ -1181,8 +1190,6 @@
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_PREFIX_HEADER = "ReactiveCocoaLayout/ReactiveCocoaLayout-Prefix.pch";
 				HEADER_SEARCH_PATHS = (
-					External/Archimedes,
-					"External/ReactiveCocoa/ReactiveCocoaFramework/**",
 					External/ReactiveCocoa/external/specta/src,
 					"External/ReactiveCocoa/external/expecta/src/**",
 				);
@@ -1190,8 +1197,6 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = ReactiveCocoaLayout;
-				TEST_AFTER_BUILD = NO;
-				WARNING_CFLAGS = "-Wno-gcc-compat";
 			};
 			name = Profile;
 		};
@@ -1226,6 +1231,7 @@
 				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = NO;
 				DSTROOT = /tmp/ReactiveCocoaLayout.dst;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PUBLIC_HEADERS_FOLDER_PATH = include/ReactiveCocoaLayout;
 			};
 			name = Profile;
 		};
@@ -1255,8 +1261,6 @@
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_PREFIX_HEADER = "ReactiveCocoaLayout/ReactiveCocoaLayout-Prefix.pch";
 				HEADER_SEARCH_PATHS = (
-					External/Archimedes,
-					"External/ReactiveCocoa/ReactiveCocoaFramework/**",
 					External/ReactiveCocoa/external/specta/src,
 					"External/ReactiveCocoa/external/expecta/src/**",
 				);
@@ -1264,8 +1268,6 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = ReactiveCocoaLayout;
-				TEST_AFTER_BUILD = NO;
-				WARNING_CFLAGS = "-Wno-gcc-compat";
 			};
 			name = Debug;
 		};
@@ -1279,8 +1281,6 @@
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_PREFIX_HEADER = "ReactiveCocoaLayout/ReactiveCocoaLayout-Prefix.pch";
 				HEADER_SEARCH_PATHS = (
-					External/Archimedes,
-					"External/ReactiveCocoa/ReactiveCocoaFramework/**",
 					External/ReactiveCocoa/external/specta/src,
 					"External/ReactiveCocoa/external/expecta/src/**",
 				);
@@ -1288,8 +1288,6 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = ReactiveCocoaLayout;
-				TEST_AFTER_BUILD = NO;
-				WARNING_CFLAGS = "-Wno-gcc-compat";
 			};
 			name = Release;
 		};
