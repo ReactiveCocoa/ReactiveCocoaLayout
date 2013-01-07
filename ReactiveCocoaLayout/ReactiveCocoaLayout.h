@@ -6,15 +6,15 @@
 //  Copyright (c) 2012 GitHub. All rights reserved.
 //
 
-#import "RACSignal+RCLAnimationAdditions.h"
-#import "RACSignal+RCLGeometryAdditions.h"
-#import "RACSignal+RCLWritingDirectionAdditions.h"
-#import "View+RCLAutoLayoutAdditions.h"
+#import <ReactiveCocoaLayout/RACSignal+RCLAnimationAdditions.h>
+#import <ReactiveCocoaLayout/RACSignal+RCLGeometryAdditions.h>
+#import <ReactiveCocoaLayout/RACSignal+RCLWritingDirectionAdditions.h>
+#import <ReactiveCocoaLayout/View+RCLAutoLayoutAdditions.h>
 
 #ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
-	#import "UIView+RCLGeometryAdditions.h"
+	#import <ReactiveCocoaLayout/UIView+RCLGeometryAdditions.h>
 #elif TARGET_OS_MAC
-	#import "NSCell+RCLGeometryAdditions.h"
-	#import "NSControl+RCLGeometryAdditions.h"
-	#import "NSView+RCLGeometryAdditions.h"
+	#import <ReactiveCocoaLayout/NSCell+RCLGeometryAdditions.h>
+	#import <ReactiveCocoaLayout/NSControl+RCLGeometryAdditions.h>
+	#import <ReactiveCocoaLayout/NSView+RCLGeometryAdditions.h>
 #endif
