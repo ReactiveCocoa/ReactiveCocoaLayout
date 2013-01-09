@@ -24,6 +24,8 @@ __block RACSequence *centerYs;
 __block RACSequence *maxXs;
 __block RACSequence *maxYs;
 
+__block CGRectEdge leadingEdge;
+
 beforeEach(^{
 	rects = @[
 		MEDBox(CGRectMake(10, 10, 20, 20)),
@@ -70,6 +72,11 @@ beforeEach(^{
 	maxYs = [RACSequence zip:@[ minYs, heights ] reduce:^(NSNumber *y, NSNumber *height) {
 		return @(y.doubleValue + height.doubleValue);
 	}];
+
+	NSNumber *leadingEdgeNum = [RACSignal.leadingEdgeSignal first];
+	expect(leadingEdgeNum).notTo.beNil();
+
+	leadingEdge = (CGRectEdge)leadingEdgeNum.unsignedIntegerValue;
 });
 
 describe(@"zeroes", ^{
@@ -92,15 +99,9 @@ describe(@"zeroes", ^{
 
 describe(@"signal of CGRects", ^{
 	__block RACSignal *signal;
-	__block CGRectEdge leadingEdge;
 
 	beforeEach(^{
 		signal = rects.signal;
-
-		NSNumber *leadingEdgeNum = [RACSignal.leadingEdgeSignal first];
-		expect(leadingEdgeNum).notTo.beNil();
-
-		leadingEdge = (CGRectEdge)leadingEdgeNum.unsignedIntegerValue;
 	});
 
 	it(@"should map to sizes", ^{
@@ -225,17 +226,6 @@ describe(@"signal of CGRects", ^{
 		expect(result.sequence).to.equal(expectedRects.rac_sequence);
 	});
 
-	it(@"should offset", ^{
-		RACSignal *result = [signal offsetX:[RACSignal return:@3] Y:[RACSignal return:@5]];
-		NSArray *expectedRects = @[
-			MEDBox(CGRectMake(13, 15, 20, 20)),
-			MEDBox(CGRectMake(13, 25, 30, 40)),
-			MEDBox(CGRectMake(28, 20, 45, 35)),
-		];
-
-		expect(result.sequence).to.equal(expectedRects.rac_sequence);
-	});
-
 	it(@"should slice", ^{
 		RACSignal *result = [signal sliceWithAmount:[RACSignal return:@5] fromEdge:NSLayoutAttributeLeft];
 		NSArray *expectedRects = @[
@@ -355,26 +345,6 @@ describe(@"signal of CGRects", ^{
 			].rac_sequence;
 
 			expect([signal extendAttribute:NSLayoutAttributeHeight byAmount:value].sequence).to.equal(expected);
-		});
-
-		it(@"should extend center X", ^{
-			RACSequence *expected = @[
-				MEDBox(CGRectMake(5, 10, 20, 20)),
-				MEDBox(CGRectMake(5, 20, 30, 40)),
-				MEDBox(CGRectMake(20, 15, 45, 35)),
-			].rac_sequence;
-
-			expect([signal extendAttribute:NSLayoutAttributeCenterX byAmount:value].sequence).to.equal(expected);
-		});
-
-		it(@"should extend center Y", ^{
-			RACSequence *expected = @[
-				MEDBox(CGRectMake(10, 5, 20, 20)),
-				MEDBox(CGRectMake(10, 15, 30, 40)),
-				MEDBox(CGRectMake(25, 10, 45, 35)),
-			].rac_sequence;
-
-			expect([signal extendAttribute:NSLayoutAttributeCenterY byAmount:value].sequence).to.equal(expected);
 		});
 	});
 
@@ -896,17 +866,6 @@ describe(@"signal of CGPoints", ^{
 		expect(result.sequence).to.equal(expected);
 	});
 
-	it(@"should offset", ^{
-		RACSignal *result = [signal offsetX:[RACSignal return:@3] Y:[RACSignal return:@5]];
-		NSArray *expected = @[
-			MEDBox(CGPointMake(13, 15)),
-			MEDBox(CGPointMake(13, 25)),
-			MEDBox(CGPointMake(28, 20)),
-		];
-
-		expect(result.sequence).to.equal(expected.rac_sequence);
-	});
-
 	it(@"should be negated", ^{
 		RACSignal *result = [signal negate];
 
@@ -1284,6 +1243,122 @@ describe(@"-ceil", ^{
 		}];
 
 		expect(ceiled.sequence).to.equal(expected);
+	});
+});
+
+describe(@"-offsetByAmount:towardEdge:", ^{
+	__block RACSignal *rectSignal;
+	__block RACSignal *pointSignal;
+	__block RACSignal *amount;
+
+	__block RACSignal *offsetMinX;
+	__block RACSignal *offsetMinY;
+	__block RACSignal *offsetMaxX;
+	__block RACSignal *offsetMaxY;
+	__block RACSignal *offsetLeading;
+	__block RACSignal *offsetTrailing;
+
+	beforeEach(^{
+		amount = [RACSignal return:@8];
+		
+		pointSignal = points.signal;
+		rectSignal = [RACSignal rectsWithOrigin:pointSignal size:[RACSignal zeroSize]];
+
+		offsetMinX = @[
+			MEDBox(CGRectMake(2, 10, 0, 0)),
+			MEDBox(CGRectMake(2, 20, 0, 0)),
+			MEDBox(CGRectMake(17, 15, 0, 0)),
+		].rac_sequence.signal;
+
+		offsetMinY = @[
+			MEDBox(CGRectMake(10, 2, 0, 0)),
+			MEDBox(CGRectMake(10, 12, 0, 0)),
+			MEDBox(CGRectMake(25, 7, 0, 0)),
+		].rac_sequence.signal;
+
+		offsetMaxX = @[
+			MEDBox(CGRectMake(18, 10, 0, 0)),
+			MEDBox(CGRectMake(18, 20, 0, 0)),
+			MEDBox(CGRectMake(33, 15, 0, 0)),
+		].rac_sequence.signal;
+
+		offsetMaxY = @[
+			MEDBox(CGRectMake(10, 18, 0, 0)),
+			MEDBox(CGRectMake(10, 28, 0, 0)),
+			MEDBox(CGRectMake(25, 23, 0, 0)),
+		].rac_sequence.signal;
+
+		if (leadingEdge == CGRectMinXEdge) {
+			offsetLeading = offsetMinX;
+			offsetTrailing = offsetMaxX;
+		} else {
+			offsetLeading = offsetMaxX;
+			offsetTrailing = offsetMinX;
+		}
+	});
+
+	it(@"should offset left side by a specified amount", ^{
+		expect([pointSignal offsetByAmount:amount towardEdge:NSLayoutAttributeLeft].sequence).to.equal(offsetMinX.origin.sequence);
+		expect([pointSignal moveLeft:amount].sequence).to.equal(offsetMinX.origin.sequence);
+
+		expect([rectSignal offsetByAmount:amount towardEdge:NSLayoutAttributeLeft].sequence).to.equal(offsetMinX.sequence);
+		expect([rectSignal moveLeft:amount].sequence).to.equal(offsetMinX.sequence);
+	});
+
+	it(@"should offset right side by a specified amount", ^{
+		expect([pointSignal offsetByAmount:amount towardEdge:NSLayoutAttributeRight].sequence).to.equal(offsetMaxX.origin.sequence);
+		expect([pointSignal moveRight:amount].sequence).to.equal(offsetMaxX.origin.sequence);
+
+		expect([rectSignal offsetByAmount:amount towardEdge:NSLayoutAttributeRight].sequence).to.equal(offsetMaxX.sequence);
+		expect([rectSignal moveRight:amount].sequence).to.equal(offsetMaxX.sequence);
+	});
+
+	it(@"should offset leading side by a specified amount", ^{
+		expect([pointSignal offsetByAmount:amount towardEdge:NSLayoutAttributeLeading].sequence).to.equal(offsetLeading.origin.sequence);
+		expect([pointSignal moveLeadingOutward:amount].sequence).to.equal(offsetLeading.origin.sequence);
+
+		expect([rectSignal offsetByAmount:amount towardEdge:NSLayoutAttributeLeading].sequence).to.equal(offsetLeading.sequence);
+		expect([rectSignal moveLeadingOutward:amount].sequence).to.equal(offsetLeading.sequence);
+	});
+
+	it(@"should offset trailing side by a specified amount", ^{
+		expect([pointSignal offsetByAmount:amount towardEdge:NSLayoutAttributeTrailing].sequence).to.equal(offsetTrailing.origin.sequence);
+		expect([pointSignal moveTrailingOutward:amount].sequence).to.equal(offsetTrailing.origin.sequence);
+
+		expect([rectSignal offsetByAmount:amount towardEdge:NSLayoutAttributeTrailing].sequence).to.equal(offsetTrailing.sequence);
+		expect([rectSignal moveTrailingOutward:amount].sequence).to.equal(offsetTrailing.sequence);
+	});
+
+	it(@"should offset top side by a specified value", ^{
+		#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
+			expect([pointSignal offsetByAmount:amount towardEdge:NSLayoutAttributeTop].sequence).to.equal(offsetMinY.origin.sequence);
+			expect([pointSignal moveUp:amount].sequence).to.equal(offsetMinY.origin.sequence);
+
+			expect([rectSignal offsetByAmount:amount towardEdge:NSLayoutAttributeTop].sequence).to.equal(offsetMinY.sequence);
+			expect([rectSignal moveUp:amount].sequence).to.equal(offsetMinY.sequence);
+		#elif TARGET_OS_MAC
+			expect([pointSignal offsetByAmount:amount towardEdge:NSLayoutAttributeTop].sequence).to.equal(offsetMaxY.origin.sequence);
+			expect([pointSignal moveUp:amount].sequence).to.equal(offsetMaxY.origin.sequence);
+
+			expect([rectSignal offsetByAmount:amount towardEdge:NSLayoutAttributeTop].sequence).to.equal(offsetMaxY.sequence);
+			expect([rectSignal moveUp:amount].sequence).to.equal(offsetMaxY.sequence);
+		#endif
+	});
+
+	it(@"should offset bottom side by a specified value", ^{
+		#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
+			expect([pointSignal offsetByAmount:amount towardEdge:NSLayoutAttributeBottom].sequence).to.equal(offsetMaxY.origin.sequence);
+			expect([pointSignal moveDown:amount].sequence).to.equal(offsetMaxY.origin.sequence);
+
+			expect([rectSignal offsetByAmount:amount towardEdge:NSLayoutAttributeBottom].sequence).to.equal(offsetMaxY.sequence);
+			expect([rectSignal moveDown:amount].sequence).to.equal(offsetMaxY.sequence);
+		#elif TARGET_OS_MAC
+			expect([pointSignal offsetByAmount:amount towardEdge:NSLayoutAttributeBottom].sequence).to.equal(offsetMinY.origin.sequence);
+			expect([pointSignal moveDown:amount].sequence).to.equal(offsetMinY.origin.sequence);
+
+			expect([rectSignal offsetByAmount:amount towardEdge:NSLayoutAttributeBottom].sequence).to.equal(offsetMinY.sequence);
+			expect([rectSignal moveDown:amount].sequence).to.equal(offsetMinY.sequence);
+		#endif
 	});
 });
 

@@ -195,26 +195,83 @@
 // Returns a signal of new, inset CGRect values.
 - (RACSignal *)insetWidth:(RACSignal *)widthSignal height:(RACSignal *)heightSignal;
 
-// Offsets each CGPoint or CGRect by the number of points sent from the given
-// X and Y signals.
+// Offsets CGRect or CGPoint values in a specified direction.
 //
-// xSignal - A signal of CGFloat values, representing the number of points to
-//           offset the X position by.
-// ySignal - A signal of CGFloat values, representing the number of points to
-//           offset the Y position by.
+// amountSignal  - A signal of CGFloat values, representing the number of points
+//                 by which to offset the rectangle or point.
+// edgeAttribute - A layout attribute representing the edge toward which the
+//                 point or rectangle should be offset. This must be
+//                 NSLayoutAttributeLeft, NSLayoutAttributeRight,
+//                 NSLayoutAttributeTop, NSLayoutAttributeBottom,
+//                 NSLayoutAttributeLeading, or NSLayoutAttributeTrailing.
 //
-// Returns a signal of offset points or rects, using the same type as the input
-// values.
-- (RACSignal *)offsetX:(RACSignal *)xSignal Y:(RACSignal *)ySignal;
+// Returns a signal of offset CGRects or CGPoints, using the same type as the
+// input value.
+- (RACSignal *)offsetByAmount:(RACSignal *)amountSignal towardEdge:(NSLayoutAttribute)edgeAttribute;
+
+// Moves each CGRect or CGPoint value left.
+//
+// amountSignal - A signal of CGFloat values, representing the number of points
+//                by which to move the rectangle or point.
+//
+// Returns a signal of offset CGRects or CGPoints, using the same type as the
+// input value.
+- (RACSignal *)moveLeft:(RACSignal *)amountSignal;
+
+// Moves each CGRect or CGPoint value right.
+//
+// amountSignal - A signal of CGFloat values, representing the number of points
+//                by which to move the rectangle or point.
+//
+// Returns a signal of offset CGRects or CGPoints, using the same type as the
+// input value.
+- (RACSignal *)moveRight:(RACSignal *)amountSignal;
+
+// Moves each CGRect or CGPoint value down.
+//
+// amountSignal - A signal of CGFloat values, representing the number of points
+//                by which to move the rectangle or point.
+//
+// Returns a signal of offset CGRects or CGPoints, using the same type as the
+// input value.
+- (RACSignal *)moveDown:(RACSignal *)amountSignal;
+
+// Moves each CGRect or CGPoint value up.
+//
+// amountSignal - A signal of CGFloat values, representing the number of points
+//                by which to move the rectangle or point.
+//
+// Returns a signal of offset CGRects or CGPoints, using the same type as the
+// input value.
+- (RACSignal *)moveUp:(RACSignal *)amountSignal;
+
+// Moves each CGRect or CGPoint value toward the direction of the leading edge.
+//
+// amountSignal - A signal of CGFloat values, representing the number of points
+//                by which to move the rectangle or point.
+//
+// Returns a signal of offset CGRects or CGPoints, using the same type as the
+// input value.
+- (RACSignal *)moveLeadingOutward:(RACSignal *)amountSignal;
+
+// Moves each CGRect or CGPoint value toward the direction of the trailing edge.
+//
+// amountSignal - A signal of CGFloat values, representing the number of points
+//                by which to move the rectangle or point.
+//
+// Returns a signal of offset CGRects or CGPoints, using the same type as the
+// input value.
+- (RACSignal *)moveTrailingOutward:(RACSignal *)amountSignal;
 
 // Extends the given layout attribute of each CGRect by the given number of points
 // sent from `amountSignal`.
 //
 // attribute    - The attribute to extend. Extending an edge will grow it
 //                outward, and keep the positions of all other edges constant.
-//                Extending NSLayoutAttributeWidth or NSLayoutAttributeHeight will split
-//                the added points between both of the edges that intersect that
-//                axis. This must not be NSLayoutAttributeBaseline.
+//                Extending NSLayoutAttributeWidth or NSLayoutAttributeHeight
+//                will evenly outset the rectangle along that dimension. This
+//                must not be NSLayoutAttributeBaseline,
+//                NSLayoutAttributeCenterX, or NSLayoutAttributeCenterY.
 // amountSignal - A signal of CGFloat values, representing the number of points
 //                to extend by. This signal may send negative values to instead
 //                remove points.
