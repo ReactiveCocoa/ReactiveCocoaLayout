@@ -696,6 +696,30 @@ static RACSignal *combineAttributeAndSignals(NSLayoutAttribute attribute, NSArra
 	}) setNameWithFormat:@"[%@] -offsetByAmount: %@ towardEdge: %li", self.name, amountSignal, (long)edgeAttribute];
 }
 
+- (RACSignal *)moveLeft:(RACSignal *)amountSignal {
+	return [[self offsetByAmount:amountSignal towardEdge:NSLayoutAttributeLeft] setNameWithFormat:@"[%@] -moveLeft: %@", self.name, amountSignal];
+}
+
+- (RACSignal *)moveRight:(RACSignal *)amountSignal {
+	return [[self offsetByAmount:amountSignal towardEdge:NSLayoutAttributeRight] setNameWithFormat:@"[%@] -moveRight: %@", self.name, amountSignal];
+}
+
+- (RACSignal *)moveUp:(RACSignal *)amountSignal {
+	return [[self offsetByAmount:amountSignal towardEdge:NSLayoutAttributeTop] setNameWithFormat:@"[%@] -moveUp: %@", self.name, amountSignal];
+}
+
+- (RACSignal *)moveDown:(RACSignal *)amountSignal {
+	return [[self offsetByAmount:amountSignal towardEdge:NSLayoutAttributeBottom] setNameWithFormat:@"[%@] -moveDown: %@", self.name, amountSignal];
+}
+
+- (RACSignal *)moveLeadingOutward:(RACSignal *)amountSignal {
+	return [[self offsetByAmount:amountSignal towardEdge:NSLayoutAttributeLeading] setNameWithFormat:@"[%@] -moveLeadingOutward: %@", self.name, amountSignal];
+}
+
+- (RACSignal *)moveTrailingOutward:(RACSignal *)amountSignal {
+	return [[self offsetByAmount:amountSignal towardEdge:NSLayoutAttributeTrailing] setNameWithFormat:@"[%@] -moveTrailingOutward: %@", self.name, amountSignal];
+}
+
 - (RACSignal *)extendAttribute:(NSLayoutAttribute)attribute byAmount:(RACSignal *)amountSignal {
 	NSParameterAssert(amountSignal != nil);
 

@@ -1319,41 +1319,65 @@ describe(@"-offsetByAmount:towardEdge:", ^{
 
 	it(@"should offset left side by a specified amount", ^{
 		expect([pointSignal offsetByAmount:amount towardEdge:NSLayoutAttributeLeft].sequence).to.equal(offsetMinX.origin.sequence);
+		expect([pointSignal moveLeft:amount].sequence).to.equal(offsetMinX.origin.sequence);
+
 		expect([rectSignal offsetByAmount:amount towardEdge:NSLayoutAttributeLeft].sequence).to.equal(offsetMinX.sequence);
+		expect([rectSignal moveLeft:amount].sequence).to.equal(offsetMinX.sequence);
 	});
 
 	it(@"should offset right side by a specified amount", ^{
 		expect([pointSignal offsetByAmount:amount towardEdge:NSLayoutAttributeRight].sequence).to.equal(offsetMaxX.origin.sequence);
+		expect([pointSignal moveRight:amount].sequence).to.equal(offsetMaxX.origin.sequence);
+
 		expect([rectSignal offsetByAmount:amount towardEdge:NSLayoutAttributeRight].sequence).to.equal(offsetMaxX.sequence);
+		expect([rectSignal moveRight:amount].sequence).to.equal(offsetMaxX.sequence);
 	});
 
 	it(@"should offset leading side by a specified amount", ^{
 		expect([pointSignal offsetByAmount:amount towardEdge:NSLayoutAttributeLeading].sequence).to.equal(offsetLeading.origin.sequence);
+		expect([pointSignal moveLeadingOutward:amount].sequence).to.equal(offsetLeading.origin.sequence);
+
 		expect([rectSignal offsetByAmount:amount towardEdge:NSLayoutAttributeLeading].sequence).to.equal(offsetLeading.sequence);
+		expect([rectSignal moveLeadingOutward:amount].sequence).to.equal(offsetLeading.sequence);
 	});
 
 	it(@"should offset trailing side by a specified amount", ^{
 		expect([pointSignal offsetByAmount:amount towardEdge:NSLayoutAttributeTrailing].sequence).to.equal(offsetTrailing.origin.sequence);
+		expect([pointSignal moveTrailingOutward:amount].sequence).to.equal(offsetTrailing.origin.sequence);
+
 		expect([rectSignal offsetByAmount:amount towardEdge:NSLayoutAttributeTrailing].sequence).to.equal(offsetTrailing.sequence);
+		expect([rectSignal moveTrailingOutward:amount].sequence).to.equal(offsetTrailing.sequence);
 	});
 
 	it(@"should offset top side by a specified value", ^{
 		#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
 			expect([pointSignal offsetByAmount:amount towardEdge:NSLayoutAttributeTop].sequence).to.equal(offsetMinY.origin.sequence);
+			expect([pointSignal moveUp:amount].sequence).to.equal(offsetMinY.origin.sequence);
+
 			expect([rectSignal offsetByAmount:amount towardEdge:NSLayoutAttributeTop].sequence).to.equal(offsetMinY.sequence);
+			expect([rectSignal moveUp:amount].sequence).to.equal(offsetMinY.sequence);
 		#elif TARGET_OS_MAC
 			expect([pointSignal offsetByAmount:amount towardEdge:NSLayoutAttributeTop].sequence).to.equal(offsetMaxY.origin.sequence);
+			expect([pointSignal moveUp:amount].sequence).to.equal(offsetMaxY.origin.sequence);
+
 			expect([rectSignal offsetByAmount:amount towardEdge:NSLayoutAttributeTop].sequence).to.equal(offsetMaxY.sequence);
+			expect([rectSignal moveUp:amount].sequence).to.equal(offsetMaxY.sequence);
 		#endif
 	});
 
 	it(@"should offset bottom side by a specified value", ^{
 		#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
 			expect([pointSignal offsetByAmount:amount towardEdge:NSLayoutAttributeBottom].sequence).to.equal(offsetMaxY.origin.sequence);
+			expect([pointSignal moveDown:amount].sequence).to.equal(offsetMaxY.origin.sequence);
+
 			expect([rectSignal offsetByAmount:amount towardEdge:NSLayoutAttributeBottom].sequence).to.equal(offsetMaxY.sequence);
+			expect([rectSignal moveDown:amount].sequence).to.equal(offsetMaxY.sequence);
 		#elif TARGET_OS_MAC
 			expect([pointSignal offsetByAmount:amount towardEdge:NSLayoutAttributeBottom].sequence).to.equal(offsetMinY.origin.sequence);
+			expect([pointSignal moveDown:amount].sequence).to.equal(offsetMinY.origin.sequence);
+
 			expect([rectSignal offsetByAmount:amount towardEdge:NSLayoutAttributeBottom].sequence).to.equal(offsetMinY.sequence);
+			expect([rectSignal moveDown:amount].sequence).to.equal(offsetMinY.sequence);
 		#endif
 	});
 });

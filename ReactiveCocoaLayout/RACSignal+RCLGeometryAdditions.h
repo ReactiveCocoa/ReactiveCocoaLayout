@@ -209,6 +209,60 @@
 // input value.
 - (RACSignal *)offsetByAmount:(RACSignal *)amountSignal towardEdge:(NSLayoutAttribute)edgeAttribute;
 
+// Moves each CGRect or CGPoint value left.
+//
+// amountSignal - A signal of CGFloat values, representing the number of points
+//                by which to move the rectangle or point.
+//
+// Returns a signal of offset CGRects or CGPoints, using the same type as the
+// input value.
+- (RACSignal *)moveLeft:(RACSignal *)amountSignal;
+
+// Moves each CGRect or CGPoint value right.
+//
+// amountSignal - A signal of CGFloat values, representing the number of points
+//                by which to move the rectangle or point.
+//
+// Returns a signal of offset CGRects or CGPoints, using the same type as the
+// input value.
+- (RACSignal *)moveRight:(RACSignal *)amountSignal;
+
+// Moves each CGRect or CGPoint value down.
+//
+// amountSignal - A signal of CGFloat values, representing the number of points
+//                by which to move the rectangle or point.
+//
+// Returns a signal of offset CGRects or CGPoints, using the same type as the
+// input value.
+- (RACSignal *)moveDown:(RACSignal *)amountSignal;
+
+// Moves each CGRect or CGPoint value up.
+//
+// amountSignal - A signal of CGFloat values, representing the number of points
+//                by which to move the rectangle or point.
+//
+// Returns a signal of offset CGRects or CGPoints, using the same type as the
+// input value.
+- (RACSignal *)moveUp:(RACSignal *)amountSignal;
+
+// Moves each CGRect or CGPoint value toward the direction of the leading edge.
+//
+// amountSignal - A signal of CGFloat values, representing the number of points
+//                by which to move the rectangle or point.
+//
+// Returns a signal of offset CGRects or CGPoints, using the same type as the
+// input value.
+- (RACSignal *)moveLeadingOutward:(RACSignal *)amountSignal;
+
+// Moves each CGRect or CGPoint value toward the direction of the trailing edge.
+//
+// amountSignal - A signal of CGFloat values, representing the number of points
+//                by which to move the rectangle or point.
+//
+// Returns a signal of offset CGRects or CGPoints, using the same type as the
+// input value.
+- (RACSignal *)moveTrailingOutward:(RACSignal *)amountSignal;
+
 // Extends the given layout attribute of each CGRect by the given number of points
 // sent from `amountSignal`.
 //
