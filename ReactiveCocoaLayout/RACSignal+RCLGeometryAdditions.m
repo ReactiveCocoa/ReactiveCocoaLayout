@@ -124,7 +124,7 @@ static RACSignal *combineSignalsWithOperator(NSArray *signals, RCLBinaryOperator
 //				 the values of each signal in the `signals` array.
 //
 // Returns a signal of reduced values.
-static RACSignal *combineAttributeWithRects(NSLayoutAttribute attribute, NSArray *signals, id reduceBlock) {
+static RACSignal *combineAttributeAndSignals(NSLayoutAttribute attribute, NSArray *signals, id reduceBlock) {
 	NSCParameterAssert(attribute != NSLayoutAttributeBaseline);
 	NSCParameterAssert(attribute != NSLayoutAttributeNotAnAttribute);
 	NSCParameterAssert(signals.count > 0);
@@ -400,7 +400,7 @@ static RACSignal *combineAttributeWithRects(NSLayoutAttribute attribute, NSArray
 }
 
 - (RACSignal *)valueForAttribute:(NSLayoutAttribute)attribute {
-	return [combineAttributeWithRects(attribute, @[ self ], ^ id (NSNumber *edge, NSValue *value) {
+	return [combineAttributeAndSignals(attribute, @[ self ], ^ id (NSNumber *edge, NSValue *value) {
 		NSAssert([value isKindOfClass:NSValue.class] && value.med_geometryStructType == MEDGeometryStructTypeRect, @"Value sent by %@ is not a CGRect: %@", self, value);
 
 		CGRect rect = value.med_rectValue;
@@ -479,7 +479,7 @@ static RACSignal *combineAttributeWithRects(NSLayoutAttribute attribute, NSArray
 - (RACSignal *)alignAttribute:(NSLayoutAttribute)attribute to:(RACSignal *)valueSignal {
 	NSParameterAssert(valueSignal != nil);
 
-	return [combineAttributeWithRects(attribute, @[ valueSignal, self ], ^ id (NSNumber *edge, NSNumber *num, NSValue *value) {
+	return [combineAttributeAndSignals(attribute, @[ valueSignal, self ], ^ id (NSNumber *edge, NSNumber *num, NSValue *value) {
 		NSAssert([num isKindOfClass:NSNumber.class], @"Value sent by %@ is not a number: %@", valueSignal, num);
 		NSAssert([value isKindOfClass:NSValue.class] && value.med_geometryStructType == MEDGeometryStructTypeRect, @"Value sent by %@ is not a CGRect: %@", self, value);
 
@@ -642,29 +642,88 @@ static RACSignal *combineAttributeWithRects(NSLayoutAttribute attribute, NSArray
 	}] setNameWithFormat:@"[%@] -insetWidth: %@ height: %@", self.name, widthSignal, heightSignal];
 }
 
-- (RACSignal *)offsetX:(RACSignal *)xSignal Y:(RACSignal *)ySignal {
-	NSParameterAssert(xSignal != nil);
-	NSParameterAssert(ySignal != nil);
+- (RACSignal *)offsetByAmount:(RACSignal *)amountSignal towardEdge:(NSLayoutAttribute)edgeAttribute {
+	NSParameterAssert(amountSignal != nil);
 
-	return [[RACSignal combineLatest:@[ xSignal, ySignal, self ] reduce:^(NSNumber *x, NSNumber *y, NSValue *value) {
-		NSAssert([x isKindOfClass:NSNumber.class], @"Value sent by %@ is not a number: %@", xSignal, x);
-		NSAssert([y isKindOfClass:NSNumber.class], @"Value sent by %@ is not a number: %@", ySignal, y);
-	
-		if (value.med_geometryStructType == MEDGeometryStructTypeRect) {
-			return MEDBox(CGRectOffset(value.med_rectValue, x.doubleValue, y.doubleValue));
-		} else {
-			NSAssert(value.med_geometryStructType == MEDGeometryStructTypePoint, @"Unexpected type of value: %@", value);
+	return [combineAttributeAndSignals(edgeAttribute, @[ amountSignal, self ], ^ id (NSNumber *edge, NSNumber *num, NSValue *value) {
+		NSAssert(edge != nil, @"NSLayoutAttribute does not represent an edge: %li", (long)edgeAttribute);
+		NSAssert([num isKindOfClass:NSNumber.class], @"Value sent by %@ is not a number: %@", amountSignal, num);
+		NSAssert([value isKindOfClass:NSValue.class], @"Value sent by %@ is not an NSValue: %@", self, value);
 
-			CGPoint offset = CGPointMake(x.doubleValue, y.doubleValue);
-			return MEDBox(CGPointAdd(value.med_pointValue, offset));
+		CGFloat n = num.doubleValue;
+		CGRect rect = CGRectZero;
+
+		switch (value.med_geometryStructType) {
+			case MEDGeometryStructTypeRect:
+				rect = value.med_rectValue;
+				break;
+
+			case MEDGeometryStructTypePoint:
+				rect.origin = value.med_pointValue;
+				break;
+
+			default:
+				NSAssert(NO, @"Value sent by %@ is not a CGRect or CGPoint: %@", self, value);
 		}
-	}] setNameWithFormat:@"[%@] -offsetX: %@ Y: %@", self.name, xSignal, ySignal];
+
+		switch (edge.unsignedIntegerValue) {
+			case CGRectMinXEdge:
+				rect.origin.x -= n;
+				break;
+
+			case CGRectMinYEdge:
+				rect.origin.y -= n;
+				break;
+
+			case CGRectMaxXEdge:
+				rect.origin.x += n;
+				break;
+
+			case CGRectMaxYEdge:
+				rect.origin.y += n;
+				break;
+
+			default:
+				NSAssert(NO, @"Unrecognized CGRectEdge: %@", edge);
+				return nil;
+		}
+
+		if (value.med_geometryStructType == MEDGeometryStructTypePoint) {
+			return MEDBox(rect.origin);
+		} else {
+			return MEDBox(CGRectStandardize(rect));
+		}
+	}) setNameWithFormat:@"[%@] -offsetByAmount: %@ towardEdge: %li", self.name, amountSignal, (long)edgeAttribute];
+}
+
+- (RACSignal *)moveLeft:(RACSignal *)amountSignal {
+	return [[self offsetByAmount:amountSignal towardEdge:NSLayoutAttributeLeft] setNameWithFormat:@"[%@] -moveLeft: %@", self.name, amountSignal];
+}
+
+- (RACSignal *)moveRight:(RACSignal *)amountSignal {
+	return [[self offsetByAmount:amountSignal towardEdge:NSLayoutAttributeRight] setNameWithFormat:@"[%@] -moveRight: %@", self.name, amountSignal];
+}
+
+- (RACSignal *)moveUp:(RACSignal *)amountSignal {
+	return [[self offsetByAmount:amountSignal towardEdge:NSLayoutAttributeTop] setNameWithFormat:@"[%@] -moveUp: %@", self.name, amountSignal];
+}
+
+- (RACSignal *)moveDown:(RACSignal *)amountSignal {
+	return [[self offsetByAmount:amountSignal towardEdge:NSLayoutAttributeBottom] setNameWithFormat:@"[%@] -moveDown: %@", self.name, amountSignal];
+}
+
+- (RACSignal *)moveLeadingOutward:(RACSignal *)amountSignal {
+	return [[self offsetByAmount:amountSignal towardEdge:NSLayoutAttributeLeading] setNameWithFormat:@"[%@] -moveLeadingOutward: %@", self.name, amountSignal];
+}
+
+- (RACSignal *)moveTrailingOutward:(RACSignal *)amountSignal {
+	return [[self offsetByAmount:amountSignal towardEdge:NSLayoutAttributeTrailing] setNameWithFormat:@"[%@] -moveTrailingOutward: %@", self.name, amountSignal];
 }
 
 - (RACSignal *)extendAttribute:(NSLayoutAttribute)attribute byAmount:(RACSignal *)amountSignal {
 	NSParameterAssert(amountSignal != nil);
 
-	return [combineAttributeWithRects(attribute, @[ amountSignal, self ], ^ id (NSNumber *edge, NSNumber *amount, NSValue *value) {
+	return [combineAttributeAndSignals(attribute, @[ amountSignal, self ], ^ id (NSNumber *edge, NSNumber *amount, NSValue *value) {
 		NSAssert([amount isKindOfClass:NSNumber.class], @"Value sent by %@ is not a number: %@", amountSignal, amount);
 		NSAssert([value isKindOfClass:NSValue.class] && value.med_geometryStructType == MEDGeometryStructTypeRect, @"Value sent by %@ is not a CGRect: %@", self, value);
 
@@ -683,16 +742,8 @@ static RACSignal *combineAttributeWithRects(NSLayoutAttribute attribute, NSArray
 					rect.origin.y -= n / 2;
 					break;
 
-				case NSLayoutAttributeCenterX:
-					rect.origin.x += n;
-					break;
-
-				case NSLayoutAttributeCenterY:
-					rect.origin.y += n;
-					break;
-
 				default:
-					NSAssert(NO, @"NSLayoutAttribute should have had a CGRectEdge: %li", (long)attribute);
+					NSAssert(NO, @"NSLayoutAttribute cannot be extended: %li", (long)attribute);
 					return nil;
 			}
 		} else {
@@ -719,7 +770,7 @@ static RACSignal *combineAttributeWithRects(NSLayoutAttribute attribute, NSArray
 	NSParameterAssert(amountSignal != nil);
 	NSParameterAssert(paddingSignal != nil);
 
-	RACSignal *combinedSignal = combineAttributeWithRects(edgeAttribute, @[ amountSignal, paddingSignal, self ], ^ id (NSNumber *edge, NSNumber *amount, NSNumber *padding, NSValue *value) {
+	RACSignal *combinedSignal = combineAttributeAndSignals(edgeAttribute, @[ amountSignal, paddingSignal, self ], ^ id (NSNumber *edge, NSNumber *amount, NSNumber *padding, NSValue *value) {
 		NSAssert(edge != nil, @"NSLayoutAttribute does not represent an edge: %li", (long)edgeAttribute);
 		NSAssert([amount isKindOfClass:NSNumber.class], @"Value sent by %@ is not a number: %@", amountSignal, amount);
 		NSAssert([padding isKindOfClass:NSNumber.class], @"Value sent by %@ is not a number: %@", paddingSignal, padding);
