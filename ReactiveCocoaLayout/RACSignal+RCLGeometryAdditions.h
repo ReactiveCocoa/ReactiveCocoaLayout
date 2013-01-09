@@ -268,9 +268,9 @@
 //
 // attribute    - The attribute to extend. Extending an edge will grow it
 //                outward, and keep the positions of all other edges constant.
-//                Extending NSLayoutAttributeWidth or NSLayoutAttributeHeight will split
-//                the added points between both of the edges that intersect that
-//                axis. This must not be NSLayoutAttributeBaseline,
+//                Extending NSLayoutAttributeWidth or NSLayoutAttributeHeight
+//                will evenly outset the rectangle along that dimension. This
+//                must not be NSLayoutAttributeBaseline,
 //                NSLayoutAttributeCenterX, or NSLayoutAttributeCenterY.
 // amountSignal - A signal of CGFloat values, representing the number of points
 //                to extend by. This signal may send negative values to instead
