@@ -270,7 +270,8 @@
 //                outward, and keep the positions of all other edges constant.
 //                Extending NSLayoutAttributeWidth or NSLayoutAttributeHeight will split
 //                the added points between both of the edges that intersect that
-//                axis. This must not be NSLayoutAttributeBaseline.
+//                axis. This must not be NSLayoutAttributeBaseline,
+//                NSLayoutAttributeCenterX, or NSLayoutAttributeCenterY.
 // amountSignal - A signal of CGFloat values, representing the number of points
 //                to extend by. This signal may send negative values to instead
 //                remove points.

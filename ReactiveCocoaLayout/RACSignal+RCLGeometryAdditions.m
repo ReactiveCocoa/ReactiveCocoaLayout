@@ -742,16 +742,8 @@ static RACSignal *combineAttributeAndSignals(NSLayoutAttribute attribute, NSArra
 					rect.origin.y -= n / 2;
 					break;
 
-				case NSLayoutAttributeCenterX:
-					rect.origin.x += n;
-					break;
-
-				case NSLayoutAttributeCenterY:
-					rect.origin.y += n;
-					break;
-
 				default:
-					NSAssert(NO, @"NSLayoutAttribute should have had a CGRectEdge: %li", (long)attribute);
+					NSAssert(NO, @"NSLayoutAttribute cannot be extended: %li", (long)attribute);
 					return nil;
 			}
 		} else {

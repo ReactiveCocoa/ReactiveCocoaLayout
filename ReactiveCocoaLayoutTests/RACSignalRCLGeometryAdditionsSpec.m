@@ -346,26 +346,6 @@ describe(@"signal of CGRects", ^{
 
 			expect([signal extendAttribute:NSLayoutAttributeHeight byAmount:value].sequence).to.equal(expected);
 		});
-
-		it(@"should extend center X", ^{
-			RACSequence *expected = @[
-				MEDBox(CGRectMake(5, 10, 20, 20)),
-				MEDBox(CGRectMake(5, 20, 30, 40)),
-				MEDBox(CGRectMake(20, 15, 45, 35)),
-			].rac_sequence;
-
-			expect([signal extendAttribute:NSLayoutAttributeCenterX byAmount:value].sequence).to.equal(expected);
-		});
-
-		it(@"should extend center Y", ^{
-			RACSequence *expected = @[
-				MEDBox(CGRectMake(10, 5, 20, 20)),
-				MEDBox(CGRectMake(10, 15, 30, 40)),
-				MEDBox(CGRectMake(25, 10, 45, 35)),
-			].rac_sequence;
-
-			expect([signal extendAttribute:NSLayoutAttributeCenterY byAmount:value].sequence).to.equal(expected);
-		});
 	});
 
 	it(@"should divide into two rects", ^{
