@@ -32,7 +32,6 @@
 		D06269FF1679440D00E951A5 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0BB24791678772C005E9371 /* Foundation.framework */; };
 		D0626A021679440D00E951A5 /* libReactiveCocoaLayout iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D06269ED1679440C00E951A5 /* libReactiveCocoaLayout iOS.a */; };
 		D0626A3A167944CF00E951A5 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0626A39167944CF00E951A5 /* UIKit.framework */; };
-		D0626A3C167944DA00E951A5 /* libReactiveCocoa-iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D0BB24CF16787923005E9371 /* libReactiveCocoa-iOS.a */; };
 		D0626A3D167944E800E951A5 /* RACSignal+RCLGeometryAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = D0BB2631167887C3005E9371 /* RACSignal+RCLGeometryAdditions.m */; };
 		D06C9E48167D888100276090 /* libExpecta.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D06C9E31167D886A00276090 /* libExpecta.a */; };
 		D06C9E49167D888100276090 /* libSpecta.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D06C9E3D167D886A00276090 /* libSpecta.a */; };
@@ -341,7 +340,6 @@
 			files = (
 				D037FEFB1696F42D002D0CBA /* QuartzCore.framework in Frameworks */,
 				D0FD5A0C1679DFA8003C3210 /* libArchimedes-iOS.a in Frameworks */,
-				D0626A3C167944DA00E951A5 /* libReactiveCocoa-iOS.a in Frameworks */,
 				D0626A3A167944CF00E951A5 /* UIKit.framework in Frameworks */,
 				D06269EE1679440C00E951A5 /* Foundation.framework in Frameworks */,
 			);
