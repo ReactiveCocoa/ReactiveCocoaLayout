@@ -124,7 +124,7 @@ static RACSignal *combineSignalsWithOperator(NSArray *signals, RCLBinaryOperator
 //				 the values of each signal in the `signals` array.
 //
 // Returns a signal of reduced values.
-static RACSignal *combineAttributeWithRects(NSLayoutAttribute attribute, NSArray *signals, id reduceBlock) {
+static RACSignal *combineAttributeAndSignals(NSLayoutAttribute attribute, NSArray *signals, id reduceBlock) {
 	NSCParameterAssert(attribute != NSLayoutAttributeBaseline);
 	NSCParameterAssert(attribute != NSLayoutAttributeNotAnAttribute);
 	NSCParameterAssert(signals.count > 0);
@@ -400,7 +400,7 @@ static RACSignal *combineAttributeWithRects(NSLayoutAttribute attribute, NSArray
 }
 
 - (RACSignal *)valueForAttribute:(NSLayoutAttribute)attribute {
-	return [combineAttributeWithRects(attribute, @[ self ], ^ id (NSNumber *edge, NSValue *value) {
+	return [combineAttributeAndSignals(attribute, @[ self ], ^ id (NSNumber *edge, NSValue *value) {
 		NSAssert([value isKindOfClass:NSValue.class] && value.med_geometryStructType == MEDGeometryStructTypeRect, @"Value sent by %@ is not a CGRect: %@", self, value);
 
 		CGRect rect = value.med_rectValue;
@@ -479,7 +479,7 @@ static RACSignal *combineAttributeWithRects(NSLayoutAttribute attribute, NSArray
 - (RACSignal *)alignAttribute:(NSLayoutAttribute)attribute to:(RACSignal *)valueSignal {
 	NSParameterAssert(valueSignal != nil);
 
-	return [combineAttributeWithRects(attribute, @[ valueSignal, self ], ^ id (NSNumber *edge, NSNumber *num, NSValue *value) {
+	return [combineAttributeAndSignals(attribute, @[ valueSignal, self ], ^ id (NSNumber *edge, NSNumber *num, NSValue *value) {
 		NSAssert([num isKindOfClass:NSNumber.class], @"Value sent by %@ is not a number: %@", valueSignal, num);
 		NSAssert([value isKindOfClass:NSValue.class] && value.med_geometryStructType == MEDGeometryStructTypeRect, @"Value sent by %@ is not a CGRect: %@", self, value);
 
@@ -664,7 +664,7 @@ static RACSignal *combineAttributeWithRects(NSLayoutAttribute attribute, NSArray
 - (RACSignal *)extendAttribute:(NSLayoutAttribute)attribute byAmount:(RACSignal *)amountSignal {
 	NSParameterAssert(amountSignal != nil);
 
-	return [combineAttributeWithRects(attribute, @[ amountSignal, self ], ^ id (NSNumber *edge, NSNumber *amount, NSValue *value) {
+	return [combineAttributeAndSignals(attribute, @[ amountSignal, self ], ^ id (NSNumber *edge, NSNumber *amount, NSValue *value) {
 		NSAssert([amount isKindOfClass:NSNumber.class], @"Value sent by %@ is not a number: %@", amountSignal, amount);
 		NSAssert([value isKindOfClass:NSValue.class] && value.med_geometryStructType == MEDGeometryStructTypeRect, @"Value sent by %@ is not a CGRect: %@", self, value);
 
@@ -719,7 +719,7 @@ static RACSignal *combineAttributeWithRects(NSLayoutAttribute attribute, NSArray
 	NSParameterAssert(amountSignal != nil);
 	NSParameterAssert(paddingSignal != nil);
 
-	RACSignal *combinedSignal = combineAttributeWithRects(edgeAttribute, @[ amountSignal, paddingSignal, self ], ^ id (NSNumber *edge, NSNumber *amount, NSNumber *padding, NSValue *value) {
+	RACSignal *combinedSignal = combineAttributeAndSignals(edgeAttribute, @[ amountSignal, paddingSignal, self ], ^ id (NSNumber *edge, NSNumber *amount, NSNumber *padding, NSValue *value) {
 		NSAssert(edge != nil, @"NSLayoutAttribute does not represent an edge: %li", (long)edgeAttribute);
 		NSAssert([amount isKindOfClass:NSNumber.class], @"Value sent by %@ is not a number: %@", amountSignal, amount);
 		NSAssert([padding isKindOfClass:NSNumber.class], @"Value sent by %@ is not a number: %@", paddingSignal, padding);
