@@ -44,8 +44,8 @@ To start building the framework, clone this repository and then run `git
 submodule update --init --recursive`. This will automatically pull down any
 dependencies.
 
-To use ReactiveCocoaLayout in an iOS project, add the ReactiveCocoaLayout and
-ReactiveCocoa targets as dependencies to your target and link them as well. It
+To use ReactiveCocoaLayout in an iOS project, add ReactiveCocoaLayout and
+ReactiveCocoa as dependencies to your target and link them as well. It
 may also be necessary to disable Parallel Builds in the target's build scheme.
 
 
