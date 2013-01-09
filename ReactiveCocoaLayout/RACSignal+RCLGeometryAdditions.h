@@ -195,17 +195,19 @@
 // Returns a signal of new, inset CGRect values.
 - (RACSignal *)insetWidth:(RACSignal *)widthSignal height:(RACSignal *)heightSignal;
 
-// Offsets each CGPoint or CGRect by the number of points sent from the given
-// X and Y signals.
+// Offsets CGRect or CGPoint values in a specified direction.
 //
-// xSignal - A signal of CGFloat values, representing the number of points to
-//           offset the X position by.
-// ySignal - A signal of CGFloat values, representing the number of points to
-//           offset the Y position by.
+// amountSignal  - A signal of CGFloat values, representing the number of points
+//                 by which to offset the rectangle or point.
+// edgeAttribute - A layout attribute representing the edge toward which the
+//                 point or rectangle should be offset. This must be
+//                 NSLayoutAttributeLeft, NSLayoutAttributeRight,
+//                 NSLayoutAttributeTop, NSLayoutAttributeBottom,
+//                 NSLayoutAttributeLeading, or NSLayoutAttributeTrailing.
 //
-// Returns a signal of offset points or rects, using the same type as the input
-// values.
-- (RACSignal *)offsetX:(RACSignal *)xSignal Y:(RACSignal *)ySignal;
+// Returns a signal of offset CGRects or CGPoints, using the same type as the
+// input value.
+- (RACSignal *)offsetByAmount:(RACSignal *)amountSignal towardEdge:(NSLayoutAttribute)edgeAttribute;
 
 // Extends the given layout attribute of each CGRect by the given number of points
 // sent from `amountSignal`.
