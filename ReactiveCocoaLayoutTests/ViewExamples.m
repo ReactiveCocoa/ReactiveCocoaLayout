@@ -13,7 +13,7 @@ NSString * const ViewExamples = @"ViewExamples";
 
 SharedExampleGroupsBegin(ViewExamples)
 
-sharedExamplesFor(ViewExamples, ^{
+sharedExamplesFor(ViewExamples, ^(NSDictionary *_) {
 	__block CGRect initialFrame;
 	__block CGRect initialBounds;
 
