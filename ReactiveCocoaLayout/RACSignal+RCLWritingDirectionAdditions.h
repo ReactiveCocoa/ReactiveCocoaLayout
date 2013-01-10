@@ -6,7 +6,7 @@
 //  Copyright (c) 2012 GitHub. All rights reserved.
 //
 
-#import <ReactiveCocoa/ReactiveCocoa.h>
+@class RACSignal;
 
 @interface RACSignal (RCLWritingDirectionAdditions)
 

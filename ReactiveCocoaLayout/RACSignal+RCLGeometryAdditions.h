@@ -6,8 +6,10 @@
 //  Copyright (c) 2012 GitHub. All rights reserved.
 //
 
-#import <ReactiveCocoa/ReactiveCocoa.h>
+#import <ReactiveCocoa/RACSignal.h>
 #import <ReactiveCocoaLayout/View+RCLAutoLayoutAdditions.h>
+
+@class RACTuple;
 
 // Adds geometry functions to RACSignal.
 @interface RACSignal (RCLGeometryAdditions)

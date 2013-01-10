@@ -6,7 +6,7 @@
 //  Copyright (c) 2013 GitHub. All rights reserved.
 //
 
-#import <ReactiveCocoa/ReactiveCocoa.h>
+#import <ReactiveCocoa/RACSignal.h>
 
 // Defines the curve (timing function) for an animation.
 //
