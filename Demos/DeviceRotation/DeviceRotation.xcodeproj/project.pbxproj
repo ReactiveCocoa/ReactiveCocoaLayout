@@ -7,8 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1E252602169E31EE0055F52A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E252601169E31EE0055F52A /* UIKit.framework */; };
+		1E252605169E31F60055F52A /* libReactiveCocoa-iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D0FD5B1A1679E98F003C3210 /* libReactiveCocoa-iOS.a */; };
 		D037FF2D1696F4E3002D0CBA /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D037FF2C1696F4E3002D0CBA /* QuartzCore.framework */; };
-		D0FD5AA91679E96D003C3210 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0FD5AA81679E96D003C3210 /* UIKit.framework */; };
 		D0FD5AAB1679E96D003C3210 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0FD5AAA1679E96D003C3210 /* Foundation.framework */; };
 		D0FD5AAD1679E96D003C3210 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0FD5AAC1679E96D003C3210 /* CoreGraphics.framework */; };
 		D0FD5AB31679E96D003C3210 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = D0FD5AB11679E96D003C3210 /* InfoPlist.strings */; };
@@ -22,6 +23,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		1E252603169E31F20055F52A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D0FD5B111679E98F003C3210 /* ReactiveCocoa.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 88F440AA153DAC820097B4C3;
+			remoteInfo = "ReactiveCocoa-iOS";
+		};
 		D0FD5B051679E988003C3210 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = D0FD5AE31679E987003C3210 /* ReactiveCocoaLayout.xcodeproj */;
@@ -109,9 +117,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		1E252601169E31EE0055F52A /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.0.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
 		D037FF2C1696F4E3002D0CBA /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.0.sdk/System/Library/Frameworks/QuartzCore.framework; sourceTree = DEVELOPER_DIR; };
 		D0FD5AA41679E96D003C3210 /* DeviceRotation.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DeviceRotation.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		D0FD5AA81679E96D003C3210 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		D0FD5AAA1679E96D003C3210 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		D0FD5AAC1679E96D003C3210 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		D0FD5AB01679E96D003C3210 /* DeviceRotation-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "DeviceRotation-Info.plist"; sourceTree = "<group>"; };
@@ -150,9 +158,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1E252602169E31EE0055F52A /* UIKit.framework in Frameworks */,
 				D037FF2D1696F4E3002D0CBA /* QuartzCore.framework in Frameworks */,
+				1E252605169E31F60055F52A /* libReactiveCocoa-iOS.a in Frameworks */,
 				D0FD5B5A1679EF37003C3210 /* libReactiveCocoaLayout iOS.a in Frameworks */,
-				D0FD5AA91679E96D003C3210 /* UIKit.framework in Frameworks */,
 				D0FD5AAB1679E96D003C3210 /* Foundation.framework in Frameworks */,
 				D0FD5AAD1679E96D003C3210 /* CoreGraphics.framework in Frameworks */,
 			);
@@ -182,13 +191,13 @@
 		D0FD5AA71679E96D003C3210 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				D0FD5AAC1679E96D003C3210 /* CoreGraphics.framework */,
+				D0FD5AAA1679E96D003C3210 /* Foundation.framework */,
+				D037FF2C1696F4E3002D0CBA /* QuartzCore.framework */,
+				1E252601169E31EE0055F52A /* UIKit.framework */,
 				D0FD5B5B1679F006003C3210 /* Archimedes.xcodeproj */,
 				D0FD5B111679E98F003C3210 /* ReactiveCocoa.xcodeproj */,
 				D0FD5AE31679E987003C3210 /* ReactiveCocoaLayout.xcodeproj */,
-				D0FD5AA81679E96D003C3210 /* UIKit.framework */,
-				D0FD5AAA1679E96D003C3210 /* Foundation.framework */,
-				D0FD5AAC1679E96D003C3210 /* CoreGraphics.framework */,
-				D037FF2C1696F4E3002D0CBA /* QuartzCore.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -328,6 +337,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				1E252604169E31F20055F52A /* PBXTargetDependency */,
 				D0FD5B581679EF31003C3210 /* PBXTargetDependency */,
 			);
 			name = DeviceRotation;
@@ -483,6 +493,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		1E252604169E31F20055F52A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "ReactiveCocoa-iOS";
+			targetProxy = 1E252603169E31F20055F52A /* PBXContainerItemProxy */;
+		};
 		D0FD5B581679EF31003C3210 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = "ReactiveCocoaLayout iOS";
