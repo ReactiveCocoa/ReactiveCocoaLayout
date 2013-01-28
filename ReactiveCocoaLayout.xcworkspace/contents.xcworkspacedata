@@ -4,4 +4,7 @@
    <FileRef
       location = "container:ReactiveCocoaLayout.xcodeproj">
    </FileRef>
+   <FileRef
+      location = "group:External/ReactiveCocoa/ReactiveCocoaFramework/ReactiveCocoa.xcodeproj">
+   </FileRef>
 </Workspace>
