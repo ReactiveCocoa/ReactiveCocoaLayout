@@ -1136,10 +1136,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = D0BB24B51678789A005E9371 /* Mac-Application.xcconfig */;
 			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = (
-					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
-					"\"/Users/justin/Library/Developer/Xcode/DerivedData/ReactiveCocoaLayout-hagzauzqgqzpvraojalyjhjcqhqx/Build/Products/Debug\"",
-				);
+				FRAMEWORK_SEARCH_PATHS = "\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"";
 				GCC_PREFIX_HEADER = "ReactiveCocoaLayoutTests/ReactiveCocoaLayoutTests-Prefix.pch";
 				INFOPLIST_FILE = "ReactiveCocoaLayoutTests/ReactiveCocoaLayoutTests-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1242,10 +1239,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = D0BB24B51678789A005E9371 /* Mac-Application.xcconfig */;
 			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = (
-					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
-					"\"/Users/justin/Library/Developer/Xcode/DerivedData/ReactiveCocoaLayout-hagzauzqgqzpvraojalyjhjcqhqx/Build/Products/Debug\"",
-				);
+				FRAMEWORK_SEARCH_PATHS = "\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"";
 				GCC_PREFIX_HEADER = "ReactiveCocoaLayoutTests/ReactiveCocoaLayoutTests-Prefix.pch";
 				INFOPLIST_FILE = "ReactiveCocoaLayoutTests/ReactiveCocoaLayoutTests-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1257,10 +1251,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = D0BB24B51678789A005E9371 /* Mac-Application.xcconfig */;
 			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = (
-					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
-					"\"/Users/justin/Library/Developer/Xcode/DerivedData/ReactiveCocoaLayout-hagzauzqgqzpvraojalyjhjcqhqx/Build/Products/Debug\"",
-				);
+				FRAMEWORK_SEARCH_PATHS = "\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"";
 				GCC_PREFIX_HEADER = "ReactiveCocoaLayoutTests/ReactiveCocoaLayoutTests-Prefix.pch";
 				INFOPLIST_FILE = "ReactiveCocoaLayoutTests/ReactiveCocoaLayoutTests-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
