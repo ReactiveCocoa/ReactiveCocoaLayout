@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		1E252602169E31EE0055F52A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E252601169E31EE0055F52A /* UIKit.framework */; };
-		1E252605169E31F60055F52A /* libReactiveCocoa-iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D0FD5B1A1679E98F003C3210 /* libReactiveCocoa-iOS.a */; };
 		D037FF2D1696F4E3002D0CBA /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D037FF2C1696F4E3002D0CBA /* QuartzCore.framework */; };
 		D0FD5AAB1679E96D003C3210 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0FD5AAA1679E96D003C3210 /* Foundation.framework */; };
 		D0FD5AAD1679E96D003C3210 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0FD5AAC1679E96D003C3210 /* CoreGraphics.framework */; };
@@ -160,7 +159,6 @@
 			files = (
 				1E252602169E31EE0055F52A /* UIKit.framework in Frameworks */,
 				D037FF2D1696F4E3002D0CBA /* QuartzCore.framework in Frameworks */,
-				1E252605169E31F60055F52A /* libReactiveCocoa-iOS.a in Frameworks */,
 				D0FD5B5A1679EF37003C3210 /* libReactiveCocoaLayout iOS.a in Frameworks */,
 				D0FD5AAB1679E96D003C3210 /* Foundation.framework in Frameworks */,
 				D0FD5AAD1679E96D003C3210 /* CoreGraphics.framework in Frameworks */,

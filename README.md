@@ -42,13 +42,11 @@ RCL intends to offer the following advantages over Auto Layout:
 
 To start building the framework, clone this repository and then run `git
 submodule update --init --recursive`. This will automatically pull down any
-dependencies.
-
+dependencies. Then, simply open `ReactiveCocoaLayout.xcworkspace` and build.
 
 To use ReactiveCocoaLayout in an iOS project, you will also need to add 
 ReactiveCocoa as a dependency, and link it into your application target.
 It may also be necessary to disable Parallel Builds in the target's build scheme.
-
 
 ## License
 
