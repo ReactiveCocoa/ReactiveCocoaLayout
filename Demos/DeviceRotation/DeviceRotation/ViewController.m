@@ -7,7 +7,7 @@
 //
 
 #import "ViewController.h"
-#import "EXTScope.h"
+#import <ReactiveCocoa/EXTScope.h>
 
 @interface ViewController () {
 	RACSubject *_rotationSignal;
