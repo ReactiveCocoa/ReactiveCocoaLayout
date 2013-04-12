@@ -6,6 +6,7 @@
 //  Copyright (c) 2013 GitHub. All rights reserved.
 //
 
+#import <libkern/OSAtomic.h>
 #import "RACSignal+RCLAnimationAdditions.h"
 #import "EXTScope.h"
 
