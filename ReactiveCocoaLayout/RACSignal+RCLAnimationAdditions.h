@@ -86,6 +86,6 @@ extern BOOL RCLIsInAnimatedSignal(void);
 
 // Completes only after the animated signal has completed *and* all running
 // animations have completed.
-- (RACSignal *)completeWithAnimation;
+- (RACSignal *)completeAfterAnimations;
 
 @end

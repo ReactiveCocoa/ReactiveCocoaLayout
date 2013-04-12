@@ -96,10 +96,10 @@ describe(@"-doAnimationCompleted:", ^{
 	});
 });
 
-describe(@"-completeWithAnimation", ^{
+describe(@"-completeAfterAnimations", ^{
 	it(@"should complete only after the signal completes and all animations complete", ^{
 		RACSubject *subject = [RACSubject subject];
-		RACSignal *animated = [[subject animateWithDuration:0.1] completeWithAnimation];
+		RACSignal *animated = [[subject animateWithDuration:0.1] completeAfterAnimations];
 		__block BOOL completed = NO;
 		[animated subscribeCompleted:^{
 			completed = YES;

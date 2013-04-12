@@ -141,7 +141,7 @@ static RACSignal *animateWithDuration (RACSignal *self, NSTimeInterval *duration
 	}] setNameWithFormat:@"[%@] -doAnimationCompleted:", self.name];
 }
 
-- (RACSignal *)completeWithAnimation {
+- (RACSignal *)completeAfterAnimations {
 	return [[RACSignal createSignal:^(id<RACSubscriber> subscriber) {
 		__block volatile int32_t animating = 0;
 		__block volatile uint32_t completed = 0;
@@ -154,12 +154,12 @@ static RACSignal *animateWithDuration (RACSignal *self, NSTimeInterval *duration
 				OSAtomicDecrement32Barrier(&animating);
 			};
 
+			OSAtomicIncrement32Barrier(&animating);
+
 			if (!RCLIsInAnimatedSignal()) {
 				completionBlock();
 				return;
 			}
-
-			OSAtomicIncrement32Barrier(&animating);
 
 #ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
 			[CATransaction begin];
