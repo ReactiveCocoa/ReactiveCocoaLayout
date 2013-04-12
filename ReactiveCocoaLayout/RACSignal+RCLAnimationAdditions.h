@@ -84,4 +84,8 @@ extern BOOL RCLIsInAnimatedSignal(void);
 // Returns a signal which forwards all the events of the receiver.
 - (RACSignal *)doAnimationCompleted:(void (^)(id))block;
 
+// Completes only after the animated signal has completed *and* all running
+// animations have completed.
+- (RACSignal *)completeWithAnimation;
+
 @end

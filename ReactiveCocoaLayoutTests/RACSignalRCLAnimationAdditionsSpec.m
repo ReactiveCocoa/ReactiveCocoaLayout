@@ -96,4 +96,25 @@ describe(@"-doAnimationCompleted:", ^{
 	});
 });
 
+describe(@"-completeWithAnimation", ^{
+	it(@"should complete only after the signal completes and all animations complete", ^{
+		RACSubject *subject = [RACSubject subject];
+		RACSignal *animated = [[subject animateWithDuration:0.1] completeWithAnimation];
+		__block BOOL completed = NO;
+		[animated subscribeCompleted:^{
+			completed = YES;
+		}];
+
+		expect(completed).to.beFalsy();
+
+		[subject sendNext:@1];
+		expect(completed).to.beFalsy();
+
+		[subject sendCompleted];
+		// The underlying signal has completed but the animation hasn't yet.
+		expect(completed).to.beFalsy();
+		expect(completed).will.beTruthy();
+	});
+});
+
 SpecEnd
