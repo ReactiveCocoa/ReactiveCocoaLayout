@@ -141,7 +141,10 @@ static NSMutableSet *swizzledClasses() {
 	}
 
 	CAAnimation *animation = RCLCurrentAnimation();
-	if (animation != nil && ![swizzledClasses() containsObject:self.class]) {
+	NSString *className = NSStringFromClass(self.class);
+	if (animation != nil && ![swizzledClasses() containsObject:className]) {
+		[swizzledClasses() addObject:className];
+		
 		SEL selector = sel_registerName("animationForKey:");
 		Method method = class_getInstanceMethod(self.class, selector);
 		id (*original)(id, SEL, NSString *) = (__typeof__(original))method_getImplementation(method);
