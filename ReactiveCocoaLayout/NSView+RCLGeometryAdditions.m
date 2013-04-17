@@ -10,6 +10,7 @@
 #import "EXTScope.h"
 #import "NSNotificationCenter+RACSupport.h"
 #import "RACSignal+RCLAnimationAdditions.h"
+#import <objc/runtime.h>
 
 @implementation NSView (RCLGeometryAdditions)
 
@@ -37,11 +38,9 @@
 		frame = [self.superview convertRect:alignedWindowFrame fromView:nil];
 	}
 
-	if (RCLIsInAnimatedSignal()) {
-		[self.animator setFrame:frame];
-	} else {
+	[self rcl_animate:^(NSView *self) {
 		self.frame = frame;
-	}
+	}];
 }
 
 - (CGRect)rcl_bounds {
@@ -58,11 +57,9 @@
 		bounds = [self convertRect:alignedWindowRect fromView:nil];
 	}
 
-	if (RCLIsInAnimatedSignal()) {
-		[self.animator setBounds:bounds];
-	} else {
+	[self rcl_animate:^(NSView *self) {
 		self.bounds = bounds;
-	}
+	}];
 }
 
 - (CGFloat)rcl_alphaValue {
@@ -70,11 +67,9 @@
 }
 
 - (void)setRcl_alphaValue:(CGFloat)alphaValue {
-	if (RCLIsInAnimatedSignal()) {
-		[self.animator setAlphaValue:alphaValue];
-	} else {
+	[self rcl_animate:^(NSView *self) {
 		self.alphaValue = alphaValue;
-	}
+	}];
 }
 
 - (BOOL)rcl_isHidden {
@@ -125,6 +120,43 @@
 
 - (RACSignal *)rcl_baselineSignal {
 	return [[RACSignal return:@(self.baselineOffsetFromBottom)] setNameWithFormat:@"%@ -rcl_baselineSignal", self];
+}
+
+static NSMutableSet *swizzledClasses() {
+	static dispatch_once_t onceToken;
+	static NSMutableSet *swizzledClasses = nil;
+	dispatch_once(&onceToken, ^{
+		swizzledClasses = [[NSMutableSet alloc] init];
+	});
+
+	return swizzledClasses;
+}
+
+- (void)rcl_animate:(void (^)(NSView *self))block {
+	NSParameterAssert(block != NULL);
+
+	if (!RCLIsInAnimatedSignal()) {
+		block(self);
+		return;
+	}
+
+	CAAnimation *animation = RCLCurrentAnimation();
+	if (animation != nil && ![swizzledClasses() containsObject:self.class]) {
+		SEL selector = sel_registerName("animationForKey:");
+		Method method = class_getInstanceMethod(self.class, selector);
+		id (*original)(id, SEL, NSString *) = (__typeof__(original))method_getImplementation(method);
+
+		id newImp = ^ id (__unsafe_unretained NSObject *self, NSString *key) {
+			CAAnimation *animation = RCLCurrentAnimation();
+			if (animation != nil) return animation;
+
+			return original(self, selector, key);
+		};
+
+		class_replaceMethod(self.class, selector, imp_implementationWithBlock(newImp), method_getTypeEncoding(method));
+	}
+
+	block(self.animator);
 }
 
 @end

@@ -46,6 +46,13 @@
 // This function is thread-safe.
 extern BOOL RCLIsInAnimatedSignal(void);
 
+#ifndef __IPHONE_OS_VERSION_MIN_REQUIRED
+
+// Returns the current custom animation, or nil if there is no custom animation.
+extern CAAnimation * RCLCurrentAnimation(void);
+
+#endif
+
 @interface RACSignal (RCLAnimationAdditions)
 
 // Wraps every next in an animation block, using the default duration and
@@ -70,6 +77,18 @@ extern BOOL RCLIsInAnimatedSignal(void);
 // Behaves like -animate, but uses the given duration and animation curve
 // instead of the defaults.
 - (RACSignal *)animateWithDuration:(NSTimeInterval)duration curve:(RCLAnimationCurve)curve;
+
+#ifndef __IPHONE_OS_VERSION_MIN_REQUIRED
+
+// Behaves like -animate, but animates with the given animation.
+//
+// animation - The animation to use to animate changes in this signal. Cannot be
+//             nil.
+//
+// Returns a signal like -animate which animates the sending of its values.
+- (RACSignal *)animateWithAnimation:(CAAnimation *)animation;
+
+#endif
 
 // Injects side effects whenever an animation triggered by the receiver
 // completes, or whenever the receiver sends a non-animated value.
