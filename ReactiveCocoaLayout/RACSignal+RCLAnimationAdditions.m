@@ -245,8 +245,6 @@ static RACSignal *animateWithDuration (RACSignal *self, NSTimeInterval *duration
 	}];
 }
 
-#endif
-
 static CGSize RCLInterpolateSize(CGSize startSize, CGSize endSize, CGFloat t) {
 	return CGSizeMake(startSize.width + t * (endSize.width - startSize.width), startSize.height + t * (endSize.height - startSize.height));
 }
@@ -339,5 +337,7 @@ RCLInterpolationBlock RCLBounceInterpolation(void) {
 		}];
 	}];
 }
+
+#endif
 
 @end

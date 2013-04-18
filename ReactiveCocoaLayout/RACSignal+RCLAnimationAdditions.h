@@ -88,8 +88,6 @@ extern CAAnimation * RCLCurrentAnimation(void);
 // Returns a signal like -animate which animates the sending of its values.
 - (RACSignal *)animateWithAnimation:(CAAnimation *)animation;
 
-#endif
-
 // An interpolation block.
 //
 // progress - 0.0 to 1.0. Represents the progress of the animation, with 0 being
@@ -114,6 +112,8 @@ extern RCLInterpolationBlock RCLBounceInterpolation(void);
 //
 // Returns a signal like -animate which animates the sending of its values.
 - (RACSignal *)animateWithDuration:(NSTimeInterval)duration start:(id)start interpolate:(RCLInterpolationBlock)interpolate;
+
+#endif
 
 // Injects side effects whenever an animation triggered by the receiver
 // completes, or whenever the receiver sends a non-animated value.
