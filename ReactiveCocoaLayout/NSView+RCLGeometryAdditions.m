@@ -10,6 +10,7 @@
 #import "EXTScope.h"
 #import "NSNotificationCenter+RACSupport.h"
 #import "RACSignal+RCLAnimationAdditions.h"
+#import <objc/runtime.h>
 
 @implementation NSView (RCLGeometryAdditions)
 
@@ -88,24 +89,34 @@
 #pragma mark Signals
 
 - (RACSignal *)rcl_boundsSignal {
-	// TODO: These only need to be enabled when we actually start watching for
-	// the notifications (i.e., after the startWith:).
+	RACSubject *subject = objc_getAssociatedObject(self, _cmd);
+	if (subject != nil) return subject;
+
+	subject = [[RACReplaySubject replaySubjectWithCapacity:1] setNameWithFormat:@"%@ -rcl_boundsSignal", self];
+	objc_setAssociatedObject(self, _cmd, subject, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+
 	self.postsBoundsChangedNotifications = YES;
 	self.postsFrameChangedNotifications = YES;
 
-	NSArray *signals = @[
-		[NSNotificationCenter.defaultCenter rac_addObserverForName:NSViewBoundsDidChangeNotification object:self],
-		[NSNotificationCenter.defaultCenter rac_addObserverForName:NSViewFrameDidChangeNotification object:self]
-	];
-
-	return [[[[[RACSignal merge:signals]
+	RACDisposable *disposable = [[[[[RACSignal
+		merge:@[
+			[NSNotificationCenter.defaultCenter rac_addObserverForName:NSViewBoundsDidChangeNotification object:self],
+			[NSNotificationCenter.defaultCenter rac_addObserverForName:NSViewFrameDidChangeNotification object:self]
+		]]
 		map:^(NSNotification *notification) {
 			NSView *view = notification.object;
-			return [NSValue valueWithRect:view.bounds];
+			return MEDBox(view.bounds);
 		}]
-		startWith:[NSValue valueWithRect:self.bounds]]
+		startWith:MEDBox(self.bounds)]
 		distinctUntilChanged]
-		setNameWithFormat:@"%@ -rcl_boundsSignal", self];
+		subscribe:subject];
+
+	[self rac_addDeallocDisposable:[RACDisposable disposableWithBlock:^{
+		[disposable dispose];
+		[subject sendCompleted];
+	}]];
+
+	return subject;
 }
 
 - (RACSignal *)rcl_frameSignal {

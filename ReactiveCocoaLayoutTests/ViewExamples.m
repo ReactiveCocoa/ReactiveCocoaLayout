@@ -47,6 +47,30 @@ sharedExamplesFor(ViewExamples, ^(NSDictionary *_) {
 		expect(lastValue.med_rectValue).to.equal(newBounds);
 	});
 
+	it(@"should complete rcl_boundsSignal when deallocated", ^{
+		__block BOOL completed = NO;
+
+		@autoreleasepool {
+			TestView *view __attribute__((objc_precise_lifetime)) = [[TestView alloc] initWithFrame:initialFrame];
+			[view.rcl_boundsSignal subscribeCompleted:^{
+				completed = YES;
+			}];
+
+			expect(completed).to.beFalsy();
+		}
+
+		expect(completed).to.beTruthy();
+	});
+
+	it(@"should defer reading initial bounds", ^{
+		RACSignal *boundsSignal = view.rcl_boundsSignal;
+
+		CGRect newBounds = CGRectMake(0, 0, 30, 40);
+		view.bounds = newBounds;
+
+		expect([[boundsSignal first] med_rectValue]).to.equal(newBounds);
+	});
+
 	it(@"should send values on rcl_frameSignal", ^{
 		__block NSValue *lastValue = nil;
 		[view.rcl_frameSignal subscribeNext:^(NSValue *value) {
