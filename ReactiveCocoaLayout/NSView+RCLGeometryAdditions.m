@@ -120,18 +120,29 @@
 }
 
 - (RACSignal *)rcl_frameSignal {
-	// TODO: This only needs to be enabled when we actually start watching for
-	// the notification (i.e., after the startWith:).
+	RACSubject *subject = objc_getAssociatedObject(self, _cmd);
+	if (subject != nil) return subject;
+
+	subject = [[RACReplaySubject replaySubjectWithCapacity:1] setNameWithFormat:@"%@ -rcl_frameSignal", self];
+	objc_setAssociatedObject(self, _cmd, subject, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+
 	self.postsFrameChangedNotifications = YES;
 
-	return [[[[[NSNotificationCenter.defaultCenter rac_addObserverForName:NSViewFrameDidChangeNotification object:self]
+	RACDisposable *disposable = [[[[[NSNotificationCenter.defaultCenter rac_addObserverForName:NSViewFrameDidChangeNotification object:self]
 		map:^(NSNotification *notification) {
 			NSView *view = notification.object;
-			return [NSValue valueWithRect:view.frame];
+			return MEDBox(view.frame);
 		}]
-		startWith:[NSValue valueWithRect:self.frame]]
+		startWith:MEDBox(self.frame)]
 		distinctUntilChanged]
-		setNameWithFormat:@"%@ -rcl_frameSignal", self];
+		subscribe:subject];
+
+	[self rac_addDeallocDisposable:[RACDisposable disposableWithBlock:^{
+		[disposable dispose];
+		[subject sendCompleted];
+	}]];
+
+	return subject;
 }
 
 - (RACSignal *)rcl_baselineSignal {

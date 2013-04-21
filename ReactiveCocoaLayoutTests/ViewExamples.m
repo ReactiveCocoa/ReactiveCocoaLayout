@@ -86,6 +86,30 @@ sharedExamplesFor(ViewExamples, ^(NSDictionary *_) {
 		expect(lastValue.med_rectValue).to.equal(newFrame);
 	});
 
+	it(@"should complete rcl_frameSignal when deallocated", ^{
+		__block BOOL completed = NO;
+
+		@autoreleasepool {
+			TestView *view __attribute__((objc_precise_lifetime)) = [[TestView alloc] initWithFrame:initialFrame];
+			[view.rcl_frameSignal subscribeCompleted:^{
+				completed = YES;
+			}];
+
+			expect(completed).to.beFalsy();
+		}
+
+		expect(completed).to.beTruthy();
+	});
+
+	it(@"should defer reading initial frame", ^{
+		RACSignal *frameSignal = view.rcl_frameSignal;
+
+		CGRect newFrame = CGRectMake(10, 20, 30, 40);
+		view.frame = newFrame;
+
+		expect([[frameSignal first] med_rectValue]).to.equal(newFrame);
+	});
+
 	describe(@"intrinsic size signals", ^{
 		__block id lastValue;
 		__block void (^subscribeToSignal)(RACSignal *);
