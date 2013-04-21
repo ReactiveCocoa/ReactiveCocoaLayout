@@ -72,4 +72,21 @@ describe(@"NSTextFieldCell", ^{
 	});
 });
 
+it(@"should complete rcl_sizeSignal upon deallocation", ^{
+	__block BOOL completed = NO;
+
+	@autoreleasepool {
+		NSTextField *control __attribute__((objc_precise_lifetime)) = [[NSTextField alloc] initWithFrame:NSZeroRect];
+		NSCell *cell __attribute__((objc_precise_lifetime)) = control.cell;
+
+		[cell.rcl_sizeSignal subscribeCompleted:^{
+			completed = YES;
+		}];
+
+		expect(completed).to.beFalsy();
+	}
+
+	expect(completed).to.beTruthy();
+});
+
 SpecEnd
