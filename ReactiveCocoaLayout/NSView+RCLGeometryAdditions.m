@@ -146,7 +146,11 @@
 }
 
 - (RACSignal *)rcl_baselineSignal {
-	return [[RACSignal return:@(self.baselineOffsetFromBottom)] setNameWithFormat:@"%@ -rcl_baselineSignal", self];
+	return [[RACSignal
+		defer:^{
+			return [RACSignal return:@(self.baselineOffsetFromBottom)];
+		}]
+		setNameWithFormat:@"%@ -rcl_baselineSignal", self];
 }
 
 @end
