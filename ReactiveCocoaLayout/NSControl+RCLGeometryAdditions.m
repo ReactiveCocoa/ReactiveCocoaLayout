@@ -46,6 +46,10 @@ static void newInvalidateIntrinsicContentSizeForCell(NSControl *self, SEL _cmd, 
 		[subject setNameWithFormat:@"%@ -rcl_cellIntrinsicContentSizeInvalidatedSignal", self];
 
 		objc_setAssociatedObject(self, IntrinsicContentSizeSubjectKey, subject, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+
+		[self rac_addDeallocDisposable:[RACDisposable disposableWithBlock:^{
+			[subject sendCompleted];
+		}]];
 	}
 
 	return subject;
