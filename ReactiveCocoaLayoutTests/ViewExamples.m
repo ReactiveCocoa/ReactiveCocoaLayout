@@ -142,6 +142,28 @@ sharedExamplesFor(ViewExamples, ^(NSDictionary *_) {
 			expect([lastValue med_sizeValue]).to.equal(newSize);
 		});
 
+		it(@"should complete rcl_intrinsicContentSizeSignal when deallocated", ^{
+			__block BOOL completed = NO;
+
+			@autoreleasepool {
+				TestView *view __attribute__((objc_precise_lifetime)) = [[TestView alloc] initWithFrame:initialFrame];
+				[view.rcl_intrinsicContentSizeSignal subscribeCompleted:^{
+					completed = YES;
+				}];
+
+				expect(completed).to.beFalsy();
+			}
+
+			expect(completed).to.beTruthy();
+		});
+
+		it(@"should defer intrinsic content size", ^{
+			RACSignal *sizeSignal = view.rcl_intrinsicContentSizeSignal;
+
+			setNewSize();
+			expect([[sizeSignal first] med_sizeValue]).to.equal(newSize);
+		});
+
 		it(@"should send values on rcl_intrinsicBoundsSignal", ^{
 			subscribeToSignal(view.rcl_intrinsicBoundsSignal);
 			expect([lastValue med_rectValue]).to.equal(CGRectZero);
