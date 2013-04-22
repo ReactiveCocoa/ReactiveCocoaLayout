@@ -47,6 +47,30 @@ sharedExamplesFor(ViewExamples, ^(NSDictionary *_) {
 		expect(lastValue.med_rectValue).to.equal(newBounds);
 	});
 
+	it(@"should complete rcl_boundsSignal when deallocated", ^{
+		__block BOOL completed = NO;
+
+		@autoreleasepool {
+			TestView *view __attribute__((objc_precise_lifetime)) = [[TestView alloc] initWithFrame:initialFrame];
+			[view.rcl_boundsSignal subscribeCompleted:^{
+				completed = YES;
+			}];
+
+			expect(completed).to.beFalsy();
+		}
+
+		expect(completed).to.beTruthy();
+	});
+
+	it(@"should defer reading initial bounds", ^{
+		RACSignal *boundsSignal = view.rcl_boundsSignal;
+
+		CGRect newBounds = CGRectMake(0, 0, 30, 40);
+		view.bounds = newBounds;
+
+		expect([[boundsSignal first] med_rectValue]).to.equal(newBounds);
+	});
+
 	it(@"should send values on rcl_frameSignal", ^{
 		__block NSValue *lastValue = nil;
 		[view.rcl_frameSignal subscribeNext:^(NSValue *value) {
@@ -60,6 +84,30 @@ sharedExamplesFor(ViewExamples, ^(NSDictionary *_) {
 		CGRect newFrame = CGRectMake(10, 20, 30, 40);
 		view.frame = newFrame;
 		expect(lastValue.med_rectValue).to.equal(newFrame);
+	});
+
+	it(@"should complete rcl_frameSignal when deallocated", ^{
+		__block BOOL completed = NO;
+
+		@autoreleasepool {
+			TestView *view __attribute__((objc_precise_lifetime)) = [[TestView alloc] initWithFrame:initialFrame];
+			[view.rcl_frameSignal subscribeCompleted:^{
+				completed = YES;
+			}];
+
+			expect(completed).to.beFalsy();
+		}
+
+		expect(completed).to.beTruthy();
+	});
+
+	it(@"should defer reading initial frame", ^{
+		RACSignal *frameSignal = view.rcl_frameSignal;
+
+		CGRect newFrame = CGRectMake(10, 20, 30, 40);
+		view.frame = newFrame;
+
+		expect([[frameSignal first] med_rectValue]).to.equal(newFrame);
 	});
 
 	describe(@"intrinsic size signals", ^{
@@ -92,6 +140,28 @@ sharedExamplesFor(ViewExamples, ^(NSDictionary *_) {
 
 			setNewSize();
 			expect([lastValue med_sizeValue]).to.equal(newSize);
+		});
+
+		it(@"should complete rcl_intrinsicContentSizeSignal when deallocated", ^{
+			__block BOOL completed = NO;
+
+			@autoreleasepool {
+				TestView *view __attribute__((objc_precise_lifetime)) = [[TestView alloc] initWithFrame:initialFrame];
+				[view.rcl_intrinsicContentSizeSignal subscribeCompleted:^{
+					completed = YES;
+				}];
+
+				expect(completed).to.beFalsy();
+			}
+
+			expect(completed).to.beTruthy();
+		});
+
+		it(@"should defer intrinsic content size", ^{
+			RACSignal *sizeSignal = view.rcl_intrinsicContentSizeSignal;
+
+			setNewSize();
+			expect([[sizeSignal first] med_sizeValue]).to.equal(newSize);
 		});
 
 		it(@"should send values on rcl_intrinsicBoundsSignal", ^{

@@ -57,4 +57,19 @@ describe(@"NSMatrix", ^{
 	});
 });
 
+it(@"should complete rcl_cellIntrinsicContentSizeInvalidatedSignal upon deallocation", ^{
+	__block BOOL completed = NO;
+
+	@autoreleasepool {
+		NSControl *control __attribute__((objc_precise_lifetime)) = [[NSControl alloc] initWithFrame:NSZeroRect];
+		[control.rcl_cellIntrinsicContentSizeInvalidatedSignal subscribeCompleted:^{
+			completed = YES;
+		}];
+
+		expect(completed).to.beFalsy();
+	}
+
+	expect(completed).to.beTruthy();
+});
+
 SpecEnd
