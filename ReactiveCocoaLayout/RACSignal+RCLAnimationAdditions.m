@@ -21,6 +21,40 @@ BOOL RCLIsInAnimatedSignal (void) {
 	return RCLSignalAnimationLevel > 0;
 }
 
+#ifndef __IPHONE_OS_VERSION_MIN_REQUIRED
+
+// The current animation stack.
+//
+// This should only be used while on the main thread.
+static NSMutableArray *RCLSignalAnimationStack = nil;
+
+CAAnimation * RCLCurrentAnimation(void) {
+	if (![NSThread isMainThread]) return nil;
+
+	return RCLSignalAnimationStack.lastObject;
+}
+
+// Pushes the given animation on to the animation stack.
+//
+// animation - The animation to push on to the stack. Cannot be nil.
+//
+// Returns nothing.
+static void RCLPushAnimation(CAAnimation *animation) {	
+	if (![NSThread isMainThread]) return;
+
+	if (RCLSignalAnimationStack == nil) RCLSignalAnimationStack = [NSMutableArray array];
+	[RCLSignalAnimationStack addObject:animation];
+}
+
+// Pops the top-most animation off the animation stack.
+static void RCLPopAnimation(void) {
+	if (![NSThread isMainThread]) return;
+
+	[RCLSignalAnimationStack removeLastObject];
+}
+
+#endif
+
 // Animates the given signal.
 //
 // self        - The signal to animate.
@@ -181,5 +215,36 @@ static RACSignal *animateWithDuration (RACSignal *self, NSTimeInterval *duration
 		}];
 	}] setNameWithFormat:@"[%@] -completeWithAnimation", self.name];
 }
+
+#ifndef __IPHONE_OS_VERSION_MIN_REQUIRED
+
+- (RACSignal *)animateWithAnimation:(CAAnimation *)animation {
+	NSParameterAssert(animation != nil);
+
+	return [RACSignal createSignal:^(id<RACSubscriber> subscriber) {
+		return [self subscribeNext:^(id value) {
+			++RCLSignalAnimationLevel;
+			@onExit {
+				NSCAssert(RCLSignalAnimationLevel > 0, @"Unbalanced decrement of RCLSignalAnimationLevel");
+				--RCLSignalAnimationLevel;
+			};
+
+			RCLPushAnimation(animation);
+			@onExit {
+				RCLPopAnimation();
+			};
+
+			[NSAnimationContext runAnimationGroup:^(NSAnimationContext *context) {
+				[subscriber sendNext:value];
+			} completionHandler:nil];
+		} error:^(NSError *error) {
+			[subscriber sendError:error];
+		} completed:^{
+			[subscriber sendCompleted];
+		}];
+	}];
+}
+
+#endif
 
 @end
