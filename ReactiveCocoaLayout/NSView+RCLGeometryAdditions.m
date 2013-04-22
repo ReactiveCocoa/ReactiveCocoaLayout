@@ -146,10 +146,19 @@
 }
 
 - (RACSignal *)rcl_baselineSignal {
-	return [[RACSignal
+	RACSubject *deallocSubject = [RACReplaySubject replaySubjectWithCapacity:1];
+	[self rac_addDeallocDisposable:[RACDisposable disposableWithBlock:^{
+		[deallocSubject sendCompleted];
+	}]];
+
+	@unsafeify(self);
+
+	return [[[RACSignal
 		defer:^{
+			@strongify(self);
 			return [RACSignal return:@(self.baselineOffsetFromBottom)];
 		}]
+		takeUntil:deallocSubject]
 		setNameWithFormat:@"%@ -rcl_baselineSignal", self];
 }
 
