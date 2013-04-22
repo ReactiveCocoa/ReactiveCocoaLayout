@@ -31,6 +31,13 @@ describe(@"NSTextField", ^{
 		it(@"should send the baseline", ^{
 			expect([[field.rcl_baselineSignal first] doubleValue]).to.equal(baseline);
 		});
+
+		it(@"should defer reading baseline", ^{
+			RACSignal *signal = field.rcl_baselineSignal;
+
+			field.font = [NSFont systemFontOfSize:144];
+			expect([[signal first] doubleValue]).notTo.equal(baseline);
+		});
 	});
 });
 
