@@ -21,6 +21,40 @@ BOOL RCLIsInAnimatedSignal (void) {
 	return RCLSignalAnimationLevel > 0;
 }
 
+#ifndef __IPHONE_OS_VERSION_MIN_REQUIRED
+
+// The current animation stack.
+//
+// This should only be used while on the main thread.
+static NSMutableArray *RCLSignalAnimationStack = nil;
+
+CAAnimation * RCLCurrentAnimation(void) {
+	if (![NSThread isMainThread]) return nil;
+
+	return RCLSignalAnimationStack.lastObject;
+}
+
+// Pushes the given animation on to the animation stack.
+//
+// animation - The animation to push on to the stack. Cannot be nil.
+//
+// Returns nothing.
+static void RCLPushAnimation(CAAnimation *animation) {	
+	if (![NSThread isMainThread]) return;
+
+	if (RCLSignalAnimationStack == nil) RCLSignalAnimationStack = [NSMutableArray array];
+	[RCLSignalAnimationStack addObject:animation];
+}
+
+// Pops the top-most animation off the animation stack.
+static void RCLPopAnimation(void) {
+	if (![NSThread isMainThread]) return;
+
+	[RCLSignalAnimationStack removeLastObject];
+}
+
+#endif
+
 // Animates the given signal.
 //
 // self        - The signal to animate.
@@ -181,5 +215,129 @@ static RACSignal *animateWithDuration (RACSignal *self, NSTimeInterval *duration
 		}];
 	}] setNameWithFormat:@"[%@] -completeWithAnimation", self.name];
 }
+
+#ifndef __IPHONE_OS_VERSION_MIN_REQUIRED
+
+- (RACSignal *)animateWithAnimation:(CAAnimation *)animation {
+	NSParameterAssert(animation != nil);
+
+	return [RACSignal createSignal:^(id<RACSubscriber> subscriber) {
+		return [self subscribeNext:^(id value) {
+			++RCLSignalAnimationLevel;
+			@onExit {
+				NSCAssert(RCLSignalAnimationLevel > 0, @"Unbalanced decrement of RCLSignalAnimationLevel");
+				--RCLSignalAnimationLevel;
+			};
+
+			RCLPushAnimation(animation);
+			@onExit {
+				RCLPopAnimation();
+			};
+
+			[NSAnimationContext runAnimationGroup:^(NSAnimationContext *context) {
+				[subscriber sendNext:value];
+			} completionHandler:nil];
+		} error:^(NSError *error) {
+			[subscriber sendError:error];
+		} completed:^{
+			[subscriber sendCompleted];
+		}];
+	}];
+}
+
+static CGSize RCLInterpolateSize(CGSize startSize, CGSize endSize, CGFloat t) {
+	return CGSizeMake(startSize.width + t * (endSize.width - startSize.width), startSize.height + t * (endSize.height - startSize.height));
+}
+
+static CGPoint RCLInterpolatePoint(CGPoint startPoint, CGPoint endPoint, CGFloat t) {
+	return CGPointMake(startPoint.x + t * (endPoint.x - startPoint.x), startPoint.y + t * (endPoint.y - startPoint.y));
+}
+
+static id RCLInterpolateValue(id startValue, id endValue, CGFloat t) {
+	NSCAssert([startValue class] == [endValue class], @"Start value class (%@) does not match end value class (%@).", [startValue class], [endValue class]);
+	
+	if ([startValue isKindOfClass:NSValue.class]) {
+		NSValue *start = startValue;
+		NSValue *end = endValue;
+		if (start.med_geometryStructType == MEDGeometryStructTypeRect) {
+			CGRect startRect = start.med_rectValue;
+			CGRect endRect = end.med_rectValue;
+			CGPoint newPoint = RCLInterpolatePoint(startRect.origin, endRect.origin, t);
+			CGSize newSize = RCLInterpolateSize(startRect.size, endRect.size, t);
+			CGRect newRect = (CGRect){ .origin = newPoint, .size = newSize };
+			return MEDBox(newRect);
+		} else if (start.med_geometryStructType == MEDGeometryStructTypeSize) {
+			return MEDBox(RCLInterpolateSize(start.med_sizeValue, end.med_sizeValue, t));
+		} else if (start.med_geometryStructType == MEDGeometryStructTypePoint) {
+			return MEDBox(RCLInterpolatePoint(start.med_pointValue, end.med_pointValue, t));
+		} else {
+			NSCAssert(NO, @"%@ is of an unhandled type (%@).", startValue, [startValue class]);
+		}
+	} else if ([startValue isKindOfClass:NSNumber.class]) {
+		NSNumber *start = startValue;
+		NSNumber *end = endValue;
+		return @(start.doubleValue + t * (end.doubleValue - start.doubleValue));
+	} else {
+		NSCAssert(NO, @"%@ is of an unhandled type (%@).", startValue, [startValue class]);
+	}
+
+	return nil;
+}
+
+RCLInterpolationBlock RCLBounceInterpolation(void) {
+	return ^(CGFloat progress) {
+		CGFloat zeta = 0.33;
+		CGFloat omega = 20.0;
+		CGFloat beta = sqrt(1 - zeta * zeta);
+		CGFloat phi = atan(beta / zeta);
+		return 1.0 + -1.0 / beta * exp(-zeta * omega * progress) * sin(beta * omega * progress + phi);
+	};
+}
+
+- (RACSignal *)animateWithDuration:(NSTimeInterval)duration start:(id)start interpolate:(RCLInterpolationBlock)interpolate {
+	NSParameterAssert(start != nil);
+	NSParameterAssert(interpolate != NULL);
+
+	return [RACSignal createSignal:^(id<RACSubscriber> subscriber) {
+		__block id lastValue = start;
+		return [self subscribeNext:^(id value) {
+			CAKeyframeAnimation *animation = [CAKeyframeAnimation animation];
+
+			const NSUInteger stepCount = (NSUInteger)ceil(60 * duration);
+			NSMutableArray *steps = [NSMutableArray arrayWithCapacity:stepCount];
+			for (NSUInteger i = 0; i < stepCount; i++) {
+				CGFloat progress = i / (CGFloat)stepCount;
+				CGFloat t = interpolate(progress);
+				[steps addObject:RCLInterpolateValue(lastValue, value, t)];
+			}
+
+			animation.values = steps;
+			animation.duration = duration;
+
+			++RCLSignalAnimationLevel;
+			@onExit {
+				NSCAssert(RCLSignalAnimationLevel > 0, @"Unbalanced decrement of RCLSignalAnimationLevel");
+				--RCLSignalAnimationLevel;
+			};
+
+			RCLPushAnimation(animation);
+			@onExit {
+				RCLPopAnimation();
+			};
+
+			[NSAnimationContext runAnimationGroup:^(NSAnimationContext *context) {
+				[subscriber sendNext:value];
+			} completionHandler:nil];
+
+			lastValue = value;
+		} error:^(NSError *error) {
+			[subscriber sendError:error];
+		} completed:^{
+			[subscriber sendCompleted];
+		}];
+	}];
+}
+
+#endif
 
 @end

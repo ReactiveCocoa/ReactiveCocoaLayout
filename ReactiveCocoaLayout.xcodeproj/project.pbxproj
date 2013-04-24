@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		88BFE466171F590200B7CE40 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D06C9F40167D9AD300276090 /* QuartzCore.framework */; };
 		D005A2CE169A3C8200A9D2DB /* ReactiveCocoaLayout.h in Headers */ = {isa = PBXBuildFile; fileRef = D0BB24811678772C005E9371 /* ReactiveCocoaLayout.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D005A2CF169A3C8C00A9D2DB /* RACSignal+RCLAnimationAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = D037FEF21696ED02002D0CBA /* RACSignal+RCLAnimationAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D005A2D0169A3C8C00A9D2DB /* RACSignal+RCLGeometryAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = D0BB2630167887C3005E9371 /* RACSignal+RCLGeometryAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -343,6 +344,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				88BFE466171F590200B7CE40 /* QuartzCore.framework in Frameworks */,
 				D0BB248B1678772C005E9371 /* SenTestingKit.framework in Frameworks */,
 				D0BB248C1678772C005E9371 /* Cocoa.framework in Frameworks */,
 				D0BB248F1678772C005E9371 /* ReactiveCocoaLayout.framework in Frameworks */,

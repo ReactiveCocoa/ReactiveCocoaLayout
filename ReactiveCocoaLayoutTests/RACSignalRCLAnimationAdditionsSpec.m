@@ -54,6 +54,18 @@ describe(@"RCLIsInAnimatedSignal()", ^{
 			}]
 			toArray];
 	});
+
+	it(@"should be true from nexts of -animateWithAnimation:", ^{
+		[[[[baseSignal animateWithAnimation:[CAAnimation animation]]
+			doNext:^(id x) {
+				expect(x).to.equal(@0);
+				expect(RCLIsInAnimatedSignal()).to.beTruthy();
+			}]
+			doCompleted:^{
+				expect(RCLIsInAnimatedSignal()).to.beFalsy();
+			}]
+			toArray];
+	});
 });
 
 describe(@"-doAnimationCompleted:", ^{
@@ -93,6 +105,24 @@ describe(@"-doAnimationCompleted:", ^{
 
 		expect(animationCompleted).to.beTruthy();
 		expect(signalCompleted).to.beTruthy();
+	});
+
+	it(@"should trigger when a custom animation completes", ^{
+		__block BOOL animationCompleted = NO;
+		__block BOOL signalCompleted = NO;
+
+		[[[baseSignal
+			animateWithAnimation:[CAAnimation animation]]
+			doAnimationCompleted:^(id x) {
+				animationCompleted = YES;
+			}]
+			subscribeCompleted:^{
+				signalCompleted = YES;
+			}];
+
+		expect(signalCompleted).to.beTruthy();
+		expect(animationCompleted).to.beFalsy();
+		expect(animationCompleted).will.beTruthy();
 	});
 });
 
