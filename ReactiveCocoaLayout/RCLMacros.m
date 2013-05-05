@@ -49,28 +49,10 @@
 - (RACSignal *)rectSignalFromBindings:(NSDictionary *)bindings {
 	NSParameterAssert(bindings != nil);
 
-	// Width and height attributes need to be applied before others, since they
-	// may affect coordinate calculations.
-	BOOL (^layoutAttributeIsForSize)(NSLayoutAttribute) = ^ BOOL (NSLayoutAttribute attribute) {
-		return attribute == NSLayoutAttributeWidth || attribute == NSLayoutAttributeHeight;
-	};
+	__block RACSignal *signal = [self.view rcl_intrinsicBoundsSignal];
 
-	NSArray *sortedAttributes = [bindings.allKeys sortedArrayUsingComparator:^(NSNumber *attribA, NSNumber *attribB) {
-		NSAssert([attribA isKindOfClass:NSNumber.class], @"Layout binding key is not an NSLayoutAttribute: %@", attribA);
-		NSAssert([attribB isKindOfClass:NSNumber.class], @"Layout binding key is not an NSLayoutAttribute: %@", attribB);
-
-		if (layoutAttributeIsForSize(attribA.integerValue)) {
-			return NSOrderedAscending;
-		} else if (layoutAttributeIsForSize(attribB.integerValue)) {
-			return NSOrderedDescending;
-		} else {
-			return NSOrderedSame;
-		}
-	}];
-
-	RACSignal *signal = [self.view rcl_intrinsicBoundsSignal];
-	for (NSNumber *attribute in sortedAttributes) {
-		id value = bindings[attribute];
+	[bindings enumerateKeysAndObjectsUsingBlock:^(NSNumber *attribute, id value, BOOL *stop) {
+		NSAssert([attribute isKindOfClass:NSNumber.class], @"Layout binding key is not an NSLayoutAttribute: %@", attribute);
 
 		if ([value isKindOfClass:NSValue.class]) {
 			value = [RACSignal return:value];
@@ -78,7 +60,7 @@
 
 		NSAssert([value isKindOfClass:RACSignal.class], @"Layout binding value is not a signal or geometry value: %@", value);
 		signal = [signal alignAttribute:attribute.integerValue to:value];
-	}
+	}];
 
 	return signal;
 }
