@@ -226,13 +226,12 @@ sharedExamplesFor(ViewExamples, ^(NSDictionary *_) {
 	});
 
 	describe(@"RCLMacros", ^{
-		it(@"should bind", ^{
-			RAC(view, rcl_frame) = RCLAlign(
-				RACSignal.zeroRect,
-				left([RACSignal return:@5]),
-				right([RACSignal return:@15]),
-				height([RACSignal return:@30])
-			);
+		it(@"should bind constant values", ^{
+			RCLFrame(view) = @{
+				rcl_left: @5,
+				rcl_right: @15,
+				rcl_height: @30,
+			};
 
 			expect(view.frame).to.equal(CGRectMake(5, 0, 10, 30));
 		});
