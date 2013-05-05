@@ -227,8 +227,9 @@ sharedExamplesFor(ViewExamples, ^(NSDictionary *_) {
 
 	describe(@"RCLMacros", ^{
 		it(@"should bind constant values", ^{
+			[view invalidateAndSetIntrinsicContentSize:CGSizeMake(10, 20)];
+
 			RCLFrame(view) = @{
-				rcl_left: @5,
 				rcl_right: @15,
 				rcl_height: @30,
 			};
