@@ -49,35 +49,79 @@
 - (RACSignal *)rectSignalFromBindings:(NSDictionary *)bindings {
 	NSParameterAssert(bindings != nil);
 
-	// Width and height attributes need to be applied before others, since they
-	// may affect coordinate calculations.
-	BOOL (^layoutAttributeIsForSize)(NSLayoutAttribute) = ^ BOOL (NSLayoutAttribute attribute) {
-		return attribute == NSLayoutAttributeWidth || attribute == NSLayoutAttributeHeight;
-	};
-
-	NSArray *sortedAttributes = [bindings.allKeys sortedArrayUsingComparator:^(NSNumber *attribA, NSNumber *attribB) {
-		NSAssert([attribA isKindOfClass:NSNumber.class], @"Layout binding key is not an NSLayoutAttribute: %@", attribA);
-		NSAssert([attribB isKindOfClass:NSNumber.class], @"Layout binding key is not an NSLayoutAttribute: %@", attribB);
-
-		if (layoutAttributeIsForSize(attribA.integerValue)) {
-			return NSOrderedAscending;
-		} else if (layoutAttributeIsForSize(attribB.integerValue)) {
-			return NSOrderedDescending;
-		} else {
-			return NSOrderedSame;
-		}
-	}];
+	NSArray *sortedAttributes = [bindings.allKeys sortedArrayUsingSelector:@selector(compare:)];
 
 	RACSignal *signal = [self.view rcl_intrinsicBoundsSignal];
 	for (NSNumber *attribute in sortedAttributes) {
-		id value = bindings[attribute];
-
-		if ([value isKindOfClass:NSValue.class]) {
+		RACSignal *value = bindings[attribute];
+		if (![value isKindOfClass:RACSignal.class]) {
 			value = [RACSignal return:value];
 		}
 
-		NSAssert([value isKindOfClass:RACSignal.class], @"Layout binding value is not a signal or geometry value: %@", value);
-		signal = [signal alignAttribute:attribute.integerValue to:value];
+		NSAssert([attribute isKindOfClass:NSNumber.class], @"Layout binding key is not a RCLAttribute: %@", attribute);
+		switch (attribute.integerValue) {
+			case RCLAttributeRect:
+				signal = [RACSignal combineLatest:@[ signal, value ] reduce:^(NSValue *baseRect, NSValue *overrideRect) {
+					return overrideRect;
+				}];
+
+				break;
+
+			case RCLAttributeSize:
+				signal = [signal replaceSize:value];
+				break;
+
+			case RCLAttributeOrigin:
+				signal = [signal replaceOrigin:value];
+				break;
+
+			case RCLAttributeCenter:
+				signal = [signal alignCenter:value];
+				break;
+
+			case RCLAttributeWidth:
+				signal = [signal alignAttribute:NSLayoutAttributeWidth to:value];
+				break;
+
+			case RCLAttributeHeight:
+				signal = [signal alignAttribute:NSLayoutAttributeHeight to:value];
+				break;
+
+			case RCLAttributeCenterX:
+				signal = [signal alignAttribute:NSLayoutAttributeCenterX to:value];
+				break;
+
+			case RCLAttributeCenterY:
+				signal = [signal alignAttribute:NSLayoutAttributeCenterY to:value];
+				break;
+
+			case RCLAttributeBottom:
+				signal = [signal alignAttribute:NSLayoutAttributeBottom to:value];
+				break;
+
+			case RCLAttributeRight:
+				signal = [signal alignAttribute:NSLayoutAttributeRight to:value];
+				break;
+
+			case RCLAttributeTop:
+				signal = [signal alignAttribute:NSLayoutAttributeTop to:value];
+				break;
+
+			case RCLAttributeLeft:
+				signal = [signal alignAttribute:NSLayoutAttributeLeft to:value];
+				break;
+
+			case RCLAttributeTrailing:
+				signal = [signal alignAttribute:NSLayoutAttributeTrailing to:value];
+				break;
+
+			case RCLAttributeLeading:
+				signal = [signal alignAttribute:NSLayoutAttributeLeading to:value];
+				break;
+
+			default:
+				NSAssert(NO, @"Unrecognized RCLAttribute: %@", attribute);
+		}
 	}
 
 	return signal;

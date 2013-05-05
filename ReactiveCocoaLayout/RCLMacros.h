@@ -17,12 +17,20 @@
 #define RCLAlignment(VIEW) \
 	[RCLRectAssignmentTrampoline trampolineWithView:(VIEW)][@"rcl_alignmentRect"]
 
-#define rcl_left @(NSLayoutAttributeLeft)
-#define rcl_right @(NSLayoutAttributeRight)
-#define rcl_top @(NSLayoutAttributeTop)
-#define rcl_bottom @(NSLayoutAttributeBottom)
-#define rcl_width @(NSLayoutAttributeWidth)
-#define rcl_height @(NSLayoutAttributeHeight)
+#define rcl_left @(RCLAttributeLeft)
+#define rcl_right @(RCLAttributeRight)
+#define rcl_top @(RCLAttributeTop)
+#define rcl_bottom @(RCLAttributeBottom)
+#define rcl_leading @(RCLAttributeLeading)
+#define rcl_trailing @(RCLAttributeTrailing)
+#define rcl_width @(RCLAttributeWidth)
+#define rcl_height @(RCLAttributeHeight)
+#define rcl_centerX @(RCLAttributeCenterX)
+#define rcl_centerY @(RCLAttributeCenterY)
+#define rcl_center @(RCLAttributeCenter)
+#define rcl_rect @(RCLAttributeRect)
+#define rcl_size @(RCLAttributeSize)
+#define rcl_origin @(RCLAttributeOrigin)
 
 @interface RCLRectAssignmentTrampoline : NSObject
 
@@ -36,3 +44,22 @@
 - (void)setObject:(NSDictionary *)attributes forKeyedSubscript:(NSString *)property;
 
 @end
+
+typedef enum : NSInteger {
+	// Order is important here! It determines the order in which attributes are
+	// applied (and overwritten) in a binding.
+	RCLAttributeRect,
+	RCLAttributeSize,
+	RCLAttributeHeight,
+	RCLAttributeWidth,
+	RCLAttributeOrigin,
+	RCLAttributeCenter,
+	RCLAttributeCenterX,
+	RCLAttributeCenterY,
+	RCLAttributeBottom,
+	RCLAttributeRight,
+	RCLAttributeTop,
+	RCLAttributeLeft,
+	RCLAttributeTrailing,
+	RCLAttributeLeading,
+} RCLAttribute;
