@@ -2,7 +2,7 @@
 
 ReactiveCocoaLayout is a framework for describing Cocoa and Cocoa Touch layouts
 in a reactive way, based on
-[ReactiveCocoa](https://github.com/github/ReactiveCocoa).
+[ReactiveCocoa](https://github.com/ReactiveCocoa/ReactiveCocoa).
 
 This framework is very much a work in progress at the moment, and should be
 considered **alpha quality**. Breaking changes may happen often during this
@@ -20,7 +20,7 @@ RCL intends to offer the following advantages over Auto Layout:
    better encapsulation (no global priorities!) and less complexity.
    Bidirectional relationships are still possible, but must be made explicit.
  * **Conditional layouts at runtime.** RCL is built on the full power
-   of [ReactiveCocoa](https://github.com/github/ReactiveCocoa), and signals can
+   of [ReactiveCocoa](https://github.com/ReactiveCocoa/ReactiveCocoa), and signals can
    be composed to dynamically disable and re-enable entire layout chains (like
    when you want to hide and show views) without actually modifying them.
  * **Implicit animations.** To animate the setting of a view's frame, simply add
@@ -51,4 +51,4 @@ It may also be necessary to disable Parallel Builds in the target's build scheme
 ## License
 
 ReactiveCocoaLayout is released under the MIT license. See
-[LICENSE.md](https://github.com/github/ReactiveCocoaLayout/blob/master/LICENSE.md).
+[LICENSE.md](https://github.com/ReactiveCocoa/ReactiveCocoaLayout/blob/master/LICENSE.md).
