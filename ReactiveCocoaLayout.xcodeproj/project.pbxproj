@@ -71,6 +71,10 @@
 		D0BB25EB16788579005E9371 /* NSNotificationCenter+RACSupport.m in Sources */ = {isa = PBXBuildFile; fileRef = D0BB25E916788579005E9371 /* NSNotificationCenter+RACSupport.m */; };
 		D0BB2632167887C3005E9371 /* RACSignal+RCLGeometryAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = D0BB2630167887C3005E9371 /* RACSignal+RCLGeometryAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D0BB2633167887C3005E9371 /* RACSignal+RCLGeometryAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = D0BB2631167887C3005E9371 /* RACSignal+RCLGeometryAdditions.m */; };
+		D0C20EF51736398700115B19 /* RCLMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = D0C20EF41736398700115B19 /* RCLMacros.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D0C20EF61736398700115B19 /* RCLMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = D0C20EF41736398700115B19 /* RCLMacros.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D0C20EF817363A6500115B19 /* RCLMacros.m in Sources */ = {isa = PBXBuildFile; fileRef = D0C20EF717363A6500115B19 /* RCLMacros.m */; };
+		D0C20EF917363A6500115B19 /* RCLMacros.m in Sources */ = {isa = PBXBuildFile; fileRef = D0C20EF717363A6500115B19 /* RCLMacros.m */; };
 		D0ED89F416814D800041A188 /* RACSignal+RCLWritingDirectionAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = D0ED89F216814D800041A188 /* RACSignal+RCLWritingDirectionAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D0ED89F516814D800041A188 /* RACSignal+RCLWritingDirectionAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = D0ED89F316814D800041A188 /* RACSignal+RCLWritingDirectionAdditions.m */; };
 		D0ED89F616814D800041A188 /* RACSignal+RCLWritingDirectionAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = D0ED89F316814D800041A188 /* RACSignal+RCLWritingDirectionAdditions.m */; };
@@ -292,6 +296,8 @@
 		D0BB25E916788579005E9371 /* NSNotificationCenter+RACSupport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSNotificationCenter+RACSupport.m"; path = "External/ReactiveCocoa/RACExtensions/NSNotificationCenter+RACSupport.m"; sourceTree = "<group>"; };
 		D0BB2630167887C3005E9371 /* RACSignal+RCLGeometryAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RACSignal+RCLGeometryAdditions.h"; sourceTree = "<group>"; };
 		D0BB2631167887C3005E9371 /* RACSignal+RCLGeometryAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RACSignal+RCLGeometryAdditions.m"; sourceTree = "<group>"; };
+		D0C20EF41736398700115B19 /* RCLMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCLMacros.h; sourceTree = "<group>"; };
+		D0C20EF717363A6500115B19 /* RCLMacros.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCLMacros.m; sourceTree = "<group>"; };
 		D0ED89F216814D800041A188 /* RACSignal+RCLWritingDirectionAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RACSignal+RCLWritingDirectionAdditions.h"; sourceTree = "<group>"; };
 		D0ED89F316814D800041A188 /* RACSignal+RCLWritingDirectionAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RACSignal+RCLWritingDirectionAdditions.m"; sourceTree = "<group>"; };
 		D0ED89F7168150030041A188 /* RACSignalRCLWritingDirectionAdditionsSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RACSignalRCLWritingDirectionAdditionsSpec.m; sourceTree = "<group>"; };
@@ -450,6 +456,7 @@
 			children = (
 				D0BB24811678772C005E9371 /* ReactiveCocoaLayout.h */,
 				D0BB262F16788758005E9371 /* Signals */,
+				D0C20EED1736393A00115B19 /* Declarative Layouts */,
 				D0513918167F106800334374 /* Auto Layout Extensions */,
 				D0BB24E6167879E6005E9371 /* AppKit Extensions */,
 				D0FD5A951679E758003C3210 /* UIKit Extensions */,
@@ -611,6 +618,15 @@
 			name = Signals;
 			sourceTree = "<group>";
 		};
+		D0C20EED1736393A00115B19 /* Declarative Layouts */ = {
+			isa = PBXGroup;
+			children = (
+				D0C20EF41736398700115B19 /* RCLMacros.h */,
+				D0C20EF717363A6500115B19 /* RCLMacros.m */,
+			);
+			name = "Declarative Layouts";
+			sourceTree = "<group>";
+		};
 		D0FD5A951679E758003C3210 /* UIKit Extensions */ = {
 			isa = PBXGroup;
 			children = (
@@ -633,6 +649,7 @@
 				D005A2D1169A3C8C00A9D2DB /* RACSignal+RCLWritingDirectionAdditions.h in Headers */,
 				D005A2D2169A3C8C00A9D2DB /* View+RCLAutoLayoutAdditions.h in Headers */,
 				D005A2D6169A3C8C00A9D2DB /* UIView+RCLGeometryAdditions.h in Headers */,
+				D0C20EF61736398700115B19 /* RCLMacros.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -648,6 +665,7 @@
 				D096C4EF16917B140071C6D6 /* NSControl+RCLGeometryAdditions.h in Headers */,
 				D096C51816917BA60071C6D6 /* NSCell+RCLGeometryAdditions.h in Headers */,
 				D037FEF41696ED02002D0CBA /* RACSignal+RCLAnimationAdditions.h in Headers */,
+				D0C20EF51736398700115B19 /* RCLMacros.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -931,6 +949,7 @@
 				D096C4C216917A7A0071C6D6 /* EXTRuntimeExtensions.m in Sources */,
 				D096C4C516917A7A0071C6D6 /* EXTScope.m in Sources */,
 				D037FEF61696ED02002D0CBA /* RACSignal+RCLAnimationAdditions.m in Sources */,
+				D0C20EF917363A6500115B19 /* RCLMacros.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -961,6 +980,7 @@
 				D096C4F016917B140071C6D6 /* NSControl+RCLGeometryAdditions.m in Sources */,
 				D096C51916917BA60071C6D6 /* NSCell+RCLGeometryAdditions.m in Sources */,
 				D037FEF51696ED02002D0CBA /* RACSignal+RCLAnimationAdditions.m in Sources */,
+				D0C20EF817363A6500115B19 /* RCLMacros.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
