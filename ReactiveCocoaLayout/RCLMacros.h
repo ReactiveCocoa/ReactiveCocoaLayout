@@ -8,31 +8,21 @@
 
 #import <ReactiveCocoa/metamacros.h>
 
-#define RCLFrame(VIEW) \
-	[RCLRectAssignmentTrampoline trampolineWithView:(VIEW)][@"rcl_frame"]
+#define RCLAlign(RECTS, ...) \
+	(^ RACSignal * (RACSignal *rcl_signal_) { \
+		metamacro_foreach_concat(RCLAlign_,, __VA_ARGS__) \
+		\
+		return rcl_signal_; \
+	})(RECTS)
 
-#define RCLBounds(VIEW) \
-	[RCLRectAssignmentTrampoline trampolineWithView:(VIEW)][@"rcl_bounds"]
+#define RCLAlign_left(SIGNAL) \
+	rcl_signal_ = [rcl_signal_ alignAttribute:NSLayoutAttributeLeft to:(SIGNAL)];
 
-#define RCLAlignment(VIEW) \
-	[RCLRectAssignmentTrampoline trampolineWithView:(VIEW)][@"rcl_alignmentRect"]
+#define RCLAlign_right(SIGNAL) \
+	rcl_signal_ = [rcl_signal_ alignAttribute:NSLayoutAttributeRight to:(SIGNAL)];
 
-#define rcl_left @(NSLayoutAttributeLeft)
-#define rcl_right @(NSLayoutAttributeRight)
-#define rcl_top @(NSLayoutAttributeTop)
-#define rcl_bottom @(NSLayoutAttributeBottom)
-#define rcl_width @(NSLayoutAttributeWidth)
-#define rcl_height @(NSLayoutAttributeHeight)
+#define RCLAlign_width(SIGNAL) \
+	rcl_signal_ = [rcl_signal_ alignAttribute:NSLayoutAttributeWidth to:(SIGNAL)];
 
-@interface RCLRectAssignmentTrampoline : NSObject
-
-#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
-+ (instancetype)trampolineWithView:(UIView *)view;
-#elif TARGET_OS_MAC
-+ (instancetype)trampolineWithView:(NSView *)view;
-#endif
-
-- (RACSignal *)objectForKeyedSubscript:(NSString *)property;
-- (void)setObject:(NSDictionary *)attributes forKeyedSubscript:(NSString *)property;
-
-@end
+#define RCLAlign_height(SIGNAL) \
+	rcl_signal_ = [rcl_signal_ alignAttribute:NSLayoutAttributeHeight to:(SIGNAL)];
