@@ -1,0 +1,44 @@
+#!/bin/bash
+
+SCRIPT_DIR=$(dirname "$0")
+cd "$SCRIPT_DIR/.."
+
+##
+## Configuration Variables
+##
+
+# The build configuration to use.
+if [ -z "$XCCONFIGURATION" ]
+then
+    XCCONFIGURATION="Release"
+fi
+
+# A bootstrap script to run before building.
+#
+# If this file does not exist, it is not considered an error.
+BOOTSTRAP="$SCRIPT_DIR/bootstrap"
+
+# Extra build settings to pass to xcodebuild.
+XCODEBUILD_SETTINGS=
+
+##
+## Build Process
+##
+
+if [ -f "$BOOTSTRAP" ]
+then
+    echo "*** Bootstrapping..."
+    bash "$BOOTSTRAP" || exit $?
+fi
+
+echo "*** Building framework..."
+xcodebuild -workspace ReactiveCocoaLayout.xcworkspace -configuration "$XCCONFIGURATION" -scheme "ReactiveCocoaLayout Mac" clean test OBJROOT="$PWD/build" SYMROOT="$PWD/build" $XCODEBUILD_SETTINGS || exit $?
+xcodebuild -workspace ReactiveCocoaLayout.xcworkspace -configuration "$XCCONFIGURATION" -scheme "ReactiveCocoaLayout iOS" clean build OBJROOT="$PWD/build" SYMROOT="$PWD/build" $XCODEBUILD_SETTINGS || exit $?
+
+echo "*** Building demos..."
+
+cd Demos/DeviceRotation
+xcodebuild -configuration "$XCCONFIGURATION" -scheme "DeviceRotation" -sdk iphonesimulator build OBJROOT="$PWD/build" SYMROOT="$PWD/build" $XCODEBUILD_SETTINGS || exit $?
+
+cd ../ResizingWindow
+xcodebuild -configuration "$XCCONFIGURATION" -scheme "ResizingWindow" build OBJROOT="$PWD/build" SYMROOT="$PWD/build" $XCODEBUILD_SETTINGS || exit $?
