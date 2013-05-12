@@ -60,19 +60,60 @@
 #define RCLAlignment(VIEW) \
 	[RCLRectAssignmentTrampoline trampolineWithView:(VIEW)][@"rcl_alignmentRect"]
 
+// Corresponds to a CGFloat or a signal thereof, which represents the position
+// to align the left side of the rectangle to.
 #define rcl_left @(RCLAttributeLeft)
+
+// Corresponds to a CGFloat or a signal thereof, which represents the position
+// to align the right side of the rectangle to.
 #define rcl_right @(RCLAttributeRight)
+
+// Corresponds to a CGFloat or a signal thereof, which represents the position
+// to align the top side of the rectangle to.
 #define rcl_top @(RCLAttributeTop)
+
+// Corresponds to a CGFloat or a signal thereof, which represents the position
+// to align the bottom side of the rectangle to.
 #define rcl_bottom @(RCLAttributeBottom)
+
+// Corresponds to a CGFloat or a signal thereof, which represents the position
+// to align the leading side of the rectangle to.
 #define rcl_leading @(RCLAttributeLeading)
+
+// Corresponds to a CGFloat or a signal thereof, which represents the position
+// to align the trailing side of the rectangle to.
 #define rcl_trailing @(RCLAttributeTrailing)
+
+// Corresponds to a CGFloat or a signal thereof, which represents the new width
+// for the rectangle.
 #define rcl_width @(RCLAttributeWidth)
+
+// Corresponds to a CGFloat or a signal thereof, which represents the new height
+// for the rectangle.
 #define rcl_height @(RCLAttributeHeight)
+
+// Corresponds to a CGFloat or a signal thereof, which represents the X position
+// to align the center of the rectangle to.
 #define rcl_centerX @(RCLAttributeCenterX)
+
+// Corresponds to a CGFloat or a signal thereof, which represents the Y position
+// to align the center of the rectangle to.
 #define rcl_centerY @(RCLAttributeCenterY)
+
+// Corresponds to a CGPoint or a signal thereof, which represents the position
+// to align the center of the rectangle to.
 #define rcl_center @(RCLAttributeCenter)
+
+// Corresponds to a CGRect or a signal thereof, which represents the rectangle
+// to use for layout.
 #define rcl_rect @(RCLAttributeRect)
+
+// Corresponds to a CGSize or a signal thereof, which represents the new size
+// for the rectangle.
 #define rcl_size @(RCLAttributeSize)
+
+// Corresponds to a CGPoint or a signal thereof, which represents the new origin
+// for the rectangle.
 #define rcl_origin @(RCLAttributeOrigin)
 
 @interface RCLRectAssignmentTrampoline : NSObject
@@ -88,6 +129,7 @@
 
 @end
 
+// Do not use this directly. Use the `rcl_` keys above.
 typedef enum : NSInteger {
 	// Order is important here! It determines the order in which attributes are
 	// applied (and overwritten) in a binding.
