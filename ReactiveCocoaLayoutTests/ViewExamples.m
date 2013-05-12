@@ -224,18 +224,6 @@ sharedExamplesFor(ViewExamples, ^(NSDictionary *_) {
 		[subject sendNext:MEDBox(CGRectMake(5, 5, 10, 10))];
 		expect(view.frame).to.equal(CGRectMake(4, 3, 12, 14));
 	});
-
-	describe(@"RCLMacros", ^{
-		it(@"should bind constant values", ^{
-			RCLFrame(view) = @{
-				rcl_rect: MEDBox(CGRectMake(0, 0, 10, 20)),
-				rcl_right: @15,
-				rcl_height: @30,
-			};
-
-			expect(view.frame).to.equal(CGRectMake(5, 0, 10, 30));
-		});
-	});
 });
 
 SharedExampleGroupsEnd

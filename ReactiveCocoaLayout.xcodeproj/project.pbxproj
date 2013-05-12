@@ -16,6 +16,8 @@
 		D02A902116B717AC000DC2DA /* ReactiveCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D02A902016B717AC000DC2DA /* ReactiveCocoa.framework */; };
 		D02A902316B717B3000DC2DA /* libReactiveCocoa-iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D02A902216B717B3000DC2DA /* libReactiveCocoa-iOS.a */; };
 		D02A902516B717C4000DC2DA /* ReactiveCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D02A902016B717AC000DC2DA /* ReactiveCocoa.framework */; };
+		D02B4242173F23AA003E00D0 /* RCLMacrosSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = D02B4241173F23AA003E00D0 /* RCLMacrosSpec.m */; };
+		D02B4243173F23AA003E00D0 /* RCLMacrosSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = D02B4241173F23AA003E00D0 /* RCLMacrosSpec.m */; };
 		D037FEF41696ED02002D0CBA /* RACSignal+RCLAnimationAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = D037FEF21696ED02002D0CBA /* RACSignal+RCLAnimationAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D037FEF51696ED02002D0CBA /* RACSignal+RCLAnimationAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = D037FEF31696ED02002D0CBA /* RACSignal+RCLAnimationAdditions.m */; };
 		D037FEF61696ED02002D0CBA /* RACSignal+RCLAnimationAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = D037FEF31696ED02002D0CBA /* RACSignal+RCLAnimationAdditions.m */; };
@@ -230,6 +232,7 @@
 /* Begin PBXFileReference section */
 		D02A902016B717AC000DC2DA /* ReactiveCocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ReactiveCocoa.framework; path = "../../../../ReactiveCocoaLayout-hagzauzqgqzpvraojalyjhjcqhqx/Build/Products/Debug/ReactiveCocoa.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D02A902216B717B3000DC2DA /* libReactiveCocoa-iOS.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libReactiveCocoa-iOS.a"; path = "External/ReactiveCocoa/ReactiveCocoaFramework/build/Release-iphoneos/libReactiveCocoa-iOS.a"; sourceTree = "<group>"; };
+		D02B4241173F23AA003E00D0 /* RCLMacrosSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCLMacrosSpec.m; sourceTree = "<group>"; };
 		D037FEF21696ED02002D0CBA /* RACSignal+RCLAnimationAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RACSignal+RCLAnimationAdditions.h"; sourceTree = "<group>"; };
 		D037FEF31696ED02002D0CBA /* RACSignal+RCLAnimationAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RACSignal+RCLAnimationAdditions.m"; sourceTree = "<group>"; };
 		D037FEF71696F1FE002D0CBA /* RACSignalRCLAnimationAdditionsSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RACSignalRCLAnimationAdditionsSpec.m; sourceTree = "<group>"; };
@@ -397,6 +400,7 @@
 				D096C51A16917EF30071C6D6 /* NSCellRCLGeometryAdditionsSpec.m */,
 				D096C4EB16917B0D0071C6D6 /* NSControlRCLGeometryAdditionsSpec.m */,
 				D06C9E5A167D8A9A00276090 /* NSViewRCLGeometryAdditionsSpec.m */,
+				D02B4241173F23AA003E00D0 /* RCLMacrosSpec.m */,
 				D037FEF71696F1FE002D0CBA /* RACSignalRCLAnimationAdditionsSpec.m */,
 				D06C9E52167D896000276090 /* RACSignalRCLGeometryAdditionsSpec.m */,
 				D0ED89F7168150030041A188 /* RACSignalRCLWritingDirectionAdditionsSpec.m */,
@@ -963,6 +967,7 @@
 				D0513975167F149F00334374 /* TestView.m in Sources */,
 				D0ED89F9168150030041A188 /* RACSignalRCLWritingDirectionAdditionsSpec.m in Sources */,
 				D037FEF91696F1FE002D0CBA /* RACSignalRCLAnimationAdditionsSpec.m in Sources */,
+				D02B4243173F23AA003E00D0 /* RCLMacrosSpec.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -996,6 +1001,7 @@
 				D096C4EC16917B0D0071C6D6 /* NSControlRCLGeometryAdditionsSpec.m in Sources */,
 				D096C51B16917EF30071C6D6 /* NSCellRCLGeometryAdditionsSpec.m in Sources */,
 				D037FEF81696F1FE002D0CBA /* RACSignalRCLAnimationAdditionsSpec.m in Sources */,
+				D02B4242173F23AA003E00D0 /* RCLMacrosSpec.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
