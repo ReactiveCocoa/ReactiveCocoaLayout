@@ -6,8 +6,6 @@
 //  Copyright (c) 2013 GitHub. All rights reserved.
 //
 
-#import <ReactiveCocoa/metamacros.h>
-
 // Binds a view's frame to a set of attributes which describe different parts of
 // the frame rectangle.
 //
