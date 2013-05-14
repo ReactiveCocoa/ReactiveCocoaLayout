@@ -7,6 +7,7 @@
 //
 
 #import "RCLMacros.h"
+#import "EXTScope.h"
 #import "RACSignal+RCLGeometryAdditions.h"
 #import "View+RCLAutoLayoutAdditions.h"
 
@@ -118,6 +119,25 @@
 			case RCLAttributeLeading:
 				signal = [signal alignAttribute:NSLayoutAttributeLeading to:value];
 				break;
+
+			case RCLAttributeBaseline: {
+				value = [[value publish] autoconnect];
+
+				RACSignal *referenceRect = [[value
+					map:^(id view) {
+						return [view rcl_boundsSignal];
+					}]
+					switchToLatest];
+
+				RACSignal *referenceBaseline = [[value
+					map:^(id view) {
+						return [view rcl_baselineSignal];
+					}]
+					switchToLatest];
+
+				signal = [signal alignBaseline:[self.view rcl_baselineSignal] toBaseline:referenceBaseline ofRect:referenceRect];
+				break;
+			}
 
 			default:
 				NSAssert(NO, @"Unrecognized RCLAttribute: %@", attribute);

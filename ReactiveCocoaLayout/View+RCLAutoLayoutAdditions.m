@@ -11,12 +11,6 @@
 #import "RACSignal+RCLGeometryAdditions.h"
 #import <objc/runtime.h>
 
-#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
-#import "UIView+RCLGeometryAdditions.h"
-#elif TARGET_OS_MAC
-#import "NSView+RCLGeometryAdditions.h"
-#endif
-
 // Associated with a RACSubject which sends -intrinsicContentSize whenever
 // -invalidateIntrinsicContentSize is invoked.
 static void *IntrinsicContentSizeSubjectKey = &IntrinsicContentSizeSubjectKey;

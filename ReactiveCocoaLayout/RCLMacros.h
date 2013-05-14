@@ -24,6 +24,7 @@
 //  4. `rcl_center`
 //  5. `rcl_centerX`, `rcl_centerY`
 //  6. `rcl_left`, `rcl_top`, `rcl_right`, `rcl_bottom`, `rcl_leading`, `rcl_trailing`
+//  7. `rcl_baseline`
 //
 // The relative order of attributes that have the same priority is undefined.
 //
@@ -114,6 +115,10 @@
 // for the rectangle.
 #define rcl_origin @(RCLAttributeOrigin)
 
+// Corresponds to a view or a signal thereof, which will be used to adjust the
+// rectangle so that both views' baselines are aligned.
+#define rcl_baseline @(RCLAttributeBaseline)
+
 @interface RCLRectAssignmentTrampoline : NSObject
 
 #ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
@@ -145,4 +150,5 @@ typedef enum : NSInteger {
 	RCLAttributeLeft,
 	RCLAttributeTrailing,
 	RCLAttributeLeading,
+    RCLAttributeBaseline
 } RCLAttribute;
