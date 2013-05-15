@@ -356,6 +356,80 @@ sharedExamplesFor(MacroExamples, ^(NSDictionary *bindingInfo) {
 			expect(getProperty()).to.equal(rect);
 		});
 	});
+
+	describe(@"rcl_top", ^{
+		__block NSNumber * (^getTop)(void);
+
+		beforeEach(^{
+			rect.origin.y = 7;
+			getTop = ^{
+				#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
+					return @(CGRectGetMinY(rect));
+				#elif TARGET_OS_MAC
+					return @(CGRectGetMaxY(rect));
+				#endif
+			};
+		});
+
+		it(@"should bind to a constant", ^{
+			bind(@{
+				rcl_top: getTop()
+			});
+
+			expect(getProperty()).to.equal(rect);
+		});
+
+		it(@"should bind to a signal", ^{
+			bind(@{
+				rcl_top: values
+			});
+
+			[values sendNext:getTop()];
+			expect(getProperty()).to.equal(rect);
+
+			rect.origin.y = 17;
+
+			[values sendNext:getTop()];
+			expect(getProperty()).to.equal(rect);
+		});
+	});
+
+	describe(@"rcl_bottom", ^{
+		__block NSNumber * (^getBottom)(void);
+
+		beforeEach(^{
+			rect.origin.y = 7;
+			getBottom = ^{
+				#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
+					return @(CGRectGetMaxY(rect));
+				#elif TARGET_OS_MAC
+					return @(CGRectGetMinY(rect));
+				#endif
+			};
+		});
+
+		it(@"should bind to a constant", ^{
+			bind(@{
+				rcl_bottom: getBottom()
+			});
+
+			expect(getProperty()).to.equal(rect);
+		});
+
+		it(@"should bind to a signal", ^{
+			bind(@{
+				rcl_bottom: values
+			});
+
+			[values sendNext:getBottom()];
+			expect(getProperty()).to.equal(rect);
+
+			rect.origin.y = 17;
+
+			[values sendNext:getBottom()];
+			expect(getProperty()).to.equal(rect);
+		});
+	});
 });
 
 SharedExampleGroupsEnd
