@@ -63,10 +63,7 @@
 		NSAssert([attribute isKindOfClass:NSNumber.class], @"Layout binding key is not a RCLAttribute: %@", attribute);
 		switch (attribute.integerValue) {
 			case RCLAttributeRect:
-				signal = [RACSignal combineLatest:@[ signal, value ] reduce:^(NSValue *baseRect, NSValue *overrideRect) {
-					return overrideRect;
-				}];
-
+				signal = value;
 				break;
 
 			case RCLAttributeSize:
