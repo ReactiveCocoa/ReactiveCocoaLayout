@@ -141,6 +141,66 @@ sharedExamplesFor(MacroExamples, ^(NSDictionary *bindingInfo) {
 		});
 	});
 
+	describe(@"rcl_width", ^{
+		it(@"should bind to a constant", ^{
+			CGRect rect = CGRectMake(0, 0, 3, intrinsicSize.height);
+
+			bind(@{
+				rcl_width: @(rect.size.width)
+			});
+
+			expect(getProperty()).to.equal(rect);
+		});
+
+		it(@"should bind to a signal", ^{
+			RACSubject *values = [RACSubject subject];
+
+			bind(@{
+				rcl_width: values
+			});
+
+			CGRect rect = CGRectMake(0, 0, 3, intrinsicSize.height);
+			[values sendNext:@(rect.size.width)];
+
+			expect(getProperty()).to.equal(rect);
+
+			rect.size.width = 7;
+			[values sendNext:@(rect.size.width)];
+
+			expect(getProperty()).to.equal(rect);
+		});
+	});
+
+	describe(@"rcl_height", ^{
+		it(@"should bind to a constant", ^{
+			CGRect rect = CGRectMake(0, 0, intrinsicSize.width, 3);
+
+			bind(@{
+				rcl_height: @(rect.size.height)
+			});
+
+			expect(getProperty()).to.equal(rect);
+		});
+
+		it(@"should bind to a signal", ^{
+			RACSubject *values = [RACSubject subject];
+
+			bind(@{
+				rcl_height: values
+			});
+
+			CGRect rect = CGRectMake(0, 0, intrinsicSize.width, 3);
+			[values sendNext:@(rect.size.height)];
+
+			expect(getProperty()).to.equal(rect);
+
+			rect.size.height = 7;
+			[values sendNext:@(rect.size.height)];
+
+			expect(getProperty()).to.equal(rect);
+		});
+	});
+
 	it(@"should bind constant values", ^{
 		bind(@{
 			rcl_rect: MEDBox(CGRectMake(0, 0, 10, 20)),
