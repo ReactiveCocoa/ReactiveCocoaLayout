@@ -121,6 +121,9 @@
 
 // Corresponds to a view or a signal thereof, which will be used to adjust the
 // rectangle so that both views' baselines are aligned.
+//
+// This should only be used with RCLAlignment, because baseline calculations are
+// always relative to views' alignment rectangles.
 #define rcl_baseline @(RCLAttributeBaseline)
 
 @interface RCLRectAssignmentTrampoline : NSObject
