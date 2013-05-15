@@ -28,6 +28,10 @@
 //
 // The relative order of attributes that have the same priority is undefined.
 //
+// If `rcl_rect` is not specified, the view's `rcl_intrinsicBoundsSignal` is
+// used as the basis for the layout. The provided attributes will simply
+// overwrite parts of the intrinsic bounds, in the order specified above.
+//
 // Examples:
 //
 //  /*
