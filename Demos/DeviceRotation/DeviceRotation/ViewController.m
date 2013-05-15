@@ -74,7 +74,7 @@
 	RCLAlignment(self.nameLabel) = @{
 		rcl_rect: labelRect,
 		rcl_size: self.nameLabel.rcl_intrinsicContentSizeSignal,
-		rcl_baseline: RACAbleWithStart(self.nameTextField)
+		rcl_baseline: self.nameTextField
 	};
 
 	// Animate the initial appearance of the text field, but not any changes due
