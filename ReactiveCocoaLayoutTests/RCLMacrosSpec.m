@@ -295,16 +295,6 @@ sharedExamplesFor(MacroExamples, ^(NSDictionary *bindingInfo) {
 			expect(getProperty()).to.equal(rect);
 		});
 	});
-
-	it(@"should bind constant values", ^{
-		bind(@{
-			rcl_rect: MEDBox(CGRectMake(0, 0, 10, 20)),
-			rcl_right: @15,
-			rcl_height: @30,
-		});
-
-		expect(getProperty()).to.equal(CGRectMake(5, 0, 10, 30));
-	});
 });
 
 SharedExampleGroupsEnd
