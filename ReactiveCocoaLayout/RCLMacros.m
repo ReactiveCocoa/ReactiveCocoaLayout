@@ -9,7 +9,12 @@
 #import "RCLMacros.h"
 #import "EXTScope.h"
 #import "RACSignal+RCLGeometryAdditions.h"
-#import "View+RCLAutoLayoutAdditions.h"
+
+#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
+#import "UIView+RCLGeometryAdditions.h"
+#elif TARGET_OS_MAC
+#import "NSView+RCLGeometryAdditions.h"
+#endif
 
 @interface RCLRectAssignmentTrampoline ()
 

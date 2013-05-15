@@ -7,9 +7,9 @@
 //
 
 #ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
-#import "UIView+RCLGeometryAdditions.h"
+#import <UIKit/UIKit.h>
 #elif TARGET_OS_MAC
-#import "NSView+RCLGeometryAdditions.h"
+#import <AppKit/AppKit.h>
 #endif
 
 @class RACSignal;
