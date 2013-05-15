@@ -29,6 +29,9 @@ sharedExamplesFor(MacroExamples, ^(NSDictionary *bindingInfo) {
 	__block void (^bind)(NSDictionary *);
 	__block CGRect (^getProperty)(void);
 
+	__block CGRect rect;
+	__block RACSubject *values;
+
 	beforeEach(^{
 		view = [[TestView alloc] initWithFrame:CGRectZero];
 		[view invalidateAndSetIntrinsicContentSize:intrinsicSize];
@@ -42,6 +45,9 @@ sharedExamplesFor(MacroExamples, ^(NSDictionary *bindingInfo) {
 			NSValue *boxedRect = [view valueForKey:bindingInfo[MacroPropertyName]];
 			return boxedRect.med_rectValue;
 		} copy];
+
+		rect = (CGRect){ .size = intrinsicSize };
+		values = [RACSubject subject];
 	});
 
 	it(@"should default to the view's intrinsic bounds", ^{
@@ -52,9 +58,11 @@ sharedExamplesFor(MacroExamples, ^(NSDictionary *bindingInfo) {
 	});
 
 	describe(@"rcl_rect", ^{
-		it(@"should bind to a constant", ^{
-			CGRect rect = CGRectMake(1, 7, 13, 21);
+		beforeEach(^{
+			rect = CGRectMake(1, 7, 13, 21);
+		});
 
+		it(@"should bind to a constant", ^{
 			bind(@{
 				rcl_rect: MEDBox(rect)
 			});
@@ -63,28 +71,26 @@ sharedExamplesFor(MacroExamples, ^(NSDictionary *bindingInfo) {
 		});
 
 		it(@"should bind to a signal", ^{
-			RACSubject *values = [RACSubject subject];
-
 			bind(@{
 				rcl_rect: values
 			});
 
-			CGRect rect = CGRectMake(1, 7, 13, 21);
 			[values sendNext:MEDBox(rect)];
-
 			expect(getProperty()).to.equal(rect);
 
 			rect = CGRectMake(2, 3, 4, 5);
-			[values sendNext:MEDBox(rect)];
 
+			[values sendNext:MEDBox(rect)];
 			expect(getProperty()).to.equal(rect);
 		});
 	});
 
 	describe(@"rcl_size", ^{
-		it(@"should bind to a constant", ^{
-			CGRect rect = CGRectMake(0, 0, 13, 21);
+		beforeEach(^{
+			rect.size = CGSizeMake(13, 21);
+		});
 
+		it(@"should bind to a constant", ^{
 			bind(@{
 				rcl_size: MEDBox(rect.size)
 			});
@@ -93,28 +99,26 @@ sharedExamplesFor(MacroExamples, ^(NSDictionary *bindingInfo) {
 		});
 
 		it(@"should bind to a signal", ^{
-			RACSubject *values = [RACSubject subject];
-
 			bind(@{
 				rcl_size: values
 			});
 
-			CGRect rect = CGRectMake(0, 0, 13, 21);
 			[values sendNext:MEDBox(rect.size)];
-
 			expect(getProperty()).to.equal(rect);
 
-			rect = CGRectMake(0, 0, 4, 5);
-			[values sendNext:MEDBox(rect.size)];
+			rect.size = CGSizeMake(4, 5);
 
+			[values sendNext:MEDBox(rect.size)];
 			expect(getProperty()).to.equal(rect);
 		});
 	});
 
 	describe(@"rcl_origin", ^{
-		it(@"should bind to a constant", ^{
-			CGRect rect = { .origin = CGPointMake(1, 3), .size = intrinsicSize };
+		beforeEach(^{
+			rect = (CGRect){ .origin = CGPointMake(1, 3), .size = intrinsicSize };
+		});
 
+		it(@"should bind to a constant", ^{
 			bind(@{
 				rcl_origin: MEDBox(rect.origin)
 			});
@@ -123,28 +127,26 @@ sharedExamplesFor(MacroExamples, ^(NSDictionary *bindingInfo) {
 		});
 
 		it(@"should bind to a signal", ^{
-			RACSubject *values = [RACSubject subject];
-
 			bind(@{
 				rcl_origin: values
 			});
 
-			CGRect rect = { .origin = CGPointMake(1, 3), .size = intrinsicSize };
 			[values sendNext:MEDBox(rect.origin)];
-
 			expect(getProperty()).to.equal(rect);
 
 			rect.origin = CGPointMake(5, 7);
-			[values sendNext:MEDBox(rect.origin)];
 
+			[values sendNext:MEDBox(rect.origin)];
 			expect(getProperty()).to.equal(rect);
 		});
 	});
 
 	describe(@"rcl_width", ^{
-		it(@"should bind to a constant", ^{
-			CGRect rect = CGRectMake(0, 0, 3, intrinsicSize.height);
+		beforeEach(^{
+			rect.size.width = 3;
+		});
 
+		it(@"should bind to a constant", ^{
 			bind(@{
 				rcl_width: @(rect.size.width)
 			});
@@ -153,28 +155,26 @@ sharedExamplesFor(MacroExamples, ^(NSDictionary *bindingInfo) {
 		});
 
 		it(@"should bind to a signal", ^{
-			RACSubject *values = [RACSubject subject];
-
 			bind(@{
 				rcl_width: values
 			});
 
-			CGRect rect = CGRectMake(0, 0, 3, intrinsicSize.height);
 			[values sendNext:@(rect.size.width)];
-
 			expect(getProperty()).to.equal(rect);
 
 			rect.size.width = 7;
-			[values sendNext:@(rect.size.width)];
 
+			[values sendNext:@(rect.size.width)];
 			expect(getProperty()).to.equal(rect);
 		});
 	});
 
 	describe(@"rcl_height", ^{
-		it(@"should bind to a constant", ^{
-			CGRect rect = CGRectMake(0, 0, intrinsicSize.width, 3);
+		beforeEach(^{
+			rect.size.height = 3;
+		});
 
+		it(@"should bind to a constant", ^{
 			bind(@{
 				rcl_height: @(rect.size.height)
 			});
@@ -183,20 +183,16 @@ sharedExamplesFor(MacroExamples, ^(NSDictionary *bindingInfo) {
 		});
 
 		it(@"should bind to a signal", ^{
-			RACSubject *values = [RACSubject subject];
-
 			bind(@{
 				rcl_height: values
 			});
 
-			CGRect rect = CGRectMake(0, 0, intrinsicSize.width, 3);
 			[values sendNext:@(rect.size.height)];
-
 			expect(getProperty()).to.equal(rect);
 
 			rect.size.height = 7;
-			[values sendNext:@(rect.size.height)];
 
+			[values sendNext:@(rect.size.height)];
 			expect(getProperty()).to.equal(rect);
 		});
 	});
