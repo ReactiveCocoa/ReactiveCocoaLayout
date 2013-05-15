@@ -637,6 +637,46 @@ sharedExamplesFor(MacroExamples, ^(NSDictionary *bindingInfo) {
 			expect(getProperty()).to.equal(rect);
 		});
 	});
+
+	describe(@"combining non-conflicting attributes", ^{
+		it(@"should combine rcl_origin with rcl_width and rcl_height", ^{
+			rect = CGRectMake(7, 13, 29, 39);
+
+			bind(@{
+				rcl_origin: MEDBox(rect.origin),
+				rcl_width: @(rect.size.width),
+				rcl_height: @(rect.size.height),
+			});
+
+			expect(getProperty()).to.equal(rect);
+		});
+
+		it(@"should combine rcl_size with rcl_center", ^{
+			CGPoint center = CGPointMake(2, 5);
+			rect = CGRectMake(0, 1, 4, 8);
+
+			bind(@{
+				rcl_size: MEDBox(rect.size),
+				rcl_center: MEDBox(center),
+			});
+
+			expect(getProperty()).to.equal(rect);
+		});
+
+		it(@"should combine rcl_left, rcl_centerY, rcl_width, and rcl_height", ^{
+			CGFloat centerY = 5;
+			rect = CGRectMake(0, 1, 4, 8);
+
+			bind(@{
+				rcl_left: @(rect.origin.x),
+				rcl_centerY: @(centerY),
+				rcl_width: @(rect.size.width),
+				rcl_height: @(rect.size.height),
+			});
+
+			expect(getProperty()).to.equal(rect);
+		});
+	});
 });
 
 SharedExampleGroupsEnd
