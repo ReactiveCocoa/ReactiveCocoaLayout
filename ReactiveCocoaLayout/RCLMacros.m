@@ -166,9 +166,9 @@
 
 		case RCLAttributeBaseline: {
 			#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
-			Class expectedClass = UIView.class;
+			Class expectedClass __attribute__((unused)) = UIView.class;
 			#elif TARGET_OS_MAC
-			Class expectedClass = NSView.class;
+			Class expectedClass __attribute__((unused)) = NSView.class;
 			#endif
 
 			NSAssert([value isKindOfClass:expectedClass], @"Expected a view for attribute %li, got %@", (long)attribute, value);
