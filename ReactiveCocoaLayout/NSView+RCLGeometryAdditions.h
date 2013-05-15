@@ -75,6 +75,10 @@
 
 // Sends the receiver's baseline, relative to the minimum Y edge.
 //
+// The baseline will be re-checked whenever the receiver's intrinsic content
+// size changes. Operations which affect the baseline but _not_ the intrinsic
+// content size may not result in a new value being sent.
+//
 // Returns a signal of baseline offsets from the minimum Y edge of the receiver.
 - (RACSignal *)rcl_baselineSignal;
 
