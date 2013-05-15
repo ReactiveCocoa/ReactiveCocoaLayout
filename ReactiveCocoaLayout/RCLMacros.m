@@ -42,13 +42,14 @@
 	NSParameterAssert(property != nil);
 	NSParameterAssert([bindings isKindOfClass:NSDictionary.class]);
 
-	[[self rectSignalFromBindings:bindings] toProperty:property onObject:self.view];
+	[[self rectSignalFromBindings:bindings forPropertyKey:property] toProperty:property onObject:self.view];
 }
 
 #pragma mark Attribute Parsing
 
-- (RACSignal *)rectSignalFromBindings:(NSDictionary *)bindings {
+- (RACSignal *)rectSignalFromBindings:(NSDictionary *)bindings forPropertyKey:(NSString *)property {
 	NSParameterAssert(bindings != nil);
+	NSParameterAssert(property != nil);
 
 	NSArray *sortedAttributes = [bindings.allKeys sortedArrayUsingSelector:@selector(compare:)];
 
@@ -123,9 +124,10 @@
 			case RCLAttributeBaseline: {
 				value = [[value publish] autoconnect];
 
+				NSString *propertySignalKey = [property stringByAppendingString:@"Signal"];
 				RACSignal *referenceRect = [[value
 					map:^(id view) {
-						return [view rcl_boundsSignal];
+						return [view valueForKey:propertySignalKey];
 					}]
 					switchToLatest];
 
