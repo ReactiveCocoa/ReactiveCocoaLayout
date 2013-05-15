@@ -295,6 +295,67 @@ sharedExamplesFor(MacroExamples, ^(NSDictionary *bindingInfo) {
 			expect(getProperty()).to.equal(rect);
 		});
 	});
+
+	describe(@"rcl_left", ^{
+		beforeEach(^{
+			rect.origin.x = 7;
+		});
+
+		it(@"should bind to a constant", ^{
+			bind(@{
+				rcl_left: @(rect.origin.x)
+			});
+
+			expect(getProperty()).to.equal(rect);
+		});
+
+		it(@"should bind to a signal", ^{
+			bind(@{
+				rcl_left: values
+			});
+
+			[values sendNext:@(rect.origin.x)];
+			expect(getProperty()).to.equal(rect);
+
+			rect.origin.x = 17;
+
+			[values sendNext:@(rect.origin.x)];
+			expect(getProperty()).to.equal(rect);
+		});
+	});
+
+	describe(@"rcl_right", ^{
+		__block NSNumber * (^getRight)(void);
+
+		beforeEach(^{
+			rect.origin.x = 7;
+			getRight = ^{
+				return @(CGRectGetMaxX(rect));
+			};
+		});
+
+		it(@"should bind to a constant", ^{
+			bind(@{
+				rcl_right: getRight()
+			});
+
+			expect(getProperty()).to.equal(rect);
+		});
+
+		it(@"should bind to a signal", ^{
+			bind(@{
+				rcl_right: values
+			});
+
+			[values sendNext:getRight()];
+			expect(getProperty()).to.equal(rect);
+
+			rect.origin.x = 17;
+
+			[values sendNext:getRight()];
+			expect(getProperty()).to.equal(rect);
+		});
+	});
 });
 
 SharedExampleGroupsEnd
