@@ -197,6 +197,105 @@ sharedExamplesFor(MacroExamples, ^(NSDictionary *bindingInfo) {
 		});
 	});
 
+	describe(@"rcl_center", ^{
+		__block NSValue * (^getCenter)(void);
+
+		beforeEach(^{
+			rect.origin = CGPointMake(2, 3);
+			getCenter = ^{
+				return MEDBox(CGPointMake(CGRectGetMidX(rect), CGRectGetMidY(rect)));
+			};
+		});
+
+		it(@"should bind to a constant", ^{
+			bind(@{
+				rcl_center: getCenter()
+			});
+
+			expect(getProperty()).to.equal(rect);
+		});
+
+		it(@"should bind to a signal", ^{
+			bind(@{
+				rcl_center: values
+			});
+
+			[values sendNext:getCenter()];
+			expect(getProperty()).to.equal(rect);
+
+			rect.origin = CGPointMake(4, 5);
+
+			[values sendNext:getCenter()];
+			expect(getProperty()).to.equal(rect);
+		});
+	});
+
+	describe(@"rcl_centerX", ^{
+		__block NSNumber * (^getCenter)(void);
+
+		beforeEach(^{
+			rect.origin.x = 2;
+			getCenter = ^{
+				return @(CGRectGetMidX(rect));
+			};
+		});
+
+		it(@"should bind to a constant", ^{
+			bind(@{
+				rcl_centerX: getCenter()
+			});
+
+			expect(getProperty()).to.equal(rect);
+		});
+
+		it(@"should bind to a signal", ^{
+			bind(@{
+				rcl_centerX: values
+			});
+
+			[values sendNext:getCenter()];
+			expect(getProperty()).to.equal(rect);
+
+			rect.origin.x = 4;
+
+			[values sendNext:getCenter()];
+			expect(getProperty()).to.equal(rect);
+		});
+	});
+
+	describe(@"rcl_centerY", ^{
+		__block NSNumber * (^getCenter)(void);
+
+		beforeEach(^{
+			rect.origin.y = 2;
+			getCenter = ^{
+				return @(CGRectGetMidY(rect));
+			};
+		});
+
+		it(@"should bind to a constant", ^{
+			bind(@{
+				rcl_centerY: getCenter()
+			});
+
+			expect(getProperty()).to.equal(rect);
+		});
+
+		it(@"should bind to a signal", ^{
+			bind(@{
+				rcl_centerY: values
+			});
+
+			[values sendNext:getCenter()];
+			expect(getProperty()).to.equal(rect);
+
+			rect.origin.y = 4;
+
+			[values sendNext:getCenter()];
+			expect(getProperty()).to.equal(rect);
+		});
+	});
+
 	it(@"should bind constant values", ^{
 		bind(@{
 			rcl_rect: MEDBox(CGRectMake(0, 0, 10, 20)),
