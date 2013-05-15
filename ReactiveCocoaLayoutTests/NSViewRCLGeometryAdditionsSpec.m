@@ -38,6 +38,19 @@ describe(@"NSTextField", ^{
 			field.font = [NSFont systemFontOfSize:144];
 			expect([[signal first] doubleValue]).notTo.equal(baseline);
 		});
+
+		it(@"should send baseline changes", ^{
+			__block CGFloat lastBaseline = 0;
+			[field.rcl_baselineSignal subscribeNext:^(NSNumber *baseline) {
+				lastBaseline = baseline.doubleValue;
+			}];
+
+			expect(lastBaseline).to.equal(baseline);
+
+			field.font = [NSFont systemFontOfSize:144];
+			expect(lastBaseline).to.beGreaterThan(baseline);
+			expect(lastBaseline).to.equal(field.baselineOffsetFromBottom);
+		});
 	});
 });
 

@@ -10,6 +10,7 @@
 #import "EXTScope.h"
 #import "NSNotificationCenter+RACSupport.h"
 #import "RACSignal+RCLAnimationAdditions.h"
+#import "View+RCLAutoLayoutAdditions.h"
 #import <objc/runtime.h>
 
 @implementation NSView (RCLGeometryAdditions)
@@ -153,10 +154,10 @@
 
 	@unsafeify(self);
 
-	return [[[RACSignal
-		defer:^{
+	return [[[self.rcl_intrinsicContentSizeSignal
+		map:^(id _) {
 			@strongify(self);
-			return [RACSignal return:@(self.baselineOffsetFromBottom)];
+			return @(self.baselineOffsetFromBottom);
 		}]
 		takeUntil:deallocSubject]
 		setNameWithFormat:@"%@ -rcl_baselineSignal", self];
