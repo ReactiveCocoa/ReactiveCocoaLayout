@@ -51,6 +51,36 @@ sharedExamplesFor(MacroExamples, ^(NSDictionary *bindingInfo) {
 		expect(getProperty()).to.equal(rect);
 	});
 
+	describe(@"rcl_rect", ^{
+		it(@"should bind to a constant", ^{
+			CGRect rect = CGRectMake(1, 7, 13, 21);
+
+			bind(@{
+				rcl_rect: MEDBox(rect)
+			});
+
+			expect(getProperty()).to.equal(rect);
+		});
+
+		it(@"should bind to a signal", ^{
+			RACSubject *values = [RACSubject subject];
+
+			bind(@{
+				rcl_rect: values
+			});
+
+			CGRect rect = CGRectMake(1, 7, 13, 21);
+			[values sendNext:MEDBox(rect)];
+
+			expect(getProperty()).to.equal(rect);
+
+			rect = CGRectMake(2, 3, 4, 5);
+			[values sendNext:MEDBox(rect)];
+
+			expect(getProperty()).to.equal(rect);
+		});
+	});
+
 	it(@"should bind constant values", ^{
 		bind(@{
 			rcl_rect: MEDBox(CGRectMake(0, 0, 10, 20)),
