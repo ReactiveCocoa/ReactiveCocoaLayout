@@ -16,7 +16,7 @@
 #import "NSView+RCLGeometryAdditions.h"
 #endif
 
-static NSString *NSStringFromRCLAttribute(RCLAttribute attribute) {
+static NSString *NSStringFromRCLAttribute(RCLAttribute attribute) __attribute__((unused)) {
 	switch (attribute) {
 		case RCLAttributeRect: return @"rcl_rect";
 		case RCLAttributeSize: return @"rcl_size";
