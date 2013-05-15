@@ -111,6 +111,17 @@ sharedExamplesFor(MacroExamples, ^(NSDictionary *bindingInfo) {
 			[values sendNext:MEDBox(rect.size)];
 			expect(getProperty()).to.equal(rect);
 		});
+
+		it(@"should override rcl_rect", ^{
+			CGRect clobberRect = { .origin = rect.origin, .size = CGSizeMake(100, 500) };
+
+			bind(@{
+				rcl_rect: MEDBox(clobberRect),
+				rcl_size: MEDBox(rect.size)
+			});
+
+			expect(getProperty()).to.equal(rect);
+		});
 	});
 
 	describe(@"rcl_origin", ^{
@@ -137,6 +148,17 @@ sharedExamplesFor(MacroExamples, ^(NSDictionary *bindingInfo) {
 			rect.origin = CGPointMake(5, 7);
 
 			[values sendNext:MEDBox(rect.origin)];
+			expect(getProperty()).to.equal(rect);
+		});
+
+		it(@"should override rcl_rect", ^{
+			CGRect clobberRect = { .origin = CGPointMake(100, 500), .size = rect.size };
+
+			bind(@{
+				rcl_rect: MEDBox(clobberRect),
+				rcl_origin: MEDBox(rect.origin)
+			});
+
 			expect(getProperty()).to.equal(rect);
 		});
 	});
@@ -167,6 +189,17 @@ sharedExamplesFor(MacroExamples, ^(NSDictionary *bindingInfo) {
 			[values sendNext:@(rect.size.width)];
 			expect(getProperty()).to.equal(rect);
 		});
+
+		it(@"should override rcl_size", ^{
+			CGSize clobberSize = { .width = 999, .height = rect.size.height };
+			
+			bind(@{
+				rcl_size: MEDBox(clobberSize),
+				rcl_width: @(rect.size.width)
+			});
+
+			expect(getProperty()).to.equal(rect);
+		});
 	});
 
 	describe(@"rcl_height", ^{
@@ -193,6 +226,17 @@ sharedExamplesFor(MacroExamples, ^(NSDictionary *bindingInfo) {
 			rect.size.height = 7;
 
 			[values sendNext:@(rect.size.height)];
+			expect(getProperty()).to.equal(rect);
+		});
+
+		it(@"should override rcl_size", ^{
+			CGSize clobberSize = { .width = rect.size.width, .height = 999 };
+			
+			bind(@{
+				rcl_size: MEDBox(clobberSize),
+				rcl_height: @(rect.size.height)
+			});
+
 			expect(getProperty()).to.equal(rect);
 		});
 	});
@@ -228,6 +272,17 @@ sharedExamplesFor(MacroExamples, ^(NSDictionary *bindingInfo) {
 			[values sendNext:getCenter()];
 			expect(getProperty()).to.equal(rect);
 		});
+
+		it(@"should override rcl_origin", ^{
+			CGPoint clobberOrigin = CGPointMake(999, 333);
+			
+			bind(@{
+				rcl_origin: MEDBox(clobberOrigin),
+				rcl_center: getCenter()
+			});
+
+			expect(getProperty()).to.equal(rect);
+		});
 	});
 
 	describe(@"rcl_centerX", ^{
@@ -259,6 +314,17 @@ sharedExamplesFor(MacroExamples, ^(NSDictionary *bindingInfo) {
 			rect.origin.x = 4;
 
 			[values sendNext:getCenter()];
+			expect(getProperty()).to.equal(rect);
+		});
+
+		it(@"should override rcl_center", ^{
+			CGPoint clobberCenter = CGPointMake(999, CGRectGetMidY(rect));
+			
+			bind(@{
+				rcl_center: MEDBox(clobberCenter),
+				rcl_centerX: getCenter()
+			});
+
 			expect(getProperty()).to.equal(rect);
 		});
 	});
@@ -294,6 +360,17 @@ sharedExamplesFor(MacroExamples, ^(NSDictionary *bindingInfo) {
 			[values sendNext:getCenter()];
 			expect(getProperty()).to.equal(rect);
 		});
+
+		it(@"should override rcl_origin", ^{
+			CGPoint clobberCenter = CGPointMake(CGRectGetMidX(rect), 999);
+			
+			bind(@{
+				rcl_center: MEDBox(clobberCenter),
+				rcl_centerY: getCenter()
+			});
+
+			expect(getProperty()).to.equal(rect);
+		});
 	});
 
 	describe(@"rcl_left", ^{
@@ -320,6 +397,15 @@ sharedExamplesFor(MacroExamples, ^(NSDictionary *bindingInfo) {
 			rect.origin.x = 17;
 
 			[values sendNext:@(rect.origin.x)];
+			expect(getProperty()).to.equal(rect);
+		});
+
+		it(@"should override rcl_centerX", ^{
+			bind(@{
+				rcl_centerX: @999,
+				rcl_left: @(rect.origin.x)
+			});
+
 			expect(getProperty()).to.equal(rect);
 		});
 	});
@@ -353,6 +439,15 @@ sharedExamplesFor(MacroExamples, ^(NSDictionary *bindingInfo) {
 			rect.origin.x = 17;
 
 			[values sendNext:getRight()];
+			expect(getProperty()).to.equal(rect);
+		});
+
+		it(@"should override rcl_centerX", ^{
+			bind(@{
+				rcl_centerX: @999,
+				rcl_right: getRight()
+			});
+
 			expect(getProperty()).to.equal(rect);
 		});
 	});
@@ -392,6 +487,15 @@ sharedExamplesFor(MacroExamples, ^(NSDictionary *bindingInfo) {
 			[values sendNext:getTop()];
 			expect(getProperty()).to.equal(rect);
 		});
+
+		it(@"should override rcl_centerY", ^{
+			bind(@{
+				rcl_centerY: @999,
+				rcl_top: getTop()
+			});
+
+			expect(getProperty()).to.equal(rect);
+		});
 	});
 
 	describe(@"rcl_bottom", ^{
@@ -427,6 +531,15 @@ sharedExamplesFor(MacroExamples, ^(NSDictionary *bindingInfo) {
 			rect.origin.y = 17;
 
 			[values sendNext:getBottom()];
+			expect(getProperty()).to.equal(rect);
+		});
+
+		it(@"should override rcl_centerY", ^{
+			bind(@{
+				rcl_centerY: @999,
+				rcl_bottom: getBottom()
+			});
+
 			expect(getProperty()).to.equal(rect);
 		});
 	});
@@ -467,6 +580,15 @@ sharedExamplesFor(MacroExamples, ^(NSDictionary *bindingInfo) {
 			[values sendNext:getLeading()];
 			expect(getProperty()).to.equal(rect);
 		});
+
+		it(@"should override rcl_centerX", ^{
+			bind(@{
+				rcl_centerX: @999,
+				rcl_leading: getLeading()
+			});
+
+			expect(getProperty()).to.equal(rect);
+		});
 	});
 
 	describe(@"rcl_trailing", ^{
@@ -503,6 +625,15 @@ sharedExamplesFor(MacroExamples, ^(NSDictionary *bindingInfo) {
 			rect.origin.x = 17;
 
 			[values sendNext:getTrailing()];
+			expect(getProperty()).to.equal(rect);
+		});
+
+		it(@"should override rcl_centerX", ^{
+			bind(@{
+				rcl_centerX: @999,
+				rcl_trailing: getTrailing()
+			});
+
 			expect(getProperty()).to.equal(rect);
 		});
 	});
@@ -586,6 +717,15 @@ describe(@"RCLAlignment", ^{
 
 			[values sendNext:alignmentView10];
 			expect(view.rcl_alignmentRect).to.equal(rectAligned10);
+		});
+
+		it(@"should override rcl_top", ^{
+			RCLAlignment(view) = @{
+				rcl_top: @999,
+				rcl_baseline: alignmentView5
+			};
+
+			expect(view.rcl_alignmentRect).to.equal(rectAligned5);
 		});
 	});
 });
