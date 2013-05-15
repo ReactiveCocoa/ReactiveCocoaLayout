@@ -430,6 +430,82 @@ sharedExamplesFor(MacroExamples, ^(NSDictionary *bindingInfo) {
 			expect(getProperty()).to.equal(rect);
 		});
 	});
+
+	describe(@"rcl_leading", ^{
+		__block NSNumber * (^getLeading)(void);
+
+		beforeEach(^{
+			rect.origin.x = 7;
+			getLeading = ^{
+				NSNumber *edge = [[RACSignal leadingEdgeSignal] first];
+				if (edge.integerValue == CGRectMinXEdge) {
+					return @(CGRectGetMinX(rect));
+				} else {
+					return @(CGRectGetMaxX(rect));
+				}
+			};
+		});
+
+		it(@"should bind to a constant", ^{
+			bind(@{
+				rcl_leading: getLeading()
+			});
+
+			expect(getProperty()).to.equal(rect);
+		});
+
+		it(@"should bind to a signal", ^{
+			bind(@{
+				rcl_leading: values
+			});
+
+			[values sendNext:getLeading()];
+			expect(getProperty()).to.equal(rect);
+
+			rect.origin.x = 17;
+
+			[values sendNext:getLeading()];
+			expect(getProperty()).to.equal(rect);
+		});
+	});
+
+	describe(@"rcl_trailing", ^{
+		__block NSNumber * (^getTrailing)(void);
+
+		beforeEach(^{
+			rect.origin.x = 7;
+			getTrailing = ^{
+				NSNumber *edge = [[RACSignal trailingEdgeSignal] first];
+				if (edge.integerValue == CGRectMinXEdge) {
+					return @(CGRectGetMinX(rect));
+				} else {
+					return @(CGRectGetMaxX(rect));
+				}
+			};
+		});
+
+		it(@"should bind to a constant", ^{
+			bind(@{
+				rcl_trailing: getTrailing()
+			});
+
+			expect(getProperty()).to.equal(rect);
+		});
+
+		it(@"should bind to a signal", ^{
+			bind(@{
+				rcl_trailing: values
+			});
+
+			[values sendNext:getTrailing()];
+			expect(getProperty()).to.equal(rect);
+
+			rect.origin.x = 17;
+
+			[values sendNext:getTrailing()];
+			expect(getProperty()).to.equal(rect);
+		});
+	});
 });
 
 SharedExampleGroupsEnd
