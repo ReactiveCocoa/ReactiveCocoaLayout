@@ -22,6 +22,8 @@ static NSString * const MacroPropertyName = @"MacroPropertyName";
 SharedExampleGroupsBegin(MacroExamples)
 
 sharedExamplesFor(MacroExamples, ^(NSDictionary *bindingInfo) {
+	CGSize intrinsicSize = CGSizeMake(10, 15);
+
 	__block TestView *view;
 
 	__block void (^bind)(NSDictionary *);
@@ -29,6 +31,7 @@ sharedExamplesFor(MacroExamples, ^(NSDictionary *bindingInfo) {
 
 	beforeEach(^{
 		view = [[TestView alloc] initWithFrame:CGRectZero];
+		[view invalidateAndSetIntrinsicContentSize:intrinsicSize];
 
 		void (^innerBindingBlock)(TestView *, NSDictionary *) = bindingInfo[MacroBindingBlock];
 		bind = [^(NSDictionary *bindings) {
@@ -39,6 +42,13 @@ sharedExamplesFor(MacroExamples, ^(NSDictionary *bindingInfo) {
 			NSValue *boxedRect = [view valueForKey:bindingInfo[MacroPropertyName]];
 			return boxedRect.med_rectValue;
 		} copy];
+	});
+
+	it(@"should default to the view's intrinsic bounds", ^{
+		bind(@{});
+
+		CGRect rect = { .origin = CGPointZero, .size = intrinsicSize };
+		expect(getProperty()).to.equal(rect);
 	});
 
 	it(@"should bind constant values", ^{
