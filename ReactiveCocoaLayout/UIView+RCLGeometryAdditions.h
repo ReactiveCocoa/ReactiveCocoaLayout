@@ -54,6 +54,10 @@
 // -viewForBaselineLayout, and recalculates the offset of the baseline from the
 // maximum Y edge whenever either changes.
 //
+// **Note:** This method may sometimes return incorrect results because
+// -viewForBaselineLayout isn't actually intended to be used outside of Auto
+// Layout. See http://www.openradar.me/radar?id=2468401 for more information.
+//
 // Returns a signal of baseline offsets from the maximum Y edge of the view.
 - (RACSignal *)rcl_baselineSignal;
 
