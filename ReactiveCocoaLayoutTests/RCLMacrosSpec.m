@@ -81,6 +81,66 @@ sharedExamplesFor(MacroExamples, ^(NSDictionary *bindingInfo) {
 		});
 	});
 
+	describe(@"rcl_size", ^{
+		it(@"should bind to a constant", ^{
+			CGRect rect = CGRectMake(0, 0, 13, 21);
+
+			bind(@{
+				rcl_size: MEDBox(rect.size)
+			});
+
+			expect(getProperty()).to.equal(rect);
+		});
+
+		it(@"should bind to a signal", ^{
+			RACSubject *values = [RACSubject subject];
+
+			bind(@{
+				rcl_size: values
+			});
+
+			CGRect rect = CGRectMake(0, 0, 13, 21);
+			[values sendNext:MEDBox(rect.size)];
+
+			expect(getProperty()).to.equal(rect);
+
+			rect = CGRectMake(0, 0, 4, 5);
+			[values sendNext:MEDBox(rect.size)];
+
+			expect(getProperty()).to.equal(rect);
+		});
+	});
+
+	describe(@"rcl_origin", ^{
+		it(@"should bind to a constant", ^{
+			CGRect rect = { .origin = CGPointMake(1, 3), .size = intrinsicSize };
+
+			bind(@{
+				rcl_origin: MEDBox(rect.origin)
+			});
+
+			expect(getProperty()).to.equal(rect);
+		});
+
+		it(@"should bind to a signal", ^{
+			RACSubject *values = [RACSubject subject];
+
+			bind(@{
+				rcl_origin: values
+			});
+
+			CGRect rect = { .origin = CGPointMake(1, 3), .size = intrinsicSize };
+			[values sendNext:MEDBox(rect.origin)];
+
+			expect(getProperty()).to.equal(rect);
+
+			rect.origin = CGPointMake(5, 7);
+			[values sendNext:MEDBox(rect.origin)];
+
+			expect(getProperty()).to.equal(rect);
+		});
+	});
+
 	it(@"should bind constant values", ^{
 		bind(@{
 			rcl_rect: MEDBox(CGRectMake(0, 0, 10, 20)),
