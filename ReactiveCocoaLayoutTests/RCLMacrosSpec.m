@@ -512,18 +512,82 @@ SharedExampleGroupsEnd
 
 SpecBegin(RCLMacros)
 
-itShouldBehaveLike(MacroExamples, @{
-	MacroPropertyName: @"rcl_frame",
-	MacroBindingBlock: ^(TestView *view, NSDictionary *bindings) {
-		RCLFrame(view) = bindings;
-	}
+describe(@"RCLFrame", ^{
+	itShouldBehaveLike(MacroExamples, @{
+		MacroPropertyName: @"rcl_frame",
+		MacroBindingBlock: ^(TestView *view, NSDictionary *bindings) {
+			RCLFrame(view) = bindings;
+		}
+	});
 });
 
-itShouldBehaveLike(MacroExamples, @{
-	MacroPropertyName: @"rcl_alignmentRect",
-	MacroBindingBlock: ^(TestView *view, NSDictionary *bindings) {
-		RCLAlignment(view) = bindings;
-	}
+describe(@"RCLAlignment", ^{
+	itShouldBehaveLike(MacroExamples, @{
+		MacroPropertyName: @"rcl_alignmentRect",
+		MacroBindingBlock: ^(TestView *view, NSDictionary *bindings) {
+			RCLAlignment(view) = bindings;
+		}
+	});
+
+	describe(@"rcl_baseline", ^{
+		__block TestView *view;
+		__block TestView *alignmentView5;
+		__block TestView *alignmentView10;
+
+		__block CGRect rectAligned5;
+		__block CGRect rectAligned10;
+
+		__block RACSubject *values;
+
+		beforeEach(^{
+			CGRect frame = CGRectMake(0, 0, 20, 20);
+
+			view = [[TestView alloc] initWithFrame:frame];
+			[view invalidateAndSetIntrinsicContentSize:frame.size];
+
+			values = [RACSubject subject];
+
+			alignmentView5 = [[TestView alloc] initWithFrame:frame];
+			alignmentView5.baselineOffsetFromBottom = 5;
+			expect([alignmentView5.rcl_baselineSignal first]).to.equal(@5);
+
+			alignmentView10 = [[TestView alloc] initWithFrame:frame];
+			alignmentView10.baselineOffsetFromBottom = 10;
+			expect([alignmentView10.rcl_baselineSignal first]).to.equal(@10);
+
+			rectAligned5 = frame;
+			rectAligned10 = frame;
+
+			// Gotta take alignment rect padding into account here.
+			#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
+			rectAligned5.origin.y = -7;
+			rectAligned10.origin.y = -12;
+			#elif TARGET_OS_MAC
+			rectAligned5.origin.y = 7;
+			rectAligned10.origin.y = 12;
+			#endif
+		});
+
+		it(@"should bind to a constant", ^{
+			RCLAlignment(view) = @{
+				rcl_baseline: alignmentView5
+			};
+
+			expect(view.rcl_alignmentRect).to.equal(rectAligned5);
+		});
+
+		it(@"should bind to a signal", ^{
+			RCLAlignment(view) = @{
+				rcl_baseline: values
+			};
+
+			[values sendNext:alignmentView5];
+			expect(view.rcl_alignmentRect).to.equal(rectAligned5);
+
+			[values sendNext:alignmentView10];
+			expect(view.rcl_alignmentRect).to.equal(rectAligned10);
+		});
+	});
 });
 
 SpecEnd
