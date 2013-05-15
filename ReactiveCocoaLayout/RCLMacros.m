@@ -16,6 +16,26 @@
 #import "NSView+RCLGeometryAdditions.h"
 #endif
 
+static NSString *NSStringFromRCLAttribute(RCLAttribute attribute) {
+	switch (attribute) {
+		case RCLAttributeRect: return @"rcl_rect";
+		case RCLAttributeSize: return @"rcl_size";
+		case RCLAttributeOrigin: return @"rcl_origin";
+		case RCLAttributeHeight: return @"rcl_height";
+		case RCLAttributeWidth: return @"rcl_width";
+		case RCLAttributeCenter: return @"rcl_center";
+		case RCLAttributeCenterX: return @"rcl_centerX";
+		case RCLAttributeCenterY: return @"rcl_centerY";
+		case RCLAttributeBottom: return @"rcl_bottom";
+		case RCLAttributeRight: return @"rcl_right";
+		case RCLAttributeTop: return @"rcl_top";
+		case RCLAttributeLeft: return @"rcl_left";
+		case RCLAttributeTrailing: return @"rcl_trailing";
+		case RCLAttributeLeading: return @"rcl_leading";
+		case RCLAttributeBaseline: return @"rcl_baseline";
+	}
+}
+
 @interface RCLRectAssignmentTrampoline ()
 
 // The view that the receiver was initialized with.
@@ -141,9 +161,6 @@
 				signal = [signal alignBaseline:[self.view rcl_baselineSignal] toBaseline:referenceBaseline ofRect:referenceRect];
 				break;
 			}
-
-			default:
-				NSAssert(NO, @"Unrecognized RCLAttribute: %@", attribute);
 		}
 	}
 
@@ -155,16 +172,16 @@
 
 	switch (attribute) {
 		case RCLAttributeRect:
-			NSAssert([value isKindOfClass:NSValue.class] && [value med_geometryStructType] == MEDGeometryStructTypeRect, @"Expected a CGRect for attribute %li, got %@", (long)attribute, value);
+			NSAssert([value isKindOfClass:NSValue.class] && [value med_geometryStructType] == MEDGeometryStructTypeRect, @"Expected a CGRect for attribute %@, got %@", NSStringFromRCLAttribute(attribute), value);
 			break;
 
 		case RCLAttributeSize:
-			NSAssert([value isKindOfClass:NSValue.class] && [value med_geometryStructType] == MEDGeometryStructTypeSize, @"Expected a CGSize for attribute %li, got %@", (long)attribute, value);
+			NSAssert([value isKindOfClass:NSValue.class] && [value med_geometryStructType] == MEDGeometryStructTypeSize, @"Expected a CGSize for attribute %@, got %@", NSStringFromRCLAttribute(attribute), value);
 			break;
 
 		case RCLAttributeOrigin:
 		case RCLAttributeCenter:
-			NSAssert([value isKindOfClass:NSValue.class] && [value med_geometryStructType] == MEDGeometryStructTypePoint, @"Expected a CGPoint for attribute %li, got %@", (long)attribute, value);
+			NSAssert([value isKindOfClass:NSValue.class] && [value med_geometryStructType] == MEDGeometryStructTypePoint, @"Expected a CGPoint for attribute %@, got %@", NSStringFromRCLAttribute(attribute), value);
 			break;
 
 		case RCLAttributeBaseline: {
@@ -174,12 +191,12 @@
 			Class expectedClass __attribute__((unused)) = NSView.class;
 			#endif
 
-			NSAssert([value isKindOfClass:expectedClass], @"Expected a view for attribute %li, got %@", (long)attribute, value);
+			NSAssert([value isKindOfClass:expectedClass], @"Expected a view for attribute %@, got %@", NSStringFromRCLAttribute(attribute), value);
 			break;
 		}
 
 		default:
-			NSAssert([value isKindOfClass:NSNumber.class], @"Expected a CGFloat for attribute %li, got %@", (long)attribute, value);
+			NSAssert([value isKindOfClass:NSNumber.class], @"Expected a CGFloat for attribute %@, got %@", NSStringFromRCLAttribute(attribute), value);
 	}
 
 	return [RACSignal return:value];
