@@ -119,7 +119,7 @@
 				break;
 
 			case RCLAttributeBaseline: {
-				value = [[value publish] autoconnect];
+				value = [value replayLast];
 
 				NSString *propertySignalKey = [property stringByAppendingString:@"Signal"];
 				RACSignal *referenceRect = [[value
