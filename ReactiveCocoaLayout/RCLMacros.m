@@ -55,12 +55,13 @@
 
 	RACSignal *signal = [self.view rcl_intrinsicBoundsSignal];
 	for (NSNumber *attribute in sortedAttributes) {
+		NSAssert([attribute isKindOfClass:NSNumber.class], @"Layout binding key is not a RCLAttribute: %@", attribute);
+
 		RACSignal *value = bindings[attribute];
 		if (![value isKindOfClass:RACSignal.class]) {
-			value = [RACSignal return:value];
+			value = [self signalWithConstantValue:value forAttribute:attribute.integerValue];
 		}
 
-		NSAssert([attribute isKindOfClass:NSNumber.class], @"Layout binding key is not a RCLAttribute: %@", attribute);
 		switch (attribute.integerValue) {
 			case RCLAttributeRect:
 				signal = value;
@@ -144,6 +145,41 @@
 	}
 
 	return signal;
+}
+
+- (RACSignal *)signalWithConstantValue:(id)value forAttribute:(RCLAttribute)attribute {
+	NSParameterAssert(value != nil);
+
+	switch (attribute) {
+		case RCLAttributeRect:
+			NSAssert([value isKindOfClass:NSValue.class] && [value med_geometryStructType] == MEDGeometryStructTypeRect, @"Expected a CGRect for attribute %li, got %@", (long)attribute, value);
+			break;
+
+		case RCLAttributeSize:
+			NSAssert([value isKindOfClass:NSValue.class] && [value med_geometryStructType] == MEDGeometryStructTypeSize, @"Expected a CGSize for attribute %li, got %@", (long)attribute, value);
+			break;
+
+		case RCLAttributeOrigin:
+		case RCLAttributeCenter:
+			NSAssert([value isKindOfClass:NSValue.class] && [value med_geometryStructType] == MEDGeometryStructTypePoint, @"Expected a CGPoint for attribute %li, got %@", (long)attribute, value);
+			break;
+
+		case RCLAttributeBaseline: {
+			#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
+			Class expectedClass = UIView.class;
+			#elif TARGET_OS_MAC
+			Class expectedClass = NSView.class;
+			#endif
+
+			NSAssert([value isKindOfClass:expectedClass], @"Expected a view for attribute %li, got %@", (long)attribute, value);
+			break;
+		}
+
+		default:
+			NSAssert([value isKindOfClass:NSNumber.class], @"Expected a CGFloat for attribute %li, got %@", (long)attribute, value);
+	}
+
+	return [RACSignal return:value];
 }
 
 @end
