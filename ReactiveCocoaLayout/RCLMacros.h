@@ -157,5 +157,5 @@ typedef enum : NSInteger {
 	RCLAttributeLeft,
 	RCLAttributeTrailing,
 	RCLAttributeLeading,
-    RCLAttributeBaseline
+	RCLAttributeBaseline
 } RCLAttribute;
