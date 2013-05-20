@@ -22,5 +22,6 @@
 - (CGRect)alignmentRectForFrame:(CGRect)frame;
 
 - (void)invalidateAndSetIntrinsicContentSize:(CGSize)size;
+- (void)setBaselineOffsetFromBottom:(CGFloat)baseline;
 
 @end

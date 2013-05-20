@@ -71,8 +71,11 @@
 	//
 	// FIXME: Baseline alignment is a bit broken for iOS at the moment. See
 	// https://github.com/github/ReactiveCocoaLayout/issues/12.
-	RAC(self.nameLabel.rcl_alignmentRect) = [[labelRect replaceSize:self.nameLabel.rcl_intrinsicContentSizeSignal]
-		alignBaseline:self.nameLabel.rcl_baselineSignal toBaseline:self.nameTextField.rcl_baselineSignal ofRect:self.nameTextField.rcl_alignmentRectSignal];
+	RCLAlignment(self.nameLabel) = @{
+		rcl_rect: labelRect,
+		rcl_size: self.nameLabel.rcl_intrinsicContentSizeSignal,
+		rcl_baseline: self.nameTextField
+	};
 
 	// Animate the initial appearance of the text field, but not any changes due
 	// to rotation.

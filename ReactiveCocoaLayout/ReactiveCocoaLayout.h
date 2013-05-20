@@ -9,6 +9,7 @@
 #import <ReactiveCocoaLayout/RACSignal+RCLAnimationAdditions.h>
 #import <ReactiveCocoaLayout/RACSignal+RCLGeometryAdditions.h>
 #import <ReactiveCocoaLayout/RACSignal+RCLWritingDirectionAdditions.h>
+#import <ReactiveCocoaLayout/RCLMacros.h>
 #import <ReactiveCocoaLayout/View+RCLAutoLayoutAdditions.h>
 
 #ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
