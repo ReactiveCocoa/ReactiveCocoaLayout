@@ -139,8 +139,10 @@
 	RACTupleUnpack(RACSignal *labelRect, RACSignal *fieldRect) = [signal divideWithAmount:RACAbleWithStart(self.labelWidth) padding:self.horizontalPadding fromEdge:NSLayoutAttributeLeading];
 
 	RAC(field, rcl_alignmentRect) = fieldRect;
-	RAC(label, rcl_alignmentRect) = [[labelRect replaceSize:label.rcl_intrinsicContentSizeSignal]
-		alignBaseline:label.rcl_baselineSignal toBaseline:field.rcl_baselineSignal ofRect:fieldRect];
+	RCLAlignment(label) = @{
+		rcl_origin: labelRect.origin,
+		rcl_baseline: field
+	};
 }
 
 #pragma mark View Creation
