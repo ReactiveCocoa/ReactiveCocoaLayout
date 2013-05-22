@@ -8,7 +8,7 @@
 
 #import "TestView.h"
 
-static NSString * const MacroExamples = @"MacroExamples";
+static NSString * const MacroBindingExamples = @"MacroBindingExamples";
 
 // Associated with a block that binds a dictionary of attributes to the desired
 // view property. This block should be of type:
@@ -19,9 +19,9 @@ static NSString * const MacroBindingBlock = @"MacroBindingBlock";
 // Associated with the name of the view property that is being bound.
 static NSString * const MacroPropertyName = @"MacroPropertyName";
 
-SharedExampleGroupsBegin(MacroExamples)
+SharedExampleGroupsBegin(MacroBindingExamples)
 
-sharedExamplesFor(MacroExamples, ^(NSDictionary *bindingInfo) {
+sharedExamplesFor(MacroBindingExamples, ^(NSDictionary *bindingInfo) {
 	CGSize intrinsicSize = CGSizeMake(10, 15);
 
 	__block TestView *view;
@@ -684,7 +684,7 @@ SharedExampleGroupsEnd
 SpecBegin(RCLMacros)
 
 describe(@"RCLFrame", ^{
-	itShouldBehaveLike(MacroExamples, @{
+	itShouldBehaveLike(MacroBindingExamples, @{
 		MacroPropertyName: @"rcl_frame",
 		MacroBindingBlock: ^(TestView *view, NSDictionary *bindings) {
 			RCLFrame(view) = bindings;
@@ -693,7 +693,7 @@ describe(@"RCLFrame", ^{
 });
 
 describe(@"RCLAlignment", ^{
-	itShouldBehaveLike(MacroExamples, @{
+	itShouldBehaveLike(MacroBindingExamples, @{
 		MacroPropertyName: @"rcl_alignmentRect",
 		MacroBindingBlock: ^(TestView *view, NSDictionary *bindings) {
 			RCLAlignment(view) = bindings;
