@@ -32,7 +32,7 @@
             RCL_case_(unsigned long, UnsignedLong), \
             RCL_case_(unsigned long long, UnsignedLongLong), \
             RCL_case_(unsigned short, UnsignedShort), \
-            default: [NSNumber valueWithBytes:value_ptr_ objCType:@encode(__typeof__(VALUE))] \
+            default: [NSValue valueWithBytes:value_ptr_ objCType:@encode(__typeof__(VALUE))] \
         ); \
         \
         [RACSignal return:obj_]; \
