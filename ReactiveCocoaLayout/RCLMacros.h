@@ -6,37 +6,13 @@
 //  Copyright (c) 2013 GitHub. All rights reserved.
 //
 
+#import <Archimedes/Archimedes.h>
+
 // Creates a signal from a constant geometry value. The value must be a boolean,
 // integral type, floating-point type, or a Core Graphics geometry structure.
 //
 // Returns a RACSignal.
-#define RCL(VALUE) \
-    ({ \
-        __typeof__(VALUE) value_ = (VALUE); \
-        const void *value_ptr_ = &value_; \
-        \
-        NSValue *obj_ = _Generic(value_, \
-            CGRect: [NSValue med_valueWithRect:*(CGRect *)value_ptr_], \
-            CGSize: [NSValue med_valueWithSize:*(CGSize *)value_ptr_], \
-            CGPoint: [NSValue med_valueWithPoint:*(CGPoint *)value_ptr_], \
-            RCL_case_(signed char, Char), \
-            RCL_case_(char, Char), \
-            RCL_case_(double, Double), \
-            RCL_case_(float, Float), \
-            RCL_case_(int, Int), \
-            RCL_case_(long, Long), \
-            RCL_case_(long long, LongLong), \
-            RCL_case_(short, Short), \
-            RCL_case_(unsigned char, UnsignedChar), \
-            RCL_case_(unsigned int, UnsignedInt), \
-            RCL_case_(unsigned long, UnsignedLong), \
-            RCL_case_(unsigned long long, UnsignedLongLong), \
-            RCL_case_(unsigned short, UnsignedShort), \
-            default: [NSValue valueWithBytes:value_ptr_ objCType:@encode(__typeof__(VALUE))] \
-        ); \
-        \
-        [RACSignal return:obj_]; \
-    })
+#define RCL(VALUE) RCLBox(VALUE)
 
 // Binds a view's frame to a set of attributes which describe different parts of
 // the frame rectangle.
@@ -192,5 +168,28 @@ typedef enum : NSInteger {
 	RCLAttributeBaseline
 } RCLAttribute;
 
-#define RCL_case_(TYPE, NAME) \
-    TYPE: [NSNumber numberWith ## NAME:*(TYPE *)value_ptr_]
+#define RCLBox_struct_(TYPE) \
+    static inline RACSignal *RCLBox(TYPE value) __attribute__((overloadable)) { \
+        return [RACSignal return:MEDBox(value)]; \
+    }
+
+#define RCLBox_number_(TYPE) \
+    static inline RACSignal *RCLBox(TYPE value) __attribute__((overloadable)) { \
+        return [RACSignal return:@(value)]; \
+    }
+
+RCLBox_struct_(CGRect);
+RCLBox_struct_(CGSize);
+RCLBox_struct_(CGPoint);
+RCLBox_number_(signed char);
+RCLBox_number_(unsigned char);
+RCLBox_number_(short);
+RCLBox_number_(unsigned short);
+RCLBox_number_(int);
+RCLBox_number_(unsigned);
+RCLBox_number_(long);
+RCLBox_number_(unsigned long);
+RCLBox_number_(long long);
+RCLBox_number_(unsigned long long);
+RCLBox_number_(float);
+RCLBox_number_(double);
