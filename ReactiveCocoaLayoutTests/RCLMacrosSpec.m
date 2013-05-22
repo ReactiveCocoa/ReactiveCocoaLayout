@@ -770,4 +770,66 @@ describe(@"RCLAlignment", ^{
 	});
 });
 
+describe(@"RCL", ^{
+	it(@"should create a constant signal of int", ^{
+		RACSignal *signal = RCL(INT_MIN);
+		expect([signal toArray]).to.equal(@[ @(INT_MIN) ]);
+	});
+
+	it(@"should create a constant signal of unsigned int", ^{
+		RACSignal *signal = RCL(UINT_MAX);
+		expect([signal toArray]).to.equal(@[ @(UINT_MAX) ]);
+	});
+
+	it(@"should create a constant signal of long long", ^{
+		RACSignal *signal = RCL(LLONG_MIN);
+		expect([signal toArray]).to.equal(@[ @(LLONG_MIN) ]);
+	});
+
+	it(@"should create a constant signal of unsigned long long", ^{
+		RACSignal *signal = RCL(ULLONG_MAX);
+		expect([signal toArray]).to.equal(@[ @(ULLONG_MAX) ]);
+	});
+
+	it(@"should create a constant signal of signed char", ^{
+		signed char value = SCHAR_MIN;
+		RACSignal *signal = RCL(value);
+		expect([signal toArray]).to.equal(@[ @(value) ]);
+	});
+
+	it(@"should create a constant signal of unsigned char", ^{
+		unsigned char value = UCHAR_MAX;
+		RACSignal *signal = RCL(value);
+		expect([signal toArray]).to.equal(@[ @(value) ]);
+	});
+
+	it(@"should create a constant signal of float", ^{
+		RACSignal *signal = RCL(FLT_MAX);
+		expect([signal toArray]).to.equal(@[ @(FLT_MAX) ]);
+	});
+
+	it(@"should create a constant signal of double", ^{
+		RACSignal *signal = RCL(DBL_MAX);
+		expect([signal toArray]).to.equal(@[ @(DBL_MAX) ]);
+	});
+
+	it(@"should create a constant signal of CGRect", ^{
+		CGRect rect = CGRectMake(1, 2, 3, 4);
+		RACSignal *signal = RCL(rect);
+		expect([signal toArray]).to.equal(@[ [NSValue med_valueWithRect:rect] ]);
+	});
+
+	it(@"should create a constant signal of CGSize", ^{
+		CGSize size = CGSizeMake(5, 10);
+		RACSignal *signal = RCL(size);
+		expect([signal toArray]).to.equal(@[ [NSValue med_valueWithSize:size] ]);
+	});
+
+	it(@"should create a constant signal of CGPoint", ^{
+		CGPoint point = CGPointMake(5, 10);
+		RACSignal *signal = RCL(point);
+		expect([signal toArray]).to.equal(@[ [NSValue med_valueWithPoint:point] ]);
+	});
+});
+
 SpecEnd
