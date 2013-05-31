@@ -9,6 +9,7 @@
 #import "RCLMacros.h"
 #import "EXTScope.h"
 #import "RACSignal+RCLGeometryAdditions.h"
+#import <Archimedes/Archimedes.h>
 
 #ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
 #import "UIView+RCLGeometryAdditions.h"
@@ -77,7 +78,14 @@ static NSString *NSStringFromRCLAttribute(RCLAttribute attribute) __attribute__(
 
 	NSArray *sortedAttributes = [bindings.allKeys sortedArrayUsingSelector:@selector(compare:)];
 
-	RACSignal *signal = [self.view rcl_intrinsicBoundsSignal];
+	@weakify(self);
+	RACSignal *signal = [[self.view rcl_intrinsicBoundsSignal] map:^(NSValue *value) {
+		@strongify(self);
+		CGRect bounds = value.med_rectValue;
+		CGRect frame = (CGRect){ .origin = [self.view frame].origin, .size = bounds.size };
+		return MEDBox(frame);
+	}];
+
 	for (NSNumber *attribute in sortedAttributes) {
 		NSAssert([attribute isKindOfClass:NSNumber.class], @"Layout binding key is not a RCLAttribute: %@", attribute);
 
