@@ -12,7 +12,7 @@
 // integral type, floating-point type, or a Core Graphics geometry structure.
 //
 // Returns a RACSignal.
-#define RCL(VALUE) RCLBox(VALUE)
+#define RCLBox(VALUE) RCLBox(VALUE)
 
 // Binds a view's frame to a set of attributes which describe different parts of
 // the frame rectangle.

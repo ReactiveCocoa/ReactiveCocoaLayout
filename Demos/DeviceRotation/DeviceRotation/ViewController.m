@@ -52,7 +52,7 @@
 
 	// Purposely misaligned to demonstrate automatic pixel alignment when
 	// binding to RCL's UIView properties.
-	RACSignal *insetRect = [self.view.rcl_boundsSignal insetWidth:RCL(16.25) height:RCL(24.75)];
+	RACSignal *insetRect = [self.view.rcl_boundsSignal insetWidth:RCLBox(16.25) height:RCLBox(24.75)];
 
 	// Dynamically change the text of nameLabel based on the current
 	// orientation.
@@ -62,10 +62,10 @@
 
 	// Horizontally divide the available space into a rect for the label and
 	// a rect for the text field.
-	RACTupleUnpack(RACSignal *labelRect, RACSignal *textFieldRect) = [insetRect divideWithAmount:self.nameLabel.rcl_intrinsicWidthSignal padding:RCL(8) fromEdge:NSLayoutAttributeLeading];
+	RACTupleUnpack(RACSignal *labelRect, RACSignal *textFieldRect) = [insetRect divideWithAmount:self.nameLabel.rcl_intrinsicWidthSignal padding:RCLBox(8) fromEdge:NSLayoutAttributeLeading];
 
 	// Make the text field a constant 28 points high.
-	textFieldRect = [textFieldRect sliceWithAmount:RCL(28) fromEdge:NSLayoutAttributeTop];
+	textFieldRect = [textFieldRect sliceWithAmount:RCLBox(28) fromEdge:NSLayoutAttributeTop];
 
 	// Size the label to its intrinsic size, and align it to the text field.
 	//
