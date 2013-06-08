@@ -169,12 +169,12 @@ typedef enum : NSInteger {
 } RCLAttribute;
 
 #define RCLBox_struct_(TYPE) \
-    static inline RACSignal *RCLBox(TYPE value) __attribute__((overloadable)) { \
+    __attribute__((overloadable)) static inline RACSignal *RCLBox(TYPE value) { \
         return [RACSignal return:MEDBox(value)]; \
     }
 
 #define RCLBox_number_(TYPE) \
-    static inline RACSignal *RCLBox(TYPE value) __attribute__((overloadable)) { \
+    __attribute__((overloadable)) static inline RACSignal *RCLBox(TYPE value) { \
         return [RACSignal return:@(value)]; \
     }
 
