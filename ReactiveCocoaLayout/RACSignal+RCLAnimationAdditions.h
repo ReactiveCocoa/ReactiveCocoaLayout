@@ -20,7 +20,7 @@
 // RCLAnimationCurveLinear    - Animates with the same pace over the duration of
 //                              the animation.
 #ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
-    typedef enum : NSUInteger {
+    typedef enum {
         RCLAnimationCurveDefault = 0,
         RCLAnimationCurveEaseInOut = UIViewAnimationOptionCurveEaseInOut,
         RCLAnimationCurveEaseIn = UIViewAnimationOptionCurveEaseIn,
