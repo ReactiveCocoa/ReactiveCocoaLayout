@@ -112,7 +112,7 @@
 		distinctUntilChanged]
 		subscribe:subject];
 
-	[self rac_addDeallocDisposable:[RACDisposable disposableWithBlock:^{
+	[self.rac_deallocDisposable addDisposable:[RACDisposable disposableWithBlock:^{
 		[disposable dispose];
 		[subject sendCompleted];
 	}]];
@@ -138,7 +138,7 @@
 		distinctUntilChanged]
 		subscribe:subject];
 
-	[self rac_addDeallocDisposable:[RACDisposable disposableWithBlock:^{
+	[self.rac_deallocDisposable addDisposable:[RACDisposable disposableWithBlock:^{
 		[disposable dispose];
 		[subject sendCompleted];
 	}]];
@@ -148,7 +148,7 @@
 
 - (RACSignal *)rcl_baselineSignal {
 	RACSubject *deallocSubject = [RACReplaySubject replaySubjectWithCapacity:1];
-	[self rac_addDeallocDisposable:[RACDisposable disposableWithBlock:^{
+	[self.rac_deallocDisposable addDisposable:[RACDisposable disposableWithBlock:^{
 		[deallocSubject sendCompleted];
 	}]];
 
