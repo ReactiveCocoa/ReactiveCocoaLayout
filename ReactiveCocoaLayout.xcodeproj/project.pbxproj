@@ -47,9 +47,11 @@
 		D06C9E5E167D8BD900276090 /* UIViewRCLGeometryAdditionsSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = D06C9E5D167D8BD900276090 /* UIViewRCLGeometryAdditionsSpec.m */; };
 		D06C9F41167D9AD400276090 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D06C9F40167D9AD300276090 /* QuartzCore.framework */; };
 		D08D164A16819DE300FBBA12 /* NSNotificationCenter+RACSupport.m in Sources */ = {isa = PBXBuildFile; fileRef = D0BB25E916788579005E9371 /* NSNotificationCenter+RACSupport.m */; };
-		D094E4E9177766FE00906BF7 /* libReactiveCocoa-iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D094E4E0177766EB00906BF7 /* libReactiveCocoa-iOS.a */; };
-		D094E4EA1777670400906BF7 /* ReactiveCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D094E4DE177766EB00906BF7 /* ReactiveCocoa.framework */; };
 		D094E4EB1777671B00906BF7 /* ReactiveCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D094E4DE177766EB00906BF7 /* ReactiveCocoa.framework */; };
+		D094E4F51777677300906BF7 /* libArchimedes-iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D0BB25821678809D005E9371 /* libArchimedes-iOS.a */; };
+		D094E4F61777677300906BF7 /* libReactiveCocoa-iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D094E4E0177766EB00906BF7 /* libReactiveCocoa-iOS.a */; };
+		D094E530177768BE00906BF7 /* ReactiveCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D094E4DE177766EB00906BF7 /* ReactiveCocoa.framework */; };
+		D094E53517776BF500906BF7 /* libArchimedes-Mac.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D0BB257E1678809D005E9371 /* libArchimedes-Mac.a */; };
 		D096C4C416917A7A0071C6D6 /* EXTScope.m in Sources */ = {isa = PBXBuildFile; fileRef = D096C4BF16917A7A0071C6D6 /* EXTScope.m */; };
 		D096C4C516917A7A0071C6D6 /* EXTScope.m in Sources */ = {isa = PBXBuildFile; fileRef = D096C4BF16917A7A0071C6D6 /* EXTScope.m */; };
 		D096C4EC16917B0D0071C6D6 /* NSControlRCLGeometryAdditionsSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = D096C4EB16917B0D0071C6D6 /* NSControlRCLGeometryAdditionsSpec.m */; };
@@ -65,7 +67,6 @@
 		D0BB248F1678772C005E9371 /* ReactiveCocoaLayout.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0BB24711678772C005E9371 /* ReactiveCocoaLayout.framework */; };
 		D0BB24951678772C005E9371 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = D0BB24931678772C005E9371 /* InfoPlist.strings */; };
 		D0BB24DD167879A3005E9371 /* ReactiveCocoaLayout.h in Headers */ = {isa = PBXBuildFile; fileRef = D0BB24811678772C005E9371 /* ReactiveCocoaLayout.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		D0BB25A9167880BC005E9371 /* libArchimedes-Mac.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D0BB257E1678809D005E9371 /* libArchimedes-Mac.a */; };
 		D0BB25E01678847A005E9371 /* NSView+RCLGeometryAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = D0BB25DE1678847A005E9371 /* NSView+RCLGeometryAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D0BB25E11678847A005E9371 /* NSView+RCLGeometryAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = D0BB25DF1678847A005E9371 /* NSView+RCLGeometryAdditions.m */; };
 		D0BB25EB16788579005E9371 /* NSNotificationCenter+RACSupport.m in Sources */ = {isa = PBXBuildFile; fileRef = D0BB25E916788579005E9371 /* NSNotificationCenter+RACSupport.m */; };
@@ -80,7 +81,6 @@
 		D0ED89F616814D800041A188 /* RACSignal+RCLWritingDirectionAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = D0ED89F316814D800041A188 /* RACSignal+RCLWritingDirectionAdditions.m */; };
 		D0ED89F8168150030041A188 /* RACSignalRCLWritingDirectionAdditionsSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = D0ED89F7168150030041A188 /* RACSignalRCLWritingDirectionAdditionsSpec.m */; };
 		D0ED89F9168150030041A188 /* RACSignalRCLWritingDirectionAdditionsSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = D0ED89F7168150030041A188 /* RACSignalRCLWritingDirectionAdditionsSpec.m */; };
-		D0FD5A0C1679DFA8003C3210 /* libArchimedes-iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D0BB25821678809D005E9371 /* libArchimedes-iOS.a */; };
 		D0FD5A981679E7AF003C3210 /* UIView+RCLGeometryAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = D0FD5A971679E7AF003C3210 /* UIView+RCLGeometryAdditions.m */; };
 /* End PBXBuildFile section */
 
@@ -91,13 +91,6 @@
 			proxyType = 1;
 			remoteGlobalIDString = D06269EC1679440C00E951A5;
 			remoteInfo = ReactiveCocoaLayout;
-		};
-		D0626A35167944B900E951A5 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = D0BB25711678809C005E9371 /* Archimedes.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = D02FAF8E1635DFD8008D42D9;
-			remoteInfo = "Archimedes iOS";
 		};
 		D06C9E30167D886A00276090 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -211,19 +204,33 @@
 			remoteGlobalIDString = 5FAF5223174D4C2000CAC810;
 			remoteInfo = "ReactiveCocoaTests-iOS";
 		};
-		D094E4E5177766F200906BF7 /* PBXContainerItemProxy */ = {
+		D094E4FA1777684200906BF7 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = D094E4D4177766EB00906BF7 /* ReactiveCocoa.xcodeproj */;
 			proxyType = 1;
 			remoteGlobalIDString = 88037F8215056328001A5B19;
 			remoteInfo = ReactiveCocoa;
 		};
-		D094E4E7177766FB00906BF7 /* PBXContainerItemProxy */ = {
+		D094E4FC1777684200906BF7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D0BB25711678809C005E9371 /* Archimedes.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = D02FAED81635DDC0008D42D9;
+			remoteInfo = "Archimedes Mac";
+		};
+		D094E4FE1777684800906BF7 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = D094E4D4177766EB00906BF7 /* ReactiveCocoa.xcodeproj */;
 			proxyType = 1;
 			remoteGlobalIDString = 88F440AA153DAC820097B4C3;
 			remoteInfo = "ReactiveCocoa-iOS";
+		};
+		D094E5001777684800906BF7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D0BB25711678809C005E9371 /* Archimedes.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = D02FAF8E1635DFD8008D42D9;
+			remoteInfo = "Archimedes iOS";
 		};
 		D0BB248D1678772C005E9371 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -259,13 +266,6 @@
 			proxyType = 2;
 			remoteGlobalIDString = D02FAF9D1635DFD9008D42D9;
 			remoteInfo = "Archimedes iOS Tests";
-		};
-		D0BB25A7167880B2005E9371 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = D0BB25711678809C005E9371 /* Archimedes.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = D02FAED81635DDC0008D42D9;
-			remoteInfo = "Archimedes Mac";
 		};
 /* End PBXContainerItemProxy section */
 
@@ -351,9 +351,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D094E4E9177766FE00906BF7 /* libReactiveCocoa-iOS.a in Frameworks */,
 				D037FEFB1696F42D002D0CBA /* QuartzCore.framework in Frameworks */,
-				D0FD5A0C1679DFA8003C3210 /* libArchimedes-iOS.a in Frameworks */,
 				D0626A3A167944CF00E951A5 /* UIKit.framework in Frameworks */,
 				D06269EE1679440C00E951A5 /* Foundation.framework in Frameworks */,
 			);
@@ -363,6 +361,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D094E4F51777677300906BF7 /* libArchimedes-iOS.a in Frameworks */,
+				D094E4F61777677300906BF7 /* libReactiveCocoa-iOS.a in Frameworks */,
 				D06C9E59167D89DB00276090 /* CoreGraphics.framework in Frameworks */,
 				D06269FC1679440D00E951A5 /* SenTestingKit.framework in Frameworks */,
 				D06269FF1679440D00E951A5 /* Foundation.framework in Frameworks */,
@@ -378,9 +378,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D094E4EA1777670400906BF7 /* ReactiveCocoa.framework in Frameworks */,
+				D094E53517776BF500906BF7 /* libArchimedes-Mac.a in Frameworks */,
+				D094E530177768BE00906BF7 /* ReactiveCocoa.framework in Frameworks */,
 				D06C9F41167D9AD400276090 /* QuartzCore.framework in Frameworks */,
-				D0BB25A9167880BC005E9371 /* libArchimedes-Mac.a in Frameworks */,
 				D0BB24751678772C005E9371 /* Cocoa.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -734,8 +734,8 @@
 			buildRules = (
 			);
 			dependencies = (
-				D094E4E8177766FB00906BF7 /* PBXTargetDependency */,
-				D0626A36167944B900E951A5 /* PBXTargetDependency */,
+				D094E4FF1777684800906BF7 /* PBXTargetDependency */,
+				D094E5011777684800906BF7 /* PBXTargetDependency */,
 			);
 			name = "ReactiveCocoaLayout iOS";
 			productName = ReactiveCocoaLayout;
@@ -775,8 +775,8 @@
 			buildRules = (
 			);
 			dependencies = (
-				D094E4E6177766F200906BF7 /* PBXTargetDependency */,
-				D0BB25A8167880B2005E9371 /* PBXTargetDependency */,
+				D094E4FB1777684200906BF7 /* PBXTargetDependency */,
+				D094E4FD1777684200906BF7 /* PBXTargetDependency */,
 			);
 			name = "ReactiveCocoaLayout Mac";
 			productName = ReactiveCocoaLayout;
@@ -1092,11 +1092,6 @@
 			target = D06269EC1679440C00E951A5 /* ReactiveCocoaLayout iOS */;
 			targetProxy = D0626A001679440D00E951A5 /* PBXContainerItemProxy */;
 		};
-		D0626A36167944B900E951A5 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = "Archimedes iOS";
-			targetProxy = D0626A35167944B900E951A5 /* PBXContainerItemProxy */;
-		};
 		D06C9E45167D887400276090 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = Specta;
@@ -1117,25 +1112,30 @@
 			name = "Expecta-iOS";
 			targetProxy = D06C9E4C167D888700276090 /* PBXContainerItemProxy */;
 		};
-		D094E4E6177766F200906BF7 /* PBXTargetDependency */ = {
+		D094E4FB1777684200906BF7 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = ReactiveCocoa;
-			targetProxy = D094E4E5177766F200906BF7 /* PBXContainerItemProxy */;
+			targetProxy = D094E4FA1777684200906BF7 /* PBXContainerItemProxy */;
 		};
-		D094E4E8177766FB00906BF7 /* PBXTargetDependency */ = {
+		D094E4FD1777684200906BF7 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "Archimedes Mac";
+			targetProxy = D094E4FC1777684200906BF7 /* PBXContainerItemProxy */;
+		};
+		D094E4FF1777684800906BF7 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = "ReactiveCocoa-iOS";
-			targetProxy = D094E4E7177766FB00906BF7 /* PBXContainerItemProxy */;
+			targetProxy = D094E4FE1777684800906BF7 /* PBXContainerItemProxy */;
+		};
+		D094E5011777684800906BF7 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "Archimedes iOS";
+			targetProxy = D094E5001777684800906BF7 /* PBXContainerItemProxy */;
 		};
 		D0BB248E1678772C005E9371 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = D0BB24701678772C005E9371 /* ReactiveCocoaLayout Mac */;
 			targetProxy = D0BB248D1678772C005E9371 /* PBXContainerItemProxy */;
-		};
-		D0BB25A8167880B2005E9371 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = "Archimedes Mac";
-			targetProxy = D0BB25A7167880B2005E9371 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
