@@ -32,13 +32,11 @@ then
 fi
 
 echo "*** Building framework..."
-xcodebuild -workspace ReactiveCocoaLayout.xcworkspace -configuration "$XCCONFIGURATION" -scheme "ReactiveCocoaLayout Mac" clean test OBJROOT="$PWD/build" SYMROOT="$PWD/build" $XCODEBUILD_SETTINGS || exit $?
-xcodebuild -workspace ReactiveCocoaLayout.xcworkspace -configuration "$XCCONFIGURATION" -scheme "ReactiveCocoaLayout iOS" clean build OBJROOT="$PWD/build" SYMROOT="$PWD/build" $XCODEBUILD_SETTINGS || exit $?
+xcodebuild -configuration "$XCCONFIGURATION" -scheme "ReactiveCocoaLayout Mac" clean test OBJROOT="$PWD/build" SYMROOT="$PWD/build" $XCODEBUILD_SETTINGS || exit $?
+xcodebuild -configuration "$XCCONFIGURATION" -scheme "ReactiveCocoaLayout iOS" clean build OBJROOT="$PWD/build" SYMROOT="$PWD/build" $XCODEBUILD_SETTINGS || exit $?
 
 echo "*** Building demos..."
 
-cd Demos/DeviceRotation
-xcodebuild -configuration "$XCCONFIGURATION" -scheme "DeviceRotation" -sdk iphonesimulator build OBJROOT="$PWD/build" SYMROOT="$PWD/build" $XCODEBUILD_SETTINGS || exit $?
-
-cd ../ResizingWindow
-xcodebuild -configuration "$XCCONFIGURATION" -scheme "ResizingWindow" build OBJROOT="$PWD/build" SYMROOT="$PWD/build" $XCODEBUILD_SETTINGS || exit $?
+cd Demos
+xcodebuild -workspace Demos.xcworkspace -configuration "$XCCONFIGURATION" -scheme "DeviceRotation" -sdk iphonesimulator build OBJROOT="$PWD/build" SYMROOT="$PWD/build" $XCODEBUILD_SETTINGS || exit $?
+xcodebuild -workspace Demos.xcworkspace -configuration "$XCCONFIGURATION" -scheme "ResizingWindow" build OBJROOT="$PWD/build" SYMROOT="$PWD/build" $XCODEBUILD_SETTINGS || exit $?
