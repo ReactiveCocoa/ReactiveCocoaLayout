@@ -7,9 +7,9 @@
 //
 
 #import "View+RCLAutoLayoutAdditions.h"
-#import "EXTScope.h"
 #import "RACSignal+RCLGeometryAdditions.h"
 #import <objc/runtime.h>
+#import <ReactiveCocoa/EXTScope.h>
 
 #ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
 #import "UIView+RCLGeometryAdditions.h"

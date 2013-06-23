@@ -7,8 +7,8 @@
 //
 
 #import "NSCell+RCLGeometryAdditions.h"
-#import "EXTScope.h"
 #import "NSControl+RCLGeometryAdditions.h"
+#import <ReactiveCocoa/EXTScope.h>
 
 // Returns a signal which sends the given cell once immediately, and then again
 // whenever its intrinsic content size is invalidated.
