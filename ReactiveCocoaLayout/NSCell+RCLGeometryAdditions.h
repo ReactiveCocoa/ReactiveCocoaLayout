@@ -8,6 +8,8 @@
 
 #import <Cocoa/Cocoa.h>
 
+@class RACSignal;
+
 @interface NSCell (RCLGeometryAdditions)
 
 // Observes the receiver's -cellSize for changes.

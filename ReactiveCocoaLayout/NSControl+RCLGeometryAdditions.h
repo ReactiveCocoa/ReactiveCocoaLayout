@@ -8,6 +8,8 @@
 
 #import <Cocoa/Cocoa.h>
 
+@class RACSignal;
+
 @interface NSControl (RCLGeometryAdditions)
 
 // Observes the cell(s) of the receiver for changes to their intrinsic content

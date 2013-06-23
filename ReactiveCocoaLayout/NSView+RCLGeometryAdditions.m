@@ -10,8 +10,10 @@
 #import "NSNotificationCenter+RACSupport.h"
 #import "RACSignal+RCLAnimationAdditions.h"
 #import "View+RCLAutoLayoutAdditions.h"
+#import <Archimedes/Archimedes.h>
 #import <objc/runtime.h>
 #import <ReactiveCocoa/EXTScope.h>
+#import <ReactiveCocoa/ReactiveCocoa.h>
 
 @implementation NSView (RCLGeometryAdditions)
 

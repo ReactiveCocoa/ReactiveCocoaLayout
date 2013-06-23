@@ -8,6 +8,7 @@
 
 #import "NSControl+RCLGeometryAdditions.h"
 #import <objc/runtime.h>
+#import <ReactiveCocoa/ReactiveCocoa.h>
 
 // Associated with a RACSubject which sends whenever
 // -invalidateIntrinsicContentSizeForCell: is invoked.
