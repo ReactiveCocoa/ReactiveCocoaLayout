@@ -7,8 +7,8 @@
 //
 
 #import "RCLMacros.h"
-#import "EXTScope.h"
 #import "RACSignal+RCLGeometryAdditions.h"
+#import <ReactiveCocoa/EXTScope.h>
 
 #ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
 #import "UIView+RCLGeometryAdditions.h"

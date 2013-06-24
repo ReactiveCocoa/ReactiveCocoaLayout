@@ -8,6 +8,8 @@
 
 #import "RACSignal+RCLGeometryAdditions.h"
 #import "RACSignal+RCLWritingDirectionAdditions.h"
+#import <Archimedes/Archimedes.h>
+#import <ReactiveCocoa/ReactiveCocoa.h>
 
 // When any signal sends an NSNumber, sorts the latest values from all of them,
 // and sends either the minimum or the maximum.

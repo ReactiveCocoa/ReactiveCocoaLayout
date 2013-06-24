@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+@class RACSignal;
+
 @interface UIView (RCLGeometryAdditions)
 
 // The alignment rect for the receiver's current frame.

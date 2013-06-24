@@ -7,6 +7,13 @@
 //
 
 #import <Archimedes/Archimedes.h>
+#import <ReactiveCocoa/ReactiveCocoa.h>
+
+#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
+#import <UIKit/UIKit.h>
+#elif TARGET_OS_MAC
+#import <AppKit/AppKit.h>
+#endif
 
 // Creates a signal from a constant geometry value. The value must be a boolean,
 // integral type, floating-point type, or a Core Graphics geometry structure.
