@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D0476CBA17790F140071F3CB /* Archimedes.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0476CB917790F140071F3CB /* Archimedes.framework */; };
 		D094E59A177771A400906BF7 /* ReactiveCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D094E598177771A400906BF7 /* ReactiveCocoa.framework */; };
 		D094E59B177771A400906BF7 /* ReactiveCocoaLayout.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D094E599177771A400906BF7 /* ReactiveCocoaLayout.framework */; };
 		D0BB24FB16787D04005E9371 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0BB24FA16787D04005E9371 /* Cocoa.framework */; };
@@ -20,8 +21,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		D094E598177771A400906BF7 /* ReactiveCocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = file; name = ReactiveCocoa.framework; path = ../../External/ReactiveCocoa/ReactiveCocoaFramework/build/Release/ReactiveCocoa.framework; sourceTree = "<group>"; };
-		D094E599177771A400906BF7 /* ReactiveCocoaLayout.framework */ = {isa = PBXFileReference; lastKnownFileType = file; name = ReactiveCocoaLayout.framework; path = ../../build/Release/ReactiveCocoaLayout.framework; sourceTree = "<group>"; };
+		D0476CB917790F140071F3CB /* Archimedes.framework */ = {isa = PBXFileReference; lastKnownFileType = file; name = Archimedes.framework; path = ../../External/Archimedes/build/Release/Archimedes.framework; sourceTree = "<group>"; };
+		D094E598177771A400906BF7 /* ReactiveCocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ReactiveCocoa.framework; path = ../../External/ReactiveCocoa/ReactiveCocoaFramework/build/Release/ReactiveCocoa.framework; sourceTree = "<group>"; };
+		D094E599177771A400906BF7 /* ReactiveCocoaLayout.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ReactiveCocoaLayout.framework; path = ../../build/Release/ReactiveCocoaLayout.framework; sourceTree = "<group>"; };
 		D0BB24F616787D04005E9371 /* ResizingWindow.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ResizingWindow.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D0BB24FA16787D04005E9371 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		D0BB24FD16787D04005E9371 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -59,6 +61,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D0476CBA17790F140071F3CB /* Archimedes.framework in Frameworks */,
 				D094E59A177771A400906BF7 /* ReactiveCocoa.framework in Frameworks */,
 				D094E59B177771A400906BF7 /* ReactiveCocoaLayout.framework in Frameworks */,
 				D0BB24FB16787D04005E9371 /* Cocoa.framework in Frameworks */,
@@ -89,6 +92,7 @@
 		D0BB24F916787D04005E9371 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				D0476CB917790F140071F3CB /* Archimedes.framework */,
 				D0BB24FA16787D04005E9371 /* Cocoa.framework */,
 				D0BB24FD16787D04005E9371 /* AppKit.framework */,
 				D0BB24FF16787D04005E9371 /* Foundation.framework */,
