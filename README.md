@@ -45,9 +45,8 @@ This will automatically pull down any dependencies. Then, simply open
 `ReactiveCocoaLayout.xcodeproj` and build.
 
 To use ReactiveCocoaLayout in your project, you will need to link
-[ReactiveCocoa](https://github.com/ReactiveCocoa/ReactiveCocoa) into your
-application target. iOS applications will also need to link
-[Archimedes](https://github.com/github/Archimedes).
+[ReactiveCocoa](https://github.com/ReactiveCocoa/ReactiveCocoa) and
+[Archimedes](https://github.com/github/Archimedes) into your application target.
 
 ## License
 
