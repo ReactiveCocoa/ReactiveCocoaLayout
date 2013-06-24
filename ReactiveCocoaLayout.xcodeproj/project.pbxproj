@@ -51,7 +51,7 @@
 		D094E4F51777677300906BF7 /* libArchimedes-iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D0BB25821678809D005E9371 /* libArchimedes-iOS.a */; };
 		D094E4F61777677300906BF7 /* libReactiveCocoa-iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D094E4E0177766EB00906BF7 /* libReactiveCocoa-iOS.a */; };
 		D094E530177768BE00906BF7 /* ReactiveCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D094E4DE177766EB00906BF7 /* ReactiveCocoa.framework */; };
-		D094E53517776BF500906BF7 /* libArchimedes-Mac.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D0BB257E1678809D005E9371 /* libArchimedes-Mac.a */; };
+		D094E53517776BF500906BF7 /* Archimedes.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0BB257E1678809D005E9371 /* Archimedes.framework */; };
 		D096C4EC16917B0D0071C6D6 /* NSControlRCLGeometryAdditionsSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = D096C4EB16917B0D0071C6D6 /* NSControlRCLGeometryAdditionsSpec.m */; };
 		D096C4EF16917B140071C6D6 /* NSControl+RCLGeometryAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = D096C4ED16917B140071C6D6 /* NSControl+RCLGeometryAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D096C4F016917B140071C6D6 /* NSControl+RCLGeometryAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = D096C4EE16917B140071C6D6 /* NSControl+RCLGeometryAdditions.m */; };
@@ -74,6 +74,7 @@
 		D0C20EF61736398700115B19 /* RCLMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = D0C20EF41736398700115B19 /* RCLMacros.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D0C20EF817363A6500115B19 /* RCLMacros.m in Sources */ = {isa = PBXBuildFile; fileRef = D0C20EF717363A6500115B19 /* RCLMacros.m */; };
 		D0C20EF917363A6500115B19 /* RCLMacros.m in Sources */ = {isa = PBXBuildFile; fileRef = D0C20EF717363A6500115B19 /* RCLMacros.m */; };
+		D0D6294017790E5B008EF295 /* Archimedes.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0BB257E1678809D005E9371 /* Archimedes.framework */; };
 		D0ED89F416814D800041A188 /* RACSignal+RCLWritingDirectionAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = D0ED89F216814D800041A188 /* RACSignal+RCLWritingDirectionAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D0ED89F516814D800041A188 /* RACSignal+RCLWritingDirectionAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = D0ED89F316814D800041A188 /* RACSignal+RCLWritingDirectionAdditions.m */; };
 		D0ED89F616814D800041A188 /* RACSignal+RCLWritingDirectionAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = D0ED89F316814D800041A188 /* RACSignal+RCLWritingDirectionAdditions.m */; };
@@ -213,7 +214,7 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = D0BB25711678809C005E9371 /* Archimedes.xcodeproj */;
 			proxyType = 1;
-			remoteGlobalIDString = D02FAED81635DDC0008D42D9;
+			remoteGlobalIDString = D0D628E917790B29008EF295;
 			remoteInfo = "Archimedes Mac";
 		};
 		D094E4FE1777684800906BF7 /* PBXContainerItemProxy */ = {
@@ -373,7 +374,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D094E53517776BF500906BF7 /* libArchimedes-Mac.a in Frameworks */,
+				D094E53517776BF500906BF7 /* Archimedes.framework in Frameworks */,
 				D094E530177768BE00906BF7 /* ReactiveCocoa.framework in Frameworks */,
 				D06C9F41167D9AD400276090 /* QuartzCore.framework in Frameworks */,
 				D0BB24751678772C005E9371 /* Cocoa.framework in Frameworks */,
@@ -390,6 +391,7 @@
 				D0BB248F1678772C005E9371 /* ReactiveCocoaLayout.framework in Frameworks */,
 				D06C9E48167D888100276090 /* libExpecta.a in Frameworks */,
 				D06C9E49167D888100276090 /* libSpecta.a in Frameworks */,
+				D0D6294017790E5B008EF295 /* Archimedes.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -622,7 +624,7 @@
 		D0BB25721678809C005E9371 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				D0BB257E1678809D005E9371 /* libArchimedes-Mac.a */,
+				D0BB257E1678809D005E9371 /* Archimedes.framework */,
 				D0BB25801678809D005E9371 /* Archimedes Mac Tests.octest */,
 				D0BB25821678809D005E9371 /* libArchimedes-iOS.a */,
 				D0BB25841678809D005E9371 /* Archimedes iOS Tests.octest */,
@@ -919,10 +921,10 @@
 			remoteRef = D094E4E3177766EB00906BF7 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		D0BB257E1678809D005E9371 /* libArchimedes-Mac.a */ = {
+		D0BB257E1678809D005E9371 /* Archimedes.framework */ = {
 			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = "libArchimedes-Mac.a";
+			fileType = wrapper.framework;
+			path = Archimedes.framework;
 			remoteRef = D0BB257D1678809D005E9371 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
