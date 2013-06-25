@@ -7,8 +7,10 @@
 //
 
 #import "UIView+RCLGeometryAdditions.h"
-#import "EXTScope.h"
 #import "RACSignal+RCLGeometryAdditions.h"
+#import <Archimedes/Archimedes.h>
+#import <ReactiveCocoa/EXTScope.h>
+#import <ReactiveCocoa/ReactiveCocoa.h>
 
 // Aligns the given rectangle to the pixels on the view's screen, or the main
 // screen if the view is not attached to a screen yet.

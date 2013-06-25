@@ -7,7 +7,7 @@
 //
 
 #import "ResizingWindowController.h"
-#import "EXTScope.h"
+#import <ReactiveCocoa/EXTScope.h>
 
 @interface ResizingWindowController ()
 
