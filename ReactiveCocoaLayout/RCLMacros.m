@@ -67,7 +67,7 @@ static NSString *NSStringFromRCLAttribute(RCLAttribute attribute) __attribute__(
 	NSParameterAssert(property != nil);
 	NSParameterAssert([bindings isKindOfClass:NSDictionary.class]);
 
-	[[self rectSignalFromBindings:bindings] toProperty:property onObject:self.view];
+	[[self rectSignalFromBindings:bindings] setKeyPath:property onObject:self.view];
 }
 
 #pragma mark Attribute Parsing
