@@ -74,13 +74,13 @@
 
 	// The confirmation field should only be visible when some text is entered
 	// in the email field.
-	RAC(self.confirmEmailVisible) = [RACAble(self.email) map:^(NSString *str) {
+	RAC(self.confirmEmailVisible) = [[RACObserve(self.email) skip:1] map:^(NSString *str) {
 		return @(str.length > 0);
 	}];
 
 	// For the confirmation field, start with an alpha of 0, and then animate
 	// any changes thereafter.
-	RACSignal *confirmAlpha = [[RACSignal zero] concat:[RACAbleWithStart(self.confirmEmailVisible) animate]];
+	RACSignal *confirmAlpha = [[RACSignal zero] concat:[RACObserve(self.confirmEmailVisible) animate]];
 
 	RAC(self.confirmEmailLabel.rcl_alphaValue) = confirmAlpha;
 	RAC(self.confirmEmailField.rcl_alphaValue) = confirmAlpha;
@@ -106,7 +106,7 @@
 	// supposed to be visible.
 	//
 	// First, choose the appropriate signal based on the BOOL…
-	RACSignal *confirmHeightPlusPadding = [[[[[RACSignal if:RACAbleWithStart(self.confirmEmailVisible)
+	RACSignal *confirmHeightPlusPadding = [[[[[RACSignal if:RACObserve(self.confirmEmailVisible)
 		then:[self.confirmEmailField.rcl_intrinsicHeightSignal plus:self.verticalPadding]
 		else:[RACSignal zero]]
 		// Then animate all changes.
@@ -136,7 +136,7 @@
 - (void)layoutField:(NSTextField *)field label:(NSTextField *)label fromSignal:(RACSignal *)signal {
 	// Split the rect horizontally, into a rect for the label and a rect for the
 	// text field.
-	RACTupleUnpack(RACSignal *labelRect, RACSignal *fieldRect) = [signal divideWithAmount:RACAbleWithStart(self.labelWidth) padding:self.horizontalPadding fromEdge:NSLayoutAttributeLeading];
+	RACTupleUnpack(RACSignal *labelRect, RACSignal *fieldRect) = [signal divideWithAmount:RACObserve(self.labelWidth) padding:self.horizontalPadding fromEdge:NSLayoutAttributeLeading];
 
 	RAC(field, rcl_alignmentRect) = fieldRect;
 	RCLAlignment(label) = @{
