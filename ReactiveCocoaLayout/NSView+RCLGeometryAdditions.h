@@ -8,6 +8,8 @@
 
 #import <Cocoa/Cocoa.h>
 
+@class RACSignal;
+
 @interface NSView (RCLGeometryAdditions)
 
 // The alignment rect for the receiver's current frame.

@@ -6,9 +6,9 @@
 //  Copyright (c) 2013 GitHub. All rights reserved.
 //
 
-#import <libkern/OSAtomic.h>
 #import "RACSignal+RCLAnimationAdditions.h"
-#import "EXTScope.h"
+#import <libkern/OSAtomic.h>
+#import <ReactiveCocoa/EXTScope.h>
 
 // The number of animated signals in the current chain.
 //

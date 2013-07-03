@@ -8,7 +8,7 @@
 
 #import "TestView.h"
 
-static NSString * const MacroExamples = @"MacroExamples";
+static NSString * const MacroBindingExamples = @"MacroBindingExamples";
 
 // Associated with a block that binds a dictionary of attributes to the desired
 // view property. This block should be of type:
@@ -19,9 +19,9 @@ static NSString * const MacroBindingBlock = @"MacroBindingBlock";
 // Associated with the name of the view property that is being bound.
 static NSString * const MacroPropertyName = @"MacroPropertyName";
 
-SharedExampleGroupsBegin(MacroExamples)
+SharedExampleGroupsBegin(MacroBindingExamples)
 
-sharedExamplesFor(MacroExamples, ^(NSDictionary *bindingInfo) {
+sharedExamplesFor(MacroBindingExamples, ^(NSDictionary *bindingInfo) {
 	CGSize intrinsicSize = CGSizeMake(10, 15);
 
 	__block TestView *view;
@@ -684,7 +684,7 @@ SharedExampleGroupsEnd
 SpecBegin(RCLMacros)
 
 describe(@"RCLFrame", ^{
-	itShouldBehaveLike(MacroExamples, @{
+	itShouldBehaveLike(MacroBindingExamples, @{
 		MacroPropertyName: @"rcl_frame",
 		MacroBindingBlock: ^(TestView *view, NSDictionary *bindings) {
 			RCLFrame(view) = bindings;
@@ -693,7 +693,7 @@ describe(@"RCLFrame", ^{
 });
 
 describe(@"RCLAlignment", ^{
-	itShouldBehaveLike(MacroExamples, @{
+	itShouldBehaveLike(MacroBindingExamples, @{
 		MacroPropertyName: @"rcl_alignmentRect",
 		MacroBindingBlock: ^(TestView *view, NSDictionary *bindings) {
 			RCLAlignment(view) = bindings;
@@ -767,6 +767,68 @@ describe(@"RCLAlignment", ^{
 
 			expect(view.rcl_alignmentRect).to.equal(rectAligned5);
 		});
+	});
+});
+
+describe(@"RCLBox", ^{
+	it(@"should create a constant signal of int", ^{
+		RACSignal *signal = RCLBox(INT_MIN);
+		expect([signal toArray]).to.equal(@[ @(INT_MIN) ]);
+	});
+
+	it(@"should create a constant signal of unsigned int", ^{
+		RACSignal *signal = RCLBox(UINT_MAX);
+		expect([signal toArray]).to.equal(@[ @(UINT_MAX) ]);
+	});
+
+	it(@"should create a constant signal of long long", ^{
+		RACSignal *signal = RCLBox(LLONG_MIN);
+		expect([signal toArray]).to.equal(@[ @(LLONG_MIN) ]);
+	});
+
+	it(@"should create a constant signal of unsigned long long", ^{
+		RACSignal *signal = RCLBox(ULLONG_MAX);
+		expect([signal toArray]).to.equal(@[ @(ULLONG_MAX) ]);
+	});
+
+	it(@"should create a constant signal of signed char", ^{
+		signed char value = SCHAR_MIN;
+		RACSignal *signal = RCLBox(value);
+		expect([signal toArray]).to.equal(@[ @(value) ]);
+	});
+
+	it(@"should create a constant signal of unsigned char", ^{
+		unsigned char value = UCHAR_MAX;
+		RACSignal *signal = RCLBox(value);
+		expect([signal toArray]).to.equal(@[ @(value) ]);
+	});
+
+	it(@"should create a constant signal of float", ^{
+		RACSignal *signal = RCLBox(FLT_MAX);
+		expect([signal toArray]).to.equal(@[ @(FLT_MAX) ]);
+	});
+
+	it(@"should create a constant signal of double", ^{
+		RACSignal *signal = RCLBox(DBL_MAX);
+		expect([signal toArray]).to.equal(@[ @(DBL_MAX) ]);
+	});
+
+	it(@"should create a constant signal of CGRect", ^{
+		CGRect rect = CGRectMake(1, 2, 3, 4);
+		RACSignal *signal = RCLBox(rect);
+		expect([signal toArray]).to.equal(@[ [NSValue med_valueWithRect:rect] ]);
+	});
+
+	it(@"should create a constant signal of CGSize", ^{
+		CGSize size = CGSizeMake(5, 10);
+		RACSignal *signal = RCLBox(size);
+		expect([signal toArray]).to.equal(@[ [NSValue med_valueWithSize:size] ]);
+	});
+
+	it(@"should create a constant signal of CGPoint", ^{
+		CGPoint point = CGPointMake(5, 10);
+		RACSignal *signal = RCLBox(point);
+		expect([signal toArray]).to.equal(@[ [NSValue med_valueWithPoint:point] ]);
 	});
 });
 

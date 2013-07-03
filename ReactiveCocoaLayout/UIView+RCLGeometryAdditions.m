@@ -7,8 +7,10 @@
 //
 
 #import "UIView+RCLGeometryAdditions.h"
-#import "EXTScope.h"
 #import "RACSignal+RCLGeometryAdditions.h"
+#import <Archimedes/Archimedes.h>
+#import <ReactiveCocoa/EXTScope.h>
+#import <ReactiveCocoa/ReactiveCocoa.h>
 
 // Aligns the given rectangle to the pixels on the view's screen, or the main
 // screen if the view is not attached to a screen yet.
@@ -69,7 +71,7 @@ static CGRect backingAlignedRect(UIView *view, CGRect rect) {
 - (RACSignal *)rcl_boundsSignal {
 	@weakify(self);
 
-	return [[[RACAbleWithStart(self.layer.bounds)
+	return [[[RACObserve(self.layer.bounds)
 		map:^(id _) {
 			@strongify(self);
 			return MEDBox(self.bounds);
@@ -82,7 +84,7 @@ static CGRect backingAlignedRect(UIView *view, CGRect rect) {
 	@weakify(self);
 
 	return [[[[RACSignal
-		merge:@[ self.rcl_boundsSignal, RACAbleWithStart(self.layer.position) ]]
+		merge:@[ self.rcl_boundsSignal, RACObserve(self.layer.position) ]]
 		map:^(id _) {
 			@strongify(self);
 			return MEDBox(self.frame);

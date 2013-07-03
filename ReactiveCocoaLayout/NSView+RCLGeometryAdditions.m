@@ -7,11 +7,13 @@
 //
 
 #import "NSView+RCLGeometryAdditions.h"
-#import "EXTScope.h"
 #import "NSNotificationCenter+RACSupport.h"
 #import "RACSignal+RCLAnimationAdditions.h"
 #import "View+RCLAutoLayoutAdditions.h"
+#import <Archimedes/Archimedes.h>
 #import <objc/runtime.h>
+#import <ReactiveCocoa/EXTScope.h>
+#import <ReactiveCocoa/ReactiveCocoa.h>
 
 @implementation NSView (RCLGeometryAdditions)
 
@@ -112,7 +114,7 @@
 		distinctUntilChanged]
 		subscribe:subject];
 
-	[self rac_addDeallocDisposable:[RACDisposable disposableWithBlock:^{
+	[self.rac_deallocDisposable addDisposable:[RACDisposable disposableWithBlock:^{
 		[disposable dispose];
 		[subject sendCompleted];
 	}]];
@@ -138,7 +140,7 @@
 		distinctUntilChanged]
 		subscribe:subject];
 
-	[self rac_addDeallocDisposable:[RACDisposable disposableWithBlock:^{
+	[self.rac_deallocDisposable addDisposable:[RACDisposable disposableWithBlock:^{
 		[disposable dispose];
 		[subject sendCompleted];
 	}]];
@@ -148,7 +150,7 @@
 
 - (RACSignal *)rcl_baselineSignal {
 	RACSubject *deallocSubject = [RACReplaySubject replaySubjectWithCapacity:1];
-	[self rac_addDeallocDisposable:[RACDisposable disposableWithBlock:^{
+	[self.rac_deallocDisposable addDisposable:[RACDisposable disposableWithBlock:^{
 		[deallocSubject sendCompleted];
 	}]];
 

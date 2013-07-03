@@ -6,6 +6,21 @@
 //  Copyright (c) 2013 GitHub. All rights reserved.
 //
 
+#import <Archimedes/Archimedes.h>
+#import <ReactiveCocoa/ReactiveCocoa.h>
+
+#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
+#import <UIKit/UIKit.h>
+#elif TARGET_OS_MAC
+#import <AppKit/AppKit.h>
+#endif
+
+// Creates a signal from a constant geometry value. The value must be a boolean,
+// integral type, floating-point type, or a Core Graphics geometry structure.
+//
+// Returns a RACSignal.
+#define RCLBox(VALUE) RCLBox(VALUE)
+
 // Binds a view's frame to a set of attributes which describe different parts of
 // the frame rectangle.
 //
@@ -159,3 +174,29 @@ typedef enum : NSInteger {
 	RCLAttributeLeading,
 	RCLAttributeBaseline
 } RCLAttribute;
+
+#define RCLBox_struct_(TYPE) \
+    __attribute__((overloadable)) static inline RACSignal *RCLBox(TYPE value) { \
+        return [RACSignal return:MEDBox(value)]; \
+    }
+
+#define RCLBox_number_(TYPE) \
+    __attribute__((overloadable)) static inline RACSignal *RCLBox(TYPE value) { \
+        return [RACSignal return:@(value)]; \
+    }
+
+RCLBox_struct_(CGRect);
+RCLBox_struct_(CGSize);
+RCLBox_struct_(CGPoint);
+RCLBox_number_(signed char);
+RCLBox_number_(unsigned char);
+RCLBox_number_(short);
+RCLBox_number_(unsigned short);
+RCLBox_number_(int);
+RCLBox_number_(unsigned);
+RCLBox_number_(long);
+RCLBox_number_(unsigned long);
+RCLBox_number_(long long);
+RCLBox_number_(unsigned long long);
+RCLBox_number_(float);
+RCLBox_number_(double);
