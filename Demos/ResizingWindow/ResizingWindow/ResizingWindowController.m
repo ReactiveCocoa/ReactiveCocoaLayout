@@ -68,15 +68,14 @@
 	self.confirmEmailField = [self textFieldWithString:@""];
 	self.nameField = [self textFieldWithString:@""];
 
-	// Work around NSControl.stringValue not being documented as KVO-compliant by
-	// binding to our own KVO-compliant property instead.
-	[self.emailField rac_bind:NSValueBinding toObject:self withKeyPath:@keypath(self.email) nilValue:@""];
-
 	// The confirmation field should only be visible when some text is entered
 	// in the email field.
-	RAC(self.confirmEmailVisible) = [[RACObserve(self.email) skip:1] map:^(NSString *str) {
-		return @(str.length > 0);
-	}];
+	RAC(self.confirmEmailVisible) = [[[self.emailField
+		rac_bind:NSValueBinding options:@{ NSContinuouslyUpdatesValueBindingOption: @YES }]
+		skip:1]
+		map:^(NSString *str) {
+			return @(str.length > 0);
+		}];
 
 	// For the confirmation field, start with an alpha of 0, and then animate
 	// any changes thereafter.
