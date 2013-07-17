@@ -71,7 +71,7 @@ static CGRect backingAlignedRect(UIView *view, CGRect rect) {
 - (RACSignal *)rcl_boundsSignal {
 	@weakify(self);
 
-	return [[[RACObserve(self.layer.bounds)
+	return [[[RACObserve(self, layer.bounds)
 		map:^(id _) {
 			@strongify(self);
 			return MEDBox(self.bounds);
@@ -84,7 +84,7 @@ static CGRect backingAlignedRect(UIView *view, CGRect rect) {
 	@weakify(self);
 
 	return [[[[RACSignal
-		merge:@[ self.rcl_boundsSignal, RACObserve(self.layer.position) ]]
+		merge:@[ self.rcl_boundsSignal, RACObserve(self, layer.position) ]]
 		map:^(id _) {
 			@strongify(self);
 			return MEDBox(self.frame);
