@@ -70,7 +70,7 @@
 
 	// The confirmation field should only be visible when some text is entered
 	// in the email field.
-	RAC(self.confirmEmailVisible) = [[[self.emailField
+	RAC(self, confirmEmailVisible) = [[[self.emailField
 		rac_bind:NSValueBinding options:@{ NSContinuouslyUpdatesValueBindingOption: @YES }]
 		skip:1]
 		map:^(NSString *str) {
@@ -81,11 +81,11 @@
 	// any changes thereafter.
 	RACSignal *confirmAlpha = [[RACSignal zero] concat:[RACObserve(self.confirmEmailVisible) animate]];
 
-	RAC(self.confirmEmailLabel.rcl_alphaValue) = confirmAlpha;
-	RAC(self.confirmEmailField.rcl_alphaValue) = confirmAlpha;
+	RAC(self.confirmEmailLabel, rcl_alphaValue) = confirmAlpha;
+	RAC(self.confirmEmailField, rcl_alphaValue) = confirmAlpha;
 
 	// We want to align all the text fields with the longest label.
-	RAC(self.labelWidth) = [RACSignal max:@[
+	RAC(self, labelWidth) = [RACSignal max:@[
 		self.nameLabel.rcl_intrinsicWidthSignal,
 		self.emailLabel.rcl_intrinsicWidthSignal,
 		self.confirmEmailLabel.rcl_intrinsicWidthSignal,
