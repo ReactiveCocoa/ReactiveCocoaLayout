@@ -70,8 +70,7 @@
 
 	// The confirmation field should only be visible when some text is entered
 	// in the email field.
-	RAC(self, confirmEmailVisible) = [[[self.emailField
-		rac_bind:NSValueBinding options:@{ NSContinuouslyUpdatesValueBindingOption: @YES }]
+	RAC(self, confirmEmailVisible) = [[self.emailField.rac_textSignal
 		skip:1]
 		map:^(NSString *str) {
 			return @(str.length > 0);
