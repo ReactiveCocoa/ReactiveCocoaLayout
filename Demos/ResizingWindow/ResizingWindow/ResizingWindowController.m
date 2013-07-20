@@ -68,25 +68,23 @@
 	self.confirmEmailField = [self textFieldWithString:@""];
 	self.nameField = [self textFieldWithString:@""];
 
-	// Work around NSControl.stringValue not being documented as KVO-compliant by
-	// binding to our own KVO-compliant property instead.
-	[self.emailField rac_bind:NSValueBinding toObject:self withKeyPath:@keypath(self.email) nilValue:@""];
-
 	// The confirmation field should only be visible when some text is entered
 	// in the email field.
-	RAC(self.confirmEmailVisible) = [[RACObserve(self.email) skip:1] map:^(NSString *str) {
-		return @(str.length > 0);
-	}];
+	RAC(self, confirmEmailVisible) = [[self.emailField.rac_textSignal
+		skip:1]
+		map:^(NSString *str) {
+			return @(str.length > 0);
+		}];
 
 	// For the confirmation field, start with an alpha of 0, and then animate
 	// any changes thereafter.
-	RACSignal *confirmAlpha = [[RACSignal zero] concat:[RACObserve(self.confirmEmailVisible) animate]];
+	RACSignal *confirmAlpha = [[RACSignal zero] concat:[RACObserve(self, confirmEmailVisible) animate]];
 
-	RAC(self.confirmEmailLabel.rcl_alphaValue) = confirmAlpha;
-	RAC(self.confirmEmailField.rcl_alphaValue) = confirmAlpha;
+	RAC(self.confirmEmailLabel, rcl_alphaValue) = confirmAlpha;
+	RAC(self.confirmEmailField, rcl_alphaValue) = confirmAlpha;
 
 	// We want to align all the text fields with the longest label.
-	RAC(self.labelWidth) = [RACSignal max:@[
+	RAC(self, labelWidth) = [RACSignal max:@[
 		self.nameLabel.rcl_intrinsicWidthSignal,
 		self.emailLabel.rcl_intrinsicWidthSignal,
 		self.confirmEmailLabel.rcl_intrinsicWidthSignal,
@@ -106,7 +104,7 @@
 	// supposed to be visible.
 	//
 	// First, choose the appropriate signal based on the BOOL…
-	RACSignal *confirmHeightPlusPadding = [[[[[RACSignal if:RACObserve(self.confirmEmailVisible)
+	RACSignal *confirmHeightPlusPadding = [[[[[RACSignal if:RACObserve(self, confirmEmailVisible)
 		then:[self.confirmEmailField.rcl_intrinsicHeightSignal plus:self.verticalPadding]
 		else:[RACSignal zero]]
 		// Then animate all changes.
@@ -136,7 +134,7 @@
 - (void)layoutField:(NSTextField *)field label:(NSTextField *)label fromSignal:(RACSignal *)signal {
 	// Split the rect horizontally, into a rect for the label and a rect for the
 	// text field.
-	RACTupleUnpack(RACSignal *labelRect, RACSignal *fieldRect) = [signal divideWithAmount:RACObserve(self.labelWidth) padding:self.horizontalPadding fromEdge:NSLayoutAttributeLeading];
+	RACTupleUnpack(RACSignal *labelRect, RACSignal *fieldRect) = [signal divideWithAmount:RACObserve(self, labelWidth) padding:self.horizontalPadding fromEdge:NSLayoutAttributeLeading];
 
 	RAC(field, rcl_alignmentRect) = fieldRect;
 	RCLAlignment(label) = @{
