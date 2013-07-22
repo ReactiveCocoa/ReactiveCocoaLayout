@@ -56,7 +56,7 @@
 
 	// Dynamically change the text of nameLabel based on the current
 	// orientation.
-	RAC(self.nameLabel.text) = [self.rotationSignal map:^(NSNumber *orientation) {
+	RAC(self.nameLabel, text) = [self.rotationSignal map:^(NSNumber *orientation) {
 		return (UIInterfaceOrientationIsPortrait(orientation.integerValue) ? NSLocalizedString(@"Portrait!", @"") : NSLocalizedString(@"Landscape awww yeaahhh", @""));
 	}];
 
@@ -80,7 +80,7 @@
 	// Animate the initial appearance of the text field, but not any changes due
 	// to rotation.
 	RACSignal *initialRect = [[textFieldRect take:1] animateWithDuration:1 curve:RCLAnimationCurveEaseOut];
-	RAC(self.nameTextField.rcl_alignmentRect) = [initialRect concat:textFieldRect];
+	RAC(self.nameTextField, rcl_alignmentRect) = [initialRect concat:textFieldRect];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
