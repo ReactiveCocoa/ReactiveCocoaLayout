@@ -631,7 +631,7 @@ static RACSignal *combineAttributeAndSignals(NSLayoutAttribute attribute, NSArra
 		setNameWithFormat:@"[%@] -alignBaseline: %@ toBaseline: %@ ofRect: %@", self.name, baselineSignal, referenceBaselineSignal, referenceRectSignal];
 }
 
-- (RACSignal *)insetWidth:(RACSignal *)widthSignal height:(RACSignal *)heightSignal {
+- (RACSignal *)insetWidth:(RACSignal *)widthSignal height:(RACSignal *)heightSignal nullRect:(CGRect)nullRect {
 	NSParameterAssert(widthSignal != nil);
 	NSParameterAssert(heightSignal != nil);
 
@@ -639,8 +639,15 @@ static RACSignal *combineAttributeAndSignals(NSLayoutAttribute attribute, NSArra
 		NSAssert([width isKindOfClass:NSNumber.class], @"Value sent by %@ is not a number: %@", widthSignal, width);
 		NSAssert([height isKindOfClass:NSNumber.class], @"Value sent by %@ is not a number: %@", heightSignal, height);
 		NSAssert([rect isKindOfClass:NSValue.class] && rect.med_geometryStructType == MEDGeometryStructTypeRect, @"Value sent by %@ is not a CGRect: %@", self, rect);
-
-		return MEDBox(CGRectInset(rect.med_rectValue, width.doubleValue, height.doubleValue));
+		
+		CGRect rectValue = rect.med_rectValue;
+		CGFloat widthValue = width.doubleValue;
+		CGFloat heightValue = height.doubleValue;
+		if (((widthValue * 2) > rectValue.size.width) || ((heightValue * 2) > rectValue.size.height)) {
+			return MEDBox(nullRect);
+		} else {
+			return MEDBox(CGRectInset(rectValue, widthValue, heightValue));
+		}
 	}] setNameWithFormat:@"[%@] -insetWidth: %@ height: %@", self.name, widthSignal, heightSignal];
 }
 

@@ -216,13 +216,25 @@ describe(@"signal of CGRects", ^{
 	});
 
 	it(@"should inset", ^{
-		RACSignal *result = [signal insetWidth:[RACSignal return:@3] height:[RACSignal return:@5]];
+		RACSignal *result = [signal insetWidth:[RACSignal return:@3] height:[RACSignal return:@5] nullRect:CGRectNull];
 		NSArray *expectedRects = @[
 			MEDBox(CGRectMake(13, 15, 14, 10)),
 			MEDBox(CGRectMake(13, 25, 24, 30)),
 			MEDBox(CGRectMake(28, 20, 39, 25)),
 		];
 
+		expect(result.sequence).to.equal(expectedRects.rac_sequence);
+	});
+	
+	it(@"should use null rect for insets larger than the rect dimensions", ^{
+		CGRect nullRect = CGRectMake(1, 2, 3, 4);
+		RACSignal *result = [signal insetWidth:[RACSignal return:@11] height:[RACSignal return:@18] nullRect:nullRect];
+		NSArray *expectedRects = @[
+			MEDBox(nullRect),
+			MEDBox(CGRectMake(21, 38, 8, 4)),
+			MEDBox(nullRect),
+		];
+		
 		expect(result.sequence).to.equal(expectedRects.rac_sequence);
 	});
 
