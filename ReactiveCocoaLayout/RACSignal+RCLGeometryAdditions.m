@@ -641,7 +641,7 @@ static RACSignal *combineAttributeAndSignals(NSLayoutAttribute attribute, NSArra
 		NSAssert([rect isKindOfClass:NSValue.class] && rect.med_geometryStructType == MEDGeometryStructTypeRect, @"Value sent by %@ is not a CGRect: %@", self, rect);
 		
 		CGRect insetRect = CGRectInset(rect.med_rectValue, width.doubleValue, height.doubleValue);
-		if (CGRectEqualToRect(insetRect, CGRectNull)) {
+		if (CGRectIsNull(insetRect)) {
 			return MEDBox(nullRect);
 		} else {
 			return MEDBox(insetRect);
