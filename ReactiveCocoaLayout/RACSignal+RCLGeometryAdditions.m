@@ -644,7 +644,7 @@ static RACSignal *combineAttributeAndSignals(NSLayoutAttribute attribute, NSArra
 	}] setNameWithFormat:@"[%@] -insetWidth: %@ height: %@", self.name, widthSignal, heightSignal];
 }
 
-- (RACSignal *)insetTop:(RACSignal *)topSignal left:(RACSignal *)leftSignal bottom:(RACSignal *)bottomSignal right:(RACSignal *)rightSignal {
+- (RACSignal *)insetTop:(RACSignal *)topSignal left:(RACSignal *)leftSignal bottom:(RACSignal *)bottomSignal right:(RACSignal *)rightSignal nullRect:(CGRect)nullRect {
 	NSParameterAssert(topSignal != nil);
 	NSParameterAssert(leftSignal != nil);
 	NSParameterAssert(bottomSignal != nil);
@@ -658,7 +658,13 @@ static RACSignal *combineAttributeAndSignals(NSLayoutAttribute attribute, NSArra
 		NSAssert([rect isKindOfClass:NSValue.class] && rect.med_geometryStructType == MEDGeometryStructTypeRect, @"Value sent by %@ is not a CGRect: %@", self, rect);
 		
 		MEDEdgeInsets insets = MEDEdgeInsetsMake(top.doubleValue, left.doubleValue, bottom.doubleValue, right.doubleValue);
-		return MEDBox(MEDEdgeInsetsInsetRect(rect.med_rectValue, insets));
+		CGRect insetRect = MEDEdgeInsetsInsetRect(rect.med_rectValue, insets);
+		
+		if (CGRectIsNull(insetRect)) {
+			return MEDBox(nullRect);
+		} else {
+			return MEDBox(insetRect);
+		}
 	}];
 }
 

@@ -206,9 +206,12 @@
 //                remove from the bottom of the rectangle.
 // rightSignal  - A signal of CGFloat values, representing the number of points
 //                remove from the right of the rectangle.
+// nullRect     - Rect to fall back to when the insets exceed the dimensions of
+//                the rect. Pass `CGRectNull` for the default behaviour of
+//                `CGRectInset`.
 //
 // Returns a signal of new, inset CGRect values.
-- (RACSignal *)insetTop:(RACSignal *)topSignal left:(RACSignal *)leftSignal bottom:(RACSignal *)bottomSignal right:(RACSignal *)rightSignal;
+- (RACSignal *)insetTop:(RACSignal *)topSignal left:(RACSignal *)leftSignal bottom:(RACSignal *)bottomSignal right:(RACSignal *)rightSignal nullRect:(CGRect)nullRect;
 
 // Offsets CGRect or CGPoint values in a specified direction.
 //
