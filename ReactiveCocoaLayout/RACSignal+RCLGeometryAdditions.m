@@ -640,13 +640,11 @@ static RACSignal *combineAttributeAndSignals(NSLayoutAttribute attribute, NSArra
 		NSAssert([height isKindOfClass:NSNumber.class], @"Value sent by %@ is not a number: %@", heightSignal, height);
 		NSAssert([rect isKindOfClass:NSValue.class] && rect.med_geometryStructType == MEDGeometryStructTypeRect, @"Value sent by %@ is not a CGRect: %@", self, rect);
 		
-		CGRect rectValue = rect.med_rectValue;
-		CGFloat widthValue = width.doubleValue;
-		CGFloat heightValue = height.doubleValue;
-		if (((widthValue * 2) > rectValue.size.width) || ((heightValue * 2) > rectValue.size.height)) {
+		CGRect insetRect = CGRectInset(rect.med_rectValue, width.doubleValue, height.doubleValue);
+		if (CGRectEqualToRect(insetRect, CGRectNull)) {
 			return MEDBox(nullRect);
 		} else {
-			return MEDBox(CGRectInset(rectValue, widthValue, heightValue));
+			return MEDBox(insetRect);
 		}
 	}] setNameWithFormat:@"[%@] -insetWidth: %@ height: %@", self.name, widthSignal, heightSignal];
 }
