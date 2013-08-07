@@ -195,6 +195,21 @@
 // Returns a signal of new, inset CGRect values.
 - (RACSignal *)insetWidth:(RACSignal *)widthSignal height:(RACSignal *)heightSignal;
 
+// Insets each CGRect by the number of points sent from the given top, bottom, left
+// and right signals.
+//
+// topSignal    - A signal of CGFloat values, representing the number of points
+//                remove from the top of the rectangle.
+// leftSignal   - A signal of CGFloat values, representing the number of points
+//                remove from the left side of the rectangle.
+// bottomSignal - A signal of CGFloat values, representing the number of points
+//                remove from the bottom of the rectangle.
+// rightSignal  - A signal of CGFloat values, representing the number of points
+//                remove from the right of the rectangle.
+//
+// Returns a signal of new, inset CGRect values.
+- (RACSignal *)insetTop:(RACSignal *)topSignal left:(RACSignal *)leftSignal bottom:(RACSignal *)bottomSignal right:(RACSignal *)rightSignal;
+
 // Offsets CGRect or CGPoint values in a specified direction.
 //
 // amountSignal  - A signal of CGFloat values, representing the number of points
