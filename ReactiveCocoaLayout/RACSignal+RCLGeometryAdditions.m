@@ -631,6 +631,22 @@ static RACSignal *combineAttributeAndSignals(NSLayoutAttribute attribute, NSArra
 		setNameWithFormat:@"[%@] -alignBaseline: %@ toBaseline: %@ ofRect: %@", self.name, baselineSignal, referenceBaselineSignal, referenceRectSignal];
 }
 
+- (RACSignal *)inset:(RACSignal *)insetSignal nullRect:(CGRect)nullRect {
+	NSParameterAssert(insetSignal != nil);
+	
+	return [RACSignal combineLatest:@[ insetSignal, self ] reduce:^id(NSValue *insets, NSValue *rect) {
+		NSAssert([insets isKindOfClass:NSValue.class] && rect.med_geometryStructType == MEDGeometryStructTypeEdgeInsets, @"Value sent by %@ is not an MEDEdgeInsets: %@", self, insets);
+		NSAssert([rect isKindOfClass:NSValue.class] && rect.med_geometryStructType == MEDGeometryStructTypeRect, @"Value sent by %@ is not a CGRect: %@", self, rect);
+		
+		CGRect insetRect = MEDEdgeInsetsInsetRect(rect.med_rectValue, insets.med_edgeInsetsValue);
+		if (CGRectIsNull(insetRect)) {
+			return MEDBox(nullRect);
+		} else {
+			return MEDBox(insetRect);
+		}
+	}];
+}
+
 - (RACSignal *)insetWidth:(RACSignal *)widthSignal height:(RACSignal *)heightSignal {
 	NSParameterAssert(widthSignal != nil);
 	NSParameterAssert(heightSignal != nil);
@@ -650,7 +666,7 @@ static RACSignal *combineAttributeAndSignals(NSLayoutAttribute attribute, NSArra
 	NSParameterAssert(bottomSignal != nil);
 	NSParameterAssert(rightSignal != nil);
 	
-	return [RACSignal combineLatest:@[ topSignal, leftSignal, bottomSignal, rightSignal, self ] reduce:^id(NSNumber *top, NSNumber *left, NSNumber *bottom, NSNumber *right, NSValue *rect) {
+	return [RACSignal combineLatest:@[ topSignal, leftSignal, bottomSignal, rightSignal, self ] reduce:^(NSNumber *top, NSNumber *left, NSNumber *bottom, NSNumber *right, NSValue *rect) {
 		NSAssert([top isKindOfClass:NSNumber.class], @"Value sent by %@ is not a number: %@", topSignal, top);
 		NSAssert([left isKindOfClass:NSNumber.class], @"Value sent by %@ is not a number: %@", leftSignal, left);
 		NSAssert([bottom isKindOfClass:NSNumber.class], @"Value sent by %@ is not a number: %@", bottomSignal, bottom);

@@ -184,6 +184,17 @@
 // Returns a signal of CGFloat values.
 - (RACSignal *)centerY;
 
+// Insets each CGRect using the given edge insets signal.
+//
+// insetSignal  - A signal of MEDEdgeInsets values, representing the number of points
+//                to inset the sides of the rectangle.
+// nullRect     - Rect to fall back to when the insets exceed the dimensions of
+//                the rect. Pass `CGRectNull` for the default behaviour of
+//                `CGRectInset`.
+//
+// Returns a signal of new, inset CGRect values.
+- (RACSignal *)inset:(RACSignal *)insetSignal nullRect:(CGRect)nullRect;
+
 // Insets each CGRect by the number of points sent from the given width and
 // height signals.
 //
