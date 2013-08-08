@@ -635,7 +635,7 @@ static RACSignal *combineAttributeAndSignals(NSLayoutAttribute attribute, NSArra
 	NSParameterAssert(insetSignal != nil);
 	
 	return [RACSignal combineLatest:@[ insetSignal, self ] reduce:^id(NSValue *insets, NSValue *rect) {
-		NSAssert([insets isKindOfClass:NSValue.class] && rect.med_geometryStructType == MEDGeometryStructTypeEdgeInsets, @"Value sent by %@ is not an MEDEdgeInsets: %@", self, insets);
+		NSAssert([insets isKindOfClass:NSValue.class] && insets.med_geometryStructType == MEDGeometryStructTypeEdgeInsets, @"Value sent by %@ is not an MEDEdgeInsets: %@", self, insets);
 		NSAssert([rect isKindOfClass:NSValue.class] && rect.med_geometryStructType == MEDGeometryStructTypeRect, @"Value sent by %@ is not a CGRect: %@", self, rect);
 		
 		CGRect insetRect = MEDEdgeInsetsInsetRect(rect.med_rectValue, insets.med_edgeInsetsValue);

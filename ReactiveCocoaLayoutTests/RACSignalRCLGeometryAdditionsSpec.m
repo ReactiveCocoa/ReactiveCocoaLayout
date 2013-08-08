@@ -226,22 +226,32 @@ describe(@"signal of CGRects", ^{
 		expect(result.sequence).to.equal(expectedRects.rac_sequence);
 	});
 	
-	it(@"should inset top, left, bottom, and right", ^{
-		RACSignal *result = [signal insetTop:[RACSignal return:@2] left:[RACSignal return:@10] bottom:[RACSignal return:@4] right:[RACSignal return:@20] nullRect:CGRectZero];
-		NSArray *expectedRects = @[
-			MEDBox(CGRectZero),
+	describe(@"variable top, left, bottom, right insets", ^{
+		__block NSArray *expectedRects;
+		beforeEach(^{
+			expectedRects = @[
+				MEDBox(CGRectZero),
 #ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
-			MEDBox(CGRectMake(20, 22, 0, 34)),
-			MEDBox(CGRectMake(35, 17, 15, 29)),
+				MEDBox(CGRectMake(20, 22, 0, 34)),
+				MEDBox(CGRectMake(35, 17, 15, 29)),
 #elif TARGET_OS_MAC
-			MEDBox(CGRectMake(20, 24, 0, 34)),
-			MEDBox(CGRectMake(35, 19, 15, 29)),
+				MEDBox(CGRectMake(20, 24, 0, 34)),
+				MEDBox(CGRectMake(35, 19, 15, 29)),
 #endif
-		];
+				];
+		});
 		
-		expect(result.sequence).to.equal(expectedRects.rac_sequence);
+		it(@"should inset using top, left, bottom, right signals", ^{
+			RACSignal *result = [signal insetTop:[RACSignal return:@2] left:[RACSignal return:@10] bottom:[RACSignal return:@4] right:[RACSignal return:@20] nullRect:CGRectZero];
+			expect(result.sequence).to.equal(expectedRects.rac_sequence);
+		});
+		
+		it(@"should inset using an MEDEdgeInsets signal", ^{
+			RACSignal *result = [signal inset:[RACSignal return:MEDBox(MEDEdgeInsetsMake(2, 10, 4, 20))] nullRect:CGRectZero];
+			expect(result.sequence).to.equal(expectedRects.rac_sequence);
+		});
 	});
-
+	
 	it(@"should slice", ^{
 		RACSignal *result = [signal sliceWithAmount:[RACSignal return:@5] fromEdge:NSLayoutAttributeLeft];
 		NSArray *expectedRects = @[
