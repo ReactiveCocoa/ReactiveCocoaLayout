@@ -634,7 +634,7 @@ static RACSignal *combineAttributeAndSignals(NSLayoutAttribute attribute, NSArra
 - (RACSignal *)inset:(RACSignal *)insetSignal nullRect:(CGRect)nullRect {
 	NSParameterAssert(insetSignal != nil);
 	
-	return [RACSignal combineLatest:@[ insetSignal, self ] reduce:^id(NSValue *insets, NSValue *rect) {
+	return [[RACSignal combineLatest:@[ insetSignal, self ] reduce:^id(NSValue *insets, NSValue *rect) {
 		NSAssert([insets isKindOfClass:NSValue.class] && insets.med_geometryStructType == MEDGeometryStructTypeEdgeInsets, @"Value sent by %@ is not an MEDEdgeInsets: %@", self, insets);
 		NSAssert([rect isKindOfClass:NSValue.class] && rect.med_geometryStructType == MEDGeometryStructTypeRect, @"Value sent by %@ is not a CGRect: %@", self, rect);
 		
@@ -644,7 +644,7 @@ static RACSignal *combineAttributeAndSignals(NSLayoutAttribute attribute, NSArra
 		} else {
 			return MEDBox(insetRect);
 		}
-	}];
+	}] setNameWithFormat:@"[%@] -inset: %@", self.name, insetSignal];
 }
 
 - (RACSignal *)insetWidth:(RACSignal *)widthSignal height:(RACSignal *)heightSignal {
@@ -666,7 +666,7 @@ static RACSignal *combineAttributeAndSignals(NSLayoutAttribute attribute, NSArra
 	NSParameterAssert(bottomSignal != nil);
 	NSParameterAssert(rightSignal != nil);
 	
-	return [RACSignal combineLatest:@[ topSignal, leftSignal, bottomSignal, rightSignal, self ] reduce:^(NSNumber *top, NSNumber *left, NSNumber *bottom, NSNumber *right, NSValue *rect) {
+	return [[RACSignal combineLatest:@[ topSignal, leftSignal, bottomSignal, rightSignal, self ] reduce:^(NSNumber *top, NSNumber *left, NSNumber *bottom, NSNumber *right, NSValue *rect) {
 		NSAssert([top isKindOfClass:NSNumber.class], @"Value sent by %@ is not a number: %@", topSignal, top);
 		NSAssert([left isKindOfClass:NSNumber.class], @"Value sent by %@ is not a number: %@", leftSignal, left);
 		NSAssert([bottom isKindOfClass:NSNumber.class], @"Value sent by %@ is not a number: %@", bottomSignal, bottom);
@@ -681,7 +681,7 @@ static RACSignal *combineAttributeAndSignals(NSLayoutAttribute attribute, NSArra
 		} else {
 			return MEDBox(insetRect);
 		}
-	}];
+	}] setNameWithFormat:@"[%@] -insetTop: %@ left: %@ bottom: %@ right: %@", self.name, topSignal, leftSignal, bottomSignal, rightSignal];
 }
 
 - (RACSignal *)offsetByAmount:(RACSignal *)amountSignal towardEdge:(NSLayoutAttribute)edgeAttribute {
