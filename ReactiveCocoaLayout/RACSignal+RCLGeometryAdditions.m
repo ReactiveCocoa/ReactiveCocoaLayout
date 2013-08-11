@@ -634,7 +634,7 @@ static RACSignal *combineAttributeAndSignals(NSLayoutAttribute attribute, NSArra
 - (RACSignal *)insetBy:(RACSignal *)insetSignal nullRect:(CGRect)nullRect {
 	NSParameterAssert(insetSignal != nil);
 	
-	return [[RACSignal combineLatest:@[ insetSignal, self ] reduce:^id(NSValue *insets, NSValue *rect) {
+	return [[RACSignal combineLatest:@[ insetSignal, self ] reduce:^(NSValue *insets, NSValue *rect) {
 		NSAssert([insets isKindOfClass:NSValue.class] && insets.med_geometryStructType == MEDGeometryStructTypeEdgeInsets, @"Value sent by %@ is not an MEDEdgeInsets: %@", self, insets);
 		NSAssert([rect isKindOfClass:NSValue.class] && rect.med_geometryStructType == MEDGeometryStructTypeRect, @"Value sent by %@ is not a CGRect: %@", self, rect);
 		
@@ -651,18 +651,16 @@ static RACSignal *combineAttributeAndSignals(NSLayoutAttribute attribute, NSArra
 	NSParameterAssert(widthSignal != nil);
 	NSParameterAssert(heightSignal != nil);
 
-	return [[RACSignal combineLatest:@[ widthSignal, heightSignal, self ] reduce:^(NSNumber *width, NSNumber *height, NSValue *rect) {
+	RACSignal *insets = [RACSignal combineLatest:@[ widthSignal, heightSignal, self ] reduce:^(NSNumber *width, NSNumber *height, NSValue *rect) {
 		NSAssert([width isKindOfClass:NSNumber.class], @"Value sent by %@ is not a number: %@", widthSignal, width);
 		NSAssert([height isKindOfClass:NSNumber.class], @"Value sent by %@ is not a number: %@", heightSignal, height);
 		NSAssert([rect isKindOfClass:NSValue.class] && rect.med_geometryStructType == MEDGeometryStructTypeRect, @"Value sent by %@ is not a CGRect: %@", self, rect);
 		
-		CGRect insetRect = CGRectInset(rect.med_rectValue, width.doubleValue, height.doubleValue);
-		if (CGRectIsNull(insetRect)) {
-			return MEDBox(nullRect);
-		} else {
-			return MEDBox(insetRect);
-		}
-	}] setNameWithFormat:@"[%@] -insetWidth: %@ height: %@", self.name, widthSignal, heightSignal];
+		CGFloat widthValue = width.doubleValue;
+		CGFloat heightValue = height.doubleValue;
+		return MEDBox(MEDEdgeInsetsMake(heightValue, widthValue, heightValue, widthValue));
+	}];
+	return [[self insetBy:insets nullRect:nullRect] setNameWithFormat:@"[%@] -insetWidth: %@ height: %@", self.name, widthSignal, heightSignal];
 }
 
 - (RACSignal *)insetTop:(RACSignal *)topSignal left:(RACSignal *)leftSignal bottom:(RACSignal *)bottomSignal right:(RACSignal *)rightSignal nullRect:(CGRect)nullRect {
@@ -671,22 +669,16 @@ static RACSignal *combineAttributeAndSignals(NSLayoutAttribute attribute, NSArra
 	NSParameterAssert(bottomSignal != nil);
 	NSParameterAssert(rightSignal != nil);
 	
-	return [[RACSignal combineLatest:@[ topSignal, leftSignal, bottomSignal, rightSignal, self ] reduce:^(NSNumber *top, NSNumber *left, NSNumber *bottom, NSNumber *right, NSValue *rect) {
+	RACSignal *insets = [RACSignal combineLatest:@[ topSignal, leftSignal, bottomSignal, rightSignal, self ] reduce:^(NSNumber *top, NSNumber *left, NSNumber *bottom, NSNumber *right, NSValue *rect) {
 		NSAssert([top isKindOfClass:NSNumber.class], @"Value sent by %@ is not a number: %@", topSignal, top);
 		NSAssert([left isKindOfClass:NSNumber.class], @"Value sent by %@ is not a number: %@", leftSignal, left);
 		NSAssert([bottom isKindOfClass:NSNumber.class], @"Value sent by %@ is not a number: %@", bottomSignal, bottom);
 		NSAssert([right isKindOfClass:NSNumber.class], @"Value sent by %@ is not a number: %@", rightSignal, right);
 		NSAssert([rect isKindOfClass:NSValue.class] && rect.med_geometryStructType == MEDGeometryStructTypeRect, @"Value sent by %@ is not a CGRect: %@", self, rect);
 		
-		MEDEdgeInsets insets = MEDEdgeInsetsMake(top.doubleValue, left.doubleValue, bottom.doubleValue, right.doubleValue);
-		CGRect insetRect = MEDEdgeInsetsInsetRect(rect.med_rectValue, insets);
-		
-		if (CGRectIsNull(insetRect)) {
-			return MEDBox(nullRect);
-		} else {
-			return MEDBox(insetRect);
-		}
-	}] setNameWithFormat:@"[%@] -insetTop: %@ left: %@ bottom: %@ right: %@", self.name, topSignal, leftSignal, bottomSignal, rightSignal];
+		return MEDBox(MEDEdgeInsetsMake(top.doubleValue, left.doubleValue, bottom.doubleValue, right.doubleValue));
+	}];
+	return [[self insetBy:insets nullRect:nullRect] setNameWithFormat:@"[%@] -insetTop: %@ left: %@ bottom: %@ right: %@", self.name, topSignal, leftSignal, bottomSignal, rightSignal];
 }
 
 - (RACSignal *)offsetByAmount:(RACSignal *)amountSignal towardEdge:(NSLayoutAttribute)edgeAttribute {
