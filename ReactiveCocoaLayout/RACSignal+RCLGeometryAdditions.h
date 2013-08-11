@@ -196,15 +196,19 @@
 - (RACSignal *)inset:(RACSignal *)insetSignal nullRect:(CGRect)nullRect;
 
 // Insets each CGRect by the number of points sent from the given width and
-// height signals.
+// height signals and falls back to a given null rect when the insets exceed
+// the dimensions of the rect.
 //
 // widthSignal  - A signal of CGFloat values, representing the number of points
 //                to remove from both the left and right sides of the rectangle.
 // heightSignal - A signal of CGFloat values, representing the number of points
 //                to remove from both the top and bottom sides of the rectangle.
+// nullRect     - Rect to fall back to when the insets exceed the dimensions of
+//                the rect. Pass `CGRectNull` for the default behaviour of
+//                `CGRectInset`.
 //
 // Returns a signal of new, inset CGRect values.
-- (RACSignal *)insetWidth:(RACSignal *)widthSignal height:(RACSignal *)heightSignal;
+- (RACSignal *)insetWidth:(RACSignal *)widthSignal height:(RACSignal *)heightSignal nullRect:(CGRect)nullRect;
 
 // Insets each CGRect by the number of points sent from the given top, bottom, left
 // and right signals.

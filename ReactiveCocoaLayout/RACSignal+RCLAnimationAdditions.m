@@ -106,7 +106,7 @@ static RACSignal *animateWithDuration (RACSignal *self, NSTimeInterval *duration
 }
 
 - (RACSignal *)animateWithDuration:(NSTimeInterval)duration curve:(RCLAnimationCurve)curve {
-	return animateWithDuration(self, &duration, RCLAnimationCurveDefault);
+	return animateWithDuration(self, &duration, curve);
 }
 
 - (RACSignal *)doAnimationCompleted:(void (^)(id))block {

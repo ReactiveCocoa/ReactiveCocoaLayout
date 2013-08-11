@@ -52,7 +52,7 @@
 
 	// Purposely misaligned to demonstrate automatic pixel alignment when
 	// binding to RCL's UIView properties.
-	RACSignal *insetRect = [self.view.rcl_boundsSignal insetWidth:RCLBox(16.25) height:RCLBox(24.75)];
+	RACSignal *insetRect = [self.view.rcl_boundsSignal insetWidth:RCLBox(16.25) height:RCLBox(24.75) nullRect:CGRectNull];
 
 	// Dynamically change the text of nameLabel based on the current
 	// orientation.
