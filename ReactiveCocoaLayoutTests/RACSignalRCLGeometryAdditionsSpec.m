@@ -247,7 +247,7 @@ describe(@"signal of CGRects", ^{
 		});
 		
 		it(@"should inset using an MEDEdgeInsets signal", ^{
-			RACSignal *result = [signal inset:[RACSignal return:MEDBox(MEDEdgeInsetsMake(2, 10, 4, 20))] nullRect:CGRectZero];
+			RACSignal *result = [signal insetBy:[RACSignal return:MEDBox(MEDEdgeInsetsMake(2, 10, 4, 20))] nullRect:CGRectZero];
 			expect(result.sequence).to.equal(expectedRects.rac_sequence);
 		});
 	});

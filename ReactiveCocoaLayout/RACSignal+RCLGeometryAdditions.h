@@ -193,7 +193,7 @@
 //                `CGRectInset`.
 //
 // Returns a signal of new, inset CGRect values.
-- (RACSignal *)inset:(RACSignal *)insetSignal nullRect:(CGRect)nullRect;
+- (RACSignal *)insetBy:(RACSignal *)insetSignal nullRect:(CGRect)nullRect;
 
 // Insets each CGRect by the number of points sent from the given width and
 // height signals and falls back to a given null rect when the insets exceed

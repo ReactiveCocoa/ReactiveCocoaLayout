@@ -631,7 +631,7 @@ static RACSignal *combineAttributeAndSignals(NSLayoutAttribute attribute, NSArra
 		setNameWithFormat:@"[%@] -alignBaseline: %@ toBaseline: %@ ofRect: %@", self.name, baselineSignal, referenceBaselineSignal, referenceRectSignal];
 }
 
-- (RACSignal *)inset:(RACSignal *)insetSignal nullRect:(CGRect)nullRect {
+- (RACSignal *)insetBy:(RACSignal *)insetSignal nullRect:(CGRect)nullRect {
 	NSParameterAssert(insetSignal != nil);
 	
 	return [[RACSignal combineLatest:@[ insetSignal, self ] reduce:^id(NSValue *insets, NSValue *rect) {
