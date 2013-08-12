@@ -651,10 +651,9 @@ static RACSignal *combineAttributeAndSignals(NSLayoutAttribute attribute, NSArra
 	NSParameterAssert(widthSignal != nil);
 	NSParameterAssert(heightSignal != nil);
 
-	RACSignal *insets = [RACSignal combineLatest:@[ widthSignal, heightSignal, self ] reduce:^(NSNumber *width, NSNumber *height, NSValue *rect) {
+	RACSignal *insets = [RACSignal combineLatest:@[ widthSignal, heightSignal ] reduce:^(NSNumber *width, NSNumber *height) {
 		NSAssert([width isKindOfClass:NSNumber.class], @"Value sent by %@ is not a number: %@", widthSignal, width);
 		NSAssert([height isKindOfClass:NSNumber.class], @"Value sent by %@ is not a number: %@", heightSignal, height);
-		NSAssert([rect isKindOfClass:NSValue.class] && rect.med_geometryStructType == MEDGeometryStructTypeRect, @"Value sent by %@ is not a CGRect: %@", self, rect);
 		
 		CGFloat widthValue = width.doubleValue;
 		CGFloat heightValue = height.doubleValue;
@@ -669,12 +668,11 @@ static RACSignal *combineAttributeAndSignals(NSLayoutAttribute attribute, NSArra
 	NSParameterAssert(bottomSignal != nil);
 	NSParameterAssert(rightSignal != nil);
 	
-	RACSignal *insets = [RACSignal combineLatest:@[ topSignal, leftSignal, bottomSignal, rightSignal, self ] reduce:^(NSNumber *top, NSNumber *left, NSNumber *bottom, NSNumber *right, NSValue *rect) {
+	RACSignal *insets = [RACSignal combineLatest:@[ topSignal, leftSignal, bottomSignal, rightSignal ] reduce:^(NSNumber *top, NSNumber *left, NSNumber *bottom, NSNumber *right) {
 		NSAssert([top isKindOfClass:NSNumber.class], @"Value sent by %@ is not a number: %@", topSignal, top);
 		NSAssert([left isKindOfClass:NSNumber.class], @"Value sent by %@ is not a number: %@", leftSignal, left);
 		NSAssert([bottom isKindOfClass:NSNumber.class], @"Value sent by %@ is not a number: %@", bottomSignal, bottom);
 		NSAssert([right isKindOfClass:NSNumber.class], @"Value sent by %@ is not a number: %@", rightSignal, right);
-		NSAssert([rect isKindOfClass:NSValue.class] && rect.med_geometryStructType == MEDGeometryStructTypeRect, @"Value sent by %@ is not a CGRect: %@", self, rect);
 		
 		return MEDBox(MEDEdgeInsetsMake(top.doubleValue, left.doubleValue, bottom.doubleValue, right.doubleValue));
 	}];
