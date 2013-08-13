@@ -184,6 +184,17 @@
 // Returns a signal of CGFloat values.
 - (RACSignal *)centerY;
 
+// Insets each CGRect using the given edge insets signal.
+//
+// insetSignal  - A signal of MEDEdgeInsets values, representing the number of points
+//                to inset the sides of the rectangle.
+// nullRect     - Rect to fall back to when the insets exceed the dimensions of
+//                the rect. Pass `CGRectNull` for the default behaviour of
+//                `CGRectInset`.
+//
+// Returns a signal of new, inset CGRect values.
+- (RACSignal *)insetBy:(RACSignal *)insetSignal nullRect:(CGRect)nullRect;
+
 // Insets each CGRect by the number of points sent from the given width and
 // height signals and falls back to a given null rect when the insets exceed
 // the dimensions of the rect.
@@ -198,6 +209,24 @@
 //
 // Returns a signal of new, inset CGRect values.
 - (RACSignal *)insetWidth:(RACSignal *)widthSignal height:(RACSignal *)heightSignal nullRect:(CGRect)nullRect;
+
+// Insets each CGRect by the number of points sent from the given top, bottom, left
+// and right signals.
+//
+// topSignal    - A signal of CGFloat values, representing the number of points
+//                remove from the top of the rectangle.
+// leftSignal   - A signal of CGFloat values, representing the number of points
+//                remove from the left side of the rectangle.
+// bottomSignal - A signal of CGFloat values, representing the number of points
+//                remove from the bottom of the rectangle.
+// rightSignal  - A signal of CGFloat values, representing the number of points
+//                remove from the right of the rectangle.
+// nullRect     - Rect to fall back to when the insets exceed the dimensions of
+//                the rect. Pass `CGRectNull` for the default behaviour of
+//                `CGRectInset`.
+//
+// Returns a signal of new, inset CGRect values.
+- (RACSignal *)insetTop:(RACSignal *)topSignal left:(RACSignal *)leftSignal bottom:(RACSignal *)bottomSignal right:(RACSignal *)rightSignal nullRect:(CGRect)nullRect;
 
 // Offsets CGRect or CGPoint values in a specified direction.
 //
