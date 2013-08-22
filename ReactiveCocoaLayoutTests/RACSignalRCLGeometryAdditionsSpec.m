@@ -1181,7 +1181,7 @@ describe(@"-floor", ^{
 		RACSignal *floored = values.signal.floor;
 
 		RACSequence *expected = [values map:^(NSValue *value) {
-			return MEDBox(CGPointFloor(value.med_pointValue));
+			return MEDBox(MEDPointFloor(value.med_pointValue));
 		}];
 
 		expect(floored.sequence).to.equal(expected);
@@ -1215,7 +1215,7 @@ describe(@"-floor", ^{
 		RACSignal *floored = values.signal.floor;
 
 		RACSequence *expected = [values map:^(NSValue *value) {
-			return MEDBox(CGRectFloor(value.med_rectValue));
+			return MEDBox(MEDRectFloor(value.med_rectValue));
 		}];
 
 		expect(floored.sequence).to.equal(expected);

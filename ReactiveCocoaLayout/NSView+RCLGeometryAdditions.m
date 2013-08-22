@@ -33,7 +33,7 @@
 
 - (void)setRcl_frame:(CGRect)frame {
 	if (self.superview != nil && self.window != nil) {
-		// Matches the behavior of CGRectFloor().
+		// Matches the behavior of MEDRectFloor().
 		NSAlignmentOptions options = NSAlignMinXOutward | NSAlignMinYInward | NSAlignWidthInward | NSAlignHeightInward;
 
 		CGRect windowFrame = [self.superview convertRect:frame toView:nil];
@@ -54,7 +54,7 @@
 
 - (void)setRcl_bounds:(CGRect)bounds {
 	if (self.window != nil) {
-		// Matches the behavior of CGRectFloor().
+		// Matches the behavior of MEDRectFloor().
 		NSAlignmentOptions options = NSAlignMinXOutward | NSAlignMinYInward | NSAlignWidthInward | NSAlignHeightInward;
 
 		CGRect windowRect = [self convertRect:bounds toView:nil];
