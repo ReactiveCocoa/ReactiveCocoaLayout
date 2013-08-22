@@ -361,7 +361,7 @@ static RACSignal *combineAttributeAndSignals(NSLayoutAttribute attribute, NSArra
 	return [[self map:^(NSValue *value) {
 		NSAssert([value isKindOfClass:NSValue.class] && value.med_geometryStructType == MEDGeometryStructTypeRect, @"Value sent by %@ is not a CGRect: %@", self, value);
 
-		return MEDBox(CGRectCenterPoint(value.med_rectValue));
+		return MEDBox(MEDRectCenterPoint(value.med_rectValue));
 	}] setNameWithFormat:@"[%@] -center", self.name];
 }
 
@@ -784,7 +784,7 @@ static RACSignal *combineAttributeAndSignals(NSLayoutAttribute attribute, NSArra
 					return nil;
 			}
 		} else {
-			rect = CGRectGrow(rect, n, (CGRectEdge)edge.unsignedIntegerValue);
+			rect = MEDRectGrow(rect, n, (CGRectEdge)edge.unsignedIntegerValue);
 		}
 
 		return MEDBox(CGRectStandardize(rect));
@@ -817,7 +817,7 @@ static RACSignal *combineAttributeAndSignals(NSLayoutAttribute attribute, NSArra
 
 		CGRect slice = CGRectZero;
 		CGRect remainder = CGRectZero;
-		CGRectDivideWithPadding(rect, &slice, &remainder, amount.doubleValue, padding.doubleValue, (CGRectEdge)edge.unsignedIntegerValue);
+		MEDRectDivideWithPadding(rect, &slice, &remainder, amount.doubleValue, padding.doubleValue, (CGRectEdge)edge.unsignedIntegerValue);
 
 		return [RACTuple tupleWithObjects:MEDBox(slice), MEDBox(remainder), nil];
 	});
@@ -949,10 +949,10 @@ static RACSignal *combineAttributeAndSignals(NSLayoutAttribute attribute, NSArra
 
 		switch ([value med_geometryStructType]) {
 			case MEDGeometryStructTypeRect:
-				return MEDBox(CGRectFloor([value med_rectValue]));
+				return MEDBox(MEDRectFloor([value med_rectValue]));
 
 			case MEDGeometryStructTypePoint:
-				return MEDBox(CGPointFloor([value med_pointValue]));
+				return MEDBox(MEDPointFloor([value med_pointValue]));
 
 			case MEDGeometryStructTypeSize: {
 				CGSize size = [value med_sizeValue];
