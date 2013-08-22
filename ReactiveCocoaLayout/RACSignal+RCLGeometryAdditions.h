@@ -590,8 +590,8 @@
 // preferring smaller sizes.
 //
 // - CGFloat and CGSize values are rounded using floor().
-// - CGPoint and CGRect values are rounded using Archimedes' CGPointFloor() and
-//   CGRectFloor() functions, respectively, such that the coordinates always move
+// - CGPoint and CGRect values are rounded using Archimedes' MEDPointFloor() and
+//   MEDRectFloor() functions, respectively, such that the coordinates always move
 //   up and left.
 //
 // This is useful for view geometry that needs to be of a precise size, like an

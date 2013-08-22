@@ -26,7 +26,7 @@ static CGRect backingAlignedRect(UIView *view, CGRect rect) {
 	rect.size.width *= screen.scale;
 	rect.size.height *= screen.scale;
 
-	rect = CGRectFloor(rect);
+	rect = MEDRectFloor(rect);
 
 	rect.origin.x /= screen.scale;
 	rect.origin.y /= screen.scale;
