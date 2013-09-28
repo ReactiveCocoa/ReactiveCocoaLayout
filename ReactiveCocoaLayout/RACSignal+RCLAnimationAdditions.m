@@ -8,7 +8,7 @@
 
 #import "RACSignal+RCLAnimationAdditions.h"
 #import <libkern/OSAtomic.h>
-#import <ReactiveCocoa/EXTScope.h>
+#import <ReactiveCocoa/RACEXTScope.h>
 
 // The number of animated signals in the current chain.
 //
