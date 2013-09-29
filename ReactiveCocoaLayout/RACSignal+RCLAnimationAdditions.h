@@ -48,8 +48,70 @@ extern BOOL RCLIsInAnimatedSignal(void);
 
 @interface RACSignal (RCLAnimationAdditions)
 
-// Wraps every next in an animation block, using the default duration and
-// animation curve.
+// Behaves like -animatedSignalsWithDuration: with the system's default
+// animation duration.
+- (RACSignal *)animatedSignals;
+
+// Invokes -animatedSignalsWithDuration:curve: with a curve of
+// RCLAnimationCurveDefault.
+- (RACSignal *)animatedSignalsWithDuration:(NSTimeInterval)duration;
+
+// Wraps every next in an animation, using the default duration and animation
+// curve, and captures each animation in an inner signal.
+//
+// How you combine the inner signals determines whether animations are
+// interruptible:
+//
+//  - Concatenating the inner signals will result in new animations only
+//    beginning after all previous animations have completed.
+//  - Flattening or switching the inner signals will start new animations as
+//    soon as possible, and use the current (in progress) UI state for
+//    animating.
+//
+// Combining the inner signals, and binding the resulting signal of values to
+// a view property, will result in updates to that property (that originate from
+// the signal) being automatically animated.
+//
+// To delay an animation, use -[RACSignal delay:] or -[RACSignal throttle:] on
+// the receiver _before_ using this method. Because the aforementioned methods
+// delay delivery of `next`s, applying them _after_ this method may cause
+// values to be delivered outside of any animation block.
+//
+// Examples
+//
+//   RAC(self.textField, rcl_alphaValue, @1) = [[alphaValues
+//		animatedSignalsWithDuration:0.2]
+//		/* Animate changes to the alpha without interruption. */
+//		concat];
+//
+//	RAC(self.button, rcl_alphaValue, @1) = [[[alphaValues
+//		/* Delay animations by 0.1 seconds. */
+//		delay:0.1]
+//		animatedSignalsWithDuration:0.2 curve:RCLAnimationCurveLinear]
+//		/* Animate changes to the alpha, and interrupt for any new animations. */
+//		switchToLatest];
+//
+// Returns a signal of signals, where each inner signal sends one `next`
+// that corresponds to a value from the receiver, then completes when the
+// animation corresponding to that value has finished. Deferring the events of
+// the returned signal or having them delivered on another thread is considered
+// undefined behavior.
+- (RACSignal *)animatedSignalsWithDuration:(NSTimeInterval)duration curve:(RCLAnimationCurve)curve;
+
+// Behaves like -animateWithDuration: with the system's default animation
+// duration.
+- (RACSignal *)animate;
+
+// Invokes -animateWithDuration:curve: with a curve of RCLAnimationCurveDefault.
+- (RACSignal *)animateWithDuration:(NSTimeInterval)duration;
+
+// Wraps every next in an animation, using the given duration and animation
+// curve.
+//
+// When using this method, new animations will not begin until all previous
+// animations have completed. To disable this behavior, use
+// -animatedSignalsWithDuration:curve: instead, and flatten or switch the
+// returned signal.
 //
 // Binding the resulting signal to a view property will result in updates to
 // that property (that originate from the signal) being automatically animated.
@@ -59,33 +121,20 @@ extern BOOL RCLIsInAnimatedSignal(void);
 // delay delivery of `next`s, applying them _after_ -animate will cause values
 // to be delivered outside of any animation block.
 //
+// Examples
+//
+//   RAC(self.textField, rcl_alphaValue, @1) = [[alphaValues
+//		/* Animate changes to the alpha without interruption. */
+//		animateWithDuration:0.2];
+//
+//	RAC(self.button, rcl_alphaValue, @1) = [[alphaValues
+//		/* Delay animations by 0.1 seconds. */
+//		delay:0.1]
+//		animateWithDuration:0.2 curve:RCLAnimationCurveLinear];
+//
 // Returns a signal which animates the sending of its values. Deferring the
 // signal's events or having them delivered on another thread is considered
 // undefined behavior.
-- (RACSignal *)animate;
-
-// Invokes -animateWithDuration:curve: with a curve of RCLAnimationCurveDefault.
-- (RACSignal *)animateWithDuration:(NSTimeInterval)duration;
-
-// Behaves like -animate, but uses the given duration and animation curve
-// instead of the defaults.
 - (RACSignal *)animateWithDuration:(NSTimeInterval)duration curve:(RCLAnimationCurve)curve;
-
-// Injects side effects whenever an animation triggered by the receiver
-// completes, or whenever the receiver sends a non-animated value.
-//
-// This is equivalent to -doNext: if applied to a signal that does not animate.
-//
-// block - A block to execute when animations complete or non-animated values
-//         are sent. The block will be passed the non-animated value, or the
-//         value that triggered the animation which is now complete. This block
-//         must not be nil.
-//
-// Returns a signal which forwards all the events of the receiver.
-- (RACSignal *)doAnimationCompleted:(void (^)(id))block;
-
-// Completes only after the animated signal has completed *and* all running
-// animations have completed.
-- (RACSignal *)completeAfterAnimations;
 
 @end

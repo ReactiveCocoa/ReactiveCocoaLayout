@@ -11,7 +11,68 @@ SpecBegin(RACSignalRCLAnimationAdditions)
 __block RACSignal *baseSignal;
 
 beforeEach(^{
-	baseSignal = [RACSignal return:@0];
+	baseSignal = @[ @0, @1, @2 ].rac_sequence.signal;
+});
+
+describe(@"-animatedSignalsWithDuration:curve:", ^{
+	it(@"should send a signal for each next", ^{
+		__block NSUInteger signalsReceived = 0;
+
+		[[baseSignal
+			animatedSignalsWithDuration:0.01 curve:RCLAnimationCurveEaseOut]
+			subscribeNext:^(RACSignal *signal) {
+				expect([signal first]).to.equal(signalsReceived);
+				signalsReceived++;
+			}];
+
+		expect(signalsReceived).will.equal(3);
+	});
+
+	it(@"should send the underlying value immediately, then complete later", ^{
+		__block NSUInteger signalsReceived = 0;
+		__block NSUInteger signalsCompleted = 0;
+
+		[[baseSignal
+			animatedSignalsWithDuration:0.01]
+			subscribeNext:^(RACSignal *signal) {
+				__block id value = nil;
+				[signal subscribeNext:^(id x) {
+					expect(value).to.beNil();
+					expect(x).notTo.beNil();
+
+					value = x;
+				} completed:^{
+					signalsCompleted++;
+				}];
+
+				// The underlying value should have been sent synchronously.
+				expect(value).to.equal(signalsReceived);
+				signalsReceived++;
+			}];
+
+		expect(signalsReceived).will.equal(3);
+		expect(signalsCompleted).will.equal(3);
+	});
+
+	it(@"should start animating only when subscribed to", ^{
+		__block NSUInteger signalsStarted = 0;
+		__block NSUInteger valuesReceived = 0;
+
+		[[[[baseSignal
+			animatedSignals]
+			map:^(RACSignal *signal) {
+				return [signal initially:^{
+					signalsStarted++;
+				}];
+			}]
+			concat]
+			subscribeNext:^(id _) {
+				valuesReceived++;
+				expect(valuesReceived).to.equal(signalsStarted);
+			}];
+
+		expect(valuesReceived).will.equal(3);
+	});
 });
 
 describe(@"RCLIsInAnimatedSignal()", ^{
@@ -20,7 +81,9 @@ describe(@"RCLIsInAnimatedSignal()", ^{
 	});
 
 	it(@"should be true from nexts of -animate", ^{
-		[[[[baseSignal animate]
+		[[[[[baseSignal
+			take:1]
+			animate]
 			doNext:^(id x) {
 				expect(x).to.equal(@0);
 				expect(RCLIsInAnimatedSignal()).to.beTruthy();
@@ -28,11 +91,13 @@ describe(@"RCLIsInAnimatedSignal()", ^{
 			doCompleted:^{
 				expect(RCLIsInAnimatedSignal()).to.beFalsy();
 			}]
-			toArray];
+			asynchronouslyWaitUntilCompleted:NULL];
 	});
 
 	it(@"should be true from nexts of -animateWithDuration:", ^{
-		[[[[baseSignal animateWithDuration:0.01]
+		[[[[[baseSignal
+			take:1]
+			animateWithDuration:0.01]
 			doNext:^(id x) {
 				expect(x).to.equal(@0);
 				expect(RCLIsInAnimatedSignal()).to.beTruthy();
@@ -40,11 +105,13 @@ describe(@"RCLIsInAnimatedSignal()", ^{
 			doCompleted:^{
 				expect(RCLIsInAnimatedSignal()).to.beFalsy();
 			}]
-			toArray];
+			asynchronouslyWaitUntilCompleted:NULL];
 	});
 
 	it(@"should be true from nexts of -animateWithDuration:curve:", ^{
-		[[[[baseSignal animateWithDuration:0.01 curve:RCLAnimationCurveEaseOut]
+		[[[[[baseSignal
+			take:1]
+			animateWithDuration:0.01 curve:RCLAnimationCurveEaseOut]
 			doNext:^(id x) {
 				expect(x).to.equal(@0);
 				expect(RCLIsInAnimatedSignal()).to.beTruthy();
@@ -52,87 +119,32 @@ describe(@"RCLIsInAnimatedSignal()", ^{
 			doCompleted:^{
 				expect(RCLIsInAnimatedSignal()).to.beFalsy();
 			}]
-			toArray];
+			asynchronouslyWaitUntilCompleted:NULL];
 	});
-});
 
-describe(@"-doAnimationCompleted:", ^{
-	it(@"should trigger when the animation completes", ^{
-		__block BOOL animationCompleted = NO;
-		__block BOOL signalCompleted = NO;
-
-		[[[baseSignal
-			animate]
-			doAnimationCompleted:^(id x) {
-				animationCompleted = YES;
+	it(@"should be false from nexts of -animatedSignals", ^{
+		[[[[baseSignal
+			take:1]
+			animatedSignalsWithDuration:0.01]
+			doNext:^(RACSignal *signal) {
+				expect(RCLIsInAnimatedSignal()).to.beFalsy();
 			}]
-			subscribeCompleted:^{
-				signalCompleted = YES;
-			}];
-
-		expect(signalCompleted).to.beTruthy();
-		expect(animationCompleted).to.beFalsy();
-		expect(animationCompleted).will.beTruthy();
+			asynchronouslyWaitUntilCompleted:NULL];
 	});
 
-	it(@"should behave like -doNext: outside of an animated signal", ^{
-		__block BOOL animationCompleted = NO;
-		__block BOOL signalCompleted = NO;
-
-		[[baseSignal
-			doAnimationCompleted:^(id x) {
+	it(@"should be true from nexts of inner signals from -animatedSignals", ^{
+		[[[[[[baseSignal
+			take:1]
+			animatedSignalsWithDuration:0.01]
+			concat]
+			doNext:^(id x) {
 				expect(x).to.equal(@0);
-				animationCompleted = YES;
+				expect(RCLIsInAnimatedSignal()).to.beTruthy();
 			}]
-			subscribeNext:^(id x) {
-				expect(x).to.equal(@0);
-				expect(animationCompleted).to.beTruthy();
-			} completed:^{
-				signalCompleted = YES;
-			}];
-
-		expect(animationCompleted).to.beTruthy();
-		expect(signalCompleted).to.beTruthy();
-	});
-});
-
-describe(@"-completeAfterAnimations", ^{
-	it(@"shouldn't complete after just the animation completes", ^{
-		RACSubject *subject = [RACSubject subject];
-		RACSignal *animated = [[subject animateWithDuration:0.1] completeAfterAnimations];
-		__block BOOL completed = NO;
-		[animated subscribeCompleted:^{
-			completed = YES;
-		}];
-
-		expect(completed).to.beFalsy();
-
-		[subject sendNext:@1];
-		[NSRunLoop.mainRunLoop runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.11]];
-		// The animation is done but the signal shouldn't be complete yet.
-		expect(completed).to.beFalsy();
-
-		[subject sendCompleted];
-		expect(completed).to.beTruthy();
-	});
-
-	it(@"should complete only after the signal completes and all animations complete", ^{
-		RACSubject *subject = [RACSubject subject];
-		RACSignal *animated = [[subject animateWithDuration:0.1] completeAfterAnimations];
-		__block BOOL completed = NO;
-		[animated subscribeCompleted:^{
-			completed = YES;
-		}];
-
-		expect(completed).to.beFalsy();
-
-		[subject sendNext:@1];
-		expect(completed).to.beFalsy();
-
-		[subject sendCompleted];
-		// The underlying signal has completed but the animation hasn't yet.
-		expect(completed).to.beFalsy();
-		expect(completed).will.beTruthy();
+			doCompleted:^{
+				expect(RCLIsInAnimatedSignal()).to.beFalsy();
+			}]
+			asynchronouslyWaitUntilCompleted:NULL];
 	});
 });
 

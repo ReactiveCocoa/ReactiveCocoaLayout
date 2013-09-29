@@ -21,31 +21,53 @@ BOOL RCLIsInAnimatedSignal (void) {
 	return RCLSignalAnimationLevel > 0;
 }
 
-// Animates the given signal.
+// Creates a signal of animated signals.
 //
-// self        - The signal to animate.
-// durationPtr - If not NULL, an explicit duration to specify when starting the
-//				 animation.
-// curve       - The animation curve to use.
-static RACSignal *animateWithDuration (RACSignal *self, NSTimeInterval *durationPtr, RCLAnimationCurve curve) {
+// self     - The signal to animate.
+// duration - If not nil, an explicit duration to specify when starting the animation.
+// curve    - The animation curve to use.
+static RACSignal *animatedSignalsWithDuration (RACSignal *self, NSNumber *duration, RCLAnimationCurve curve) {
 	#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
-		// This seems like a saner default setting for a layout-triggered
-		// animation.
-		UIViewAnimationOptions options = curve | UIViewAnimationOptionLayoutSubviews;
+		// `UIViewAnimationOptionLayoutSubviews` seems like a sane default
+		// setting for a layout-triggered animation.
+		//
+		// We use `UIViewAnimationOptionBeginFromCurrentState` to implement
+		// interruption behaviors, but ultimately that's controlled by the
+		// subscriber (and how the inner signals are combined).
+		UIViewAnimationOptions options = curve | UIViewAnimationOptionLayoutSubviews | UIViewAnimationOptionBeginFromCurrentState;
 		if (curve != RCLAnimationCurveDefault) options |= UIViewAnimationOptionOverrideInheritedCurve;
 
-		NSTimeInterval duration = 0.2;
-		if (durationPtr != NULL) {
-			duration = *durationPtr;
-			options |= UIViewAnimationOptionOverrideInheritedDuration;
-		}
+		NSTimeInterval durationInterval = (duration != nil ? duration.doubleValue : 0.2);
 	#elif TARGET_OS_MAC
-		BOOL hasDuration = (durationPtr != NULL);
-		NSTimeInterval duration = (hasDuration ? *durationPtr : 0);
+		CAMediaTimingFunction *timingFunction;
+		switch (curve) {
+			case RCLAnimationCurveEaseInOut:
+				timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+				break;
+
+			case RCLAnimationCurveEaseIn:
+				timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseIn];
+				break;
+
+			case RCLAnimationCurveEaseOut:
+				timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut];
+				break;
+
+			case RCLAnimationCurveLinear:
+				timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
+				break;
+
+			case RCLAnimationCurveDefault:
+				timingFunction = nil;
+				break;
+
+			default:
+				NSCAssert(NO, @"Unrecognized animation curve: %i", (int)curve);
+		}
 	#endif
 
-	return [[RACSignal createSignal:^(id<RACSubscriber> subscriber) {
-		return [self subscribeNext:^(id value) {
+	return [[self map:^(id value) {
+		return [[RACSignal createSignal:^ RACDisposable * (id<RACSubscriber> subscriber) {
 			++RCLSignalAnimationLevel;
 			@onExit {
 				NSCAssert(RCLSignalAnimationLevel > 0, @"Unbalanced decrement of RCLSignalAnimationLevel");
@@ -53,52 +75,33 @@ static RACSignal *animateWithDuration (RACSignal *self, NSTimeInterval *duration
 			};
 
 			#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
-				[UIView animateWithDuration:duration delay:0 options:options animations:^{
+				[UIView animateWithDuration:durationInterval delay:0 options:options animations:^{
 					[subscriber sendNext:value];
-				} completion:nil];
+				} completion:^(BOOL finished) {
+					[subscriber sendCompleted];
+				}];
 			#elif TARGET_OS_MAC
 				[NSAnimationContext runAnimationGroup:^(NSAnimationContext *context) {
-					if (hasDuration) context.duration = duration;
-
-					switch (curve) {
-						case RCLAnimationCurveEaseInOut:
-							context.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
-							break;
-
-						case RCLAnimationCurveEaseIn:
-							context.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseIn];
-							break;
-
-						case RCLAnimationCurveEaseOut:
-							context.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut];
-							break;
-
-						case RCLAnimationCurveLinear:
-							context.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
-							break;
-
-						case RCLAnimationCurveDefault:
-							break;
-
-						default:
-							NSCAssert(NO, @"Unrecognized animation curve: %i", (int)curve);
-					}
+					if (duration != nil) context.duration = duration.doubleValue;
+					if (timingFunction != nil) context.timingFunction = timingFunction;
 
 					[subscriber sendNext:value];
-				} completionHandler:nil];
+				} completionHandler:^{
+					[subscriber sendCompleted];
+				}];
 			#endif
-		} error:^(NSError *error) {
-			[subscriber sendError:error];
-		} completed:^{
-			[subscriber sendCompleted];
-		}];
-	}] setNameWithFormat:@"[%@] -animateWithDuration: %f curve: %li", self.name, (double)duration, (long)curve];
+
+			return nil;
+		}] setNameWithFormat:@"[[%@] -animatedSignalsWithDuration: %@ curve: %li] animationSignal: %@", self.name, duration, (long)curve, value];
+	}] setNameWithFormat:@"[%@] -animatedSignalsWithDuration: %@ curve: %li", self.name, duration, (long)curve];
 }
 
 @implementation RACSignal (RCLAnimationAdditions)
 
 - (RACSignal *)animate {
-	return animateWithDuration(self, NULL, RCLAnimationCurveDefault);
+	return [[animatedSignalsWithDuration(self, nil, RCLAnimationCurveDefault)
+		concat]
+		setNameWithFormat:@"[%@] -animate", self.name];
 }
 
 - (RACSignal *)animateWithDuration:(NSTimeInterval)duration {
@@ -106,80 +109,21 @@ static RACSignal *animateWithDuration (RACSignal *self, NSTimeInterval *duration
 }
 
 - (RACSignal *)animateWithDuration:(NSTimeInterval)duration curve:(RCLAnimationCurve)curve {
-	return animateWithDuration(self, &duration, curve);
+	return [[animatedSignalsWithDuration(self, @(duration), curve)
+		concat]
+		setNameWithFormat:@"[%@] -animateWithDuration: %@ curve: %li", self.name, @(duration), (long)curve];
 }
 
-- (RACSignal *)doAnimationCompleted:(void (^)(id))block {
-	NSParameterAssert(block != nil);
-
-	return [[RACSignal createSignal:^(id<RACSubscriber> subscriber) {
-		return [self subscribeNext:^(id x) {
-			void (^completionBlock)(void) = ^{
-				block(x);
-			};
-
-			if (!RCLIsInAnimatedSignal()) {
-				completionBlock();
-				return;
-			}
-
-			#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
-				[CATransaction begin];
-				CATransaction.completionBlock = completionBlock;
-				[subscriber sendNext:x];
-				[CATransaction commit];
-			#elif TARGET_OS_MAC
-				[NSAnimationContext runAnimationGroup:^(NSAnimationContext *context) {
-					[subscriber sendNext:x];
-				} completionHandler:completionBlock];
-			#endif
-		} error:^(NSError *error) {
-			[subscriber sendError:error];
-		} completed:^{
-			[subscriber sendCompleted];
-		}];
-	}] setNameWithFormat:@"[%@] -doAnimationCompleted:", self.name];
+- (RACSignal *)animatedSignals {
+	return animatedSignalsWithDuration(self, nil, RCLAnimationCurveDefault);
 }
 
-- (RACSignal *)completeAfterAnimations {
-	return [[RACSignal createSignal:^(id<RACSubscriber> subscriber) {
-		__block volatile int32_t animating = 0;
-		__block volatile uint32_t completed = 0;
-		return [self subscribeNext:^(id x) {
-			void (^completionBlock)(void) = ^{
-				if (completed == 1) {
-					[subscriber sendCompleted];
-				}
+- (RACSignal *)animatedSignalsWithDuration:(NSTimeInterval)duration {
+	return [self animatedSignalsWithDuration:duration curve:RCLAnimationCurveDefault];
+}
 
-				OSAtomicDecrement32Barrier(&animating);
-			};
-
-			OSAtomicIncrement32Barrier(&animating);
-
-			if (!RCLIsInAnimatedSignal()) {
-				completionBlock();
-				return;
-			}
-
-#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
-			[CATransaction begin];
-			CATransaction.completionBlock = completionBlock;
-			[subscriber sendNext:x];
-			[CATransaction commit];
-#elif TARGET_OS_MAC
-			[NSAnimationContext runAnimationGroup:^(NSAnimationContext *context) {
-				[subscriber sendNext:x];
-			} completionHandler:completionBlock];
-#endif
-		} error:^(NSError *error) {
-			[subscriber sendError:error];
-		} completed:^{
-			OSAtomicOr32Barrier(1, &completed);
-			if (animating == 0) {
-				[subscriber sendCompleted];
-			}
-		}];
-	}] setNameWithFormat:@"[%@] -completeWithAnimation", self.name];
+- (RACSignal *)animatedSignalsWithDuration:(NSTimeInterval)duration curve:(RCLAnimationCurve)curve {
+	return animatedSignalsWithDuration(self, @(duration), curve);
 }
 
 @end
