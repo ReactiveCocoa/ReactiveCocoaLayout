@@ -108,13 +108,17 @@
 		then:[self.confirmEmailField.rcl_intrinsicHeightSignal plus:self.verticalPadding]
 		else:[RACSignal zero]]
 		// Then animate all changes.
-		animate]
-		doNext:^(NSNumber *height) {
-			NSLog(@"Animating confirmEmailField to height %@", height);
+		animatedSignals]
+		map:^(RACSignal *animation) {
+			return [[animation
+				doNext:^(NSNumber *height) {
+					NSLog(@"Animating confirmEmailField to height %@", height);
+				}]
+				doCompleted:^{
+					NSLog(@"confirmEmailField is done animating");
+				}];
 		}]
-		doAnimationCompleted:^(NSNumber *height) {
-			NSLog(@"confirmEmailField is now at height %@", height);
-		}]
+		switchToLatest]
 		replayLast];
 
 	// Cut out space for the confirmation email field.
