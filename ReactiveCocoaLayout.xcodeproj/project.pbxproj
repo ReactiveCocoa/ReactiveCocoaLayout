@@ -46,7 +46,6 @@
 		D06C9E5B167D8A9A00276090 /* NSViewRCLGeometryAdditionsSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = D06C9E5A167D8A9A00276090 /* NSViewRCLGeometryAdditionsSpec.m */; };
 		D06C9E5E167D8BD900276090 /* UIViewRCLGeometryAdditionsSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = D06C9E5D167D8BD900276090 /* UIViewRCLGeometryAdditionsSpec.m */; };
 		D06C9F41167D9AD400276090 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D06C9F40167D9AD300276090 /* QuartzCore.framework */; };
-		D08D164A16819DE300FBBA12 /* NSNotificationCenter+RACSupport.m in Sources */ = {isa = PBXBuildFile; fileRef = D0BB25E916788579005E9371 /* NSNotificationCenter+RACSupport.m */; };
 		D094E4EB1777671B00906BF7 /* ReactiveCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D094E4DE177766EB00906BF7 /* ReactiveCocoa.framework */; };
 		D094E4F51777677300906BF7 /* libArchimedes-iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D0BB25821678809D005E9371 /* libArchimedes-iOS.a */; };
 		D094E4F61777677300906BF7 /* libReactiveCocoa-iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D094E4E0177766EB00906BF7 /* libReactiveCocoa-iOS.a */; };
@@ -1044,7 +1043,6 @@
 				D0FD5A981679E7AF003C3210 /* UIView+RCLGeometryAdditions.m in Sources */,
 				D051391D167F108000334374 /* View+RCLAutoLayoutAdditions.m in Sources */,
 				D0ED89F616814D800041A188 /* RACSignal+RCLWritingDirectionAdditions.m in Sources */,
-				D08D164A16819DE300FBBA12 /* NSNotificationCenter+RACSupport.m in Sources */,
 				D037FEF61696ED02002D0CBA /* RACSignal+RCLAnimationAdditions.m in Sources */,
 				D0C20EF917363A6500115B19 /* RCLMacros.m in Sources */,
 			);
