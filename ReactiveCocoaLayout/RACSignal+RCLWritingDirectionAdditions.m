@@ -7,7 +7,6 @@
 //
 
 #import "RACSignal+RCLWritingDirectionAdditions.h"
-#import "NSNotificationCenter+RACSupport.h"
 
 // Returns a signal which sends the character direction for the current language,
 // and automatically re-sends it any time the current locale changes.
