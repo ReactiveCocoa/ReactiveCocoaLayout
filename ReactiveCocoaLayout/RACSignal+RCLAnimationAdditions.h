@@ -81,12 +81,12 @@ extern BOOL RCLIsInAnimatedSignal(void);
 //
 // Examples
 //
-//   RAC(self.textField, rcl_alphaValue, @1) = [[alphaValues
+//   RAC(self.textField, alpha, @1) = [[alphaValues
 //		animatedSignalsWithDuration:0.2]
 //		/* Animate changes to the alpha without interruption. */
 //		concat];
 //
-//	RAC(self.button, rcl_alphaValue, @1) = [[[alphaValues
+//	RAC(self.button, alpha, @1) = [[[alphaValues
 //		/* Delay animations by 0.1 seconds. */
 //		delay:0.1]
 //		animatedSignalsWithDuration:0.2 curve:RCLAnimationCurveLinear]
