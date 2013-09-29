@@ -59,7 +59,7 @@ extern BOOL RCLIsInAnimatedSignal(void);
 // Wraps every next in an animation, using the default duration and animation
 // curve, and captures each animation in an inner signal.
 //
-// How you combine the inner signals determines whether animations are
+// On iOS, how you combine the inner signals determines whether animations are
 // interruptible:
 //
 //  - Concatenating the inner signals will result in new animations only
@@ -67,6 +67,8 @@ extern BOOL RCLIsInAnimatedSignal(void);
 //  - Flattening or switching the inner signals will start new animations as
 //    soon as possible, and use the current (in progress) UI state for
 //    animating.
+//
+// On OS X, `NSView` animations are always serialized.
 //
 // Combining the inner signals, and binding the resulting signal of values to
 // a view property, will result in updates to that property (that originate from
@@ -109,7 +111,7 @@ extern BOOL RCLIsInAnimatedSignal(void);
 // curve.
 //
 // When using this method, new animations will not begin until all previous
-// animations have completed. To disable this behavior, use
+// animations have completed. To disable this behavior (on iOS only), use
 // -animatedSignalsWithDuration:curve: instead, and flatten or switch the
 // returned signal.
 //
