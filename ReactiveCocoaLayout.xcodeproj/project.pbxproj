@@ -19,7 +19,6 @@
 		D037FEF51696ED02002D0CBA /* RACSignal+RCLAnimationAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = D037FEF31696ED02002D0CBA /* RACSignal+RCLAnimationAdditions.m */; };
 		D037FEF61696ED02002D0CBA /* RACSignal+RCLAnimationAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = D037FEF31696ED02002D0CBA /* RACSignal+RCLAnimationAdditions.m */; };
 		D037FEF81696F1FE002D0CBA /* RACSignalRCLAnimationAdditionsSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = D037FEF71696F1FE002D0CBA /* RACSignalRCLAnimationAdditionsSpec.m */; };
-		D037FEF91696F1FE002D0CBA /* RACSignalRCLAnimationAdditionsSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = D037FEF71696F1FE002D0CBA /* RACSignalRCLAnimationAdditionsSpec.m */; };
 		D037FEFB1696F42D002D0CBA /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D037FEFA1696F42D002D0CBA /* QuartzCore.framework */; };
 		D037FEFC1696F438002D0CBA /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D037FEFA1696F42D002D0CBA /* QuartzCore.framework */; };
 		D051391B167F108000334374 /* View+RCLAutoLayoutAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = D0513919167F108000334374 /* View+RCLAutoLayoutAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1057,7 +1056,6 @@
 				D0513920167F11FD00334374 /* ViewExamples.m in Sources */,
 				D0513975167F149F00334374 /* TestView.m in Sources */,
 				D0ED89F9168150030041A188 /* RACSignalRCLWritingDirectionAdditionsSpec.m in Sources */,
-				D037FEF91696F1FE002D0CBA /* RACSignalRCLAnimationAdditionsSpec.m in Sources */,
 				D02B4243173F23AA003E00D0 /* RCLMacrosSpec.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
