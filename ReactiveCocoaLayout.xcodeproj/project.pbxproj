@@ -46,7 +46,6 @@
 		D06C9E5B167D8A9A00276090 /* NSViewRCLGeometryAdditionsSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = D06C9E5A167D8A9A00276090 /* NSViewRCLGeometryAdditionsSpec.m */; };
 		D06C9E5E167D8BD900276090 /* UIViewRCLGeometryAdditionsSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = D06C9E5D167D8BD900276090 /* UIViewRCLGeometryAdditionsSpec.m */; };
 		D06C9F41167D9AD400276090 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D06C9F40167D9AD300276090 /* QuartzCore.framework */; };
-		D08D164A16819DE300FBBA12 /* NSNotificationCenter+RACSupport.m in Sources */ = {isa = PBXBuildFile; fileRef = D0BB25E916788579005E9371 /* NSNotificationCenter+RACSupport.m */; };
 		D094E4EB1777671B00906BF7 /* ReactiveCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D094E4DE177766EB00906BF7 /* ReactiveCocoa.framework */; };
 		D094E4F51777677300906BF7 /* libArchimedes-iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D0BB25821678809D005E9371 /* libArchimedes-iOS.a */; };
 		D094E4F61777677300906BF7 /* libReactiveCocoa-iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D094E4E0177766EB00906BF7 /* libReactiveCocoa-iOS.a */; };
@@ -67,7 +66,6 @@
 		D0BB24DD167879A3005E9371 /* ReactiveCocoaLayout.h in Headers */ = {isa = PBXBuildFile; fileRef = D0BB24811678772C005E9371 /* ReactiveCocoaLayout.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D0BB25E01678847A005E9371 /* NSView+RCLGeometryAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = D0BB25DE1678847A005E9371 /* NSView+RCLGeometryAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D0BB25E11678847A005E9371 /* NSView+RCLGeometryAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = D0BB25DF1678847A005E9371 /* NSView+RCLGeometryAdditions.m */; };
-		D0BB25EB16788579005E9371 /* NSNotificationCenter+RACSupport.m in Sources */ = {isa = PBXBuildFile; fileRef = D0BB25E916788579005E9371 /* NSNotificationCenter+RACSupport.m */; };
 		D0BB2632167887C3005E9371 /* RACSignal+RCLGeometryAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = D0BB2630167887C3005E9371 /* RACSignal+RCLGeometryAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D0BB2633167887C3005E9371 /* RACSignal+RCLGeometryAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = D0BB2631167887C3005E9371 /* RACSignal+RCLGeometryAdditions.m */; };
 		D0C20EF51736398700115B19 /* RCLMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = D0C20EF41736398700115B19 /* RCLMacros.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -84,6 +82,20 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		D020F4A217F6A7480092BED2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D094E4D4177766EB00906BF7 /* ReactiveCocoa.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 1860F412177C91B500C7B3C9;
+			remoteInfo = "ReactiveCocoa-iOS-UIKitTestHost";
+		};
+		D020F4A417F6A7480092BED2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D094E4D4177766EB00906BF7 /* ReactiveCocoa.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 1860F430177C91B500C7B3C9;
+			remoteInfo = "ReactiveCocoa-iOS-UIKitTestHostTests";
+		};
 		D0626A001679440D00E951A5 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = D0BB24671678772C005E9371 /* Project object */;
@@ -517,6 +529,8 @@
 				D094E4E0177766EB00906BF7 /* libReactiveCocoa-iOS.a */,
 				D094E4E2177766EB00906BF7 /* ReactiveCocoaTests.octest */,
 				D094E4E4177766EB00906BF7 /* ReactiveCocoaTests-iOS.octest */,
+				D020F4A317F6A7480092BED2 /* ReactiveCocoa-iOS-UIKitTestHost.app */,
+				D020F4A517F6A7480092BED2 /* ReactiveCocoa-iOS-UIKitTestHostTests.octest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -837,6 +851,20 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
+		D020F4A317F6A7480092BED2 /* ReactiveCocoa-iOS-UIKitTestHost.app */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.application;
+			path = "ReactiveCocoa-iOS-UIKitTestHost.app";
+			remoteRef = D020F4A217F6A7480092BED2 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		D020F4A517F6A7480092BED2 /* ReactiveCocoa-iOS-UIKitTestHostTests.octest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = "ReactiveCocoa-iOS-UIKitTestHostTests.octest";
+			remoteRef = D020F4A417F6A7480092BED2 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		D06C9E31167D886A00276090 /* libExpecta.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
@@ -1015,7 +1043,6 @@
 				D0FD5A981679E7AF003C3210 /* UIView+RCLGeometryAdditions.m in Sources */,
 				D051391D167F108000334374 /* View+RCLAutoLayoutAdditions.m in Sources */,
 				D0ED89F616814D800041A188 /* RACSignal+RCLWritingDirectionAdditions.m in Sources */,
-				D08D164A16819DE300FBBA12 /* NSNotificationCenter+RACSupport.m in Sources */,
 				D037FEF61696ED02002D0CBA /* RACSignal+RCLAnimationAdditions.m in Sources */,
 				D0C20EF917363A6500115B19 /* RCLMacros.m in Sources */,
 			);
@@ -1040,7 +1067,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				D0BB25E11678847A005E9371 /* NSView+RCLGeometryAdditions.m in Sources */,
-				D0BB25EB16788579005E9371 /* NSNotificationCenter+RACSupport.m in Sources */,
 				D0BB2633167887C3005E9371 /* RACSignal+RCLGeometryAdditions.m in Sources */,
 				D051391C167F108000334374 /* View+RCLAutoLayoutAdditions.m in Sources */,
 				D0ED89F516814D800041A188 /* RACSignal+RCLWritingDirectionAdditions.m in Sources */,
