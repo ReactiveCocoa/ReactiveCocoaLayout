@@ -56,9 +56,14 @@
 
 	// Dynamically change the text of nameLabel based on the current
 	// orientation.
-	RAC(self.nameLabel, text) = [self.rotationSignal map:^(NSNumber *orientation) {
-		return (UIInterfaceOrientationIsPortrait(orientation.integerValue) ? NSLocalizedString(@"Portrait!", @"") : NSLocalizedString(@"Landscape awww yeaahhh", @""));
-	}];
+	RAC(self.nameLabel, text) = [[[self.rotationSignal
+		map:^(NSNumber *orientation) {
+			return @(UIInterfaceOrientationIsPortrait(orientation.integerValue));
+		}]
+		startWith:@YES]
+		map:^(NSNumber *isPortait) {
+			return (isPortait.boolValue ? NSLocalizedString(@"Portrait!", @"") : NSLocalizedString(@"Landscape awww yeaahhh", @""));
+		}];
 
 	// Horizontally divide the available space into a rect for the label and
 	// a rect for the text field.
