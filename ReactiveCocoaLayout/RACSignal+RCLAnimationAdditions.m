@@ -87,7 +87,11 @@ static RACSignal *animatedSignalsWithDuration (RACSignal *self, NSNumber *durati
 
 					[subscriber sendNext:value];
 				} completionHandler:^{
-					[subscriber sendCompleted];
+					// Avoids weird AppKit deadlocks when interrupting an
+					// existing animation.
+					[RACScheduler.mainThreadScheduler schedule:^{
+						[subscriber sendCompleted];
+					}];
 				}];
 			#endif
 
