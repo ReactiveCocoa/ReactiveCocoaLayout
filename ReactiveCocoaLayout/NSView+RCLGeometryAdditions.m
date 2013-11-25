@@ -91,68 +91,46 @@
 #pragma mark Signals
 
 - (RACSignal *)rcl_boundsSignal {
-	RACSubject *subject = objc_getAssociatedObject(self, _cmd);
-	if (subject != nil) return subject;
+	return [[RACSignal
+		defer:^{
+			self.postsBoundsChangedNotifications = YES;
+			self.postsFrameChangedNotifications = YES;
 
-	subject = [[RACReplaySubject replaySubjectWithCapacity:1] setNameWithFormat:@"%@ -rcl_boundsSignal", self];
-	objc_setAssociatedObject(self, _cmd, subject, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-
-	self.postsBoundsChangedNotifications = YES;
-	self.postsFrameChangedNotifications = YES;
-
-	RACDisposable *disposable = [[[[[RACSignal
-		merge:@[
-			[NSNotificationCenter.defaultCenter rac_addObserverForName:NSViewBoundsDidChangeNotification object:self],
-			[NSNotificationCenter.defaultCenter rac_addObserverForName:NSViewFrameDidChangeNotification object:self]
-		]]
-		map:^(NSNotification *notification) {
-			NSView *view = notification.object;
-			return MEDBox(view.bounds);
+			return [[[[[RACSignal
+				merge:@[
+					[NSNotificationCenter.defaultCenter rac_addObserverForName:NSViewBoundsDidChangeNotification object:self],
+					[NSNotificationCenter.defaultCenter rac_addObserverForName:NSViewFrameDidChangeNotification object:self]
+				]]
+				map:^(NSNotification *notification) {
+					NSView *view = notification.object;
+					return MEDBox(view.bounds);
+				}]
+				startWith:MEDBox(self.bounds)]
+				distinctUntilChanged]
+				takeUntil:self.rac_willDeallocSignal];
 		}]
-		startWith:MEDBox(self.bounds)]
-		distinctUntilChanged]
-		subscribe:subject];
-
-	[self.rac_deallocDisposable addDisposable:[RACDisposable disposableWithBlock:^{
-		[disposable dispose];
-		[subject sendCompleted];
-	}]];
-
-	return subject;
+		setNameWithFormat:@"%@ -rcl_boundsSignal", self];
 }
 
 - (RACSignal *)rcl_frameSignal {
-	RACSubject *subject = objc_getAssociatedObject(self, _cmd);
-	if (subject != nil) return subject;
+	return [[RACSignal
+		defer:^{
+			self.postsFrameChangedNotifications = YES;
 
-	subject = [[RACReplaySubject replaySubjectWithCapacity:1] setNameWithFormat:@"%@ -rcl_frameSignal", self];
-	objc_setAssociatedObject(self, _cmd, subject, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-
-	self.postsFrameChangedNotifications = YES;
-
-	RACDisposable *disposable = [[[[[NSNotificationCenter.defaultCenter rac_addObserverForName:NSViewFrameDidChangeNotification object:self]
-		map:^(NSNotification *notification) {
-			NSView *view = notification.object;
-			return MEDBox(view.frame);
+			return [[[[[NSNotificationCenter.defaultCenter
+				rac_addObserverForName:NSViewFrameDidChangeNotification object:self]
+				map:^(NSNotification *notification) {
+					NSView *view = notification.object;
+					return MEDBox(view.frame);
+				}]
+				startWith:MEDBox(self.frame)]
+				distinctUntilChanged]
+				takeUntil:self.rac_willDeallocSignal];
 		}]
-		startWith:MEDBox(self.frame)]
-		distinctUntilChanged]
-		subscribe:subject];
-
-	[self.rac_deallocDisposable addDisposable:[RACDisposable disposableWithBlock:^{
-		[disposable dispose];
-		[subject sendCompleted];
-	}]];
-
-	return subject;
+		setNameWithFormat:@"%@ -rcl_frameSignal", self];
 }
 
 - (RACSignal *)rcl_baselineSignal {
-	RACSubject *deallocSubject = [RACReplaySubject replaySubjectWithCapacity:1];
-	[self.rac_deallocDisposable addDisposable:[RACDisposable disposableWithBlock:^{
-		[deallocSubject sendCompleted];
-	}]];
-
 	@unsafeify(self);
 
 	return [[[self.rcl_intrinsicContentSizeSignal
@@ -160,7 +138,7 @@
 			@strongify(self);
 			return @(self.baselineOffsetFromBottom);
 		}]
-		takeUntil:deallocSubject]
+		takeUntil:self.rac_willDeallocSignal]
 		setNameWithFormat:@"%@ -rcl_baselineSignal", self];
 }
 
