@@ -67,7 +67,7 @@ static RACSignal *animatedSignalsWithDuration (RACSignal *self, NSNumber *durati
 	#endif
 
 	return [[self map:^(id value) {
-		return [[RACSignal createSignal:^ RACDisposable * (id<RACSubscriber> subscriber) {
+		return [[RACSignal create:^(id<RACSubscriber> subscriber) {
 			++RCLSignalAnimationLevel;
 			@onExit {
 				NSCAssert(RCLSignalAnimationLevel > 0, @"Unbalanced decrement of RCLSignalAnimationLevel");
@@ -94,8 +94,6 @@ static RACSignal *animatedSignalsWithDuration (RACSignal *self, NSNumber *durati
 					}];
 				}];
 			#endif
-
-			return nil;
 		}] setNameWithFormat:@"[[%@] -animatedSignalsWithDuration: %@ curve: %li] animationSignal: %@", self.name, duration, (long)curve, value];
 	}] setNameWithFormat:@"[%@] -animatedSignalsWithDuration: %@ curve: %li", self.name, duration, (long)curve];
 }
