@@ -125,7 +125,7 @@ describe(@"signal of CGRects", ^{
 	__block RACSignal *signal;
 
 	beforeEach(^{
-		signal = rects.rac_signal;
+		signal = [rects.rac_signal subscribeOn:[RACScheduler scheduler]];
 	});
 
 	it(@"should map to sizes", ^{
@@ -138,7 +138,8 @@ describe(@"signal of CGRects", ^{
 
 	it(@"should map to center points", ^{
 		NSArray *expected = [[RACSignal
-			zip:@[ centerXs.rac_signal, centerYs.rac_signal ] reduce:^(NSNumber *x, NSNumber *y) {
+			zip:@[ centerXs.rac_signal, centerYs.rac_signal ]
+			reduce:^(NSNumber *x, NSNumber *y) {
 				return MEDBox(CGPointMake(x.doubleValue, y.doubleValue));
 			}]
 			array];
@@ -795,7 +796,7 @@ describe(@"signal of CGSizes", ^{
 	__block RACSignal *signal;
 
 	beforeEach(^{
-		signal = sizes.rac_signal;
+		signal = [sizes.rac_signal subscribeOn:[RACScheduler scheduler]];
 	});
 
 	it(@"should map to widths", ^{
@@ -871,7 +872,7 @@ describe(@"signal of CGPoints", ^{
 	__block RACSignal *signal;
 
 	beforeEach(^{
-		signal = points.rac_signal;
+		signal = [points.rac_signal subscribeOn:[RACScheduler scheduler]];
 	});
 
 	it(@"should map to minXs", ^{
@@ -947,7 +948,7 @@ describe(@"signal of CGFloats", ^{
 	__block RACSignal *signal;
 
 	beforeEach(^{
-		signal = widths.rac_signal;
+		signal = [widths.rac_signal subscribeOn:[RACScheduler scheduler]];
 	});
 
 	it(@"should be negated", ^{
@@ -1328,7 +1329,7 @@ describe(@"-offsetByAmount:towardEdge:", ^{
 	beforeEach(^{
 		amount = [RACSignal return:@8];
 		
-		pointSignal = points.rac_signal;
+		pointSignal = [points.rac_signal subscribeOn:[RACScheduler scheduler]];
 		rectSignal = [RACSignal rectsWithOrigin:pointSignal size:[RACSignal zeroSize]];
 
 		offsetMinX = @[
