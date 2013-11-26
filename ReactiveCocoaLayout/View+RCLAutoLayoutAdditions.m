@@ -58,17 +58,17 @@ static void newInvalidateIntrinsicContentSize(id self, SEL _cmd) {
 	if (subject == nil) {
 		subject = [RACSubject subject];
 		objc_setAssociatedObject(self, IntrinsicContentSizeSubjectKey, subject, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-
-		[self.rac_deallocDisposable addDisposable:[RACDisposable disposableWithBlock:^{
-			[subject sendCompleted];
-		}]];
 	}
 
-	return [[[RACSignal
+	@unsafeify(self);
+
+	return [[[[RACSignal
 		defer:^{
+			@strongify(self);
 			return [subject startWith:MEDBox(self.intrinsicContentSize)];
 		}]
 		distinctUntilChanged]
+		takeUntil:self.rac_willDeallocSignal]
 		setNameWithFormat:@"%@ -rcl_intrinsicContentSizeSignal", self];
 }
 

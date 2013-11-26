@@ -91,12 +91,15 @@
 #pragma mark Signals
 
 - (RACSignal *)rcl_boundsSignal {
-	return [[RACSignal
+	@unsafeify(self);
+
+	return [[[[RACSignal
 		defer:^{
+			@strongify(self);
 			self.postsBoundsChangedNotifications = YES;
 			self.postsFrameChangedNotifications = YES;
 
-			return [[[[[RACSignal
+			return [[[RACSignal
 				merge:@[
 					[NSNotificationCenter.defaultCenter rac_addObserverForName:NSViewBoundsDidChangeNotification object:self],
 					[NSNotificationCenter.defaultCenter rac_addObserverForName:NSViewFrameDidChangeNotification object:self]
@@ -105,40 +108,42 @@
 					NSView *view = notification.object;
 					return MEDBox(view.bounds);
 				}]
-				startWith:MEDBox(self.bounds)]
-				distinctUntilChanged]
-				takeUntil:self.rac_willDeallocSignal];
+				startWith:MEDBox(self.bounds)];
 		}]
+		distinctUntilChanged]
+		takeUntil:self.rac_willDeallocSignal]
 		setNameWithFormat:@"%@ -rcl_boundsSignal", self];
 }
 
 - (RACSignal *)rcl_frameSignal {
-	return [[RACSignal
+	@unsafeify(self);
+
+	return [[[[RACSignal
 		defer:^{
+			@strongify(self);
 			self.postsFrameChangedNotifications = YES;
 
-			return [[[[[NSNotificationCenter.defaultCenter
+			return [[[NSNotificationCenter.defaultCenter
 				rac_addObserverForName:NSViewFrameDidChangeNotification object:self]
 				map:^(NSNotification *notification) {
 					NSView *view = notification.object;
 					return MEDBox(view.frame);
 				}]
-				startWith:MEDBox(self.frame)]
-				distinctUntilChanged]
-				takeUntil:self.rac_willDeallocSignal];
+				startWith:MEDBox(self.frame)];
 		}]
+		distinctUntilChanged]
+		takeUntil:self.rac_willDeallocSignal]
 		setNameWithFormat:@"%@ -rcl_frameSignal", self];
 }
 
 - (RACSignal *)rcl_baselineSignal {
 	@unsafeify(self);
 
-	return [[[self.rcl_intrinsicContentSizeSignal
+	return [[self.rcl_intrinsicContentSizeSignal
 		map:^(id _) {
 			@strongify(self);
 			return @(self.baselineOffsetFromBottom);
 		}]
-		takeUntil:self.rac_willDeallocSignal]
 		setNameWithFormat:@"%@ -rcl_baselineSignal", self];
 }
 
