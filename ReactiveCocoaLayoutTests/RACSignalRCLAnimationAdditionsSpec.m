@@ -11,7 +11,7 @@ SpecBegin(RACSignalRCLAnimationAdditions)
 __block RACSignal *baseSignal;
 
 beforeEach(^{
-	baseSignal = @[ @0, @1, @2 ].rac_sequence.signal;
+	baseSignal = @[ @0, @1, @2 ].rac_signal;
 });
 
 describe(@"-animatedSignalsWithDuration:curve:", ^{
@@ -61,8 +61,9 @@ describe(@"-animatedSignalsWithDuration:curve:", ^{
 		[[[[baseSignal
 			animatedSignals]
 			map:^(RACSignal *signal) {
-				return [signal initially:^{
+				return [RACSignal defer:^{
 					signalsStarted++;
+					return signal;
 				}];
 			}]
 			concat]

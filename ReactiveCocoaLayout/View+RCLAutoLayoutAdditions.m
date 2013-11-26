@@ -64,8 +64,10 @@ static void newInvalidateIntrinsicContentSize(id self, SEL _cmd) {
 		}]];
 	}
 
-	return [[[subject
-		startWith:MEDBox(self.intrinsicContentSize)]
+	return [[[RACSignal
+		defer:^{
+			return [subject startWith:MEDBox(self.intrinsicContentSize)];
+		}]
 		distinctUntilChanged]
 		setNameWithFormat:@"%@ -rcl_intrinsicContentSizeSignal", self];
 }
