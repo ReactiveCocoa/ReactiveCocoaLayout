@@ -18,7 +18,7 @@ static RACSignal *latestSortedNumber(NSArray *signals, BOOL minimum) {
 
 	return [[[[RACSignal combineLatest:signals]
 		map:^ id (RACTuple *t) {
-			NSMutableArray *values = [t.allObjects mutableCopy];
+			NSMutableArray *values = [t.array mutableCopy];
 
 			[values removeObject:NSNull.null];
 			if (values.count == 0) return nil;
@@ -92,12 +92,9 @@ static RACSignal *combineSignalsWithOperator(NSArray *signals, RCLBinaryOperator
 	NSCParameterAssert(signals.count > 0);
 	NSCParameterAssert(operator != nil);
 
-	return [[[RACSignal
+	return [[RACSignal
 		combineLatest:signals]
 		map:^(RACTuple *values) {
-			return values.allObjects;
-		}]
-		map:^(NSArray *values) {
 			id result = values[0];
 			BOOL isNumber = [result isKindOfClass:NSNumber.class];
 
