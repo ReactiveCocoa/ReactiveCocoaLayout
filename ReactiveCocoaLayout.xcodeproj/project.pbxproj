@@ -21,6 +21,8 @@
 		D037FEF81696F1FE002D0CBA /* RACSignalRCLAnimationAdditionsSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = D037FEF71696F1FE002D0CBA /* RACSignalRCLAnimationAdditionsSpec.m */; };
 		D037FEFB1696F42D002D0CBA /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D037FEFA1696F42D002D0CBA /* QuartzCore.framework */; };
 		D037FEFC1696F438002D0CBA /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D037FEFA1696F42D002D0CBA /* QuartzCore.framework */; };
+		D04A5E3D185DAB8D009A328A /* UIViewController+RCLPresentationAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = D04A5E3B185DAB8D009A328A /* UIViewController+RCLPresentationAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D04A5E3E185DAB8D009A328A /* UIViewController+RCLPresentationAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = D04A5E3C185DAB8D009A328A /* UIViewController+RCLPresentationAdditions.m */; };
 		D051391B167F108000334374 /* View+RCLAutoLayoutAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = D0513919167F108000334374 /* View+RCLAutoLayoutAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D051391C167F108000334374 /* View+RCLAutoLayoutAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = D051391A167F108000334374 /* View+RCLAutoLayoutAdditions.m */; };
 		D051391D167F108000334374 /* View+RCLAutoLayoutAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = D051391A167F108000334374 /* View+RCLAutoLayoutAdditions.m */; };
@@ -94,6 +96,13 @@
 			proxyType = 2;
 			remoteGlobalIDString = 1860F430177C91B500C7B3C9;
 			remoteInfo = "ReactiveCocoa-iOS-UIKitTestHostTests";
+		};
+		D04A5E48185DAB8E009A328A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D094E4D4177766EB00906BF7 /* ReactiveCocoa.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = D05AD39417F2D56F0080895B;
+			remoteInfo = "ReactiveCocoa-Mac";
 		};
 		D0626A001679440D00E951A5 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -285,6 +294,8 @@
 		D037FEF31696ED02002D0CBA /* RACSignal+RCLAnimationAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RACSignal+RCLAnimationAdditions.m"; sourceTree = "<group>"; };
 		D037FEF71696F1FE002D0CBA /* RACSignalRCLAnimationAdditionsSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RACSignalRCLAnimationAdditionsSpec.m; sourceTree = "<group>"; };
 		D037FEFA1696F42D002D0CBA /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.0.sdk/System/Library/Frameworks/QuartzCore.framework; sourceTree = DEVELOPER_DIR; };
+		D04A5E3B185DAB8D009A328A /* UIViewController+RCLPresentationAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+RCLPresentationAdditions.h"; sourceTree = "<group>"; };
+		D04A5E3C185DAB8D009A328A /* UIViewController+RCLPresentationAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+RCLPresentationAdditions.m"; sourceTree = "<group>"; };
 		D0513919167F108000334374 /* View+RCLAutoLayoutAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "View+RCLAutoLayoutAdditions.h"; sourceTree = "<group>"; };
 		D051391A167F108000334374 /* View+RCLAutoLayoutAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "View+RCLAutoLayoutAdditions.m"; sourceTree = "<group>"; };
 		D051391E167F11FD00334374 /* ViewExamples.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewExamples.m; sourceTree = "<group>"; };
@@ -530,6 +541,7 @@
 				D094E4E4177766EB00906BF7 /* ReactiveCocoaTests-iOS.octest */,
 				D020F4A317F6A7480092BED2 /* ReactiveCocoa-iOS-UIKitTestHost.app */,
 				D020F4A517F6A7480092BED2 /* ReactiveCocoa-iOS-UIKitTestHostTests.octest */,
+				D04A5E49185DAB8E009A328A /* libReactiveCocoa-Mac.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -681,6 +693,8 @@
 			children = (
 				D0FD5A961679E7AF003C3210 /* UIView+RCLGeometryAdditions.h */,
 				D0FD5A971679E7AF003C3210 /* UIView+RCLGeometryAdditions.m */,
+				D04A5E3B185DAB8D009A328A /* UIViewController+RCLPresentationAdditions.h */,
+				D04A5E3C185DAB8D009A328A /* UIViewController+RCLPresentationAdditions.m */,
 			);
 			name = "UIKit Extensions";
 			sourceTree = "<group>";
@@ -697,6 +711,7 @@
 				D005A2D0169A3C8C00A9D2DB /* RACSignal+RCLGeometryAdditions.h in Headers */,
 				D005A2D1169A3C8C00A9D2DB /* RACSignal+RCLWritingDirectionAdditions.h in Headers */,
 				D005A2D2169A3C8C00A9D2DB /* View+RCLAutoLayoutAdditions.h in Headers */,
+				D04A5E3D185DAB8D009A328A /* UIViewController+RCLPresentationAdditions.h in Headers */,
 				D005A2D6169A3C8C00A9D2DB /* UIView+RCLGeometryAdditions.h in Headers */,
 				D0C20EF61736398700115B19 /* RCLMacros.h in Headers */,
 			);
@@ -862,6 +877,13 @@
 			fileType = wrapper.cfbundle;
 			path = "ReactiveCocoa-iOS-UIKitTestHostTests.octest";
 			remoteRef = D020F4A417F6A7480092BED2 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		D04A5E49185DAB8E009A328A /* libReactiveCocoa-Mac.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libReactiveCocoa-Mac.a";
+			remoteRef = D04A5E48185DAB8E009A328A /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		D06C9E31167D886A00276090 /* libExpecta.a */ = {
@@ -1042,6 +1064,7 @@
 				D0FD5A981679E7AF003C3210 /* UIView+RCLGeometryAdditions.m in Sources */,
 				D051391D167F108000334374 /* View+RCLAutoLayoutAdditions.m in Sources */,
 				D0ED89F616814D800041A188 /* RACSignal+RCLWritingDirectionAdditions.m in Sources */,
+				D04A5E3E185DAB8D009A328A /* UIViewController+RCLPresentationAdditions.m in Sources */,
 				D037FEF61696ED02002D0CBA /* RACSignal+RCLAnimationAdditions.m in Sources */,
 				D0C20EF917363A6500115B19 /* RCLMacros.m in Sources */,
 			);
