@@ -991,6 +991,86 @@
 			};
 			name = Release;
 		};
+		D499F09818E0D4A600AA91F9 /* Test */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = D094E4B51777661600906BF7 /* Test.xcconfig */;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_PREFIX_HEADER = "ReactiveCocoaLayout/ReactiveCocoaLayout-Prefix.pch";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = ReactiveCocoaLayout;
+			};
+			name = Test;
+		};
+		D499F09918E0D4A600AA91F9 /* Test */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = D094E4C11777661600906BF7 /* Mac-Framework.xcconfig */;
+			buildSettings = {
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_VERSION = A;
+				INFOPLIST_FILE = "ReactiveCocoaLayout/ReactiveCocoaLayout-Info.plist";
+				WRAPPER_EXTENSION = framework;
+			};
+			name = Test;
+		};
+		D499F09A18E0D4A600AA91F9 /* Test */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = D094E4BE1777661600906BF7 /* Mac-Application.xcconfig */;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = "\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"";
+				GCC_PREFIX_HEADER = "ReactiveCocoaLayoutTests/ReactiveCocoaLayoutTests-Prefix.pch";
+				HEADER_SEARCH_PATHS = (
+					External/ReactiveCocoa/external/specta/src,
+					"External/ReactiveCocoa/external/expecta/src/**",
+				);
+				INFOPLIST_FILE = "ReactiveCocoaLayoutTests/ReactiveCocoaLayoutTests-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(USER_LIBRARY_DIR)/Developer/Xcode/DerivedData/ReactiveCocoaLayout-asyetoilzpjmgaevwifzgyhczvsy/Build/Products/Debug",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Test;
+		};
+		D499F09B18E0D4A600AA91F9 /* Test */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = D094E4BC1777661600906BF7 /* iOS-StaticLibrary.xcconfig */;
+			buildSettings = {
+				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = NO;
+				DSTROOT = /tmp/ReactiveCocoaLayout.dst;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PUBLIC_HEADERS_FOLDER_PATH = include/ReactiveCocoaLayout;
+			};
+			name = Test;
+		};
+		D499F09C18E0D4A600AA91F9 /* Test */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = D094E4BA1777661600906BF7 /* iOS-Application.xcconfig */;
+			buildSettings = {
+				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
+					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
+				);
+				GCC_PREFIX_HEADER = "ReactiveCocoaLayoutTests/ReactiveCocoaLayoutTests-Prefix.pch";
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					External/ReactiveCocoa/external/specta/src,
+					"External/ReactiveCocoa/external/expecta/src/**",
+				);
+				INFOPLIST_FILE = "ReactiveCocoaLayoutTests/ReactiveCocoaLayoutTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Test;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -998,6 +1078,7 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				D0626A0D1679440D00E951A5 /* Debug */,
+				D499F09B18E0D4A600AA91F9 /* Test */,
 				D0626A0E1679440D00E951A5 /* Release */,
 				D0626A44167945D400E951A5 /* Profile */,
 			);
@@ -1008,6 +1089,7 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				D0626A101679440D00E951A5 /* Debug */,
+				D499F09C18E0D4A600AA91F9 /* Test */,
 				D0626A111679440D00E951A5 /* Release */,
 				D0626A45167945D400E951A5 /* Profile */,
 			);
@@ -1018,6 +1100,7 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				D0BB24991678772C005E9371 /* Debug */,
+				D499F09818E0D4A600AA91F9 /* Test */,
 				D0BB249A1678772C005E9371 /* Release */,
 				D0626A41167945D400E951A5 /* Profile */,
 			);
@@ -1028,6 +1111,7 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				D0BB249C1678772C005E9371 /* Debug */,
+				D499F09918E0D4A600AA91F9 /* Test */,
 				D0BB249D1678772C005E9371 /* Release */,
 				D0626A42167945D400E951A5 /* Profile */,
 			);
@@ -1038,6 +1122,7 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				D0BB249F1678772C005E9371 /* Debug */,
+				D499F09A18E0D4A600AA91F9 /* Test */,
 				D0BB24A01678772C005E9371 /* Release */,
 				D0626A43167945D400E951A5 /* Profile */,
 			);
