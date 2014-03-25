@@ -42,9 +42,9 @@ RCL intends to offer the following advantages over Auto Layout:
 
 To start building the framework, clone this repository and then run `script/bootstrap`.
 This will automatically pull down any dependencies. Then, simply open
-`ReactiveCocoaLayout.xcodeproj` and build.
+`ReactiveCocoaLayout.xcworkspace` (note: not the `.xcodeproj`) and build.
 
-To use ReactiveCocoaLayout in your project, you will need to link
+To use ReactiveCocoaLayout in your project, you will need to include the `ReactiveCocoaLayout.xcodeproj` (note: not the `.xcworkspace`) file in your project, and link
 [ReactiveCocoa](https://github.com/ReactiveCocoa/ReactiveCocoa) and
 [Archimedes](https://github.com/github/Archimedes) into your application target.
 
