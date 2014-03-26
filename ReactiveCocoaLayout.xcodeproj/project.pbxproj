@@ -68,10 +68,10 @@
 		D0ED89F8168150030041A188 /* RACSignalRCLWritingDirectionAdditionsSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = D0ED89F7168150030041A188 /* RACSignalRCLWritingDirectionAdditionsSpec.m */; };
 		D0ED89F9168150030041A188 /* RACSignalRCLWritingDirectionAdditionsSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = D0ED89F7168150030041A188 /* RACSignalRCLWritingDirectionAdditionsSpec.m */; };
 		D0FD5A981679E7AF003C3210 /* UIView+RCLGeometryAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = D0FD5A971679E7AF003C3210 /* UIView+RCLGeometryAdditions.m */; };
-		D4ACA48018DB8F2100EBD899 /* Archimedes.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4ACA47F18DB8F2100EBD899 /* Archimedes.framework */; };
+		D40D7B2818E30C0A0065BB70 /* Archimedes.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D40D7B2718E30C0A0065BB70 /* Archimedes.framework */; };
+		D40D7B2918E30C290065BB70 /* Archimedes.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D40D7B2718E30C0A0065BB70 /* Archimedes.framework */; };
 		D4ACA48218DB8F5200EBD899 /* ReactiveCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4ACA48118DB8F5200EBD899 /* ReactiveCocoa.framework */; };
 		D4ACA48318DB8F8200EBD899 /* ReactiveCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4ACA48118DB8F5200EBD899 /* ReactiveCocoa.framework */; };
-		D4ACA48418DB8F8200EBD899 /* Archimedes.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4ACA47F18DB8F2100EBD899 /* Archimedes.framework */; };
 		D4ACA48618DB8F8C00EBD899 /* libExpecta.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D4ACA48518DB8F8C00EBD899 /* libExpecta.a */; };
 		D4ACA48818DB8F9200EBD899 /* libSpecta.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D4ACA48718DB8F9200EBD899 /* libSpecta.a */; };
 		D4ACA49C18DB913500EBD899 /* libArchimedes-iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D4ACA49B18DB913500EBD899 /* libArchimedes-iOS.a */; };
@@ -165,10 +165,10 @@
 		D0ED89F7168150030041A188 /* RACSignalRCLWritingDirectionAdditionsSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RACSignalRCLWritingDirectionAdditionsSpec.m; sourceTree = "<group>"; };
 		D0FD5A961679E7AF003C3210 /* UIView+RCLGeometryAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+RCLGeometryAdditions.h"; sourceTree = "<group>"; };
 		D0FD5A971679E7AF003C3210 /* UIView+RCLGeometryAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+RCLGeometryAdditions.m"; sourceTree = "<group>"; };
-		D4ACA47F18DB8F2100EBD899 /* Archimedes.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Archimedes.framework; path = External/Archimedes/build/Debug/Archimedes.framework; sourceTree = "<group>"; };
-		D4ACA48118DB8F5200EBD899 /* ReactiveCocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ReactiveCocoa.framework; path = "../../../../../../../Library/Developer/Xcode/DerivedData/ReactiveCocoaLayout-asyetoilzpjmgaevwifzgyhczvsy/Build/Products/Debug/ReactiveCocoa.framework"; sourceTree = "<group>"; };
-		D4ACA48518DB8F8C00EBD899 /* libExpecta.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libExpecta.a; path = "../../../../../../../Library/Developer/Xcode/DerivedData/ReactiveCocoaLayout-asyetoilzpjmgaevwifzgyhczvsy/Build/Products/Debug/libExpecta.a"; sourceTree = "<group>"; };
-		D4ACA48718DB8F9200EBD899 /* libSpecta.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libSpecta.a; path = "../../../../../../../Library/Developer/Xcode/DerivedData/ReactiveCocoaLayout-asyetoilzpjmgaevwifzgyhczvsy/Build/Products/Debug/libSpecta.a"; sourceTree = "<group>"; };
+		D40D7B2718E30C0A0065BB70 /* Archimedes.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Archimedes.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		D4ACA48118DB8F5200EBD899 /* ReactiveCocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ReactiveCocoa.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		D4ACA48518DB8F8C00EBD899 /* libExpecta.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libExpecta.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		D4ACA48718DB8F9200EBD899 /* libSpecta.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libSpecta.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		D4ACA49B18DB913500EBD899 /* libArchimedes-iOS.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libArchimedes-iOS.a"; path = "External/Archimedes/build/Debug-iphoneos/libArchimedes-iOS.a"; sourceTree = "<group>"; };
 		D4ACA49D18DB913B00EBD899 /* libReactiveCocoa-iOS.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libReactiveCocoa-iOS.a"; path = "External/ReactiveCocoa/ReactiveCocoaFramework/build/Debug-iphoneos/libReactiveCocoa-iOS.a"; sourceTree = "<group>"; };
 		D4ACA49F18DB916200EBD899 /* libExpecta-iOS.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libExpecta-iOS.a"; path = "External/ReactiveCocoa/external/expecta/build/Debug-iphoneos/libExpecta-iOS.a"; sourceTree = "<group>"; };
@@ -209,8 +209,8 @@
 			files = (
 				D06C9F41167D9AD400276090 /* QuartzCore.framework in Frameworks */,
 				D0BB24751678772C005E9371 /* Cocoa.framework in Frameworks */,
-				D4ACA48018DB8F2100EBD899 /* Archimedes.framework in Frameworks */,
 				D4ACA48218DB8F5200EBD899 /* ReactiveCocoa.framework in Frameworks */,
+				D40D7B2918E30C290065BB70 /* Archimedes.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -222,7 +222,7 @@
 				D0BB248C1678772C005E9371 /* Cocoa.framework in Frameworks */,
 				D0BB248F1678772C005E9371 /* ReactiveCocoaLayout.framework in Frameworks */,
 				D4ACA48318DB8F8200EBD899 /* ReactiveCocoa.framework in Frameworks */,
-				D4ACA48418DB8F8200EBD899 /* Archimedes.framework in Frameworks */,
+				D40D7B2818E30C0A0065BB70 /* Archimedes.framework in Frameworks */,
 				D4ACA48618DB8F8C00EBD899 /* libExpecta.a in Frameworks */,
 				D4ACA48818DB8F9200EBD899 /* libSpecta.a in Frameworks */,
 			);
@@ -351,8 +351,8 @@
 				D4ACA48518DB8F8C00EBD899 /* libExpecta.a */,
 				D4ACA49F18DB916200EBD899 /* libExpecta-iOS.a */,
 				D4ACA48118DB8F5200EBD899 /* ReactiveCocoa.framework */,
+				D40D7B2718E30C0A0065BB70 /* Archimedes.framework */,
 				D4ACA49D18DB913B00EBD899 /* libReactiveCocoa-iOS.a */,
-				D4ACA47F18DB8F2100EBD899 /* Archimedes.framework */,
 				D4ACA49B18DB913500EBD899 /* libArchimedes-iOS.a */,
 				D0BB25EC1678857E005E9371 /* RACExtensions */,
 				D0BB24741678772C005E9371 /* Cocoa.framework */,
