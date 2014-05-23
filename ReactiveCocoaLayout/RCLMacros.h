@@ -141,6 +141,16 @@
 // always relative to views' alignment rectangles.
 #define rcl_baseline @(RCLAttributeBaseline)
 
+@interface RACSignal (RCLBindings)
+
+/// Constructs rects using the given dictionary of signals. cf `RCLFrame`
+/// and `RCLAlignment` for the semantics of this dictionary.
+///
+/// This simplifies the creation of race-free dependent layouts.
++ (RACSignal *)rectsWithView:(id)view bindings:(NSDictionary *)bindings;
+
+@end
+
 @interface RCLRectAssignmentTrampoline : NSObject
 
 #ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
