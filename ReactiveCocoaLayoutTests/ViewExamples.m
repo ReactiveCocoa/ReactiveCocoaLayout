@@ -59,7 +59,7 @@ sharedExamplesFor(ViewExamples, ^(NSDictionary *_) {
 			expect(completed).to.beFalsy();
 		}
 
-		expect(completed).to.beTruthy();
+		expect(completed).will.beTruthy();
 	});
 
 	it(@"should defer reading initial bounds", ^{
@@ -98,7 +98,7 @@ sharedExamplesFor(ViewExamples, ^(NSDictionary *_) {
 			expect(completed).to.beFalsy();
 		}
 
-		expect(completed).to.beTruthy();
+		expect(completed).will.beTruthy();
 	});
 
 	it(@"should defer reading initial frame", ^{

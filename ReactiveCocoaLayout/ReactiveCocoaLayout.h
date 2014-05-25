@@ -14,6 +14,7 @@
 
 #ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
 	#import <ReactiveCocoaLayout/UIView+RCLGeometryAdditions.h>
+	#import <ReactiveCocoaLayout/UIViewController+RCLPresentationAdditions.h>
 #elif TARGET_OS_MAC
 	#import <ReactiveCocoaLayout/NSCell+RCLGeometryAdditions.h>
 	#import <ReactiveCocoaLayout/NSControl+RCLGeometryAdditions.h>

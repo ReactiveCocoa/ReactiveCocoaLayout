@@ -144,21 +144,29 @@ static NSString *NSStringFromRCLAttribute(RCLAttribute attribute) __attribute__(
 				break;
 
 			case RCLAttributeBaseline: {
-				value = [value replayLast];
+				signal = [RACSignal create:^(id<RACSubscriber> subscriber) {
+					RACSubject *multicastedValue = [RACSubject subject];
 
-				RACSignal *referenceRect = [[value
-					map:^(id view) {
-						return [view rcl_alignmentRectSignal];
-					}]
-					switchToLatest];
+					RACSignal *referenceRect = [[multicastedValue
+						map:^(id view) {
+							return [view rcl_alignmentRectSignal];
+						}]
+						switchToLatest];
 
-				RACSignal *referenceBaseline = [[value
-					map:^(id view) {
-						return [view rcl_baselineSignal];
-					}]
-					switchToLatest];
+					RACSignal *referenceBaseline = [[multicastedValue
+						map:^(id view) {
+							return [view rcl_baselineSignal];
+						}]
+						switchToLatest];
+					
+					[[signal
+						alignBaseline:[self.view rcl_baselineSignal] toBaseline:referenceBaseline ofRect:referenceRect]
+						subscribe:subscriber];
 
-				signal = [signal alignBaseline:[self.view rcl_baselineSignal] toBaseline:referenceBaseline ofRect:referenceRect];
+					RACDisposable *valueDisposable = [value subscribe:multicastedValue];
+					[subscriber.disposable addDisposable:valueDisposable];
+				}];
+
 				break;
 			}
 		}

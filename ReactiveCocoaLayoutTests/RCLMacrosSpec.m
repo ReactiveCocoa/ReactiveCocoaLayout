@@ -773,62 +773,62 @@ describe(@"RCLAlignment", ^{
 describe(@"RCLBox", ^{
 	it(@"should create a constant signal of int", ^{
 		RACSignal *signal = RCLBox(INT_MIN);
-		expect([signal toArray]).to.equal(@[ @(INT_MIN) ]);
+		expect([signal array]).to.equal(@[ @(INT_MIN) ]);
 	});
 
 	it(@"should create a constant signal of unsigned int", ^{
 		RACSignal *signal = RCLBox(UINT_MAX);
-		expect([signal toArray]).to.equal(@[ @(UINT_MAX) ]);
+		expect([signal array]).to.equal(@[ @(UINT_MAX) ]);
 	});
 
 	it(@"should create a constant signal of long long", ^{
 		RACSignal *signal = RCLBox(LLONG_MIN);
-		expect([signal toArray]).to.equal(@[ @(LLONG_MIN) ]);
+		expect([signal array]).to.equal(@[ @(LLONG_MIN) ]);
 	});
 
 	it(@"should create a constant signal of unsigned long long", ^{
 		RACSignal *signal = RCLBox(ULLONG_MAX);
-		expect([signal toArray]).to.equal(@[ @(ULLONG_MAX) ]);
+		expect([signal array]).to.equal(@[ @(ULLONG_MAX) ]);
 	});
 
 	it(@"should create a constant signal of signed char", ^{
 		signed char value = SCHAR_MIN;
 		RACSignal *signal = RCLBox(value);
-		expect([signal toArray]).to.equal(@[ @(value) ]);
+		expect([signal array]).to.equal(@[ @(value) ]);
 	});
 
 	it(@"should create a constant signal of unsigned char", ^{
 		unsigned char value = UCHAR_MAX;
 		RACSignal *signal = RCLBox(value);
-		expect([signal toArray]).to.equal(@[ @(value) ]);
+		expect([signal array]).to.equal(@[ @(value) ]);
 	});
 
 	it(@"should create a constant signal of float", ^{
 		RACSignal *signal = RCLBox(FLT_MAX);
-		expect([signal toArray]).to.equal(@[ @(FLT_MAX) ]);
+		expect([signal array]).to.equal(@[ @(FLT_MAX) ]);
 	});
 
 	it(@"should create a constant signal of double", ^{
 		RACSignal *signal = RCLBox(DBL_MAX);
-		expect([signal toArray]).to.equal(@[ @(DBL_MAX) ]);
+		expect([signal array]).to.equal(@[ @(DBL_MAX) ]);
 	});
 
 	it(@"should create a constant signal of CGRect", ^{
 		CGRect rect = CGRectMake(1, 2, 3, 4);
 		RACSignal *signal = RCLBox(rect);
-		expect([signal toArray]).to.equal(@[ [NSValue med_valueWithRect:rect] ]);
+		expect([signal array]).to.equal(@[ [NSValue med_valueWithRect:rect] ]);
 	});
 
 	it(@"should create a constant signal of CGSize", ^{
 		CGSize size = CGSizeMake(5, 10);
 		RACSignal *signal = RCLBox(size);
-		expect([signal toArray]).to.equal(@[ [NSValue med_valueWithSize:size] ]);
+		expect([signal array]).to.equal(@[ [NSValue med_valueWithSize:size] ]);
 	});
 
 	it(@"should create a constant signal of CGPoint", ^{
 		CGPoint point = CGPointMake(5, 10);
 		RACSignal *signal = RCLBox(point);
-		expect([signal toArray]).to.equal(@[ [NSValue med_valueWithPoint:point] ]);
+		expect([signal array]).to.equal(@[ [NSValue med_valueWithPoint:point] ]);
 	});
 });
 

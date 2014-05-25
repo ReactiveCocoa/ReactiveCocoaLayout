@@ -18,7 +18,7 @@ static RACSignal *latestSortedNumber(NSArray *signals, BOOL minimum) {
 
 	return [[[[RACSignal combineLatest:signals]
 		map:^ id (RACTuple *t) {
-			NSMutableArray *values = [t.allObjects mutableCopy];
+			NSMutableArray *values = [t.array mutableCopy];
 
 			[values removeObject:NSNull.null];
 			if (values.count == 0) return nil;
@@ -92,15 +92,15 @@ static RACSignal *combineSignalsWithOperator(NSArray *signals, RCLBinaryOperator
 	NSCParameterAssert(signals.count > 0);
 	NSCParameterAssert(operator != nil);
 
-	return [[[RACSignal combineLatest:signals]
+	return [[RACSignal
+		combineLatest:signals]
 		map:^(RACTuple *values) {
-			return values.allObjects.rac_sequence;
-		}]
-		map:^(RACSequence *values) {
-			id result = values.head;
+			id result = values[0];
 			BOOL isNumber = [result isKindOfClass:NSNumber.class];
 
-			for (id value in values.tail) {
+			for (NSUInteger i = 1; i < values.count; i++) {
+				id value = values[i];
+
 				if (isNumber) {
 					result = combineNumbersWithOperator(result, value, operator);
 				} else {
@@ -164,16 +164,19 @@ static RACSignal *combineAttributeAndSignals(NSLayoutAttribute attribute, NSArra
 
 		case NSLayoutAttributeLeading:
 		case NSLayoutAttributeTrailing: {
-			RACReplaySubject *edgeSubject = [RACReplaySubject replaySubjectWithCapacity:1];
+			RACSubject *terminateSubject = [RACSubject subject];
 
-			RACSignal *baseSignal = (attribute == NSLayoutAttributeLeading ? RACSignal.leadingEdgeSignal : RACSignal.trailingEdgeSignal);
-			edgeSignal = [[baseSignal multicast:edgeSubject] autoconnect];
-
-			// Terminate edgeSubject when one of the given signals completes
+			// Terminate the edge signal when one of the given signals completes
 			// (doesn't really matter which one).
 			mutableSignals[0] = [mutableSignals[0] doCompleted:^{
-				[edgeSubject sendCompleted];
+				[terminateSubject sendCompleted];
 			}];
+
+			edgeSignal = [[RACSignal
+				defer:^{
+					return (attribute == NSLayoutAttributeLeading ? RACSignal.leadingEdgeSignal : RACSignal.trailingEdgeSignal);
+				}]
+				takeUntil:terminateSubject];
 
 			break;
 		}
