@@ -47,6 +47,8 @@
 		D096C51816917BA60071C6D6 /* NSCell+RCLGeometryAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = D096C51616917BA60071C6D6 /* NSCell+RCLGeometryAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D096C51916917BA60071C6D6 /* NSCell+RCLGeometryAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = D096C51716917BA60071C6D6 /* NSCell+RCLGeometryAdditions.m */; };
 		D096C51B16917EF30071C6D6 /* NSCellRCLGeometryAdditionsSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = D096C51A16917EF30071C6D6 /* NSCellRCLGeometryAdditionsSpec.m */; };
+		D09CC24C1932A0B2003FCB80 /* libArchimedes-iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D09CC24A1932A0B2003FCB80 /* libArchimedes-iOS.a */; };
+		D09CC24D1932A0B2003FCB80 /* libReactiveCocoa-iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D09CC24B1932A0B2003FCB80 /* libReactiveCocoa-iOS.a */; };
 		D0BB24751678772C005E9371 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0BB24741678772C005E9371 /* Cocoa.framework */; };
 		D0BB247F1678772C005E9371 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = D0BB247D1678772C005E9371 /* InfoPlist.strings */; };
 		D0BB248B1678772C005E9371 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0BB248A1678772C005E9371 /* SenTestingKit.framework */; };
@@ -74,8 +76,6 @@
 		D4ACA48318DB8F8200EBD899 /* ReactiveCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4ACA48118DB8F5200EBD899 /* ReactiveCocoa.framework */; };
 		D4ACA48618DB8F8C00EBD899 /* libExpecta.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D4ACA48518DB8F8C00EBD899 /* libExpecta.a */; };
 		D4ACA48818DB8F9200EBD899 /* libSpecta.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D4ACA48718DB8F9200EBD899 /* libSpecta.a */; };
-		D4ACA49C18DB913500EBD899 /* libArchimedes-iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D4ACA49B18DB913500EBD899 /* libArchimedes-iOS.a */; };
-		D4ACA49E18DB913B00EBD899 /* libReactiveCocoa-iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D4ACA49D18DB913B00EBD899 /* libReactiveCocoa-iOS.a */; };
 		D4ACA4A018DB916200EBD899 /* libExpecta-iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D4ACA49F18DB916200EBD899 /* libExpecta-iOS.a */; };
 		D4ACA4A218DB916700EBD899 /* libSpecta-iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D4ACA4A118DB916700EBD899 /* libSpecta-iOS.a */; };
 /* End PBXBuildFile section */
@@ -140,6 +140,8 @@
 		D096C51616917BA60071C6D6 /* NSCell+RCLGeometryAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSCell+RCLGeometryAdditions.h"; sourceTree = "<group>"; };
 		D096C51716917BA60071C6D6 /* NSCell+RCLGeometryAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSCell+RCLGeometryAdditions.m"; sourceTree = "<group>"; };
 		D096C51A16917EF30071C6D6 /* NSCellRCLGeometryAdditionsSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSCellRCLGeometryAdditionsSpec.m; sourceTree = "<group>"; };
+		D09CC24A1932A0B2003FCB80 /* libArchimedes-iOS.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libArchimedes-iOS.a"; path = "External/Archimedes/build/Debug-iphoneos/libArchimedes-iOS.a"; sourceTree = "<group>"; };
+		D09CC24B1932A0B2003FCB80 /* libReactiveCocoa-iOS.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libReactiveCocoa-iOS.a"; path = "External/ReactiveCocoa/ReactiveCocoaFramework/build/Debug-iphoneos/libReactiveCocoa-iOS.a"; sourceTree = "<group>"; };
 		D0BB24711678772C005E9371 /* ReactiveCocoaLayout.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ReactiveCocoaLayout.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D0BB24741678772C005E9371 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		D0BB24771678772C005E9371 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -183,8 +185,6 @@
 				D037FEFB1696F42D002D0CBA /* QuartzCore.framework in Frameworks */,
 				D0626A3A167944CF00E951A5 /* UIKit.framework in Frameworks */,
 				D06269EE1679440C00E951A5 /* Foundation.framework in Frameworks */,
-				D4ACA49C18DB913500EBD899 /* libArchimedes-iOS.a in Frameworks */,
-				D4ACA49E18DB913B00EBD899 /* libReactiveCocoa-iOS.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -192,6 +192,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D09CC24C1932A0B2003FCB80 /* libArchimedes-iOS.a in Frameworks */,
+				D09CC24D1932A0B2003FCB80 /* libReactiveCocoa-iOS.a in Frameworks */,
 				D06C9E59167D89DB00276090 /* CoreGraphics.framework in Frameworks */,
 				D06269FC1679440D00E951A5 /* SenTestingKit.framework in Frameworks */,
 				D06269FF1679440D00E951A5 /* Foundation.framework in Frameworks */,
@@ -346,6 +348,8 @@
 		D0BB24731678772C005E9371 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				D09CC24A1932A0B2003FCB80 /* libArchimedes-iOS.a */,
+				D09CC24B1932A0B2003FCB80 /* libReactiveCocoa-iOS.a */,
 				D4ACA48718DB8F9200EBD899 /* libSpecta.a */,
 				D4ACA4A118DB916700EBD899 /* libSpecta-iOS.a */,
 				D4ACA48518DB8F8C00EBD899 /* libExpecta.a */,
