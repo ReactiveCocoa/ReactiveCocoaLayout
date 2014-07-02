@@ -33,7 +33,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "D0BB24881678772C005E9371"
-               BuildableName = "ReactiveCocoaLayout Mac Tests.octest"
+               BuildableName = "ReactiveCocoaLayout Mac Tests.xctest"
                BlueprintName = "ReactiveCocoaLayout Mac Tests"
                ReferencedContainer = "container:ReactiveCocoaLayout.xcodeproj">
             </BuildableReference>
