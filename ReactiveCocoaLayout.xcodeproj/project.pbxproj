@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		BEB7DA7919649B8A00F69C4F /* libSpecta-OSX.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BEB7DA7819649B8A00F69C4F /* libSpecta-OSX.a */; };
+		BEB7DA7B19649B9200F69C4F /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BEB7DA7A19649B9200F69C4F /* XCTest.framework */; };
 		D005A2CE169A3C8200A9D2DB /* ReactiveCocoaLayout.h in Headers */ = {isa = PBXBuildFile; fileRef = D0BB24811678772C005E9371 /* ReactiveCocoaLayout.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D005A2CF169A3C8C00A9D2DB /* RACSignal+RCLAnimationAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = D037FEF21696ED02002D0CBA /* RACSignal+RCLAnimationAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D005A2D0169A3C8C00A9D2DB /* RACSignal+RCLGeometryAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = D0BB2630167887C3005E9371 /* RACSignal+RCLGeometryAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -29,7 +31,6 @@
 		D0513974167F149F00334374 /* TestView.m in Sources */ = {isa = PBXBuildFile; fileRef = D0513973167F149F00334374 /* TestView.m */; };
 		D0513975167F149F00334374 /* TestView.m in Sources */ = {isa = PBXBuildFile; fileRef = D0513973167F149F00334374 /* TestView.m */; };
 		D06269EE1679440C00E951A5 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0BB24791678772C005E9371 /* Foundation.framework */; };
-		D06269FC1679440D00E951A5 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0BB248A1678772C005E9371 /* SenTestingKit.framework */; };
 		D06269FF1679440D00E951A5 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0BB24791678772C005E9371 /* Foundation.framework */; };
 		D0626A021679440D00E951A5 /* libReactiveCocoaLayout iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D06269ED1679440C00E951A5 /* libReactiveCocoaLayout iOS.a */; };
 		D0626A3A167944CF00E951A5 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0626A39167944CF00E951A5 /* UIKit.framework */; };
@@ -51,7 +52,6 @@
 		D09CC24D1932A0B2003FCB80 /* libReactiveCocoa-iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D09CC24B1932A0B2003FCB80 /* libReactiveCocoa-iOS.a */; };
 		D0BB24751678772C005E9371 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0BB24741678772C005E9371 /* Cocoa.framework */; };
 		D0BB247F1678772C005E9371 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = D0BB247D1678772C005E9371 /* InfoPlist.strings */; };
-		D0BB248B1678772C005E9371 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0BB248A1678772C005E9371 /* SenTestingKit.framework */; };
 		D0BB248C1678772C005E9371 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0BB24741678772C005E9371 /* Cocoa.framework */; };
 		D0BB248F1678772C005E9371 /* ReactiveCocoaLayout.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0BB24711678772C005E9371 /* ReactiveCocoaLayout.framework */; };
 		D0BB24951678772C005E9371 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = D0BB24931678772C005E9371 /* InfoPlist.strings */; };
@@ -75,7 +75,6 @@
 		D4ACA48218DB8F5200EBD899 /* ReactiveCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4ACA48118DB8F5200EBD899 /* ReactiveCocoa.framework */; };
 		D4ACA48318DB8F8200EBD899 /* ReactiveCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4ACA48118DB8F5200EBD899 /* ReactiveCocoa.framework */; };
 		D4ACA48618DB8F8C00EBD899 /* libExpecta.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D4ACA48518DB8F8C00EBD899 /* libExpecta.a */; };
-		D4ACA48818DB8F9200EBD899 /* libSpecta.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D4ACA48718DB8F9200EBD899 /* libSpecta.a */; };
 		D4ACA4A018DB916200EBD899 /* libExpecta-iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D4ACA49F18DB916200EBD899 /* libExpecta-iOS.a */; };
 		D4ACA4A218DB916700EBD899 /* libSpecta-iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D4ACA4A118DB916700EBD899 /* libSpecta-iOS.a */; };
 /* End PBXBuildFile section */
@@ -98,6 +97,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		BEB7DA7819649B8A00F69C4F /* libSpecta-OSX.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libSpecta-OSX.a"; path = "External/ReactiveCocoa/external/specta/build/Debug/libSpecta-OSX.a"; sourceTree = "<group>"; };
+		BEB7DA7A19649B9200F69C4F /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		D02B4241173F23AA003E00D0 /* RCLMacrosSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCLMacrosSpec.m; sourceTree = "<group>"; };
 		D037FEF21696ED02002D0CBA /* RACSignal+RCLAnimationAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RACSignal+RCLAnimationAdditions.h"; sourceTree = "<group>"; };
 		D037FEF31696ED02002D0CBA /* RACSignal+RCLAnimationAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RACSignal+RCLAnimationAdditions.m"; sourceTree = "<group>"; };
@@ -110,7 +111,7 @@
 		D0513972167F149F00334374 /* TestView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestView.h; sourceTree = "<group>"; };
 		D0513973167F149F00334374 /* TestView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestView.m; sourceTree = "<group>"; };
 		D06269ED1679440C00E951A5 /* libReactiveCocoaLayout iOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libReactiveCocoaLayout iOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		D06269FB1679440C00E951A5 /* ReactiveCocoaLayout iOS Tests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "ReactiveCocoaLayout iOS Tests.octest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		D06269FB1679440C00E951A5 /* ReactiveCocoaLayout iOS Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "ReactiveCocoaLayout iOS Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D0626A39167944CF00E951A5 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.0.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
 		D06C9E50167D88B000276090 /* ReactiveCocoaLayoutTests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ReactiveCocoaLayoutTests-Prefix.pch"; sourceTree = "<group>"; };
 		D06C9E52167D896000276090 /* RACSignalRCLGeometryAdditionsSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RACSignalRCLGeometryAdditionsSpec.m; sourceTree = "<group>"; };
@@ -150,8 +151,7 @@
 		D0BB247E1678772C005E9371 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		D0BB24801678772C005E9371 /* ReactiveCocoaLayout-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ReactiveCocoaLayout-Prefix.pch"; sourceTree = "<group>"; };
 		D0BB24811678772C005E9371 /* ReactiveCocoaLayout.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ReactiveCocoaLayout.h; sourceTree = "<group>"; };
-		D0BB24891678772C005E9371 /* ReactiveCocoaLayout Mac Tests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "ReactiveCocoaLayout Mac Tests.octest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		D0BB248A1678772C005E9371 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
+		D0BB24891678772C005E9371 /* ReactiveCocoaLayout Mac Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "ReactiveCocoaLayout Mac Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D0BB24921678772C005E9371 /* ReactiveCocoaLayoutTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "ReactiveCocoaLayoutTests-Info.plist"; sourceTree = "<group>"; };
 		D0BB24941678772C005E9371 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		D0BB25DE1678847A005E9371 /* NSView+RCLGeometryAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSView+RCLGeometryAdditions.h"; sourceTree = "<group>"; };
@@ -195,7 +195,6 @@
 				D09CC24C1932A0B2003FCB80 /* libArchimedes-iOS.a in Frameworks */,
 				D09CC24D1932A0B2003FCB80 /* libReactiveCocoa-iOS.a in Frameworks */,
 				D06C9E59167D89DB00276090 /* CoreGraphics.framework in Frameworks */,
-				D06269FC1679440D00E951A5 /* SenTestingKit.framework in Frameworks */,
 				D06269FF1679440D00E951A5 /* Foundation.framework in Frameworks */,
 				D0626A021679440D00E951A5 /* libReactiveCocoaLayout iOS.a in Frameworks */,
 				D037FEFC1696F438002D0CBA /* QuartzCore.framework in Frameworks */,
@@ -220,13 +219,13 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D0BB248B1678772C005E9371 /* SenTestingKit.framework in Frameworks */,
+				BEB7DA7B19649B9200F69C4F /* XCTest.framework in Frameworks */,
+				BEB7DA7919649B8A00F69C4F /* libSpecta-OSX.a in Frameworks */,
 				D0BB248C1678772C005E9371 /* Cocoa.framework in Frameworks */,
 				D0BB248F1678772C005E9371 /* ReactiveCocoaLayout.framework in Frameworks */,
 				D4ACA48318DB8F8200EBD899 /* ReactiveCocoa.framework in Frameworks */,
 				D40D7B2818E30C0A0065BB70 /* Archimedes.framework in Frameworks */,
 				D4ACA48618DB8F8C00EBD899 /* libExpecta.a in Frameworks */,
-				D4ACA48818DB8F9200EBD899 /* libSpecta.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -338,9 +337,9 @@
 			isa = PBXGroup;
 			children = (
 				D0BB24711678772C005E9371 /* ReactiveCocoaLayout.framework */,
-				D0BB24891678772C005E9371 /* ReactiveCocoaLayout Mac Tests.octest */,
+				D0BB24891678772C005E9371 /* ReactiveCocoaLayout Mac Tests.xctest */,
 				D06269ED1679440C00E951A5 /* libReactiveCocoaLayout iOS.a */,
-				D06269FB1679440C00E951A5 /* ReactiveCocoaLayout iOS Tests.octest */,
+				D06269FB1679440C00E951A5 /* ReactiveCocoaLayout iOS Tests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -348,6 +347,8 @@
 		D0BB24731678772C005E9371 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				BEB7DA7A19649B9200F69C4F /* XCTest.framework */,
+				BEB7DA7819649B8A00F69C4F /* libSpecta-OSX.a */,
 				D09CC24A1932A0B2003FCB80 /* libArchimedes-iOS.a */,
 				D09CC24B1932A0B2003FCB80 /* libReactiveCocoa-iOS.a */,
 				D4ACA48718DB8F9200EBD899 /* libSpecta.a */,
@@ -360,7 +361,6 @@
 				D4ACA49B18DB913500EBD899 /* libArchimedes-iOS.a */,
 				D0BB25EC1678857E005E9371 /* RACExtensions */,
 				D0BB24741678772C005E9371 /* Cocoa.framework */,
-				D0BB248A1678772C005E9371 /* SenTestingKit.framework */,
 				D0BB24771678772C005E9371 /* AppKit.framework */,
 				D0BB24791678772C005E9371 /* Foundation.framework */,
 				D0626A39167944CF00E951A5 /* UIKit.framework */,
@@ -538,7 +538,7 @@
 			);
 			name = "ReactiveCocoaLayout iOS Tests";
 			productName = ReactiveCocoaLayoutTests;
-			productReference = D06269FB1679440C00E951A5 /* ReactiveCocoaLayout iOS Tests.octest */;
+			productReference = D06269FB1679440C00E951A5 /* ReactiveCocoaLayout iOS Tests.xctest */;
 			productType = "com.apple.product-type.bundle";
 		};
 		D0BB24701678772C005E9371 /* ReactiveCocoaLayout Mac */ = {
@@ -575,8 +575,8 @@
 			);
 			name = "ReactiveCocoaLayout Mac Tests";
 			productName = ReactiveCocoaLayoutTests;
-			productReference = D0BB24891678772C005E9371 /* ReactiveCocoaLayout Mac Tests.octest */;
-			productType = "com.apple.product-type.bundle";
+			productReference = D0BB24891678772C005E9371 /* ReactiveCocoaLayout Mac Tests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
 
@@ -584,6 +584,7 @@
 		D0BB24671678772C005E9371 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastTestingUpgradeCheck = 0510;
 				LastUpgradeCheck = 0500;
 				ORGANIZATIONNAME = GitHub;
 			};
@@ -790,7 +791,7 @@
 				);
 				INFOPLIST_FILE = "ReactiveCocoaLayoutTests/ReactiveCocoaLayoutTests-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				WRAPPER_EXTENSION = octest;
+				WRAPPER_EXTENSION = xctest;
 			};
 			name = Debug;
 		};
@@ -807,7 +808,7 @@
 				);
 				INFOPLIST_FILE = "ReactiveCocoaLayoutTests/ReactiveCocoaLayoutTests-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				WRAPPER_EXTENSION = octest;
+				WRAPPER_EXTENSION = xctest;
 			};
 			name = Release;
 		};
@@ -843,15 +844,18 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = D094E4BE1777661600906BF7 /* Mac-Application.xcconfig */;
 			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = "\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+				);
 				GCC_PREFIX_HEADER = "ReactiveCocoaLayoutTests/ReactiveCocoaLayoutTests-Prefix.pch";
 				HEADER_SEARCH_PATHS = (
 					External/ReactiveCocoa/external/specta/src,
 					"External/ReactiveCocoa/external/expecta/src/**",
 				);
 				INFOPLIST_FILE = "ReactiveCocoaLayoutTests/ReactiveCocoaLayoutTests-Info.plist";
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				WRAPPER_EXTENSION = octest;
 			};
 			name = Profile;
 		};
@@ -879,7 +883,7 @@
 				);
 				INFOPLIST_FILE = "ReactiveCocoaLayoutTests/ReactiveCocoaLayoutTests-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				WRAPPER_EXTENSION = octest;
+				WRAPPER_EXTENSION = xctest;
 			};
 			name = Profile;
 		};
@@ -943,15 +947,18 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = D094E4BE1777661600906BF7 /* Mac-Application.xcconfig */;
 			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = "\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+				);
 				GCC_PREFIX_HEADER = "ReactiveCocoaLayoutTests/ReactiveCocoaLayoutTests-Prefix.pch";
 				HEADER_SEARCH_PATHS = (
 					External/ReactiveCocoa/external/specta/src,
 					"External/ReactiveCocoa/external/expecta/src/**",
 				);
 				INFOPLIST_FILE = "ReactiveCocoaLayoutTests/ReactiveCocoaLayoutTests-Info.plist";
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				WRAPPER_EXTENSION = octest;
 			};
 			name = Debug;
 		};
@@ -959,15 +966,18 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = D094E4BE1777661600906BF7 /* Mac-Application.xcconfig */;
 			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = "\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+				);
 				GCC_PREFIX_HEADER = "ReactiveCocoaLayoutTests/ReactiveCocoaLayoutTests-Prefix.pch";
 				HEADER_SEARCH_PATHS = (
 					External/ReactiveCocoa/external/specta/src,
 					"External/ReactiveCocoa/external/expecta/src/**",
 				);
 				INFOPLIST_FILE = "ReactiveCocoaLayoutTests/ReactiveCocoaLayoutTests-Info.plist";
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				WRAPPER_EXTENSION = octest;
 			};
 			name = Release;
 		};
@@ -1003,15 +1013,18 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = D094E4BE1777661600906BF7 /* Mac-Application.xcconfig */;
 			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = "\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+				);
 				GCC_PREFIX_HEADER = "ReactiveCocoaLayoutTests/ReactiveCocoaLayoutTests-Prefix.pch";
 				HEADER_SEARCH_PATHS = (
 					External/ReactiveCocoa/external/specta/src,
 					"External/ReactiveCocoa/external/expecta/src/**",
 				);
 				INFOPLIST_FILE = "ReactiveCocoaLayoutTests/ReactiveCocoaLayoutTests-Info.plist";
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				WRAPPER_EXTENSION = octest;
 			};
 			name = Test;
 		};
@@ -1038,8 +1051,9 @@
 					"External/ReactiveCocoa/external/expecta/src/**",
 				);
 				INFOPLIST_FILE = "ReactiveCocoaLayoutTests/ReactiveCocoaLayoutTests-Info.plist";
+				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				WRAPPER_EXTENSION = octest;
+				WRAPPER_EXTENSION = xctest;
 			};
 			name = Test;
 		};
