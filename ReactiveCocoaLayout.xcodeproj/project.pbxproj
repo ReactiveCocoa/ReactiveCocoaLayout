@@ -585,7 +585,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastTestingUpgradeCheck = 0510;
-				LastUpgradeCheck = 0500;
+				LastUpgradeCheck = 0510;
 				ORGANIZATIONNAME = GitHub;
 			};
 			buildConfigurationList = D0BB246A1678772C005E9371 /* Build configuration list for PBXProject "ReactiveCocoaLayout" */;
