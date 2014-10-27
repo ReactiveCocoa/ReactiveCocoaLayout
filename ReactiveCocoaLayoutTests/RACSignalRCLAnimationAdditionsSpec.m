@@ -6,6 +6,12 @@
 //  Copyright (c) 2013 GitHub. All rights reserved.
 //
 
+#import <Archimedes/Archimedes.h>
+#import <Nimble/Nimble.h>
+#import <Quick/Quick.h>
+#import <ReactiveCocoa/ReactiveCocoa.h>
+#import <ReactiveCocoaLayout/ReactiveCocoaLayout.h>
+
 SpecBegin(RACSignalRCLAnimationAdditions)
 
 __block RACSignal *baseSignal;

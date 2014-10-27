@@ -6,6 +6,12 @@
 //  Copyright (c) 2012 GitHub. All rights reserved.
 //
 
+#import <Archimedes/Archimedes.h>
+#import <Nimble/Nimble.h>
+#import <Quick/Quick.h>
+#import <ReactiveCocoa/ReactiveCocoa.h>
+#import <ReactiveCocoaLayout/ReactiveCocoaLayout.h>
+
 SpecBegin(NSControlRCLGeometryAdditions)
 
 describe(@"NSTextField", ^{
@@ -51,7 +57,7 @@ describe(@"NSMatrix", ^{
 			expect(cell).to.beKindOf(NSTextFieldCell.class);
 			[invalidatedCells addObject:cell];
 		}];
-	
+
 		cell.stringValue = @"foo\nbar";
 		expect(invalidatedCells).to.contain(cell);
 	});

@@ -6,6 +6,12 @@
 //  Copyright (c) 2013 GitHub. All rights reserved.
 //
 
+#import <Archimedes/Archimedes.h>
+#import <Nimble/Nimble.h>
+#import <Quick/Quick.h>
+#import <ReactiveCocoa/ReactiveCocoa.h>
+#import <ReactiveCocoaLayout/ReactiveCocoaLayout.h>
+
 #import "TestView.h"
 
 static NSString * const MacroBindingExamples = @"MacroBindingExamples";
@@ -192,7 +198,7 @@ sharedExamplesFor(MacroBindingExamples, ^(NSDictionary *bindingInfo) {
 
 		it(@"should override rcl_size", ^{
 			CGSize clobberSize = { .width = 999, .height = rect.size.height };
-			
+
 			bind(@{
 				rcl_size: MEDBox(clobberSize),
 				rcl_width: @(rect.size.width)
@@ -231,7 +237,7 @@ sharedExamplesFor(MacroBindingExamples, ^(NSDictionary *bindingInfo) {
 
 		it(@"should override rcl_size", ^{
 			CGSize clobberSize = { .width = rect.size.width, .height = 999 };
-			
+
 			bind(@{
 				rcl_size: MEDBox(clobberSize),
 				rcl_height: @(rect.size.height)
@@ -275,7 +281,7 @@ sharedExamplesFor(MacroBindingExamples, ^(NSDictionary *bindingInfo) {
 
 		it(@"should override rcl_origin", ^{
 			CGPoint clobberOrigin = CGPointMake(999, 333);
-			
+
 			bind(@{
 				rcl_origin: MEDBox(clobberOrigin),
 				rcl_center: getCenter()
@@ -319,7 +325,7 @@ sharedExamplesFor(MacroBindingExamples, ^(NSDictionary *bindingInfo) {
 
 		it(@"should override rcl_center", ^{
 			CGPoint clobberCenter = CGPointMake(999, CGRectGetMidY(rect));
-			
+
 			bind(@{
 				rcl_center: MEDBox(clobberCenter),
 				rcl_centerX: getCenter()
@@ -363,7 +369,7 @@ sharedExamplesFor(MacroBindingExamples, ^(NSDictionary *bindingInfo) {
 
 		it(@"should override rcl_origin", ^{
 			CGPoint clobberCenter = CGPointMake(CGRectGetMidX(rect), 999);
-			
+
 			bind(@{
 				rcl_center: MEDBox(clobberCenter),
 				rcl_centerY: getCenter()

@@ -6,6 +6,12 @@
 //  Copyright (c) 2012 GitHub. All rights reserved.
 //
 
+#import <Archimedes/Archimedes.h>
+#import <Nimble/Nimble.h>
+#import <Quick/Quick.h>
+#import <ReactiveCocoa/ReactiveCocoa.h>
+#import <ReactiveCocoaLayout/ReactiveCocoaLayout.h>
+
 SpecBegin(RACSignalRCLGeometryAdditions)
 
 __block RACSequence *rects;
@@ -225,7 +231,7 @@ describe(@"signal of CGRects", ^{
 
 		expect(result.sequence).to.equal(expectedRects.rac_sequence);
 	});
-	
+
 	describe(@"variable top, left, bottom, right insets", ^{
 		__block NSArray *expectedRects;
 		beforeEach(^{
@@ -240,18 +246,18 @@ describe(@"signal of CGRects", ^{
 #endif
 				];
 		});
-		
+
 		it(@"should inset using top, left, bottom, right signals", ^{
 			RACSignal *result = [signal insetTop:[RACSignal return:@2] left:[RACSignal return:@10] bottom:[RACSignal return:@4] right:[RACSignal return:@20] nullRect:CGRectZero];
 			expect(result.sequence).to.equal(expectedRects.rac_sequence);
 		});
-		
+
 		it(@"should inset using an MEDEdgeInsets signal", ^{
 			RACSignal *result = [signal insetBy:[RACSignal return:MEDBox(MEDEdgeInsetsMake(2, 10, 4, 20))] nullRect:CGRectZero];
 			expect(result.sequence).to.equal(expectedRects.rac_sequence);
 		});
 	});
-	
+
 	it(@"should use null rect for insets larger than the rect dimensions", ^{
 		CGRect nullRect = CGRectMake(1, 2, 3, 4);
 		RACSignal *result = [signal insetWidth:[RACSignal return:@11] height:[RACSignal return:@18] nullRect:nullRect];
@@ -260,7 +266,7 @@ describe(@"signal of CGRects", ^{
 			MEDBox(CGRectMake(21, 38, 8, 4)),
 			MEDBox(nullRect),
 		];
-		
+
 		expect(result.sequence).to.equal(expectedRects.rac_sequence);
 	});
 
@@ -288,7 +294,7 @@ describe(@"signal of CGRects", ^{
 
 	describe(@"extending attributes", ^{
 		__block RACSignal *value;
-		
+
 		__block RACSequence *extendedMinX;
 		__block RACSequence *extendedMaxX;
 		__block RACSequence *extendedMinY;
@@ -296,7 +302,7 @@ describe(@"signal of CGRects", ^{
 
 		__block RACSequence *extendedLeading;
 		__block RACSequence *extendedTrailing;
-		
+
 		beforeEach(^{
 			value = [RACSignal return:@-5];
 
@@ -519,7 +525,7 @@ describe(@"signal of CGRects", ^{
 
 	describe(@"aligning attributes", ^{
 		__block RACSignal *value;
-		
+
 		__block RACSequence *alignedMinX;
 		__block RACSequence *alignedMaxX;
 		__block RACSequence *alignedMinY;
@@ -527,7 +533,7 @@ describe(@"signal of CGRects", ^{
 
 		__block RACSequence *alignedLeading;
 		__block RACSequence *alignedTrailing;
-		
+
 		beforeEach(^{
 			value = [RACSignal return:@3];
 
@@ -1298,7 +1304,7 @@ describe(@"-offsetByAmount:towardEdge:", ^{
 
 	beforeEach(^{
 		amount = [RACSignal return:@8];
-		
+
 		pointSignal = points.signal;
 		rectSignal = [RACSignal rectsWithOrigin:pointSignal size:[RACSignal zeroSize]];
 
