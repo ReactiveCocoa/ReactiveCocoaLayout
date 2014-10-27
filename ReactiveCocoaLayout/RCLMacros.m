@@ -12,7 +12,7 @@
 
 #ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
 #import "UIView+RCLGeometryAdditions.h"
-#elif TARGET_OS_MAC
+#else
 #import "NSView+RCLGeometryAdditions.h"
 #endif
 
@@ -187,7 +187,7 @@ static NSString *NSStringFromRCLAttribute(RCLAttribute attribute) __attribute__(
 		case RCLAttributeBaseline: {
 			#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
 			Class expectedClass __attribute__((unused)) = UIView.class;
-			#elif TARGET_OS_MAC
+			#else
 			Class expectedClass __attribute__((unused)) = NSView.class;
 			#endif
 

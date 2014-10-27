@@ -28,7 +28,7 @@
 
 	#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
 	[self.baselineView setAutoresizingMask:UIViewAutoresizingFlexibleTopMargin];
-	#elif TARGET_OS_MAC
+	#else
 	[(NSView *)self.baselineView setAutoresizingMask:NSViewMaxYMargin];
 	#endif
 
@@ -41,7 +41,7 @@
 - (UIView *)viewForBaselineLayout {
 	return self.baselineView;
 }
-#elif TARGET_OS_MAC
+#else
 - (CGFloat)baselineOffsetFromBottom {
 	return CGRectGetMinY([self.baselineView frame]);
 }

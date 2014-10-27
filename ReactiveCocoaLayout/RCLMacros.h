@@ -11,7 +11,7 @@
 
 #ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
 #import <UIKit/UIKit.h>
-#elif TARGET_OS_MAC
+#else
 #import <AppKit/AppKit.h>
 #endif
 
@@ -145,7 +145,7 @@
 
 #ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
 + (instancetype)trampolineWithView:(UIView *)view;
-#elif TARGET_OS_MAC
+#else
 + (instancetype)trampolineWithView:(NSView *)view;
 #endif
 

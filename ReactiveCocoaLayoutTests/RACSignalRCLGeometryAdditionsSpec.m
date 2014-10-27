@@ -138,7 +138,7 @@ describe(@"signal of CGRects", ^{
 			#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
 			tops = minYs;
 			bottoms = maxYs;
-			#elif TARGET_OS_MAC
+			#else
 			tops = maxYs;
 			bottoms = minYs;
 			#endif
@@ -234,7 +234,7 @@ describe(@"signal of CGRects", ^{
 #ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
 				MEDBox(CGRectMake(20, 22, 0, 34)),
 				MEDBox(CGRectMake(35, 17, 15, 29)),
-#elif TARGET_OS_MAC
+#else
 				MEDBox(CGRectMake(20, 24, 0, 34)),
 				MEDBox(CGRectMake(35, 19, 15, 29)),
 #endif
@@ -352,7 +352,7 @@ describe(@"signal of CGRects", ^{
 		it(@"should extend top", ^{
 			#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
 				expect([signal extendAttribute:NSLayoutAttributeTop byAmount:value].sequence).to.equal(extendedMinY);
-			#elif TARGET_OS_MAC
+			#else
 				expect([signal extendAttribute:NSLayoutAttributeTop byAmount:value].sequence).to.equal(extendedMaxY);
 			#endif
 		});
@@ -360,7 +360,7 @@ describe(@"signal of CGRects", ^{
 		it(@"should extend bottom", ^{
 			#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
 				expect([signal extendAttribute:NSLayoutAttributeBottom byAmount:value].sequence).to.equal(extendedMaxY);
-			#elif TARGET_OS_MAC
+			#else
 				expect([signal extendAttribute:NSLayoutAttributeBottom byAmount:value].sequence).to.equal(extendedMinY);
 			#endif
 		});
@@ -588,7 +588,7 @@ describe(@"signal of CGRects", ^{
 			#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
 				expect([signal alignAttribute:NSLayoutAttributeTop to:value].sequence).to.equal(alignedMinY);
 				expect([signal alignTop:value].sequence).to.equal(alignedMinY);
-			#elif TARGET_OS_MAC
+			#else
 				expect([signal alignAttribute:NSLayoutAttributeTop to:value].sequence).to.equal(alignedMaxY);
 				expect([signal alignTop:value].sequence).to.equal(alignedMaxY);
 			#endif
@@ -598,7 +598,7 @@ describe(@"signal of CGRects", ^{
 			#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
 				expect([signal alignAttribute:NSLayoutAttributeBottom to:value].sequence).to.equal(alignedMaxY);
 				expect([signal alignBottom:value].sequence).to.equal(alignedMaxY);
-			#elif TARGET_OS_MAC
+			#else
 				expect([signal alignAttribute:NSLayoutAttributeBottom to:value].sequence).to.equal(alignedMinY);
 				expect([signal alignBottom:value].sequence).to.equal(alignedMinY);
 			#endif
@@ -684,7 +684,7 @@ describe(@"signal of CGRects", ^{
 
 				expect(aligned.sequence).to.equal(expected);
 			});
-		#elif TARGET_OS_MAC
+		#else
 			it(@"should align to a baseline", ^{
 				RACSignal *reference = [RACSignal return:MEDBox(CGRectMake(0, 30, 0, 15))];
 				RACSignal *aligned = [signal alignBaseline:baseline1 toBaseline:baseline2 ofRect:reference];
@@ -1374,7 +1374,7 @@ describe(@"-offsetByAmount:towardEdge:", ^{
 
 			expect([rectSignal offsetByAmount:amount towardEdge:NSLayoutAttributeTop].sequence).to.equal(offsetMinY.sequence);
 			expect([rectSignal moveUp:amount].sequence).to.equal(offsetMinY.sequence);
-		#elif TARGET_OS_MAC
+		#else
 			expect([pointSignal offsetByAmount:amount towardEdge:NSLayoutAttributeTop].sequence).to.equal(offsetMaxY.origin.sequence);
 			expect([pointSignal moveUp:amount].sequence).to.equal(offsetMaxY.origin.sequence);
 
@@ -1390,7 +1390,7 @@ describe(@"-offsetByAmount:towardEdge:", ^{
 
 			expect([rectSignal offsetByAmount:amount towardEdge:NSLayoutAttributeBottom].sequence).to.equal(offsetMaxY.sequence);
 			expect([rectSignal moveDown:amount].sequence).to.equal(offsetMaxY.sequence);
-		#elif TARGET_OS_MAC
+		#else
 			expect([pointSignal offsetByAmount:amount towardEdge:NSLayoutAttributeBottom].sequence).to.equal(offsetMinY.origin.sequence);
 			expect([pointSignal moveDown:amount].sequence).to.equal(offsetMinY.origin.sequence);
 

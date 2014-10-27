@@ -9,6 +9,7 @@
 #import "RACSignal+RCLAnimationAdditions.h"
 #import <libkern/OSAtomic.h>
 #import <ReactiveCocoa/EXTScope.h>
+#import <QuartzCore/QuartzCore.h>
 
 // The number of animated signals in the current chain.
 //
@@ -38,7 +39,7 @@ static RACSignal *animatedSignalsWithDuration (RACSignal *self, NSNumber *durati
 		if (curve != RCLAnimationCurveDefault) options |= UIViewAnimationOptionOverrideInheritedCurve;
 
 		NSTimeInterval durationInterval = (duration != nil ? duration.doubleValue : 0.2);
-	#elif TARGET_OS_MAC
+	#else
 		CAMediaTimingFunction *timingFunction;
 		switch (curve) {
 			case RCLAnimationCurveEaseInOut:
@@ -80,7 +81,7 @@ static RACSignal *animatedSignalsWithDuration (RACSignal *self, NSNumber *durati
 				} completion:^(BOOL finished) {
 					[subscriber sendCompleted];
 				}];
-			#elif TARGET_OS_MAC
+			#else
 				[NSAnimationContext runAnimationGroup:^(NSAnimationContext *context) {
 					if (duration != nil) context.duration = duration.doubleValue;
 					if (timingFunction != nil) context.timingFunction = timingFunction;

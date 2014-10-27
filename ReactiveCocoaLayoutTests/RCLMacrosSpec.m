@@ -460,7 +460,7 @@ sharedExamplesFor(MacroBindingExamples, ^(NSDictionary *bindingInfo) {
 			getTop = ^{
 				#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
 					return @(CGRectGetMinY(rect));
-				#elif TARGET_OS_MAC
+				#else
 					return @(CGRectGetMaxY(rect));
 				#endif
 			};
@@ -506,7 +506,7 @@ sharedExamplesFor(MacroBindingExamples, ^(NSDictionary *bindingInfo) {
 			getBottom = ^{
 				#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
 					return @(CGRectGetMaxY(rect));
-				#elif TARGET_OS_MAC
+				#else
 					return @(CGRectGetMinY(rect));
 				#endif
 			};
@@ -733,7 +733,7 @@ describe(@"RCLAlignment", ^{
 			#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
 			rectAligned5.origin.y = -7;
 			rectAligned10.origin.y = -12;
-			#elif TARGET_OS_MAC
+			#else
 			rectAligned5.origin.y = 7;
 			rectAligned10.origin.y = 12;
 			#endif

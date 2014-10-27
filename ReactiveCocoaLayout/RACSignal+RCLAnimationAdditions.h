@@ -27,7 +27,7 @@
         RCLAnimationCurveEaseOut = UIViewAnimationOptionCurveEaseOut,
         RCLAnimationCurveLinear = UIViewAnimationOptionCurveLinear
     } RCLAnimationCurve;
-#elif TARGET_OS_MAC
+#else
     typedef enum : NSUInteger {
         RCLAnimationCurveDefault,
         RCLAnimationCurveEaseInOut,

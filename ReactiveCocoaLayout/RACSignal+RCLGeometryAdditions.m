@@ -152,7 +152,7 @@ static RACSignal *combineAttributeAndSignals(NSLayoutAttribute attribute, NSArra
 		case NSLayoutAttributeBottom:
 			edgeSignal = [RACSignal return:@(CGRectMaxYEdge)];
 			break;
-	#elif TARGET_OS_MAC
+	#else
 		case NSLayoutAttributeTop:
 			edgeSignal = [RACSignal return:@(CGRectMaxYEdge)];
 			break;
@@ -618,7 +618,7 @@ static RACSignal *combineAttributeAndSignals(NSLayoutAttribute attribute, NSArra
 				referenceBaseline = CGRectGetHeight(referenceRect) - referenceBaseline + CGRectGetMinY(referenceRect);
 
 				rect = CGRectOffset(rect, 0, referenceBaseline - baseline);
-			#elif TARGET_OS_MAC
+			#else
 				// Recalculate the baselines relative to a shared minY.
 				baseline += CGRectGetMinY(rect);
 				referenceBaseline += CGRectGetMinY(referenceRect);

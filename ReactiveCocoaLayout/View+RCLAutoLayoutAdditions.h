@@ -8,7 +8,7 @@
 
 #ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
 #import <UIKit/UIKit.h>
-#elif TARGET_OS_MAC
+#else
 #import <AppKit/AppKit.h>
 #endif
 
@@ -18,7 +18,7 @@
 // cross-platform Auto Layout APIs.
 #ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
 @interface UIView (RCLAutoLayoutAdditions)
-#elif TARGET_OS_MAC
+#else
 @interface NSView (RCLAutoLayoutAdditions)
 #endif
 

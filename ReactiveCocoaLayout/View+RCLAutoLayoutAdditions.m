@@ -15,7 +15,7 @@
 
 #ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
 #import "UIView+RCLGeometryAdditions.h"
-#elif TARGET_OS_MAC
+#else
 #import "NSView+RCLGeometryAdditions.h"
 #endif
 
@@ -35,7 +35,7 @@ static void newInvalidateIntrinsicContentSize(id self, SEL _cmd) {
 
 #ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
 @implementation UIView (RCLAutoLayoutAdditions)
-#elif TARGET_OS_MAC
+#else
 @implementation NSView (RCLAutoLayoutAdditions)
 #endif
 

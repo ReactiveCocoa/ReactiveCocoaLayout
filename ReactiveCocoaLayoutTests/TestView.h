@@ -11,7 +11,7 @@
 
 @interface TestView : UIView
 
-#elif TARGET_OS_MAC
+#else
 #import <AppKit/AppKit.h>
 
 @interface TestView : NSView
