@@ -43,6 +43,14 @@
 		D0731BB019FF055500C01E16 /* UIViewRCLGeometryAdditionsSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = D06C9E5D167D8BD900276090 /* UIViewRCLGeometryAdditionsSpec.m */; };
 		D0731BB119FF055500C01E16 /* ViewExamples.m in Sources */ = {isa = PBXBuildFile; fileRef = D051391E167F11FD00334374 /* ViewExamples.m */; };
 		D0731BB219FF055800C01E16 /* TestView.m in Sources */ = {isa = PBXBuildFile; fileRef = D0513973167F149F00334374 /* TestView.m */; };
+		D0731BB519FF05B100C01E16 /* Quick.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0731BB419FF05B100C01E16 /* Quick.framework */; };
+		D0731BB719FF05C400C01E16 /* Nimble.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0731BB619FF05C400C01E16 /* Nimble.framework */; };
+		D0731BB819FF05C400C01E16 /* Nimble.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0731BB619FF05C400C01E16 /* Nimble.framework */; };
+		D0731BB919FF05C900C01E16 /* Quick.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0731BB419FF05B100C01E16 /* Quick.framework */; };
+		D0731BBB19FF05E300C01E16 /* Nimble.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = D0731BB619FF05C400C01E16 /* Nimble.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		D0731BBC19FF05E900C01E16 /* Quick.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = D0731BB419FF05B100C01E16 /* Quick.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		D0731BBD19FF05EB00C01E16 /* ReactiveCocoa.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = D4ACA48118DB8F5200EBD899 /* ReactiveCocoa.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		D0731BBE19FF05ED00C01E16 /* Archimedes.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = D40D7B2718E30C0A0065BB70 /* Archimedes.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		D096C4EC16917B0D0071C6D6 /* NSControlRCLGeometryAdditionsSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = D096C4EB16917B0D0071C6D6 /* NSControlRCLGeometryAdditionsSpec.m */; };
 		D096C4EF16917B140071C6D6 /* NSControl+RCLGeometryAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = D096C4ED16917B140071C6D6 /* NSControl+RCLGeometryAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D096C4F016917B140071C6D6 /* NSControl+RCLGeometryAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = D096C4EE16917B140071C6D6 /* NSControl+RCLGeometryAdditions.m */; };
@@ -85,6 +93,23 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		D0731BBA19FF05DB00C01E16 /* Copy Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				D0731BBB19FF05E300C01E16 /* Nimble.framework in Copy Frameworks */,
+				D0731BBC19FF05E900C01E16 /* Quick.framework in Copy Frameworks */,
+				D0731BBD19FF05EB00C01E16 /* ReactiveCocoa.framework in Copy Frameworks */,
+				D0731BBE19FF05ED00C01E16 /* Archimedes.framework in Copy Frameworks */,
+			);
+			name = "Copy Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		D02B4241173F23AA003E00D0 /* RCLMacrosSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCLMacrosSpec.m; sourceTree = "<group>"; };
 		D037FEF21696ED02002D0CBA /* RACSignal+RCLAnimationAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RACSignal+RCLAnimationAdditions.h"; sourceTree = "<group>"; };
@@ -104,6 +129,8 @@
 		D0731B7C19FF028F00C01E16 /* ReactiveCocoaLayout.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ReactiveCocoaLayout.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D0731B8619FF028F00C01E16 /* ReactiveCocoaLayout iOS Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "ReactiveCocoaLayout iOS Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D0731BAA19FF04B300C01E16 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS8.1.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
+		D0731BB419FF05B100C01E16 /* Quick.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Quick.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		D0731BB619FF05C400C01E16 /* Nimble.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Nimble.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D094E4B01777661600906BF7 /* Common.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Common.xcconfig; sourceTree = "<group>"; };
 		D094E4B21777661600906BF7 /* Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
 		D094E4B31777661600906BF7 /* Profile.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Profile.xcconfig; sourceTree = "<group>"; };
@@ -167,6 +194,8 @@
 				D0731B8719FF028F00C01E16 /* ReactiveCocoaLayout.framework in Frameworks */,
 				D0731BA919FF03E500C01E16 /* ReactiveCocoa.framework in Frameworks */,
 				D0731BA819FF03E300C01E16 /* Archimedes.framework in Frameworks */,
+				D0731BB919FF05C900C01E16 /* Quick.framework in Frameworks */,
+				D0731BB819FF05C400C01E16 /* Nimble.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -184,8 +213,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D0731BB519FF05B100C01E16 /* Quick.framework in Frameworks */,
 				D0BB248C1678772C005E9371 /* Cocoa.framework in Frameworks */,
 				D0BB248F1678772C005E9371 /* ReactiveCocoaLayout.framework in Frameworks */,
+				D0731BB719FF05C400C01E16 /* Nimble.framework in Frameworks */,
 				D4ACA48318DB8F8200EBD899 /* ReactiveCocoa.framework in Frameworks */,
 				D40D7B2818E30C0A0065BB70 /* Archimedes.framework in Frameworks */,
 			);
@@ -311,6 +342,8 @@
 		D0BB24731678772C005E9371 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				D0731BB619FF05C400C01E16 /* Nimble.framework */,
+				D0731BB419FF05B100C01E16 /* Quick.framework */,
 				D0731BAA19FF04B300C01E16 /* UIKit.framework */,
 				D4ACA48118DB8F5200EBD899 /* ReactiveCocoa.framework */,
 				D40D7B2718E30C0A0065BB70 /* Archimedes.framework */,
@@ -467,6 +500,7 @@
 				D0731B8219FF028F00C01E16 /* Sources */,
 				D0731B8319FF028F00C01E16 /* Frameworks */,
 				D0731B8419FF028F00C01E16 /* Resources */,
+				D0731BBA19FF05DB00C01E16 /* Copy Frameworks */,
 			);
 			buildRules = (
 			);
