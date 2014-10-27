@@ -28,7 +28,7 @@ BOOL RCLIsInAnimatedSignal (void) {
 // duration - If not nil, an explicit duration to specify when starting the animation.
 // curve    - The animation curve to use.
 static RACSignal *animatedSignalsWithDuration (RACSignal *self, NSNumber *duration, RCLAnimationCurve curve) {
-	#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
+	#ifdef RCL_FOR_IPHONE
 		// `UIViewAnimationOptionLayoutSubviews` seems like a sane default
 		// setting for a layout-triggered animation.
 		//
@@ -75,7 +75,7 @@ static RACSignal *animatedSignalsWithDuration (RACSignal *self, NSNumber *durati
 				--RCLSignalAnimationLevel;
 			};
 
-			#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
+			#ifdef RCL_FOR_IPHONE
 				[UIView animateWithDuration:durationInterval delay:0 options:options animations:^{
 					[subscriber sendNext:value];
 				} completion:^(BOOL finished) {

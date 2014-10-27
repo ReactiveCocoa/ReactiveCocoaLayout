@@ -6,7 +6,7 @@
 //  Copyright (c) 2012 GitHub. All rights reserved.
 //
 
-#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
+#ifdef RCL_FOR_IPHONE
 #import <UIKit/UIKit.h>
 #else
 #import <AppKit/AppKit.h>
@@ -16,7 +16,7 @@
 
 // Extensions to UIView on iOS and NSView on OS X, depending only on
 // cross-platform Auto Layout APIs.
-#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
+#ifdef RCL_FOR_IPHONE
 @interface UIView (RCLAutoLayoutAdditions)
 #else
 @interface NSView (RCLAutoLayoutAdditions)

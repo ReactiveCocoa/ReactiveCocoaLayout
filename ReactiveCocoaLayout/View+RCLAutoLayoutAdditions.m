@@ -13,7 +13,7 @@
 #import <ReactiveCocoa/EXTScope.h>
 #import <ReactiveCocoa/ReactiveCocoa.h>
 
-#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
+#ifdef RCL_FOR_IPHONE
 #import "UIView+RCLGeometryAdditions.h"
 #else
 #import "NSView+RCLGeometryAdditions.h"
@@ -33,7 +33,7 @@ static void newInvalidateIntrinsicContentSize(id self, SEL _cmd) {
 	[subject sendNext:MEDBox([self intrinsicContentSize])];
 }
 
-#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
+#ifdef RCL_FOR_IPHONE
 @implementation UIView (RCLAutoLayoutAdditions)
 #else
 @implementation NSView (RCLAutoLayoutAdditions)

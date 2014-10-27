@@ -22,7 +22,7 @@ FOUNDATION_EXPORT const unsigned char ReactiveCocoaLayoutVersionString[];
 #import <ReactiveCocoaLayout/RCLMacros.h>
 #import <ReactiveCocoaLayout/View+RCLAutoLayoutAdditions.h>
 
-#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
+#ifdef RCL_FOR_IPHONE
 	#import <ReactiveCocoaLayout/UIView+RCLGeometryAdditions.h>
 #else
 	#import <ReactiveCocoaLayout/NSCell+RCLGeometryAdditions.h>

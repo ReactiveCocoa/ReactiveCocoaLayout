@@ -10,7 +10,7 @@
 #import "RACSignal+RCLGeometryAdditions.h"
 #import <ReactiveCocoa/EXTScope.h>
 
-#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
+#ifdef RCL_FOR_IPHONE
 #import "UIView+RCLGeometryAdditions.h"
 #else
 #import "NSView+RCLGeometryAdditions.h"
@@ -185,7 +185,7 @@ static NSString *NSStringFromRCLAttribute(RCLAttribute attribute) __attribute__(
 			break;
 
 		case RCLAttributeBaseline: {
-			#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
+			#ifdef RCL_FOR_IPHONE
 			Class expectedClass __attribute__((unused)) = UIView.class;
 			#else
 			Class expectedClass __attribute__((unused)) = NSView.class;

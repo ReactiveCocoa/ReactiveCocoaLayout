@@ -9,7 +9,7 @@
 #import <Archimedes/Archimedes.h>
 #import <ReactiveCocoa/ReactiveCocoa.h>
 
-#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
+#ifdef RCL_FOR_IPHONE
 #import <UIKit/UIKit.h>
 #else
 #import <AppKit/AppKit.h>
@@ -143,7 +143,7 @@
 
 @interface RCLRectAssignmentTrampoline : NSObject
 
-#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
+#ifdef RCL_FOR_IPHONE
 + (instancetype)trampolineWithView:(UIView *)view;
 #else
 + (instancetype)trampolineWithView:(NSView *)view;

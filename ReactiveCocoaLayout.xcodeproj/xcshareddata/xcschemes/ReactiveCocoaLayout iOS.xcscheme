@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "D0731B7B19FF028F00C01E16"
-               BuildableName = "ReactiveCocoaLayout iOS.framework"
+               BuildableName = "ReactiveCocoaLayout.framework"
                BlueprintName = "ReactiveCocoaLayout iOS"
                ReferencedContainer = "container:ReactiveCocoaLayout.xcodeproj">
             </BuildableReference>
@@ -57,7 +57,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "D0731B7B19FF028F00C01E16"
-            BuildableName = "ReactiveCocoaLayout iOS.framework"
+            BuildableName = "ReactiveCocoaLayout.framework"
             BlueprintName = "ReactiveCocoaLayout iOS"
             ReferencedContainer = "container:ReactiveCocoaLayout.xcodeproj">
          </BuildableReference>
@@ -76,7 +76,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "D0731B7B19FF028F00C01E16"
-            BuildableName = "ReactiveCocoaLayout iOS.framework"
+            BuildableName = "ReactiveCocoaLayout.framework"
             BlueprintName = "ReactiveCocoaLayout iOS"
             ReferencedContainer = "container:ReactiveCocoaLayout.xcodeproj">
          </BuildableReference>
@@ -94,7 +94,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "D0731B7B19FF028F00C01E16"
-            BuildableName = "ReactiveCocoaLayout iOS.framework"
+            BuildableName = "ReactiveCocoaLayout.framework"
             BlueprintName = "ReactiveCocoaLayout iOS"
             ReferencedContainer = "container:ReactiveCocoaLayout.xcodeproj">
          </BuildableReference>
