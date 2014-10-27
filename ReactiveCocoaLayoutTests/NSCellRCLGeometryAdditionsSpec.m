@@ -32,7 +32,7 @@ describe(@"NSTextFieldCell", ^{
 
 		__block NSValue *lastValue = nil;
 		[cell.rcl_sizeSignal subscribeNext:^(NSValue *value) {
-			expect(value).to(beKindOf(NSValue.class));
+			expect(value).to(beAKindOf(NSValue.class));
 			lastValue = value;
 		}];
 
@@ -49,7 +49,7 @@ describe(@"NSTextFieldCell", ^{
 
 		__block NSValue *lastValue = nil;
 		[[cell rcl_sizeSignalForBounds:boundsSubject] subscribeNext:^(NSValue *value) {
-			expect(value).to(beKindOf(NSValue.class));
+			expect(value).to(beAKindOf(NSValue.class));
 			lastValue = value;
 		}];
 

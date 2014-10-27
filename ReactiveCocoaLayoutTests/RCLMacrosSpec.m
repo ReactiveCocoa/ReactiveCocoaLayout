@@ -690,7 +690,7 @@ QuickSharedExamplesEnd
 QuickSpecBegin(RCLMacros)
 
 describe(@"RCLFrame", ^{
-	itShouldBehaveLike(MacroBindingExamples, @{
+	itBehavesLike(MacroBindingExamples, @{
 		MacroPropertyName: @"rcl_frame",
 		MacroBindingBlock: ^(TestView *view, NSDictionary *bindings) {
 			RCLFrame(view) = bindings;
@@ -699,7 +699,7 @@ describe(@"RCLFrame", ^{
 });
 
 describe(@"RCLAlignment", ^{
-	itShouldBehaveLike(MacroBindingExamples, @{
+	itBehavesLike(MacroBindingExamples, @{
 		MacroPropertyName: @"rcl_alignmentRect",
 		MacroBindingBlock: ^(TestView *view, NSDictionary *bindings) {
 			RCLAlignment(view) = bindings;

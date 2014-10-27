@@ -16,7 +16,7 @@
 
 QuickSpecBegin(UIViewRCLGeometryAdditions)
 
-itShouldBehaveLike(ViewExamples, nil);
+itBehavesLike(ViewExamples, nil);
 
 describe(@"UILabel", ^{
 	__block UILabel *label;

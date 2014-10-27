@@ -16,7 +16,7 @@
 
 QuickSpecBegin(NSViewRCLGeometryAdditions)
 
-itShouldBehaveLike(ViewExamples, nil);
+itBehavesLike(ViewExamples, nil);
 
 describe(@"NSTextField", ^{
 	__block NSTextField *field;

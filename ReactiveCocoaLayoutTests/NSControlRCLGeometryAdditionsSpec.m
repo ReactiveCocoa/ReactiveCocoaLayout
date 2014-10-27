@@ -25,7 +25,7 @@ describe(@"NSTextField", ^{
 	it(@"should send the adjusted NSCell whenever the intrinsic content size changes", ^{
 		__block NSCell *invalidatedCell = nil;
 		[field.rcl_cellIntrinsicContentSizeInvalidatedSignal subscribeNext:^(NSCell *cell) {
-			expect(cell).to(beKindOf(NSTextFieldCell.class));
+			expect(cell).to(beAKindOf(NSTextFieldCell.class));
 			invalidatedCell = cell;
 		}];
 
@@ -54,7 +54,7 @@ describe(@"NSMatrix", ^{
 	it(@"should send the adjusted NSCell whenever the intrinsic content size changes", ^{
 		NSMutableSet *invalidatedCells = [NSMutableSet set];
 		[matrix.rcl_cellIntrinsicContentSizeInvalidatedSignal subscribeNext:^(NSCell *cell) {
-			expect(cell).to(beKindOf(NSTextFieldCell.class));
+			expect(cell).to(beAKindOf(NSTextFieldCell.class));
 			[invalidatedCells addObject:cell];
 		}];
 

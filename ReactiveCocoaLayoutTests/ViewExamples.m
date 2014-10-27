@@ -36,7 +36,7 @@ sharedExamplesFor(ViewExamples, ^(NSDictionary *_) {
 	it(@"should send values on rcl_boundsSignal", ^{
 		__block NSValue *lastValue = nil;
 		[view.rcl_boundsSignal subscribeNext:^(NSValue *value) {
-			expect(value).to(beKindOf(NSValue.class));
+			expect(value).to(beAKindOf(NSValue.class));
 			lastValue = value;
 		}];
 
@@ -80,7 +80,7 @@ sharedExamplesFor(ViewExamples, ^(NSDictionary *_) {
 	it(@"should send values on rcl_frameSignal", ^{
 		__block NSValue *lastValue = nil;
 		[view.rcl_frameSignal subscribeNext:^(NSValue *value) {
-			expect(value).to(beKindOf(NSValue.class));
+			expect(value).to(beAKindOf(NSValue.class));
 			lastValue = value;
 		}];
 
@@ -198,7 +198,7 @@ sharedExamplesFor(ViewExamples, ^(NSDictionary *_) {
 	it(@"should send values on rcl_alignmentRectSignal", ^{
 		__block NSValue *lastValue = nil;
 		[view.rcl_alignmentRectSignal subscribeNext:^(NSValue *value) {
-			expect(value).to(beKindOf(NSValue.class));
+			expect(value).to(beAKindOf(NSValue.class));
 			lastValue = value;
 		}];
 
