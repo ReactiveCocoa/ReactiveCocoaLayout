@@ -12,7 +12,7 @@
 #import <ReactiveCocoa/ReactiveCocoa.h>
 #import <ReactiveCocoaLayout/ReactiveCocoaLayout.h>
 
-SpecBegin(RACSignalRCLWritingDirectionAdditionsSpec)
+QuickSpecBegin(RACSignalRCLWritingDirectionAdditionsSpec)
 
 it(@"should immediately send the current leading edge", ^{
 	__block NSNumber *edge = nil;
@@ -21,9 +21,9 @@ it(@"should immediately send the current leading edge", ^{
 		edge = x;
 	}];
 
-	expect(edge).notTo.beNil();
-	expect(edge.unsignedIntegerValue).notTo.equal(CGRectMinYEdge);
-	expect(edge.unsignedIntegerValue).notTo.equal(CGRectMaxYEdge);
+	expect(edge).notTo(beNil());
+	expect(edge.unsignedIntegerValue).notTo(equal(CGRectMinYEdge));
+	expect(edge.unsignedIntegerValue).notTo(equal(CGRectMaxYEdge));
 });
 
 it(@"should immediately send the current trailing edge", ^{
@@ -33,9 +33,9 @@ it(@"should immediately send the current trailing edge", ^{
 		edge = x;
 	}];
 
-	expect(edge).notTo.beNil();
-	expect(edge.unsignedIntegerValue).notTo.equal(CGRectMinYEdge);
-	expect(edge.unsignedIntegerValue).notTo.equal(CGRectMaxYEdge);
+	expect(edge).notTo(beNil());
+	expect(edge.unsignedIntegerValue).notTo(equal(CGRectMinYEdge));
+	expect(edge.unsignedIntegerValue).notTo(equal(CGRectMaxYEdge));
 });
 
-SpecEnd
+QuickSpecEnd

@@ -14,7 +14,7 @@
 
 #import "ViewExamples.h"
 
-SpecBegin(UIViewRCLGeometryAdditions)
+QuickSpecBegin(UIViewRCLGeometryAdditions)
 
 itShouldBehaveLike(ViewExamples, nil);
 
@@ -23,7 +23,7 @@ describe(@"UILabel", ^{
 
 	beforeEach(^{
 		label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 100, 20)];
-		expect(label).notTo.beNil();
+		expect(label).notTo(beNil());
 	});
 
 	describe(@"baseline", ^{
@@ -31,15 +31,15 @@ describe(@"UILabel", ^{
 
 		beforeEach(^{
 			UIView *baselineView = label.viewForBaselineLayout;
-			expect(baselineView).to.equal(label);
+			expect(baselineView).to(equal(label));
 
 			baseline = 0;
 		});
 
 		it(@"should send the baseline", ^{
-			expect([[label.rcl_baselineSignal first] doubleValue]).to.equal(baseline);
+			expect([[label.rcl_baselineSignal first] doubleValue]).to(equal(baseline));
 		});
 	});
 });
 
-SpecEnd
+QuickSpecEnd

@@ -12,25 +12,25 @@
 #import <ReactiveCocoa/ReactiveCocoa.h>
 #import <ReactiveCocoaLayout/ReactiveCocoaLayout.h>
 
-SpecBegin(NSControlRCLGeometryAdditions)
+QuickSpecBegin(NSControlRCLGeometryAdditions)
 
 describe(@"NSTextField", ^{
 	__block NSTextField *field;
 
 	beforeEach(^{
 		field = [[NSTextField alloc] initWithFrame:CGRectMake(0, 0, 100, 20)];
-		expect(field).notTo.beNil();
+		expect(field).notTo(beNil());
 	});
 
 	it(@"should send the adjusted NSCell whenever the intrinsic content size changes", ^{
 		__block NSCell *invalidatedCell = nil;
 		[field.rcl_cellIntrinsicContentSizeInvalidatedSignal subscribeNext:^(NSCell *cell) {
-			expect(cell).to.beKindOf(NSTextFieldCell.class);
+			expect(cell).to(beKindOf(NSTextFieldCell.class));
 			invalidatedCell = cell;
 		}];
 
 		[field.cell setStringValue:@"foo\nbar"];
-		expect(invalidatedCell).to.equal(field.cell);
+		expect(invalidatedCell).to(equal(field.cell));
 	});
 });
 
@@ -40,7 +40,7 @@ describe(@"NSMatrix", ^{
 
 	beforeEach(^{
 		matrix = [[NSMatrix alloc] initWithFrame:CGRectZero mode:NSListModeMatrix cellClass:NSTextFieldCell.class numberOfRows:2 numberOfColumns:2];
-		expect(matrix).notTo.beNil();
+		expect(matrix).notTo(beNil());
 
 		cell = matrix.cells[0];
 
@@ -48,18 +48,18 @@ describe(@"NSMatrix", ^{
 		// filled in.
 		[matrix calcSize];
 
-		expect(cell.controlView).to.equal(matrix);
+		expect(cell.controlView).to(equal(matrix));
 	});
 
 	it(@"should send the adjusted NSCell whenever the intrinsic content size changes", ^{
 		NSMutableSet *invalidatedCells = [NSMutableSet set];
 		[matrix.rcl_cellIntrinsicContentSizeInvalidatedSignal subscribeNext:^(NSCell *cell) {
-			expect(cell).to.beKindOf(NSTextFieldCell.class);
+			expect(cell).to(beKindOf(NSTextFieldCell.class));
 			[invalidatedCells addObject:cell];
 		}];
 
 		cell.stringValue = @"foo\nbar";
-		expect(invalidatedCells).to.contain(cell);
+		expect(invalidatedCells).to(contain(cell));
 	});
 });
 
@@ -72,10 +72,10 @@ it(@"should complete rcl_cellIntrinsicContentSizeInvalidatedSignal upon dealloca
 			completed = YES;
 		}];
 
-		expect(completed).to.beFalsy();
+		expect(completed).to(beFalsy());
 	}
 
-	expect(completed).to.beTruthy();
+	expect(completed).to(beTruthy());
 });
 
-SpecEnd
+QuickSpecEnd

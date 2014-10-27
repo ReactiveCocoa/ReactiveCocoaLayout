@@ -12,7 +12,7 @@
 #import <ReactiveCocoa/ReactiveCocoa.h>
 #import <ReactiveCocoaLayout/ReactiveCocoaLayout.h>
 
-SpecBegin(RACSignalRCLAnimationAdditions)
+QuickSpecBegin(RACSignalRCLAnimationAdditions)
 
 __block RACSignal *baseSignal;
 
@@ -27,11 +27,11 @@ describe(@"-animatedSignalsWithDuration:curve:", ^{
 		[[baseSignal
 			animatedSignalsWithDuration:0.01 curve:RCLAnimationCurveEaseOut]
 			subscribeNext:^(RACSignal *signal) {
-				expect([signal first]).to.equal(signalsReceived);
+				expect([signal first]).to(equal(signalsReceived));
 				signalsReceived++;
 			}];
 
-		expect(signalsReceived).will.equal(3);
+		expect(signalsReceived).toEventually(equal(3));
 	});
 
 	it(@"should send the underlying value immediately, then complete later", ^{
@@ -43,8 +43,8 @@ describe(@"-animatedSignalsWithDuration:curve:", ^{
 			subscribeNext:^(RACSignal *signal) {
 				__block id value = nil;
 				[signal subscribeNext:^(id x) {
-					expect(value).to.beNil();
-					expect(x).notTo.beNil();
+					expect(value).to(beNil());
+					expect(x).notTo(beNil());
 
 					value = x;
 				} completed:^{
@@ -52,12 +52,12 @@ describe(@"-animatedSignalsWithDuration:curve:", ^{
 				}];
 
 				// The underlying value should have been sent synchronously.
-				expect(value).to.equal(signalsReceived);
+				expect(value).to(equal(signalsReceived));
 				signalsReceived++;
 			}];
 
-		expect(signalsReceived).will.equal(3);
-		expect(signalsCompleted).will.equal(3);
+		expect(signalsReceived).toEventually(equal(3));
+		expect(signalsCompleted).toEventually(equal(3));
 	});
 
 	it(@"should start animating only when subscribed to", ^{
@@ -74,16 +74,16 @@ describe(@"-animatedSignalsWithDuration:curve:", ^{
 			concat]
 			subscribeNext:^(id _) {
 				valuesReceived++;
-				expect(valuesReceived).to.equal(signalsStarted);
+				expect(valuesReceived).to(equal(signalsStarted));
 			}];
 
-		expect(valuesReceived).will.equal(3);
+		expect(valuesReceived).toEventually(equal(3));
 	});
 });
 
 describe(@"RCLIsInAnimatedSignal()", ^{
 	it(@"should be false outside of an animated signal", ^{
-		expect(RCLIsInAnimatedSignal()).to.beFalsy();
+		expect(RCLIsInAnimatedSignal()).to(beFalsy());
 	});
 
 	it(@"should be true from nexts of -animate", ^{
@@ -91,11 +91,11 @@ describe(@"RCLIsInAnimatedSignal()", ^{
 			take:1]
 			animate]
 			doNext:^(id x) {
-				expect(x).to.equal(@0);
-				expect(RCLIsInAnimatedSignal()).to.beTruthy();
+				expect(x).to(equal(@0));
+				expect(RCLIsInAnimatedSignal()).to(beTruthy());
 			}]
 			doCompleted:^{
-				expect(RCLIsInAnimatedSignal()).to.beFalsy();
+				expect(RCLIsInAnimatedSignal()).to(beFalsy());
 			}]
 			asynchronouslyWaitUntilCompleted:NULL];
 	});
@@ -105,11 +105,11 @@ describe(@"RCLIsInAnimatedSignal()", ^{
 			take:1]
 			animateWithDuration:0.01]
 			doNext:^(id x) {
-				expect(x).to.equal(@0);
-				expect(RCLIsInAnimatedSignal()).to.beTruthy();
+				expect(x).to(equal(@0));
+				expect(RCLIsInAnimatedSignal()).to(beTruthy());
 			}]
 			doCompleted:^{
-				expect(RCLIsInAnimatedSignal()).to.beFalsy();
+				expect(RCLIsInAnimatedSignal()).to(beFalsy());
 			}]
 			asynchronouslyWaitUntilCompleted:NULL];
 	});
@@ -119,11 +119,11 @@ describe(@"RCLIsInAnimatedSignal()", ^{
 			take:1]
 			animateWithDuration:0.01 curve:RCLAnimationCurveEaseOut]
 			doNext:^(id x) {
-				expect(x).to.equal(@0);
-				expect(RCLIsInAnimatedSignal()).to.beTruthy();
+				expect(x).to(equal(@0));
+				expect(RCLIsInAnimatedSignal()).to(beTruthy());
 			}]
 			doCompleted:^{
-				expect(RCLIsInAnimatedSignal()).to.beFalsy();
+				expect(RCLIsInAnimatedSignal()).to(beFalsy());
 			}]
 			asynchronouslyWaitUntilCompleted:NULL];
 	});
@@ -133,7 +133,7 @@ describe(@"RCLIsInAnimatedSignal()", ^{
 			take:1]
 			animatedSignalsWithDuration:0.01]
 			doNext:^(RACSignal *signal) {
-				expect(RCLIsInAnimatedSignal()).to.beFalsy();
+				expect(RCLIsInAnimatedSignal()).to(beFalsy());
 			}]
 			asynchronouslyWaitUntilCompleted:NULL];
 	});
@@ -144,14 +144,14 @@ describe(@"RCLIsInAnimatedSignal()", ^{
 			animatedSignalsWithDuration:0.01]
 			concat]
 			doNext:^(id x) {
-				expect(x).to.equal(@0);
-				expect(RCLIsInAnimatedSignal()).to.beTruthy();
+				expect(x).to(equal(@0));
+				expect(RCLIsInAnimatedSignal()).to(beTruthy());
 			}]
 			doCompleted:^{
-				expect(RCLIsInAnimatedSignal()).to.beFalsy();
+				expect(RCLIsInAnimatedSignal()).to(beFalsy());
 			}]
 			asynchronouslyWaitUntilCompleted:NULL];
 	});
 });
 
-SpecEnd
+QuickSpecEnd
