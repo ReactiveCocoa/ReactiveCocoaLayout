@@ -25,15 +25,15 @@ static NSString * const MacroBindingBlock = @"MacroBindingBlock";
 // Associated with the name of the view property that is being bound.
 static NSString * const MacroPropertyName = @"MacroPropertyName";
 
-QuickSharedExamplesBegin(MacroBindingExamples)
+QuickSharedExampleGroupsBegin(MacroBindingExampleGroup)
 
-sharedExamplesFor(MacroBindingExamples, ^(NSDictionary *bindingInfo) {
+sharedExamples(MacroBindingExamples, ^(QCKDSLSharedExampleContext data) {
 	CGSize intrinsicSize = CGSizeMake(10, 15);
 
 	__block TestView *view;
 
 	__block void (^bind)(NSDictionary *);
-	__block CGRect (^getProperty)(void);
+	__block NSValue * (^getProperty)(void);
 
 	__block CGRect rect;
 	__block RACSubject *values;
@@ -42,17 +42,16 @@ sharedExamplesFor(MacroBindingExamples, ^(NSDictionary *bindingInfo) {
 		view = [[TestView alloc] initWithFrame:CGRectZero];
 		[view invalidateAndSetIntrinsicContentSize:intrinsicSize];
 
-		void (^innerBindingBlock)(TestView *, NSDictionary *) = bindingInfo[MacroBindingBlock];
+		void (^innerBindingBlock)(TestView *, NSDictionary *) = data()[MacroBindingBlock];
 		bind = [^(NSDictionary *bindings) {
 			return innerBindingBlock(view, bindings);
 		} copy];
 
 		getProperty = [^{
-			NSValue *boxedRect = [view valueForKey:bindingInfo[MacroPropertyName]];
-			return boxedRect.med_rectValue;
+			return [view valueForKey:data()[MacroPropertyName]];
 		} copy];
 
-		rect = (CGRect){ .size = intrinsicSize };
+		rect = CGRectMake(0, 0, intrinsicSize.width, intrinsicSize.height);
 		values = [RACSubject subject];
 	});
 
@@ -60,7 +59,7 @@ sharedExamplesFor(MacroBindingExamples, ^(NSDictionary *bindingInfo) {
 		bind(@{});
 
 		CGRect rect = { .origin = CGPointZero, .size = intrinsicSize };
-		expect(getProperty()).to(equal(rect));
+		expect(getProperty()).to(equal(MEDBox(rect)));
 	});
 
 	describe(@"rcl_rect", ^{
@@ -73,7 +72,7 @@ sharedExamplesFor(MacroBindingExamples, ^(NSDictionary *bindingInfo) {
 				rcl_rect: MEDBox(rect)
 			});
 
-			expect(getProperty()).to(equal(rect));
+			expect(getProperty()).to(equal(MEDBox(rect)));
 		});
 
 		it(@"should bind to a signal", ^{
@@ -82,12 +81,12 @@ sharedExamplesFor(MacroBindingExamples, ^(NSDictionary *bindingInfo) {
 			});
 
 			[values sendNext:MEDBox(rect)];
-			expect(getProperty()).to(equal(rect));
+			expect(getProperty()).to(equal(MEDBox(rect)));
 
 			rect = CGRectMake(2, 3, 4, 5);
 
 			[values sendNext:MEDBox(rect)];
-			expect(getProperty()).to(equal(rect));
+			expect(getProperty()).to(equal(MEDBox(rect)));
 		});
 	});
 
@@ -101,7 +100,7 @@ sharedExamplesFor(MacroBindingExamples, ^(NSDictionary *bindingInfo) {
 				rcl_size: MEDBox(rect.size)
 			});
 
-			expect(getProperty()).to(equal(rect));
+			expect(getProperty()).to(equal(MEDBox(rect)));
 		});
 
 		it(@"should bind to a signal", ^{
@@ -110,12 +109,12 @@ sharedExamplesFor(MacroBindingExamples, ^(NSDictionary *bindingInfo) {
 			});
 
 			[values sendNext:MEDBox(rect.size)];
-			expect(getProperty()).to(equal(rect));
+			expect(getProperty()).to(equal(MEDBox(rect)));
 
 			rect.size = CGSizeMake(4, 5);
 
 			[values sendNext:MEDBox(rect.size)];
-			expect(getProperty()).to(equal(rect));
+			expect(getProperty()).to(equal(MEDBox(rect)));
 		});
 
 		it(@"should override rcl_rect", ^{
@@ -126,13 +125,13 @@ sharedExamplesFor(MacroBindingExamples, ^(NSDictionary *bindingInfo) {
 				rcl_size: MEDBox(rect.size)
 			});
 
-			expect(getProperty()).to(equal(rect));
+			expect(getProperty()).to(equal(MEDBox(rect)));
 		});
 	});
 
 	describe(@"rcl_origin", ^{
 		beforeEach(^{
-			rect = (CGRect){ .origin = CGPointMake(1, 3), .size = intrinsicSize };
+			rect = CGRectMake(1, 3, intrinsicSize.width, intrinsicSize.height);
 		});
 
 		it(@"should bind to a constant", ^{
@@ -140,7 +139,7 @@ sharedExamplesFor(MacroBindingExamples, ^(NSDictionary *bindingInfo) {
 				rcl_origin: MEDBox(rect.origin)
 			});
 
-			expect(getProperty()).to(equal(rect));
+			expect(getProperty()).to(equal(MEDBox(rect)));
 		});
 
 		it(@"should bind to a signal", ^{
@@ -149,12 +148,12 @@ sharedExamplesFor(MacroBindingExamples, ^(NSDictionary *bindingInfo) {
 			});
 
 			[values sendNext:MEDBox(rect.origin)];
-			expect(getProperty()).to(equal(rect));
+			expect(getProperty()).to(equal(MEDBox(rect)));
 
 			rect.origin = CGPointMake(5, 7);
 
 			[values sendNext:MEDBox(rect.origin)];
-			expect(getProperty()).to(equal(rect));
+			expect(getProperty()).to(equal(MEDBox(rect)));
 		});
 
 		it(@"should override rcl_rect", ^{
@@ -165,7 +164,7 @@ sharedExamplesFor(MacroBindingExamples, ^(NSDictionary *bindingInfo) {
 				rcl_origin: MEDBox(rect.origin)
 			});
 
-			expect(getProperty()).to(equal(rect));
+			expect(getProperty()).to(equal(MEDBox(rect)));
 		});
 	});
 
@@ -179,7 +178,7 @@ sharedExamplesFor(MacroBindingExamples, ^(NSDictionary *bindingInfo) {
 				rcl_width: @(rect.size.width)
 			});
 
-			expect(getProperty()).to(equal(rect));
+			expect(getProperty()).to(equal(MEDBox(rect)));
 		});
 
 		it(@"should bind to a signal", ^{
@@ -188,12 +187,12 @@ sharedExamplesFor(MacroBindingExamples, ^(NSDictionary *bindingInfo) {
 			});
 
 			[values sendNext:@(rect.size.width)];
-			expect(getProperty()).to(equal(rect));
+			expect(getProperty()).to(equal(MEDBox(rect)));
 
 			rect.size.width = 7;
 
 			[values sendNext:@(rect.size.width)];
-			expect(getProperty()).to(equal(rect));
+			expect(getProperty()).to(equal(MEDBox(rect)));
 		});
 
 		it(@"should override rcl_size", ^{
@@ -204,7 +203,7 @@ sharedExamplesFor(MacroBindingExamples, ^(NSDictionary *bindingInfo) {
 				rcl_width: @(rect.size.width)
 			});
 
-			expect(getProperty()).to(equal(rect));
+			expect(getProperty()).to(equal(MEDBox(rect)));
 		});
 	});
 
@@ -218,7 +217,7 @@ sharedExamplesFor(MacroBindingExamples, ^(NSDictionary *bindingInfo) {
 				rcl_height: @(rect.size.height)
 			});
 
-			expect(getProperty()).to(equal(rect));
+			expect(getProperty()).to(equal(MEDBox(rect)));
 		});
 
 		it(@"should bind to a signal", ^{
@@ -227,12 +226,12 @@ sharedExamplesFor(MacroBindingExamples, ^(NSDictionary *bindingInfo) {
 			});
 
 			[values sendNext:@(rect.size.height)];
-			expect(getProperty()).to(equal(rect));
+			expect(getProperty()).to(equal(MEDBox(rect)));
 
 			rect.size.height = 7;
 
 			[values sendNext:@(rect.size.height)];
-			expect(getProperty()).to(equal(rect));
+			expect(getProperty()).to(equal(MEDBox(rect)));
 		});
 
 		it(@"should override rcl_size", ^{
@@ -243,7 +242,7 @@ sharedExamplesFor(MacroBindingExamples, ^(NSDictionary *bindingInfo) {
 				rcl_height: @(rect.size.height)
 			});
 
-			expect(getProperty()).to(equal(rect));
+			expect(getProperty()).to(equal(MEDBox(rect)));
 		});
 	});
 
@@ -262,7 +261,7 @@ sharedExamplesFor(MacroBindingExamples, ^(NSDictionary *bindingInfo) {
 				rcl_center: getCenter()
 			});
 
-			expect(getProperty()).to(equal(rect));
+			expect(getProperty()).to(equal(MEDBox(rect)));
 		});
 
 		it(@"should bind to a signal", ^{
@@ -271,12 +270,12 @@ sharedExamplesFor(MacroBindingExamples, ^(NSDictionary *bindingInfo) {
 			});
 
 			[values sendNext:getCenter()];
-			expect(getProperty()).to(equal(rect));
+			expect(getProperty()).to(equal(MEDBox(rect)));
 
 			rect.origin = CGPointMake(4, 5);
 
 			[values sendNext:getCenter()];
-			expect(getProperty()).to(equal(rect));
+			expect(getProperty()).to(equal(MEDBox(rect)));
 		});
 
 		it(@"should override rcl_origin", ^{
@@ -287,7 +286,7 @@ sharedExamplesFor(MacroBindingExamples, ^(NSDictionary *bindingInfo) {
 				rcl_center: getCenter()
 			});
 
-			expect(getProperty()).to(equal(rect));
+			expect(getProperty()).to(equal(MEDBox(rect)));
 		});
 	});
 
@@ -306,7 +305,7 @@ sharedExamplesFor(MacroBindingExamples, ^(NSDictionary *bindingInfo) {
 				rcl_centerX: getCenter()
 			});
 
-			expect(getProperty()).to(equal(rect));
+			expect(getProperty()).to(equal(MEDBox(rect)));
 		});
 
 		it(@"should bind to a signal", ^{
@@ -315,12 +314,12 @@ sharedExamplesFor(MacroBindingExamples, ^(NSDictionary *bindingInfo) {
 			});
 
 			[values sendNext:getCenter()];
-			expect(getProperty()).to(equal(rect));
+			expect(getProperty()).to(equal(MEDBox(rect)));
 
 			rect.origin.x = 4;
 
 			[values sendNext:getCenter()];
-			expect(getProperty()).to(equal(rect));
+			expect(getProperty()).to(equal(MEDBox(rect)));
 		});
 
 		it(@"should override rcl_center", ^{
@@ -331,7 +330,7 @@ sharedExamplesFor(MacroBindingExamples, ^(NSDictionary *bindingInfo) {
 				rcl_centerX: getCenter()
 			});
 
-			expect(getProperty()).to(equal(rect));
+			expect(getProperty()).to(equal(MEDBox(rect)));
 		});
 	});
 
@@ -350,7 +349,7 @@ sharedExamplesFor(MacroBindingExamples, ^(NSDictionary *bindingInfo) {
 				rcl_centerY: getCenter()
 			});
 
-			expect(getProperty()).to(equal(rect));
+			expect(getProperty()).to(equal(MEDBox(rect)));
 		});
 
 		it(@"should bind to a signal", ^{
@@ -359,12 +358,12 @@ sharedExamplesFor(MacroBindingExamples, ^(NSDictionary *bindingInfo) {
 			});
 
 			[values sendNext:getCenter()];
-			expect(getProperty()).to(equal(rect));
+			expect(getProperty()).to(equal(MEDBox(rect)));
 
 			rect.origin.y = 4;
 
 			[values sendNext:getCenter()];
-			expect(getProperty()).to(equal(rect));
+			expect(getProperty()).to(equal(MEDBox(rect)));
 		});
 
 		it(@"should override rcl_origin", ^{
@@ -375,7 +374,7 @@ sharedExamplesFor(MacroBindingExamples, ^(NSDictionary *bindingInfo) {
 				rcl_centerY: getCenter()
 			});
 
-			expect(getProperty()).to(equal(rect));
+			expect(getProperty()).to(equal(MEDBox(rect)));
 		});
 	});
 
@@ -389,7 +388,7 @@ sharedExamplesFor(MacroBindingExamples, ^(NSDictionary *bindingInfo) {
 				rcl_left: @(rect.origin.x)
 			});
 
-			expect(getProperty()).to(equal(rect));
+			expect(getProperty()).to(equal(MEDBox(rect)));
 		});
 
 		it(@"should bind to a signal", ^{
@@ -398,12 +397,12 @@ sharedExamplesFor(MacroBindingExamples, ^(NSDictionary *bindingInfo) {
 			});
 
 			[values sendNext:@(rect.origin.x)];
-			expect(getProperty()).to(equal(rect));
+			expect(getProperty()).to(equal(MEDBox(rect)));
 
 			rect.origin.x = 17;
 
 			[values sendNext:@(rect.origin.x)];
-			expect(getProperty()).to(equal(rect));
+			expect(getProperty()).to(equal(MEDBox(rect)));
 		});
 
 		it(@"should override rcl_centerX", ^{
@@ -412,7 +411,7 @@ sharedExamplesFor(MacroBindingExamples, ^(NSDictionary *bindingInfo) {
 				rcl_left: @(rect.origin.x)
 			});
 
-			expect(getProperty()).to(equal(rect));
+			expect(getProperty()).to(equal(MEDBox(rect)));
 		});
 	});
 
@@ -431,7 +430,7 @@ sharedExamplesFor(MacroBindingExamples, ^(NSDictionary *bindingInfo) {
 				rcl_right: getRight()
 			});
 
-			expect(getProperty()).to(equal(rect));
+			expect(getProperty()).to(equal(MEDBox(rect)));
 		});
 
 		it(@"should bind to a signal", ^{
@@ -440,12 +439,12 @@ sharedExamplesFor(MacroBindingExamples, ^(NSDictionary *bindingInfo) {
 			});
 
 			[values sendNext:getRight()];
-			expect(getProperty()).to(equal(rect));
+			expect(getProperty()).to(equal(MEDBox(rect)));
 
 			rect.origin.x = 17;
 
 			[values sendNext:getRight()];
-			expect(getProperty()).to(equal(rect));
+			expect(getProperty()).to(equal(MEDBox(rect)));
 		});
 
 		it(@"should override rcl_centerX", ^{
@@ -454,7 +453,7 @@ sharedExamplesFor(MacroBindingExamples, ^(NSDictionary *bindingInfo) {
 				rcl_right: getRight()
 			});
 
-			expect(getProperty()).to(equal(rect));
+			expect(getProperty()).to(equal(MEDBox(rect)));
 		});
 	});
 
@@ -477,7 +476,7 @@ sharedExamplesFor(MacroBindingExamples, ^(NSDictionary *bindingInfo) {
 				rcl_top: getTop()
 			});
 
-			expect(getProperty()).to(equal(rect));
+			expect(getProperty()).to(equal(MEDBox(rect)));
 		});
 
 		it(@"should bind to a signal", ^{
@@ -486,12 +485,12 @@ sharedExamplesFor(MacroBindingExamples, ^(NSDictionary *bindingInfo) {
 			});
 
 			[values sendNext:getTop()];
-			expect(getProperty()).to(equal(rect));
+			expect(getProperty()).to(equal(MEDBox(rect)));
 
 			rect.origin.y = 17;
 
 			[values sendNext:getTop()];
-			expect(getProperty()).to(equal(rect));
+			expect(getProperty()).to(equal(MEDBox(rect)));
 		});
 
 		it(@"should override rcl_centerY", ^{
@@ -500,7 +499,7 @@ sharedExamplesFor(MacroBindingExamples, ^(NSDictionary *bindingInfo) {
 				rcl_top: getTop()
 			});
 
-			expect(getProperty()).to(equal(rect));
+			expect(getProperty()).to(equal(MEDBox(rect)));
 		});
 	});
 
@@ -523,7 +522,7 @@ sharedExamplesFor(MacroBindingExamples, ^(NSDictionary *bindingInfo) {
 				rcl_bottom: getBottom()
 			});
 
-			expect(getProperty()).to(equal(rect));
+			expect(getProperty()).to(equal(MEDBox(rect)));
 		});
 
 		it(@"should bind to a signal", ^{
@@ -532,12 +531,12 @@ sharedExamplesFor(MacroBindingExamples, ^(NSDictionary *bindingInfo) {
 			});
 
 			[values sendNext:getBottom()];
-			expect(getProperty()).to(equal(rect));
+			expect(getProperty()).to(equal(MEDBox(rect)));
 
 			rect.origin.y = 17;
 
 			[values sendNext:getBottom()];
-			expect(getProperty()).to(equal(rect));
+			expect(getProperty()).to(equal(MEDBox(rect)));
 		});
 
 		it(@"should override rcl_centerY", ^{
@@ -546,7 +545,7 @@ sharedExamplesFor(MacroBindingExamples, ^(NSDictionary *bindingInfo) {
 				rcl_bottom: getBottom()
 			});
 
-			expect(getProperty()).to(equal(rect));
+			expect(getProperty()).to(equal(MEDBox(rect)));
 		});
 	});
 
@@ -570,7 +569,7 @@ sharedExamplesFor(MacroBindingExamples, ^(NSDictionary *bindingInfo) {
 				rcl_leading: getLeading()
 			});
 
-			expect(getProperty()).to(equal(rect));
+			expect(getProperty()).to(equal(MEDBox(rect)));
 		});
 
 		it(@"should bind to a signal", ^{
@@ -579,12 +578,12 @@ sharedExamplesFor(MacroBindingExamples, ^(NSDictionary *bindingInfo) {
 			});
 
 			[values sendNext:getLeading()];
-			expect(getProperty()).to(equal(rect));
+			expect(getProperty()).to(equal(MEDBox(rect)));
 
 			rect.origin.x = 17;
 
 			[values sendNext:getLeading()];
-			expect(getProperty()).to(equal(rect));
+			expect(getProperty()).to(equal(MEDBox(rect)));
 		});
 
 		it(@"should override rcl_centerX", ^{
@@ -593,7 +592,7 @@ sharedExamplesFor(MacroBindingExamples, ^(NSDictionary *bindingInfo) {
 				rcl_leading: getLeading()
 			});
 
-			expect(getProperty()).to(equal(rect));
+			expect(getProperty()).to(equal(MEDBox(rect)));
 		});
 	});
 
@@ -617,7 +616,7 @@ sharedExamplesFor(MacroBindingExamples, ^(NSDictionary *bindingInfo) {
 				rcl_trailing: getTrailing()
 			});
 
-			expect(getProperty()).to(equal(rect));
+			expect(getProperty()).to(equal(MEDBox(rect)));
 		});
 
 		it(@"should bind to a signal", ^{
@@ -626,12 +625,12 @@ sharedExamplesFor(MacroBindingExamples, ^(NSDictionary *bindingInfo) {
 			});
 
 			[values sendNext:getTrailing()];
-			expect(getProperty()).to(equal(rect));
+			expect(getProperty()).to(equal(MEDBox(rect)));
 
 			rect.origin.x = 17;
 
 			[values sendNext:getTrailing()];
-			expect(getProperty()).to(equal(rect));
+			expect(getProperty()).to(equal(MEDBox(rect)));
 		});
 
 		it(@"should override rcl_centerX", ^{
@@ -640,7 +639,7 @@ sharedExamplesFor(MacroBindingExamples, ^(NSDictionary *bindingInfo) {
 				rcl_trailing: getTrailing()
 			});
 
-			expect(getProperty()).to(equal(rect));
+			expect(getProperty()).to(equal(MEDBox(rect)));
 		});
 	});
 
@@ -654,7 +653,7 @@ sharedExamplesFor(MacroBindingExamples, ^(NSDictionary *bindingInfo) {
 				rcl_height: @(rect.size.height),
 			});
 
-			expect(getProperty()).to(equal(rect));
+			expect(getProperty()).to(equal(MEDBox(rect)));
 		});
 
 		it(@"should combine rcl_size with rcl_center", ^{
@@ -666,7 +665,7 @@ sharedExamplesFor(MacroBindingExamples, ^(NSDictionary *bindingInfo) {
 				rcl_center: MEDBox(center),
 			});
 
-			expect(getProperty()).to(equal(rect));
+			expect(getProperty()).to(equal(MEDBox(rect)));
 		});
 
 		it(@"should combine rcl_left, rcl_centerY, rcl_width, and rcl_height", ^{
@@ -680,12 +679,12 @@ sharedExamplesFor(MacroBindingExamples, ^(NSDictionary *bindingInfo) {
 				rcl_height: @(rect.size.height),
 			});
 
-			expect(getProperty()).to(equal(rect));
+			expect(getProperty()).to(equal(MEDBox(rect)));
 		});
 	});
 });
 
-QuickSharedExamplesEnd
+QuickSharedExampleGroupsEnd
 
 QuickSpecBegin(RCLMacros)
 

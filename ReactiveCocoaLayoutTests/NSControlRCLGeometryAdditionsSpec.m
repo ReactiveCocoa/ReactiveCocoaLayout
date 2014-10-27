@@ -72,10 +72,10 @@ it(@"should complete rcl_cellIntrinsicContentSizeInvalidatedSignal upon dealloca
 			completed = YES;
 		}];
 
-		expect(completed).to(beFalsy());
+		expect(@(completed)).to(beFalsy());
 	}
 
-	expect(completed).to(beTruthy());
+	expect(@(completed)).to(beTruthy());
 });
 
 QuickSpecEnd

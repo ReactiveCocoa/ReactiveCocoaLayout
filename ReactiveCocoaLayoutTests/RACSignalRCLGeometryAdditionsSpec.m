@@ -91,15 +91,15 @@ describe(@"zeroes", ^{
 	});
 
 	it(@"should return CGRectZero", ^{
-		expect([[[RACSignal zeroRect] first] med_rectValue]).to(equal(CGRectZero));
+		expect([[RACSignal zeroRect] first]).to(equal(MEDBox(CGRectZero)));
 	});
 
 	it(@"should return CGSizeZero", ^{
-		expect([[[RACSignal zeroSize] first] med_sizeValue]).to(equal(CGSizeZero));
+		expect([[RACSignal zeroSize] first]).to(equal(MEDBox(CGSizeZero)));
 	});
 
 	it(@"should return CGPointZero", ^{
-		expect([[[RACSignal zeroPoint] first] med_pointValue]).to(equal(CGPointZero));
+		expect([[RACSignal zeroPoint] first]).to(equal(MEDBox(CGPointZero)));
 	});
 });
 
@@ -1137,7 +1137,7 @@ describe(@"mathematical operators", ^{
 	describe(@"+divide:", ^{
 		it(@"should divide three numbers", ^{
 			CGFloat result = [[[RACSignal divide:threeNumbers] first] doubleValue];
-			expect(result).to(beCloseTo(5.0 / 2 / 3));
+			expect(@(result)).to(beCloseTo(@(5.0 / 2 / 3)));
 		});
 
 		it(@"should divide three points", ^{

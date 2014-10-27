@@ -22,8 +22,8 @@ it(@"should immediately send the current leading edge", ^{
 	}];
 
 	expect(edge).notTo(beNil());
-	expect(edge.unsignedIntegerValue).notTo(equal(CGRectMinYEdge));
-	expect(edge.unsignedIntegerValue).notTo(equal(CGRectMaxYEdge));
+	expect(edge).notTo(equal(@(CGRectMinYEdge)));
+	expect(edge).notTo(equal(@(CGRectMaxYEdge)));
 });
 
 it(@"should immediately send the current trailing edge", ^{
@@ -34,8 +34,8 @@ it(@"should immediately send the current trailing edge", ^{
 	}];
 
 	expect(edge).notTo(beNil());
-	expect(edge.unsignedIntegerValue).notTo(equal(CGRectMinYEdge));
-	expect(edge.unsignedIntegerValue).notTo(equal(CGRectMaxYEdge));
+	expect(edge).notTo(equal(@(CGRectMinYEdge)));
+	expect(edge).notTo(equal(@(CGRectMaxYEdge)));
 });
 
 QuickSpecEnd

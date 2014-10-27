@@ -31,18 +31,18 @@ describe(@"NSTextField", ^{
 
 		beforeEach(^{
 			baseline = field.baselineOffsetFromBottom;
-			expect(baseline).to(beGreaterThan(0));
+			expect(@(baseline)).to(beGreaterThan(@0));
 		});
 
 		it(@"should send the baseline", ^{
-			expect([[field.rcl_baselineSignal first] doubleValue]).to(equal(baseline));
+			expect([field.rcl_baselineSignal first]).to(equal(@(baseline)));
 		});
 
 		it(@"should defer reading baseline", ^{
 			RACSignal *signal = field.rcl_baselineSignal;
 
 			field.font = [NSFont systemFontOfSize:144];
-			expect([[signal first] doubleValue]).notTo(equal(baseline));
+			expect([signal first]).notTo(equal(@(baseline)));
 		});
 
 		it(@"should send baseline changes", ^{
@@ -51,11 +51,11 @@ describe(@"NSTextField", ^{
 				lastBaseline = baseline.doubleValue;
 			}];
 
-			expect(lastBaseline).to(equal(baseline));
+			expect(@(lastBaseline)).to(equal(@(baseline)));
 
 			field.font = [NSFont systemFontOfSize:144];
-			expect(lastBaseline).to(beGreaterThan(baseline));
-			expect(lastBaseline).to(equal(field.baselineOffsetFromBottom));
+			expect(@(lastBaseline)).to(beGreaterThan(@(baseline)));
+			expect(@(lastBaseline)).to(equal(@(field.baselineOffsetFromBottom)));
 		});
 	});
 });
