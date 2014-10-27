@@ -6,6 +6,16 @@
 //  Copyright (c) 2012 GitHub. All rights reserved.
 //
 
+#import <Foundation/Foundation.h>
+
+//! Project version number for ReactiveCocoaLayout.
+FOUNDATION_EXPORT double ReactiveCocoaLayoutVersionNumber;
+
+//! Project version string for ReactiveCocoaLayout.
+FOUNDATION_EXPORT const unsigned char ReactiveCocoaLayoutVersionString[];
+
+// In this header, you should import all the public headers of your framework using statements like #import <ReactiveCocoaLayout/PublicHeader.h>
+
 #import <ReactiveCocoaLayout/RACSignal+RCLAnimationAdditions.h>
 #import <ReactiveCocoaLayout/RACSignal+RCLGeometryAdditions.h>
 #import <ReactiveCocoaLayout/RACSignal+RCLWritingDirectionAdditions.h>
