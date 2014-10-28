@@ -17,7 +17,7 @@ QuickSpecBegin(RACSignalRCLAnimationAdditions)
 __block RACSignal *baseSignal;
 
 beforeEach(^{
-	baseSignal = @[ @0, @1, @2 ].rac_sequence.signal;
+	baseSignal = [@[ @0, @1, @2 ].rac_sequence signalWithScheduler:RACScheduler.immediateScheduler];
 });
 
 describe(@"-animatedSignalsWithDuration:curve:", ^{
