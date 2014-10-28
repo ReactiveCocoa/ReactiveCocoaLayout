@@ -834,6 +834,7 @@
 			baseConfigurationReference = D094E4BA1777661600906BF7 /* iOS-Application.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
@@ -854,6 +855,7 @@
 			baseConfigurationReference = D094E4BA1777661600906BF7 /* iOS-Application.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
@@ -874,6 +876,7 @@
 			baseConfigurationReference = D094E4BA1777661600906BF7 /* iOS-Application.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
@@ -893,6 +896,7 @@
 			baseConfigurationReference = D094E4BA1777661600906BF7 /* iOS-Application.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
