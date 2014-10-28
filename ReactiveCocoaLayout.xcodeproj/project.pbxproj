@@ -51,6 +51,8 @@
 		D0731BBC19FF05E900C01E16 /* Quick.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = D0731BB419FF05B100C01E16 /* Quick.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		D0731BBD19FF05EB00C01E16 /* ReactiveCocoa.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = D4ACA48118DB8F5200EBD899 /* ReactiveCocoa.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		D0731BBE19FF05ED00C01E16 /* Archimedes.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = D40D7B2718E30C0A0065BB70 /* Archimedes.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		D0731BC019FF2A6F00C01E16 /* SwiftSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0731BBF19FF2A6F00C01E16 /* SwiftSpec.swift */; };
+		D0731BC119FF2A6F00C01E16 /* SwiftSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0731BBF19FF2A6F00C01E16 /* SwiftSpec.swift */; };
 		D096C4EC16917B0D0071C6D6 /* NSControlRCLGeometryAdditionsSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = D096C4EB16917B0D0071C6D6 /* NSControlRCLGeometryAdditionsSpec.m */; };
 		D096C4EF16917B140071C6D6 /* NSControl+RCLGeometryAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = D096C4ED16917B140071C6D6 /* NSControl+RCLGeometryAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D096C4F016917B140071C6D6 /* NSControl+RCLGeometryAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = D096C4EE16917B140071C6D6 /* NSControl+RCLGeometryAdditions.m */; };
@@ -131,6 +133,7 @@
 		D0731BAA19FF04B300C01E16 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS8.1.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
 		D0731BB419FF05B100C01E16 /* Quick.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Quick.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D0731BB619FF05C400C01E16 /* Nimble.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Nimble.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		D0731BBF19FF2A6F00C01E16 /* SwiftSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftSpec.swift; sourceTree = "<group>"; };
 		D094E4B01777661600906BF7 /* Common.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Common.xcconfig; sourceTree = "<group>"; };
 		D094E4B21777661600906BF7 /* Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
 		D094E4B31777661600906BF7 /* Profile.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Profile.xcconfig; sourceTree = "<group>"; };
@@ -388,6 +391,7 @@
 		D0BB24911678772C005E9371 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				D0731BBF19FF2A6F00C01E16 /* SwiftSpec.swift */,
 				D0513972167F149F00334374 /* TestView.h */,
 				D0513973167F149F00334374 /* TestView.m */,
 				D0BB24921678772C005E9371 /* Info.plist */,
@@ -654,6 +658,7 @@
 			files = (
 				D0731BB219FF055800C01E16 /* TestView.m in Sources */,
 				D0731BAD19FF055500C01E16 /* RACSignalRCLAnimationAdditionsSpec.m in Sources */,
+				D0731BC119FF2A6F00C01E16 /* SwiftSpec.swift in Sources */,
 				D0731BAC19FF055500C01E16 /* RCLMacrosSpec.m in Sources */,
 				D0731BAF19FF055500C01E16 /* RACSignalRCLWritingDirectionAdditionsSpec.m in Sources */,
 				D0731BAE19FF055500C01E16 /* RACSignalRCLGeometryAdditionsSpec.m in Sources */,
@@ -685,6 +690,7 @@
 				D06C9E5B167D8A9A00276090 /* NSViewRCLGeometryAdditionsSpec.m in Sources */,
 				D051391F167F11FD00334374 /* ViewExamples.m in Sources */,
 				D0513974167F149F00334374 /* TestView.m in Sources */,
+				D0731BC019FF2A6F00C01E16 /* SwiftSpec.swift in Sources */,
 				D0ED89F8168150030041A188 /* RACSignalRCLWritingDirectionAdditionsSpec.m in Sources */,
 				D096C4EC16917B0D0071C6D6 /* NSControlRCLGeometryAdditionsSpec.m in Sources */,
 				D096C51B16917EF30071C6D6 /* NSCellRCLGeometryAdditionsSpec.m in Sources */,
@@ -735,11 +741,14 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = D094E4BE1777661600906BF7 /* Mac-Application.xcconfig */;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
 				);
 				INFOPLIST_FILE = ReactiveCocoaLayoutTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Profile;
@@ -820,6 +829,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = D094E4BA1777661600906BF7 /* iOS-Application.xcconfig */;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
@@ -829,7 +839,9 @@
 					"RCL_FOR_IPHONE=1",
 				);
 				INFOPLIST_FILE = ReactiveCocoaLayoutTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
 		};
@@ -837,6 +849,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = D094E4BA1777661600906BF7 /* iOS-Application.xcconfig */;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
@@ -846,7 +859,9 @@
 					"RCL_FOR_IPHONE=1",
 				);
 				INFOPLIST_FILE = ReactiveCocoaLayoutTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Test;
 		};
@@ -854,6 +869,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = D094E4BA1777661600906BF7 /* iOS-Application.xcconfig */;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
@@ -863,6 +879,7 @@
 					"RCL_FOR_IPHONE=1",
 				);
 				INFOPLIST_FILE = ReactiveCocoaLayoutTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
@@ -871,6 +888,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = D094E4BA1777661600906BF7 /* iOS-Application.xcconfig */;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
@@ -880,6 +898,7 @@
 					"RCL_FOR_IPHONE=1",
 				);
 				INFOPLIST_FILE = ReactiveCocoaLayoutTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Profile;
@@ -932,12 +951,16 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = D094E4BE1777661600906BF7 /* Mac-Application.xcconfig */;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
 				);
 				INFOPLIST_FILE = ReactiveCocoaLayoutTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
 		};
@@ -945,11 +968,14 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = D094E4BE1777661600906BF7 /* Mac-Application.xcconfig */;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
 				);
 				INFOPLIST_FILE = ReactiveCocoaLayoutTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
@@ -980,12 +1006,16 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = D094E4BE1777661600906BF7 /* Mac-Application.xcconfig */;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
 				);
 				INFOPLIST_FILE = ReactiveCocoaLayoutTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Test;
 		};
