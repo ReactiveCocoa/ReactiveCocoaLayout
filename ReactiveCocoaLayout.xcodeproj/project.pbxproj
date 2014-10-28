@@ -69,6 +69,7 @@
 		D0C20EF51736398700115B19 /* RCLMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = D0C20EF41736398700115B19 /* RCLMacros.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D0C20EF817363A6500115B19 /* RCLMacros.m in Sources */ = {isa = PBXBuildFile; fileRef = D0C20EF717363A6500115B19 /* RCLMacros.m */; };
 		D0DF007919FF497300698F57 /* TestView.m in Sources */ = {isa = PBXBuildFile; fileRef = D0513973167F149F00334374 /* TestView.m */; };
+		D0EB8EBB19FF4E10006FA2D5 /* ReactiveCocoaLayout.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = D0BB24711678772C005E9371 /* ReactiveCocoaLayout.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		D0ED89F416814D800041A188 /* RACSignal+RCLWritingDirectionAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = D0ED89F216814D800041A188 /* RACSignal+RCLWritingDirectionAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D0ED89F516814D800041A188 /* RACSignal+RCLWritingDirectionAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = D0ED89F316814D800041A188 /* RACSignal+RCLWritingDirectionAdditions.m */; };
 		D0ED89F8168150030041A188 /* RACSignalRCLWritingDirectionAdditionsSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = D0ED89F7168150030041A188 /* RACSignalRCLWritingDirectionAdditionsSpec.m */; };
@@ -106,6 +107,7 @@
 				D0731BBC19FF05E900C01E16 /* Quick.framework in Copy Frameworks */,
 				D0731BBD19FF05EB00C01E16 /* ReactiveCocoa.framework in Copy Frameworks */,
 				D0731BBE19FF05ED00C01E16 /* Archimedes.framework in Copy Frameworks */,
+				D0EB8EBB19FF4E10006FA2D5 /* ReactiveCocoaLayout.framework in Copy Frameworks */,
 			);
 			name = "Copy Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
