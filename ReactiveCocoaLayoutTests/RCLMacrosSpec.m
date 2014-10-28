@@ -689,20 +689,24 @@ QuickSharedExampleGroupsEnd
 QuickSpecBegin(RCLMacros)
 
 describe(@"RCLFrame", ^{
-	itBehavesLike(MacroBindingExamples, @{
-		MacroPropertyName: @"rcl_frame",
-		MacroBindingBlock: ^(TestView *view, NSDictionary *bindings) {
-			RCLFrame(view) = bindings;
-		}
+	itBehavesLike(MacroBindingExamples, ^{
+		return @{
+			MacroPropertyName: @"rcl_frame",
+			MacroBindingBlock: ^(TestView *view, NSDictionary *bindings) {
+				RCLFrame(view) = bindings;
+			}
+		};
 	});
 });
 
 describe(@"RCLAlignment", ^{
-	itBehavesLike(MacroBindingExamples, @{
-		MacroPropertyName: @"rcl_alignmentRect",
-		MacroBindingBlock: ^(TestView *view, NSDictionary *bindings) {
-			RCLAlignment(view) = bindings;
-		}
+	itBehavesLike(MacroBindingExamples, ^{
+		return @{
+			MacroPropertyName: @"rcl_alignmentRect",
+			MacroBindingBlock: ^(TestView *view, NSDictionary *bindings) {
+				RCLAlignment(view) = bindings;
+			}
+		};
 	});
 
 	describe(@"rcl_baseline", ^{
@@ -749,7 +753,7 @@ describe(@"RCLAlignment", ^{
 				rcl_baseline: alignmentView5
 			};
 
-			expect(view.rcl_alignmentRect).to(equal(rectAligned5));
+			expect(MEDBox(view.rcl_alignmentRect)).to(equal(MEDBox(rectAligned5)));
 		});
 
 		it(@"should bind to a signal", ^{
@@ -758,10 +762,10 @@ describe(@"RCLAlignment", ^{
 			};
 
 			[values sendNext:alignmentView5];
-			expect(view.rcl_alignmentRect).to(equal(rectAligned5));
+			expect(MEDBox(view.rcl_alignmentRect)).to(equal(MEDBox(rectAligned5)));
 
 			[values sendNext:alignmentView10];
-			expect(view.rcl_alignmentRect).to(equal(rectAligned10));
+			expect(MEDBox(view.rcl_alignmentRect)).to(equal(MEDBox(rectAligned10)));
 		});
 
 		it(@"should override rcl_top", ^{
@@ -770,7 +774,7 @@ describe(@"RCLAlignment", ^{
 				rcl_baseline: alignmentView5
 			};
 
-			expect(view.rcl_alignmentRect).to(equal(rectAligned5));
+			expect(MEDBox(view.rcl_alignmentRect)).to(equal(MEDBox(rectAligned5)));
 		});
 	});
 });
