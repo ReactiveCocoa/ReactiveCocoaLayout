@@ -37,7 +37,7 @@ describe(@"UILabel", ^{
 		});
 
 		it(@"should send the baseline", ^{
-			expect([[label.rcl_baselineSignal first] doubleValue]).to(equal(baseline));
+			expect([label.rcl_baselineSignal first]).to(equal(@(baseline)));
 		});
 	});
 });

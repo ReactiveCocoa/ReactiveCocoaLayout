@@ -42,7 +42,6 @@
 		D0731BAF19FF055500C01E16 /* RACSignalRCLWritingDirectionAdditionsSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = D0ED89F7168150030041A188 /* RACSignalRCLWritingDirectionAdditionsSpec.m */; };
 		D0731BB019FF055500C01E16 /* UIViewRCLGeometryAdditionsSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = D06C9E5D167D8BD900276090 /* UIViewRCLGeometryAdditionsSpec.m */; };
 		D0731BB119FF055500C01E16 /* ViewExamples.m in Sources */ = {isa = PBXBuildFile; fileRef = D051391E167F11FD00334374 /* ViewExamples.m */; };
-		D0731BB219FF055800C01E16 /* TestView.m in Sources */ = {isa = PBXBuildFile; fileRef = D0513973167F149F00334374 /* TestView.m */; };
 		D0731BB519FF05B100C01E16 /* Quick.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0731BB419FF05B100C01E16 /* Quick.framework */; };
 		D0731BB719FF05C400C01E16 /* Nimble.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0731BB619FF05C400C01E16 /* Nimble.framework */; };
 		D0731BB819FF05C400C01E16 /* Nimble.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0731BB619FF05C400C01E16 /* Nimble.framework */; };
@@ -69,6 +68,7 @@
 		D0BB2633167887C3005E9371 /* RACSignal+RCLGeometryAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = D0BB2631167887C3005E9371 /* RACSignal+RCLGeometryAdditions.m */; };
 		D0C20EF51736398700115B19 /* RCLMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = D0C20EF41736398700115B19 /* RCLMacros.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D0C20EF817363A6500115B19 /* RCLMacros.m in Sources */ = {isa = PBXBuildFile; fileRef = D0C20EF717363A6500115B19 /* RCLMacros.m */; };
+		D0DF007919FF497300698F57 /* TestView.m in Sources */ = {isa = PBXBuildFile; fileRef = D0513973167F149F00334374 /* TestView.m */; };
 		D0ED89F416814D800041A188 /* RACSignal+RCLWritingDirectionAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = D0ED89F216814D800041A188 /* RACSignal+RCLWritingDirectionAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D0ED89F516814D800041A188 /* RACSignal+RCLWritingDirectionAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = D0ED89F316814D800041A188 /* RACSignal+RCLWritingDirectionAdditions.m */; };
 		D0ED89F8168150030041A188 /* RACSignalRCLWritingDirectionAdditionsSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = D0ED89F7168150030041A188 /* RACSignalRCLWritingDirectionAdditionsSpec.m */; };
@@ -656,7 +656,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D0731BB219FF055800C01E16 /* TestView.m in Sources */,
+				D0DF007919FF497300698F57 /* TestView.m in Sources */,
 				D0731BAD19FF055500C01E16 /* RACSignalRCLAnimationAdditionsSpec.m in Sources */,
 				D0731BC119FF2A6F00C01E16 /* SwiftSpec.swift in Sources */,
 				D0731BAC19FF055500C01E16 /* RCLMacrosSpec.m in Sources */,
