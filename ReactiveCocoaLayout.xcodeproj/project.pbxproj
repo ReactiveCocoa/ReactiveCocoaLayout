@@ -757,6 +757,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = D0731B7619FF01BC00C01E16 /* iOS-Framework.xcconfig */;
 			buildSettings = {
+				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = NO;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -775,6 +776,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = D0731B7619FF01BC00C01E16 /* iOS-Framework.xcconfig */;
 			buildSettings = {
+				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = NO;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -793,6 +795,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = D0731B7619FF01BC00C01E16 /* iOS-Framework.xcconfig */;
 			buildSettings = {
+				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = NO;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -811,6 +814,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = D0731B7619FF01BC00C01E16 /* iOS-Framework.xcconfig */;
 			buildSettings = {
+				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = NO;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
 				DYLIB_COMPATIBILITY_VERSION = 1;
