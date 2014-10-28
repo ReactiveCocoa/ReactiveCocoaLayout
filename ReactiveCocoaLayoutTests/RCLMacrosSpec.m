@@ -463,7 +463,7 @@ sharedExamples(MacroBindingExamples, ^(QCKDSLSharedExampleContext data) {
 		beforeEach(^{
 			rect.origin.y = 7;
 			getTop = ^{
-				#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
+				#ifdef RCL_FOR_IPHONE
 					return @(CGRectGetMinY(rect));
 				#else
 					return @(CGRectGetMaxY(rect));
@@ -509,7 +509,7 @@ sharedExamples(MacroBindingExamples, ^(QCKDSLSharedExampleContext data) {
 		beforeEach(^{
 			rect.origin.y = 7;
 			getBottom = ^{
-				#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
+				#ifdef RCL_FOR_IPHONE
 					return @(CGRectGetMaxY(rect));
 				#else
 					return @(CGRectGetMinY(rect));
@@ -739,7 +739,7 @@ describe(@"RCLAlignment", ^{
 			rectAligned10 = frame;
 
 			// Gotta take alignment rect padding into account here.
-			#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
+			#ifdef RCL_FOR_IPHONE
 			rectAligned5.origin.y = -7;
 			rectAligned10.origin.y = -12;
 			#else

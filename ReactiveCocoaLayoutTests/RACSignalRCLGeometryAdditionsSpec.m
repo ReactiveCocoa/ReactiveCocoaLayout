@@ -141,7 +141,7 @@ describe(@"signal of CGRects", ^{
 				trailings = minXs;
 			}
 
-			#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
+			#ifdef RCL_FOR_IPHONE
 			tops = minYs;
 			bottoms = maxYs;
 			#else
@@ -237,7 +237,7 @@ describe(@"signal of CGRects", ^{
 		beforeEach(^{
 			expectedRects = @[
 				MEDBox(CGRectZero),
-#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
+#ifdef RCL_FOR_IPHONE
 				MEDBox(CGRectMake(20, 22, 0, 34)),
 				MEDBox(CGRectMake(35, 17, 15, 29)),
 #else
@@ -356,7 +356,7 @@ describe(@"signal of CGRects", ^{
 		});
 
 		it(@"should extend top", ^{
-			#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
+			#ifdef RCL_FOR_IPHONE
 				expect([signal extendAttribute:NSLayoutAttributeTop byAmount:value].sequence).to(equal(extendedMinY));
 			#else
 				expect([signal extendAttribute:NSLayoutAttributeTop byAmount:value].sequence).to(equal(extendedMaxY));
@@ -364,7 +364,7 @@ describe(@"signal of CGRects", ^{
 		});
 
 		it(@"should extend bottom", ^{
-			#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
+			#ifdef RCL_FOR_IPHONE
 				expect([signal extendAttribute:NSLayoutAttributeBottom byAmount:value].sequence).to(equal(extendedMaxY));
 			#else
 				expect([signal extendAttribute:NSLayoutAttributeBottom byAmount:value].sequence).to(equal(extendedMinY));
@@ -591,7 +591,7 @@ describe(@"signal of CGRects", ^{
 		});
 
 		it(@"should align top to a specified value", ^{
-			#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
+			#ifdef RCL_FOR_IPHONE
 				expect([signal alignAttribute:NSLayoutAttributeTop to:value].sequence).to(equal(alignedMinY));
 				expect([signal alignTop:value].sequence).to(equal(alignedMinY));
 			#else
@@ -601,7 +601,7 @@ describe(@"signal of CGRects", ^{
 		});
 
 		it(@"should align bottom to a specified value", ^{
-			#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
+			#ifdef RCL_FOR_IPHONE
 				expect([signal alignAttribute:NSLayoutAttributeBottom to:value].sequence).to(equal(alignedMaxY));
 				expect([signal alignBottom:value].sequence).to(equal(alignedMaxY));
 			#else
@@ -677,7 +677,7 @@ describe(@"signal of CGRects", ^{
 			baseline2 = [RACSignal return:@5];
 		});
 
-		#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
+		#ifdef RCL_FOR_IPHONE
 			it(@"should align to a baseline", ^{
 				RACSignal *reference = [RACSignal return:MEDBox(CGRectMake(0, 30, 0, 15))];
 				RACSignal *aligned = [signal alignBaseline:baseline1 toBaseline:baseline2 ofRect:reference];
@@ -1374,7 +1374,7 @@ describe(@"-offsetByAmount:towardEdge:", ^{
 	});
 
 	it(@"should offset top side by a specified value", ^{
-		#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
+		#ifdef RCL_FOR_IPHONE
 			expect([pointSignal offsetByAmount:amount towardEdge:NSLayoutAttributeTop].sequence).to(equal(offsetMinY.origin.sequence));
 			expect([pointSignal moveUp:amount].sequence).to(equal(offsetMinY.origin.sequence));
 
@@ -1390,7 +1390,7 @@ describe(@"-offsetByAmount:towardEdge:", ^{
 	});
 
 	it(@"should offset bottom side by a specified value", ^{
-		#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
+		#ifdef RCL_FOR_IPHONE
 			expect([pointSignal offsetByAmount:amount towardEdge:NSLayoutAttributeBottom].sequence).to(equal(offsetMaxY.origin.sequence));
 			expect([pointSignal moveDown:amount].sequence).to(equal(offsetMaxY.origin.sequence));
 
