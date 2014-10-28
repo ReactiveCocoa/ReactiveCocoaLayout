@@ -49,6 +49,15 @@
       ignoresPersistentStateOnLaunch = "NO"
       debugDocumentVersioning = "YES"
       allowLocationSimulation = "YES">
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "D0BB24701678772C005E9371"
+            BuildableName = "ReactiveCocoaLayout.framework"
+            BlueprintName = "ReactiveCocoaLayout Mac"
+            ReferencedContainer = "container:ReactiveCocoaLayout.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
       <AdditionalOptions>
       </AdditionalOptions>
    </LaunchAction>

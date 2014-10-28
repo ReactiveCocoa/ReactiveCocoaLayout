@@ -6,14 +6,20 @@
 //  Copyright (c) 2012 GitHub. All rights reserved.
 //
 
+#import <Archimedes/Archimedes.h>
+#import <Nimble/Nimble.h>
+#import <Quick/Quick.h>
+#import <ReactiveCocoa/ReactiveCocoa.h>
+#import <ReactiveCocoaLayout/ReactiveCocoaLayout.h>
+
 #import "TestView.h"
 #import "ViewExamples.h"
 
 NSString * const ViewExamples = @"ViewExamples";
 
-SharedExampleGroupsBegin(ViewExamples)
+QuickSharedExampleGroupsBegin(ViewExampleGroups)
 
-sharedExamplesFor(ViewExamples, ^(NSDictionary *_) {
+sharedExamples(ViewExamples, ^(QCKDSLSharedExampleContext data) {
 	__block CGRect initialFrame;
 	__block CGRect initialBounds;
 
@@ -24,27 +30,27 @@ sharedExamplesFor(ViewExamples, ^(NSDictionary *_) {
 		initialBounds = CGRectMake(0, 0, 300, 400);
 
 		view = [[TestView alloc] initWithFrame:initialFrame];
-		expect(view).notTo.beNil();
+		expect(view).notTo(beNil());
 	});
 
 	it(@"should send values on rcl_boundsSignal", ^{
 		__block NSValue *lastValue = nil;
 		[view.rcl_boundsSignal subscribeNext:^(NSValue *value) {
-			expect(value).to.beKindOf(NSValue.class);
+			expect(value).to(beAKindOf(NSValue.class));
 			lastValue = value;
 		}];
 
-		expect(lastValue).notTo.beNil();
-		expect(lastValue.med_rectValue).to.equal(initialBounds);
+		expect(lastValue).notTo(beNil());
+		expect(lastValue).to(equal(MEDBox(initialBounds)));
 
 		CGRect newBounds = CGRectMake(0, 0, 35, 45);
 		view.frame = CGRectMake(10, 20, 35, 45);
-		expect(view.bounds).to.equal(newBounds);
-		expect(lastValue.med_rectValue).to.equal(newBounds);
+		expect(MEDBox(view.bounds)).to(equal(MEDBox(newBounds)));
+		expect(lastValue).to(equal(MEDBox(newBounds)));
 
 		newBounds = CGRectMake(0, 0, 30, 40);
 		view.bounds = newBounds;
-		expect(lastValue.med_rectValue).to.equal(newBounds);
+		expect(lastValue).to(equal(MEDBox(newBounds)));
 	});
 
 	it(@"should complete rcl_boundsSignal when deallocated", ^{
@@ -56,10 +62,10 @@ sharedExamplesFor(ViewExamples, ^(NSDictionary *_) {
 				completed = YES;
 			}];
 
-			expect(completed).to.beFalsy();
+			expect(@(completed)).to(beFalsy());
 		}
 
-		expect(completed).to.beTruthy();
+		expect(@(completed)).to(beTruthy());
 	});
 
 	it(@"should defer reading initial bounds", ^{
@@ -68,22 +74,21 @@ sharedExamplesFor(ViewExamples, ^(NSDictionary *_) {
 		CGRect newBounds = CGRectMake(0, 0, 30, 40);
 		view.bounds = newBounds;
 
-		expect([[boundsSignal first] med_rectValue]).to.equal(newBounds);
+		expect([boundsSignal first]).to(equal(MEDBox(newBounds)));
 	});
 
 	it(@"should send values on rcl_frameSignal", ^{
 		__block NSValue *lastValue = nil;
 		[view.rcl_frameSignal subscribeNext:^(NSValue *value) {
-			expect(value).to.beKindOf(NSValue.class);
+			expect(value).to(beAKindOf(NSValue.class));
 			lastValue = value;
 		}];
 
-		expect(lastValue).notTo.beNil();
-		expect(lastValue.med_rectValue).to.equal(initialFrame);
+		expect(lastValue).to(equal(MEDBox(initialFrame)));
 
 		CGRect newFrame = CGRectMake(10, 20, 30, 40);
 		view.frame = newFrame;
-		expect(lastValue.med_rectValue).to.equal(newFrame);
+		expect(lastValue).to(equal(MEDBox(newFrame)));
 	});
 
 	it(@"should complete rcl_frameSignal when deallocated", ^{
@@ -95,10 +100,10 @@ sharedExamplesFor(ViewExamples, ^(NSDictionary *_) {
 				completed = YES;
 			}];
 
-			expect(completed).to.beFalsy();
+			expect(@(completed)).to(beFalsy());
 		}
 
-		expect(completed).to.beTruthy();
+		expect(@(completed)).to(beTruthy());
 	});
 
 	it(@"should defer reading initial frame", ^{
@@ -107,7 +112,7 @@ sharedExamplesFor(ViewExamples, ^(NSDictionary *_) {
 		CGRect newFrame = CGRectMake(10, 20, 30, 40);
 		view.frame = newFrame;
 
-		expect([[frameSignal first] med_rectValue]).to.equal(newFrame);
+		expect([frameSignal first]).to(equal(MEDBox(newFrame)));
 	});
 
 	describe(@"intrinsic size signals", ^{
@@ -125,7 +130,7 @@ sharedExamplesFor(ViewExamples, ^(NSDictionary *_) {
 					lastValue = value;
 				}];
 
-				expect(lastValue).notTo.beNil();
+				expect(lastValue).notTo(beNil());
 			} copy];
 
 			newSize = CGSizeMake(5, 10);
@@ -136,10 +141,10 @@ sharedExamplesFor(ViewExamples, ^(NSDictionary *_) {
 
 		it(@"should send values on rcl_intrinsicContentSizeSignal", ^{
 			subscribeToSignal(view.rcl_intrinsicContentSizeSignal);
-			expect([lastValue med_sizeValue]).to.equal(CGSizeZero);
+			expect(lastValue).to(equal(MEDBox(CGSizeZero)));
 
 			setNewSize();
-			expect([lastValue med_sizeValue]).to.equal(newSize);
+			expect(lastValue).to(equal(MEDBox(newSize)));
 		});
 
 		it(@"should complete rcl_intrinsicContentSizeSignal when deallocated", ^{
@@ -151,79 +156,78 @@ sharedExamplesFor(ViewExamples, ^(NSDictionary *_) {
 					completed = YES;
 				}];
 
-				expect(completed).to.beFalsy();
+				expect(@(completed)).to(beFalsy());
 			}
 
-			expect(completed).to.beTruthy();
+			expect(@(completed)).to(beTruthy());
 		});
 
 		it(@"should defer intrinsic content size", ^{
 			RACSignal *sizeSignal = view.rcl_intrinsicContentSizeSignal;
 
 			setNewSize();
-			expect([[sizeSignal first] med_sizeValue]).to.equal(newSize);
+			expect([sizeSignal first]).to(equal(MEDBox(newSize)));
 		});
 
 		it(@"should send values on rcl_intrinsicBoundsSignal", ^{
 			subscribeToSignal(view.rcl_intrinsicBoundsSignal);
-			expect([lastValue med_rectValue]).to.equal(CGRectZero);
+			expect(lastValue).to(equal(MEDBox(CGRectZero)));
 
 			setNewSize();
-			expect([lastValue med_rectValue]).to.equal(CGRectMake(0, 0, newSize.width, newSize.height));
+			expect(lastValue).to(equal(MEDBox(CGRectMake(0, 0, newSize.width, newSize.height))));
 		});
 
 		it(@"should send values on rcl_intrinsicWidthSignal", ^{
 			subscribeToSignal(view.rcl_intrinsicWidthSignal);
-			expect(lastValue).to.equal(@0);
+			expect(lastValue).to(equal(@0));
 
 			setNewSize();
-			expect([lastValue doubleValue]).to.beCloseTo(newSize.width);
+			expect(lastValue).to(beCloseTo(@(newSize.width)));
 		});
 
 		it(@"should send values on rcl_intrinsicHeightSignal", ^{
 			subscribeToSignal(view.rcl_intrinsicHeightSignal);
-			expect(lastValue).to.equal(@0);
+			expect(lastValue).to(equal(@0));
 
 			setNewSize();
-			expect([lastValue doubleValue]).to.beCloseTo(newSize.height);
+			expect(lastValue).to(beCloseTo(@(newSize.height)));
 		});
 	});
 
 	it(@"should send values on rcl_alignmentRectSignal", ^{
 		__block NSValue *lastValue = nil;
 		[view.rcl_alignmentRectSignal subscribeNext:^(NSValue *value) {
-			expect(value).to.beKindOf(NSValue.class);
+			expect(value).to(beAKindOf(NSValue.class));
 			lastValue = value;
 		}];
 
-		expect(lastValue).notTo.beNil();
-		expect(lastValue.med_rectValue).to.equal(CGRectMake(101, 202, 298, 396));
+		expect(lastValue).to(equal(MEDBox(CGRectMake(101, 202, 298, 396))));
 
 		CGRect newFrame = CGRectMake(10, 20, 30, 40);
 		view.frame = newFrame;
-		expect(lastValue.med_rectValue).to.equal(CGRectMake(11, 22, 28, 36));
+		expect(lastValue).to(equal(MEDBox(CGRectMake(11, 22, 28, 36))));
 	});
 
 	it(@"should read rcl_alignmentRect", ^{
-		expect(view.rcl_alignmentRect).to.equal(CGRectMake(101, 202, 298, 396));
+		expect(MEDBox(view.rcl_alignmentRect)).to(equal(MEDBox(CGRectMake(101, 202, 298, 396))));
 
 		CGRect newFrame = CGRectMake(10, 20, 30, 40);
 		view.frame = newFrame;
-		expect(view.rcl_alignmentRect).to.equal(CGRectMake(11, 22, 28, 36));
+		expect(MEDBox(view.rcl_alignmentRect)).to(equal(MEDBox(CGRectMake(11, 22, 28, 36))));
 	});
 
 	it(@"should bind rcl_alignmentRect", ^{
 		RACSubject *subject = [RACSubject subject];
 
 		RAC(view, rcl_alignmentRect) = subject;
-		expect(view.frame).to.equal(initialFrame);
+		expect(MEDBox(view.frame)).to(equal(MEDBox(initialFrame)));
 
 		[subject sendNext:MEDBox(CGRectMake(1, 2, 8, 6))];
-		expect(view.frame).to.equal(CGRectMake(0, 0, 10, 10));
+		expect(MEDBox(view.frame)).to(equal(MEDBox(CGRectMake(0, 0, 10, 10))));
 
 		[subject sendNext:MEDBox(CGRectMake(5, 5, 10, 10))];
-		expect(view.frame).to.equal(CGRectMake(4, 3, 12, 14));
+		expect(MEDBox(view.frame)).to(equal(MEDBox(CGRectMake(4, 3, 12, 14))));
 	});
 });
 
-SharedExampleGroupsEnd
+QuickSharedExampleGroupsEnd

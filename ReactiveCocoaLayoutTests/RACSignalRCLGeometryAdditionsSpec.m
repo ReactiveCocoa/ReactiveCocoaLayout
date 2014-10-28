@@ -6,7 +6,13 @@
 //  Copyright (c) 2012 GitHub. All rights reserved.
 //
 
-SpecBegin(RACSignalRCLGeometryAdditions)
+#import <Archimedes/Archimedes.h>
+#import <Nimble/Nimble.h>
+#import <Quick/Quick.h>
+#import <ReactiveCocoa/ReactiveCocoa.h>
+#import <ReactiveCocoaLayout/ReactiveCocoaLayout.h>
+
+QuickSpecBegin(RACSignalRCLGeometryAdditions)
 
 __block RACSequence *rects;
 __block RACSequence *sizes;
@@ -74,26 +80,26 @@ beforeEach(^{
 	}];
 
 	NSNumber *leadingEdgeNum = [RACSignal.leadingEdgeSignal first];
-	expect(leadingEdgeNum).notTo.beNil();
+	expect(leadingEdgeNum).notTo(beNil());
 
 	leadingEdge = (CGRectEdge)leadingEdgeNum.unsignedIntegerValue;
 });
 
 describe(@"zeroes", ^{
 	it(@"should return CGFloat zero", ^{
-		expect([[RACSignal zero] first]).to.equal(@0);
+		expect([[RACSignal zero] first]).to(equal(@0));
 	});
 
 	it(@"should return CGRectZero", ^{
-		expect([[[RACSignal zeroRect] first] med_rectValue]).to.equal(CGRectZero);
+		expect([[RACSignal zeroRect] first]).to(equal(MEDBox(CGRectZero)));
 	});
 
 	it(@"should return CGSizeZero", ^{
-		expect([[[RACSignal zeroSize] first] med_sizeValue]).to.equal(CGSizeZero);
+		expect([[RACSignal zeroSize] first]).to(equal(MEDBox(CGSizeZero)));
 	});
 
 	it(@"should return CGPointZero", ^{
-		expect([[[RACSignal zeroPoint] first] med_pointValue]).to.equal(CGPointZero);
+		expect([[RACSignal zeroPoint] first]).to(equal(MEDBox(CGPointZero)));
 	});
 });
 
@@ -105,11 +111,11 @@ describe(@"signal of CGRects", ^{
 	});
 
 	it(@"should map to sizes", ^{
-		expect(signal.size.sequence).to.equal(sizes);
+		expect(signal.size.sequence).to(equal(sizes));
 	});
 
 	it(@"should map to origins", ^{
-		expect(signal.origin.sequence).to.equal(points);
+		expect(signal.origin.sequence).to(equal(points));
 	});
 
 	it(@"should map to center points", ^{
@@ -117,7 +123,7 @@ describe(@"signal of CGRects", ^{
 			return MEDBox(CGPointMake(x.doubleValue, y.doubleValue));
 		}];
 
-		expect(signal.center.sequence).to.equal(expected);
+		expect(signal.center.sequence).to(equal(expected));
 	});
 
 	describe(@"getting attribute values", ^{
@@ -135,10 +141,10 @@ describe(@"signal of CGRects", ^{
 				trailings = minXs;
 			}
 
-			#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
+			#ifdef RCL_FOR_IPHONE
 			tops = minYs;
 			bottoms = maxYs;
-			#elif TARGET_OS_MAC
+			#else
 			tops = maxYs;
 			bottoms = minYs;
 			#endif
@@ -146,72 +152,72 @@ describe(@"signal of CGRects", ^{
 
 		it(@"should map to NSLayoutAttributeLeft", ^{
 			RACSignal *result = [signal valueForAttribute:NSLayoutAttributeLeft];
-			expect(result.sequence).to.equal(minXs);
+			expect(result.sequence).to(equal(minXs));
 
-			expect(signal.left.sequence).to.equal(minXs);
+			expect(signal.left.sequence).to(equal(minXs));
 		});
 
 		it(@"should map to NSLayoutAttributeRight", ^{
 			RACSignal *result = [signal valueForAttribute:NSLayoutAttributeRight];
-			expect(result.sequence).to.equal(maxXs);
+			expect(result.sequence).to(equal(maxXs));
 
-			expect(signal.right.sequence).to.equal(maxXs);
+			expect(signal.right.sequence).to(equal(maxXs));
 		});
 
 		it(@"should map to NSLayoutAttributeTop", ^{
 			RACSignal *result = [signal valueForAttribute:NSLayoutAttributeTop];
-			expect(result.sequence).to.equal(tops);
+			expect(result.sequence).to(equal(tops));
 
-			expect(signal.top.sequence).to.equal(tops);
+			expect(signal.top.sequence).to(equal(tops));
 		});
 
 		it(@"should map to NSLayoutAttributeBottom", ^{
 			RACSignal *result = [signal valueForAttribute:NSLayoutAttributeBottom];
-			expect(result.sequence).to.equal(bottoms);
+			expect(result.sequence).to(equal(bottoms));
 
-			expect(signal.bottom.sequence).to.equal(bottoms);
+			expect(signal.bottom.sequence).to(equal(bottoms));
 		});
 
 		it(@"should map to NSLayoutAttributeWidth", ^{
 			RACSignal *result = [signal valueForAttribute:NSLayoutAttributeWidth];
-			expect(result.sequence).to.equal(widths);
+			expect(result.sequence).to(equal(widths));
 
-			expect(signal.width.sequence).to.equal(widths);
+			expect(signal.width.sequence).to(equal(widths));
 		});
 
 		it(@"should map to NSLayoutAttributeHeight", ^{
 			RACSignal *result = [signal valueForAttribute:NSLayoutAttributeHeight];
-			expect(result.sequence).to.equal(heights);
+			expect(result.sequence).to(equal(heights));
 
-			expect(signal.height.sequence).to.equal(heights);
+			expect(signal.height.sequence).to(equal(heights));
 		});
 
 		it(@"should map to NSLayoutAttributeCenterX", ^{
 			RACSignal *result = [signal valueForAttribute:NSLayoutAttributeCenterX];
-			expect(result.sequence).to.equal(centerXs);
+			expect(result.sequence).to(equal(centerXs));
 
-			expect(signal.centerX.sequence).to.equal(centerXs);
+			expect(signal.centerX.sequence).to(equal(centerXs));
 		});
 
 		it(@"should map to NSLayoutAttributeCenterY", ^{
 			RACSignal *result = [signal valueForAttribute:NSLayoutAttributeCenterY];
-			expect(result.sequence).to.equal(centerYs);
+			expect(result.sequence).to(equal(centerYs));
 
-			expect(signal.centerY.sequence).to.equal(centerYs);
+			expect(signal.centerY.sequence).to(equal(centerYs));
 		});
 
 		it(@"should map to NSLayoutAttributeLeading", ^{
 			RACSignal *result = [signal valueForAttribute:NSLayoutAttributeLeading];
-			expect(result.sequence).to.equal(leadings);
+			expect(result.sequence).to(equal(leadings));
 
-			expect(signal.leading.sequence).to.equal(leadings);
+			expect(signal.leading.sequence).to(equal(leadings));
 		});
 
 		it(@"should map to NSLayoutAttributeTrailing", ^{
 			RACSignal *result = [signal valueForAttribute:NSLayoutAttributeTrailing];
-			expect(result.sequence).to.equal(trailings);
+			expect(result.sequence).to(equal(trailings));
 
-			expect(signal.trailing.sequence).to.equal(trailings);
+			expect(signal.trailing.sequence).to(equal(trailings));
 		});
 	});
 
@@ -223,35 +229,35 @@ describe(@"signal of CGRects", ^{
 			MEDBox(CGRectMake(28, 20, 39, 25)),
 		];
 
-		expect(result.sequence).to.equal(expectedRects.rac_sequence);
+		expect(result.sequence).to(equal(expectedRects.rac_sequence));
 	});
-	
+
 	describe(@"variable top, left, bottom, right insets", ^{
 		__block NSArray *expectedRects;
 		beforeEach(^{
 			expectedRects = @[
 				MEDBox(CGRectZero),
-#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
+#ifdef RCL_FOR_IPHONE
 				MEDBox(CGRectMake(20, 22, 0, 34)),
 				MEDBox(CGRectMake(35, 17, 15, 29)),
-#elif TARGET_OS_MAC
+#else
 				MEDBox(CGRectMake(20, 24, 0, 34)),
 				MEDBox(CGRectMake(35, 19, 15, 29)),
 #endif
 				];
 		});
-		
+
 		it(@"should inset using top, left, bottom, right signals", ^{
 			RACSignal *result = [signal insetTop:[RACSignal return:@2] left:[RACSignal return:@10] bottom:[RACSignal return:@4] right:[RACSignal return:@20] nullRect:CGRectZero];
-			expect(result.sequence).to.equal(expectedRects.rac_sequence);
+			expect(result.sequence).to(equal(expectedRects.rac_sequence));
 		});
-		
+
 		it(@"should inset using an MEDEdgeInsets signal", ^{
 			RACSignal *result = [signal insetBy:[RACSignal return:MEDBox(MEDEdgeInsetsMake(2, 10, 4, 20))] nullRect:CGRectZero];
-			expect(result.sequence).to.equal(expectedRects.rac_sequence);
+			expect(result.sequence).to(equal(expectedRects.rac_sequence));
 		});
 	});
-	
+
 	it(@"should use null rect for insets larger than the rect dimensions", ^{
 		CGRect nullRect = CGRectMake(1, 2, 3, 4);
 		RACSignal *result = [signal insetWidth:[RACSignal return:@11] height:[RACSignal return:@18] nullRect:nullRect];
@@ -260,8 +266,8 @@ describe(@"signal of CGRects", ^{
 			MEDBox(CGRectMake(21, 38, 8, 4)),
 			MEDBox(nullRect),
 		];
-		
-		expect(result.sequence).to.equal(expectedRects.rac_sequence);
+
+		expect(result.sequence).to(equal(expectedRects.rac_sequence));
 	});
 
 	it(@"should slice", ^{
@@ -272,7 +278,7 @@ describe(@"signal of CGRects", ^{
 			MEDBox(CGRectMake(25, 15, 5, 35)),
 		];
 
-		expect(result.sequence).to.equal(expectedRects.rac_sequence);
+		expect(result.sequence).to(equal(expectedRects.rac_sequence));
 	});
 
 	it(@"should return a remainder", ^{
@@ -283,12 +289,12 @@ describe(@"signal of CGRects", ^{
 			MEDBox(CGRectMake(30, 15, 40, 35)),
 		];
 
-		expect(result.sequence).to.equal(expectedRects.rac_sequence);
+		expect(result.sequence).to(equal(expectedRects.rac_sequence));
 	});
 
 	describe(@"extending attributes", ^{
 		__block RACSignal *value;
-		
+
 		__block RACSequence *extendedMinX;
 		__block RACSequence *extendedMaxX;
 		__block RACSequence *extendedMinY;
@@ -296,7 +302,7 @@ describe(@"signal of CGRects", ^{
 
 		__block RACSequence *extendedLeading;
 		__block RACSequence *extendedTrailing;
-		
+
 		beforeEach(^{
 			value = [RACSignal return:@-5];
 
@@ -334,34 +340,34 @@ describe(@"signal of CGRects", ^{
 		});
 
 		it(@"should extend left side", ^{
-			expect([signal extendAttribute:NSLayoutAttributeLeft byAmount:value].sequence).to.equal(extendedMinX);
+			expect([signal extendAttribute:NSLayoutAttributeLeft byAmount:value].sequence).to(equal(extendedMinX));
 		});
 
 		it(@"should extend right side", ^{
-			expect([signal extendAttribute:NSLayoutAttributeRight byAmount:value].sequence).to.equal(extendedMaxX);
+			expect([signal extendAttribute:NSLayoutAttributeRight byAmount:value].sequence).to(equal(extendedMaxX));
 		});
 
 		it(@"should extend leading side", ^{
-			expect([signal extendAttribute:NSLayoutAttributeLeading byAmount:value].sequence).to.equal(extendedLeading);
+			expect([signal extendAttribute:NSLayoutAttributeLeading byAmount:value].sequence).to(equal(extendedLeading));
 		});
 
 		it(@"should extend trailing side", ^{
-			expect([signal extendAttribute:NSLayoutAttributeTrailing byAmount:value].sequence).to.equal(extendedTrailing);
+			expect([signal extendAttribute:NSLayoutAttributeTrailing byAmount:value].sequence).to(equal(extendedTrailing));
 		});
 
 		it(@"should extend top", ^{
-			#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
-				expect([signal extendAttribute:NSLayoutAttributeTop byAmount:value].sequence).to.equal(extendedMinY);
-			#elif TARGET_OS_MAC
-				expect([signal extendAttribute:NSLayoutAttributeTop byAmount:value].sequence).to.equal(extendedMaxY);
+			#ifdef RCL_FOR_IPHONE
+				expect([signal extendAttribute:NSLayoutAttributeTop byAmount:value].sequence).to(equal(extendedMinY));
+			#else
+				expect([signal extendAttribute:NSLayoutAttributeTop byAmount:value].sequence).to(equal(extendedMaxY));
 			#endif
 		});
 
 		it(@"should extend bottom", ^{
-			#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
-				expect([signal extendAttribute:NSLayoutAttributeBottom byAmount:value].sequence).to.equal(extendedMaxY);
-			#elif TARGET_OS_MAC
-				expect([signal extendAttribute:NSLayoutAttributeBottom byAmount:value].sequence).to.equal(extendedMinY);
+			#ifdef RCL_FOR_IPHONE
+				expect([signal extendAttribute:NSLayoutAttributeBottom byAmount:value].sequence).to(equal(extendedMaxY));
+			#else
+				expect([signal extendAttribute:NSLayoutAttributeBottom byAmount:value].sequence).to(equal(extendedMinY));
 			#endif
 		});
 
@@ -372,7 +378,7 @@ describe(@"signal of CGRects", ^{
 				MEDBox(CGRectMake(27.5, 15, 40, 35)),
 			].rac_sequence;
 
-			expect([signal extendAttribute:NSLayoutAttributeWidth byAmount:value].sequence).to.equal(expected);
+			expect([signal extendAttribute:NSLayoutAttributeWidth byAmount:value].sequence).to(equal(expected));
 		});
 
 		it(@"should extend height", ^{
@@ -382,7 +388,7 @@ describe(@"signal of CGRects", ^{
 				MEDBox(CGRectMake(25, 17.5, 45, 30)),
 			].rac_sequence;
 
-			expect([signal extendAttribute:NSLayoutAttributeHeight byAmount:value].sequence).to.equal(expected);
+			expect([signal extendAttribute:NSLayoutAttributeHeight byAmount:value].sequence).to(equal(expected));
 		});
 	});
 
@@ -401,8 +407,8 @@ describe(@"signal of CGRects", ^{
 			MEDBox(CGRectMake(40, 15, 30, 35)),
 		];
 
-		expect(slices.sequence).to.equal(expectedSlices.rac_sequence);
-		expect(remainders.sequence).to.equal(expectedRemainders.rac_sequence);
+		expect(slices.sequence).to(equal(expectedSlices.rac_sequence));
+		expect(remainders.sequence).to(equal(expectedRemainders.rac_sequence));
 	});
 
 	it(@"should divide into two rects with padding", ^{
@@ -420,8 +426,8 @@ describe(@"signal of CGRects", ^{
 			MEDBox(CGRectMake(43, 15, 27, 35)),
 		];
 
-		expect(slices.sequence).to.equal(expectedSlices.rac_sequence);
-		expect(remainders.sequence).to.equal(expectedRemainders.rac_sequence);
+		expect(slices.sequence).to(equal(expectedSlices.rac_sequence));
+		expect(remainders.sequence).to(equal(expectedRemainders.rac_sequence));
 	});
 
 	it(@"should be returned from +rectsWithX:Y:width:height:", ^{
@@ -445,7 +451,7 @@ describe(@"signal of CGRects", ^{
 			MEDBox(CGRectMake(5, 5, 5, 5)),
 		];
 
-		expect(values).to.equal(expected);
+		expect(values).to(equal(expected));
 	});
 
 	it(@"should be returned from +rectsWithOrigin:size:", ^{
@@ -468,7 +474,7 @@ describe(@"signal of CGRects", ^{
 			MEDBox(CGRectMake(0, 0, 5, 5)),
 		];
 
-		expect(values).to.equal(expected);
+		expect(values).to(equal(expected));
 	});
 
 	it(@"should be returned from +rectsWithCenter:size:", ^{
@@ -493,7 +499,7 @@ describe(@"signal of CGRects", ^{
 			MEDBox(CGRectMake(-2.5, -2.5, 5, 5)),
 		];
 
-		expect(values).to.equal(expected);
+		expect(values).to(equal(expected));
 	});
 
 	it(@"should be returned from +rectsWithSize:", ^{
@@ -514,12 +520,12 @@ describe(@"signal of CGRects", ^{
 			MEDBox(CGRectMake(0, 0, 5, 5)),
 		];
 
-		expect(values).to.equal(expected);
+		expect(values).to(equal(expected));
 	});
 
 	describe(@"aligning attributes", ^{
 		__block RACSignal *value;
-		
+
 		__block RACSequence *alignedMinX;
 		__block RACSequence *alignedMaxX;
 		__block RACSequence *alignedMinY;
@@ -527,7 +533,7 @@ describe(@"signal of CGRects", ^{
 
 		__block RACSequence *alignedLeading;
 		__block RACSequence *alignedTrailing;
-		
+
 		beforeEach(^{
 			value = [RACSignal return:@3];
 
@@ -565,42 +571,42 @@ describe(@"signal of CGRects", ^{
 		});
 
 		it(@"should align left side to a specified value", ^{
-			expect([signal alignAttribute:NSLayoutAttributeLeft to:value].sequence).to.equal(alignedMinX);
-			expect([signal alignLeft:value].sequence).to.equal(alignedMinX);
+			expect([signal alignAttribute:NSLayoutAttributeLeft to:value].sequence).to(equal(alignedMinX));
+			expect([signal alignLeft:value].sequence).to(equal(alignedMinX));
 		});
 
 		it(@"should align right side to a specified value", ^{
-			expect([signal alignAttribute:NSLayoutAttributeRight to:value].sequence).to.equal(alignedMaxX);
-			expect([signal alignRight:value].sequence).to.equal(alignedMaxX);
+			expect([signal alignAttribute:NSLayoutAttributeRight to:value].sequence).to(equal(alignedMaxX));
+			expect([signal alignRight:value].sequence).to(equal(alignedMaxX));
 		});
 
 		it(@"should align leading side to a specified value", ^{
-			expect([signal alignAttribute:NSLayoutAttributeLeading to:value].sequence).to.equal(alignedLeading);
-			expect([signal alignLeading:value].sequence).to.equal(alignedLeading);
+			expect([signal alignAttribute:NSLayoutAttributeLeading to:value].sequence).to(equal(alignedLeading));
+			expect([signal alignLeading:value].sequence).to(equal(alignedLeading));
 		});
 
 		it(@"should align trailing side to a specified value", ^{
-			expect([signal alignAttribute:NSLayoutAttributeTrailing to:value].sequence).to.equal(alignedTrailing);
-			expect([signal alignTrailing:value].sequence).to.equal(alignedTrailing);
+			expect([signal alignAttribute:NSLayoutAttributeTrailing to:value].sequence).to(equal(alignedTrailing));
+			expect([signal alignTrailing:value].sequence).to(equal(alignedTrailing));
 		});
 
 		it(@"should align top to a specified value", ^{
-			#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
-				expect([signal alignAttribute:NSLayoutAttributeTop to:value].sequence).to.equal(alignedMinY);
-				expect([signal alignTop:value].sequence).to.equal(alignedMinY);
-			#elif TARGET_OS_MAC
-				expect([signal alignAttribute:NSLayoutAttributeTop to:value].sequence).to.equal(alignedMaxY);
-				expect([signal alignTop:value].sequence).to.equal(alignedMaxY);
+			#ifdef RCL_FOR_IPHONE
+				expect([signal alignAttribute:NSLayoutAttributeTop to:value].sequence).to(equal(alignedMinY));
+				expect([signal alignTop:value].sequence).to(equal(alignedMinY));
+			#else
+				expect([signal alignAttribute:NSLayoutAttributeTop to:value].sequence).to(equal(alignedMaxY));
+				expect([signal alignTop:value].sequence).to(equal(alignedMaxY));
 			#endif
 		});
 
 		it(@"should align bottom to a specified value", ^{
-			#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
-				expect([signal alignAttribute:NSLayoutAttributeBottom to:value].sequence).to.equal(alignedMaxY);
-				expect([signal alignBottom:value].sequence).to.equal(alignedMaxY);
-			#elif TARGET_OS_MAC
-				expect([signal alignAttribute:NSLayoutAttributeBottom to:value].sequence).to.equal(alignedMinY);
-				expect([signal alignBottom:value].sequence).to.equal(alignedMinY);
+			#ifdef RCL_FOR_IPHONE
+				expect([signal alignAttribute:NSLayoutAttributeBottom to:value].sequence).to(equal(alignedMaxY));
+				expect([signal alignBottom:value].sequence).to(equal(alignedMaxY));
+			#else
+				expect([signal alignAttribute:NSLayoutAttributeBottom to:value].sequence).to(equal(alignedMinY));
+				expect([signal alignBottom:value].sequence).to(equal(alignedMinY));
 			#endif
 		});
 
@@ -611,8 +617,8 @@ describe(@"signal of CGRects", ^{
 				MEDBox(CGRectMake(25, 15, 3, 35)),
 			].rac_sequence;
 
-			expect([signal alignAttribute:NSLayoutAttributeWidth to:value].sequence).to.equal(expected);
-			expect([signal alignWidth:value].sequence).to.equal(expected);
+			expect([signal alignAttribute:NSLayoutAttributeWidth to:value].sequence).to(equal(expected));
+			expect([signal alignWidth:value].sequence).to(equal(expected));
 		});
 
 		it(@"should align height to a specified value", ^{
@@ -622,8 +628,8 @@ describe(@"signal of CGRects", ^{
 				MEDBox(CGRectMake(25, 15, 45, 3)),
 			].rac_sequence;
 
-			expect([signal alignAttribute:NSLayoutAttributeHeight to:value].sequence).to.equal(expected);
-			expect([signal alignHeight:value].sequence).to.equal(expected);
+			expect([signal alignAttribute:NSLayoutAttributeHeight to:value].sequence).to(equal(expected));
+			expect([signal alignHeight:value].sequence).to(equal(expected));
 		});
 
 		it(@"should align center X to a specified value", ^{
@@ -633,8 +639,8 @@ describe(@"signal of CGRects", ^{
 				MEDBox(CGRectMake(-19.5, 15, 45, 35)),
 			].rac_sequence;
 
-			expect([signal alignAttribute:NSLayoutAttributeCenterX to:value].sequence).to.equal(expected);
-			expect([signal alignCenterX:value].sequence).to.equal(expected);
+			expect([signal alignAttribute:NSLayoutAttributeCenterX to:value].sequence).to(equal(expected));
+			expect([signal alignCenterX:value].sequence).to(equal(expected));
 		});
 
 		it(@"should align center Y to a specified value", ^{
@@ -644,8 +650,8 @@ describe(@"signal of CGRects", ^{
 				MEDBox(CGRectMake(25, -14.5, 45, 35)),
 			].rac_sequence;
 
-			expect([signal alignAttribute:NSLayoutAttributeCenterY to:value].sequence).to.equal(expected);
-			expect([signal alignCenterY:value].sequence).to.equal(expected);
+			expect([signal alignAttribute:NSLayoutAttributeCenterY to:value].sequence).to(equal(expected));
+			expect([signal alignCenterY:value].sequence).to(equal(expected));
 		});
 
 		it(@"should align center point to a specified value", ^{
@@ -658,7 +664,7 @@ describe(@"signal of CGRects", ^{
 				MEDBox(CGRectMake(-17.5, -7.5, 45, 35)),
 			].rac_sequence;
 
-			expect(aligned.sequence).to.equal(expected);
+			expect(aligned.sequence).to(equal(expected));
 		});
 	});
 
@@ -671,7 +677,7 @@ describe(@"signal of CGRects", ^{
 			baseline2 = [RACSignal return:@5];
 		});
 
-		#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
+		#ifdef RCL_FOR_IPHONE
 			it(@"should align to a baseline", ^{
 				RACSignal *reference = [RACSignal return:MEDBox(CGRectMake(0, 30, 0, 15))];
 				RACSignal *aligned = [signal alignBaseline:baseline1 toBaseline:baseline2 ofRect:reference];
@@ -682,9 +688,9 @@ describe(@"signal of CGRects", ^{
 					MEDBox(CGRectMake(25, 7, 45, 35)),
 				].rac_sequence;
 
-				expect(aligned.sequence).to.equal(expected);
+				expect(aligned.sequence).to(equal(expected));
 			});
-		#elif TARGET_OS_MAC
+		#else
 			it(@"should align to a baseline", ^{
 				RACSignal *reference = [RACSignal return:MEDBox(CGRectMake(0, 30, 0, 15))];
 				RACSignal *aligned = [signal alignBaseline:baseline1 toBaseline:baseline2 ofRect:reference];
@@ -695,7 +701,7 @@ describe(@"signal of CGRects", ^{
 					MEDBox(CGRectMake(25, 33, 45, 35)),
 				].rac_sequence;
 
-				expect(aligned.sequence).to.equal(expected);
+				expect(aligned.sequence).to(equal(expected));
 			});
 		#endif
 	});
@@ -710,7 +716,7 @@ describe(@"signal of CGRects", ^{
 			MEDBox(CGRectMake(25, 15, 15, 25)),
 		].rac_sequence;
 
-		expect(result.sequence).to.equal(expected);
+		expect(result.sequence).to(equal(expected));
 	});
 
 	it(@"should replace width", ^{
@@ -723,7 +729,7 @@ describe(@"signal of CGRects", ^{
 			MEDBox(CGRectMake(25, 15, 5, 35)),
 		].rac_sequence;
 
-		expect(result.sequence).to.equal(expected);
+		expect(result.sequence).to(equal(expected));
 	});
 
 	it(@"should replace height", ^{
@@ -736,7 +742,7 @@ describe(@"signal of CGRects", ^{
 			MEDBox(CGRectMake(25, 15, 45, 15)),
 		].rac_sequence;
 
-		expect(result.sequence).to.equal(expected);
+		expect(result.sequence).to(equal(expected));
 	});
 
 	it(@"should replace origin", ^{
@@ -749,7 +755,7 @@ describe(@"signal of CGRects", ^{
 			MEDBox(CGRectMake(15, 25, 45, 35)),
 		].rac_sequence;
 
-		expect(result.sequence).to.equal(expected);
+		expect(result.sequence).to(equal(expected));
 	});
 
 	it(@"should be negated", ^{
@@ -761,7 +767,7 @@ describe(@"signal of CGRects", ^{
 			MEDBox(CGRectStandardize(CGRectMake(-25, -15, -45, -35))),
 		].rac_sequence;
 
-		expect(result.sequence).to.equal(expected);
+		expect(result.sequence).to(equal(expected));
 	});
 });
 
@@ -773,11 +779,11 @@ describe(@"signal of CGSizes", ^{
 	});
 
 	it(@"should map to widths", ^{
-		expect(signal.width.sequence).to.equal(widths);
+		expect(signal.width.sequence).to(equal(widths));
 	});
 
 	it(@"should map to heights", ^{
-		expect(signal.height.sequence).to.equal(heights);
+		expect(signal.height.sequence).to(equal(heights));
 	});
 
 	it(@"should be returned from +sizesWithWidth:height:", ^{
@@ -799,7 +805,7 @@ describe(@"signal of CGSizes", ^{
 			MEDBox(CGSizeMake(5, 5)),
 		];
 
-		expect(values).to.equal(expected);
+		expect(values).to(equal(expected));
 	});
 
 	it(@"should replace width", ^{
@@ -812,7 +818,7 @@ describe(@"signal of CGSizes", ^{
 			MEDBox(CGSizeMake(5, 35)),
 		].rac_sequence;
 
-		expect(result.sequence).to.equal(expected);
+		expect(result.sequence).to(equal(expected));
 	});
 
 	it(@"should replace height", ^{
@@ -825,7 +831,7 @@ describe(@"signal of CGSizes", ^{
 			MEDBox(CGSizeMake(45, 15)),
 		].rac_sequence;
 
-		expect(result.sequence).to.equal(expected);
+		expect(result.sequence).to(equal(expected));
 	});
 
 	it(@"should be negated", ^{
@@ -837,7 +843,7 @@ describe(@"signal of CGSizes", ^{
 			MEDBox(CGSizeMake(-45, -35)),
 		].rac_sequence;
 
-		expect(result.sequence).to.equal(expected);
+		expect(result.sequence).to(equal(expected));
 	});
 });
 
@@ -849,11 +855,11 @@ describe(@"signal of CGPoints", ^{
 	});
 
 	it(@"should map to minXs", ^{
-		expect(signal.x.sequence).to.equal(minXs);
+		expect(signal.x.sequence).to(equal(minXs));
 	});
 
 	it(@"should map to minYs", ^{
-		expect(signal.y.sequence).to.equal(minYs);
+		expect(signal.y.sequence).to(equal(minYs));
 	});
 
 	it(@"should be returned from +pointsWithX:Y:", ^{
@@ -875,7 +881,7 @@ describe(@"signal of CGPoints", ^{
 			MEDBox(CGPointMake(5, 5)),
 		];
 
-		expect(values).to.equal(expected);
+		expect(values).to(equal(expected));
 	});
 
 	it(@"should replace X", ^{
@@ -888,7 +894,7 @@ describe(@"signal of CGPoints", ^{
 			MEDBox(CGPointMake(5, 15)),
 		].rac_sequence;
 
-		expect(result.sequence).to.equal(expected);
+		expect(result.sequence).to(equal(expected));
 	});
 
 	it(@"should replace Y", ^{
@@ -901,7 +907,7 @@ describe(@"signal of CGPoints", ^{
 			MEDBox(CGPointMake(25, 5)),
 		].rac_sequence;
 
-		expect(result.sequence).to.equal(expected);
+		expect(result.sequence).to(equal(expected));
 	});
 
 	it(@"should be negated", ^{
@@ -913,7 +919,7 @@ describe(@"signal of CGPoints", ^{
 			MEDBox(CGPointMake(-25, -15)),
 		].rac_sequence;
 
-		expect(result.sequence).to.equal(expected);
+		expect(result.sequence).to(equal(expected));
 	});
 });
 
@@ -933,7 +939,7 @@ describe(@"signal of CGFloats", ^{
 			@(-45),
 		].rac_sequence;
 
-		expect(result.sequence).to.equal(expected);
+		expect(result.sequence).to(equal(expected));
 	});
 });
 
@@ -956,53 +962,53 @@ it(@"should return maximums and minimums", ^{
 
 	[firstSubject sendNext:@20];
 
-	expect(receivedMinimums).to.equal(minimums);
-	expect(receivedMaximums).to.equal(maximums);
+	expect(receivedMinimums).to(equal(minimums));
+	expect(receivedMaximums).to(equal(maximums));
 
 	[secondSubject sendNext:@30];
 	[minimums addObject:@20];
 	[maximums addObject:@30];
 
-	expect(receivedMinimums).to.equal(minimums);
-	expect(receivedMaximums).to.equal(maximums);
+	expect(receivedMinimums).to(equal(minimums));
+	expect(receivedMaximums).to(equal(maximums));
 
 	[firstSubject sendNext:@15];
 	[minimums addObject:@15];
 
-	expect(receivedMinimums).to.equal(minimums);
-	expect(receivedMaximums).to.equal(maximums);
+	expect(receivedMinimums).to(equal(minimums));
+	expect(receivedMaximums).to(equal(maximums));
 
 	[secondSubject sendNext:@45];
 	[maximums addObject:@45];
 
-	expect(receivedMinimums).to.equal(minimums);
-	expect(receivedMaximums).to.equal(maximums);
+	expect(receivedMinimums).to(equal(minimums));
+	expect(receivedMaximums).to(equal(maximums));
 
 	[firstSubject sendNext:@40];
 	[minimums addObject:@40];
 
-	expect(receivedMinimums).to.equal(minimums);
-	expect(receivedMaximums).to.equal(maximums);
+	expect(receivedMinimums).to(equal(minimums));
+	expect(receivedMaximums).to(equal(maximums));
 
 	[secondSubject sendNext:@30];
 	[minimums addObject:@30];
 	[maximums addObject:@40];
 
-	expect(receivedMinimums).to.equal(minimums);
-	expect(receivedMaximums).to.equal(maximums);
+	expect(receivedMinimums).to(equal(minimums));
+	expect(receivedMaximums).to(equal(maximums));
 
 	[firstSubject sendNext:@35];
 	[maximums addObject:@35];
 
-	expect(receivedMinimums).to.equal(minimums);
-	expect(receivedMaximums).to.equal(maximums);
+	expect(receivedMinimums).to(equal(minimums));
+	expect(receivedMaximums).to(equal(maximums));
 
 	[secondSubject sendNext:@50];
 	[minimums addObject:@35];
 	[maximums addObject:@50];
 
-	expect(receivedMinimums).to.equal(minimums);
-	expect(receivedMaximums).to.equal(maximums);
+	expect(receivedMinimums).to(equal(minimums));
+	expect(receivedMaximums).to(equal(maximums));
 });
 
 describe(@"mathematical operators", ^{
@@ -1034,130 +1040,130 @@ describe(@"mathematical operators", ^{
 
 	describe(@"+add:", ^{
 		it(@"should add three numbers", ^{
-			expect([RACSignal add:threeNumbers].sequence).to.equal(@[ @10 ].rac_sequence);
+			expect([RACSignal add:threeNumbers].sequence).to(equal(@[ @10 ].rac_sequence));
 		});
 
 		it(@"should add three points", ^{
 			CGPoint expected = CGPointMake(8, 13);
-			expect([RACSignal add:threePoints].sequence).to.equal(@[ MEDBox(expected) ].rac_sequence);
+			expect([RACSignal add:threePoints].sequence).to(equal(@[ MEDBox(expected) ].rac_sequence));
 		});
 
 		it(@"should add three sizes", ^{
 			CGSize expected = CGSizeMake(8, 13);
-			expect([RACSignal add:threeSizes].sequence).to.equal(@[ MEDBox(expected) ].rac_sequence);
+			expect([RACSignal add:threeSizes].sequence).to(equal(@[ MEDBox(expected) ].rac_sequence));
 		});
 	});
 
 	describe(@"-plus:", ^{
 		it(@"should add two numbers", ^{
-			expect([numberA plus:numberB].sequence).to.equal(@[ @7 ].rac_sequence);
+			expect([numberA plus:numberB].sequence).to(equal(@[ @7 ].rac_sequence));
 		});
 
 		it(@"should add two points", ^{
 			CGPoint expected = CGPointMake(6, 12);
-			expect([pointA plus:pointB].sequence).to.equal(@[ MEDBox(expected) ].rac_sequence);
+			expect([pointA plus:pointB].sequence).to(equal(@[ MEDBox(expected) ].rac_sequence));
 		});
 
 		it(@"should add two sizes", ^{
 			CGSize expected = CGSizeMake(6, 12);
-			expect([sizeA plus:sizeB].sequence).to.equal(@[ MEDBox(expected) ].rac_sequence);
+			expect([sizeA plus:sizeB].sequence).to(equal(@[ MEDBox(expected) ].rac_sequence));
 		});
 	});
 
 	describe(@"+subtract:", ^{
 		it(@"should subtract three numbers", ^{
-			expect([RACSignal subtract:threeNumbers].sequence).to.equal(@[ @0 ].rac_sequence);
+			expect([RACSignal subtract:threeNumbers].sequence).to(equal(@[ @0 ].rac_sequence));
 		});
 
 		it(@"should subtract three points", ^{
 			CGPoint expected = CGPointMake(2, 7);
-			expect([RACSignal subtract:threePoints].sequence).to.equal(@[ MEDBox(expected) ].rac_sequence);
+			expect([RACSignal subtract:threePoints].sequence).to(equal(@[ MEDBox(expected) ].rac_sequence));
 		});
 
 		it(@"should subtract three sizes", ^{
 			CGSize expected = CGSizeMake(2, 7);
-			expect([RACSignal subtract:threeSizes].sequence).to.equal(@[ MEDBox(expected) ].rac_sequence);
+			expect([RACSignal subtract:threeSizes].sequence).to(equal(@[ MEDBox(expected) ].rac_sequence));
 		});
 	});
 
 	describe(@"-minus:", ^{
 		it(@"should subtract two numbers", ^{
-			expect([numberA minus:numberB].sequence).to.equal(@[ @3 ].rac_sequence);
+			expect([numberA minus:numberB].sequence).to(equal(@[ @3 ].rac_sequence));
 		});
 
 		it(@"should subtract two points", ^{
 			CGPoint expected = CGPointMake(4, 8);
-			expect([pointA minus:pointB].sequence).to.equal(@[ MEDBox(expected) ].rac_sequence);
+			expect([pointA minus:pointB].sequence).to(equal(@[ MEDBox(expected) ].rac_sequence));
 		});
 
 		it(@"should subtract two sizes", ^{
 			CGSize expected = CGSizeMake(4, 8);
-			expect([sizeA minus:sizeB].sequence).to.equal(@[ MEDBox(expected) ].rac_sequence);
+			expect([sizeA minus:sizeB].sequence).to(equal(@[ MEDBox(expected) ].rac_sequence));
 		});
 	});
 
 	describe(@"+multiply:", ^{
 		it(@"should multiply three numbers", ^{
-			expect([RACSignal multiply:threeNumbers].sequence).to.equal(@[ @30 ].rac_sequence);
+			expect([RACSignal multiply:threeNumbers].sequence).to(equal(@[ @30 ].rac_sequence));
 		});
 
 		it(@"should multiply three points", ^{
 			CGPoint expected = CGPointMake(10, 20);
-			expect([RACSignal multiply:threePoints].sequence).to.equal(@[ MEDBox(expected) ].rac_sequence);
+			expect([RACSignal multiply:threePoints].sequence).to(equal(@[ MEDBox(expected) ].rac_sequence));
 		});
 
 		it(@"should multiply three sizes", ^{
 			CGSize expected = CGSizeMake(10, 20);
-			expect([RACSignal multiply:threeSizes].sequence).to.equal(@[ MEDBox(expected) ].rac_sequence);
+			expect([RACSignal multiply:threeSizes].sequence).to(equal(@[ MEDBox(expected) ].rac_sequence));
 		});
 	});
 
 	describe(@"-multipliedBy:", ^{
 		it(@"should multiply two numbers", ^{
-			expect([numberA multipliedBy:numberB].sequence).to.equal(@[ @10 ].rac_sequence);
+			expect([numberA multipliedBy:numberB].sequence).to(equal(@[ @10 ].rac_sequence));
 		});
 
 		it(@"should multiply two points", ^{
 			CGPoint expected = CGPointMake(5, 20);
-			expect([pointA multipliedBy:pointB].sequence).to.equal(@[ MEDBox(expected) ].rac_sequence);
+			expect([pointA multipliedBy:pointB].sequence).to(equal(@[ MEDBox(expected) ].rac_sequence));
 		});
 
 		it(@"should multiply two sizes", ^{
 			CGSize expected = CGSizeMake(5, 20);
-			expect([sizeA multipliedBy:sizeB].sequence).to.equal(@[ MEDBox(expected) ].rac_sequence);
+			expect([sizeA multipliedBy:sizeB].sequence).to(equal(@[ MEDBox(expected) ].rac_sequence));
 		});
 	});
 
 	describe(@"+divide:", ^{
 		it(@"should divide three numbers", ^{
 			CGFloat result = [[[RACSignal divide:threeNumbers] first] doubleValue];
-			expect(result).to.beCloseTo(5.0 / 2 / 3);
+			expect(@(result)).to(beCloseTo(@(5.0 / 2 / 3)));
 		});
 
 		it(@"should divide three points", ^{
 			CGPoint expected = CGPointMake(2.5, 5);
-			expect([RACSignal divide:threePoints].sequence).to.equal(@[ MEDBox(expected) ].rac_sequence);
+			expect([RACSignal divide:threePoints].sequence).to(equal(@[ MEDBox(expected) ].rac_sequence));
 		});
 
 		it(@"should divide three sizes", ^{
 			CGSize expected = CGSizeMake(2.5, 5);
-			expect([RACSignal divide:threeSizes].sequence).to.equal(@[ MEDBox(expected) ].rac_sequence);
+			expect([RACSignal divide:threeSizes].sequence).to(equal(@[ MEDBox(expected) ].rac_sequence));
 		});
 	});
 
 	describe(@"-dividedBy:", ^{
 		it(@"should divide two numbers", ^{
-			expect([numberA dividedBy:numberB].sequence).to.equal(@[ @2.5 ].rac_sequence);
+			expect([numberA dividedBy:numberB].sequence).to(equal(@[ @2.5 ].rac_sequence));
 		});
 
 		it(@"should divide two points", ^{
 			CGPoint expected = CGPointMake(5, 5);
-			expect([pointA dividedBy:pointB].sequence).to.equal(@[ MEDBox(expected) ].rac_sequence);
+			expect([pointA dividedBy:pointB].sequence).to(equal(@[ MEDBox(expected) ].rac_sequence));
 		});
 
 		it(@"should divide two sizes", ^{
 			CGSize expected = CGSizeMake(5, 5);
-			expect([sizeA dividedBy:sizeB].sequence).to.equal(@[ MEDBox(expected) ].rac_sequence);
+			expect([sizeA dividedBy:sizeB].sequence).to(equal(@[ MEDBox(expected) ].rac_sequence));
 		});
 	});
 });
@@ -1168,7 +1174,7 @@ describe(@"-floor", ^{
 		RACSignal *floored = values.signal.floor;
 
 		RACSequence *expected = @[ @2, @3, @4, @5 ].rac_sequence;
-		expect(floored.sequence).to.equal(expected);
+		expect(floored.sequence).to(equal(expected));
 	});
 
 	it(@"should floor CGPoints", ^{
@@ -1184,7 +1190,7 @@ describe(@"-floor", ^{
 			return MEDBox(MEDPointFloor(value.med_pointValue));
 		}];
 
-		expect(floored.sequence).to.equal(expected);
+		expect(floored.sequence).to(equal(expected));
 	});
 
 	it(@"should floor CGSizes", ^{
@@ -1202,7 +1208,7 @@ describe(@"-floor", ^{
 			MEDBox(CGSizeMake(4, 5)),
 		].rac_sequence;
 
-		expect(floored.sequence).to.equal(expected);
+		expect(floored.sequence).to(equal(expected));
 	});
 
 	it(@"should floor CGRects", ^{
@@ -1218,7 +1224,7 @@ describe(@"-floor", ^{
 			return MEDBox(MEDRectFloor(value.med_rectValue));
 		}];
 
-		expect(floored.sequence).to.equal(expected);
+		expect(floored.sequence).to(equal(expected));
 	});
 });
 
@@ -1228,7 +1234,7 @@ describe(@"-ceil", ^{
 		RACSignal *ceiled = values.signal.ceil;
 
 		RACSequence *expected = @[ @2, @4, @5, @6 ].rac_sequence;
-		expect(ceiled.sequence).to.equal(expected);
+		expect(ceiled.sequence).to(equal(expected));
 	});
 
 	it(@"should ceil CGPoints", ^{
@@ -1246,7 +1252,7 @@ describe(@"-ceil", ^{
 			MEDBox(CGPointMake(4, 5)),
 		].rac_sequence;
 
-		expect(ceiled.sequence).to.equal(expected);
+		expect(ceiled.sequence).to(equal(expected));
 	});
 
 	it(@"should ceil CGSizes", ^{
@@ -1264,7 +1270,7 @@ describe(@"-ceil", ^{
 			MEDBox(CGSizeMake(5, 5)),
 		].rac_sequence;
 
-		expect(ceiled.sequence).to.equal(expected);
+		expect(ceiled.sequence).to(equal(expected));
 	});
 
 	it(@"should ceil CGRects", ^{
@@ -1280,7 +1286,7 @@ describe(@"-ceil", ^{
 			return MEDBox(CGRectIntegral(value.med_rectValue));
 		}];
 
-		expect(ceiled.sequence).to.equal(expected);
+		expect(ceiled.sequence).to(equal(expected));
 	});
 });
 
@@ -1298,7 +1304,7 @@ describe(@"-offsetByAmount:towardEdge:", ^{
 
 	beforeEach(^{
 		amount = [RACSignal return:@8];
-		
+
 		pointSignal = points.signal;
 		rectSignal = [RACSignal rectsWithOrigin:pointSignal size:[RACSignal zeroSize]];
 
@@ -1336,68 +1342,68 @@ describe(@"-offsetByAmount:towardEdge:", ^{
 	});
 
 	it(@"should offset left side by a specified amount", ^{
-		expect([pointSignal offsetByAmount:amount towardEdge:NSLayoutAttributeLeft].sequence).to.equal(offsetMinX.origin.sequence);
-		expect([pointSignal moveLeft:amount].sequence).to.equal(offsetMinX.origin.sequence);
+		expect([pointSignal offsetByAmount:amount towardEdge:NSLayoutAttributeLeft].sequence).to(equal(offsetMinX.origin.sequence));
+		expect([pointSignal moveLeft:amount].sequence).to(equal(offsetMinX.origin.sequence));
 
-		expect([rectSignal offsetByAmount:amount towardEdge:NSLayoutAttributeLeft].sequence).to.equal(offsetMinX.sequence);
-		expect([rectSignal moveLeft:amount].sequence).to.equal(offsetMinX.sequence);
+		expect([rectSignal offsetByAmount:amount towardEdge:NSLayoutAttributeLeft].sequence).to(equal(offsetMinX.sequence));
+		expect([rectSignal moveLeft:amount].sequence).to(equal(offsetMinX.sequence));
 	});
 
 	it(@"should offset right side by a specified amount", ^{
-		expect([pointSignal offsetByAmount:amount towardEdge:NSLayoutAttributeRight].sequence).to.equal(offsetMaxX.origin.sequence);
-		expect([pointSignal moveRight:amount].sequence).to.equal(offsetMaxX.origin.sequence);
+		expect([pointSignal offsetByAmount:amount towardEdge:NSLayoutAttributeRight].sequence).to(equal(offsetMaxX.origin.sequence));
+		expect([pointSignal moveRight:amount].sequence).to(equal(offsetMaxX.origin.sequence));
 
-		expect([rectSignal offsetByAmount:amount towardEdge:NSLayoutAttributeRight].sequence).to.equal(offsetMaxX.sequence);
-		expect([rectSignal moveRight:amount].sequence).to.equal(offsetMaxX.sequence);
+		expect([rectSignal offsetByAmount:amount towardEdge:NSLayoutAttributeRight].sequence).to(equal(offsetMaxX.sequence));
+		expect([rectSignal moveRight:amount].sequence).to(equal(offsetMaxX.sequence));
 	});
 
 	it(@"should offset leading side by a specified amount", ^{
-		expect([pointSignal offsetByAmount:amount towardEdge:NSLayoutAttributeLeading].sequence).to.equal(offsetLeading.origin.sequence);
-		expect([pointSignal moveLeadingOutward:amount].sequence).to.equal(offsetLeading.origin.sequence);
+		expect([pointSignal offsetByAmount:amount towardEdge:NSLayoutAttributeLeading].sequence).to(equal(offsetLeading.origin.sequence));
+		expect([pointSignal moveLeadingOutward:amount].sequence).to(equal(offsetLeading.origin.sequence));
 
-		expect([rectSignal offsetByAmount:amount towardEdge:NSLayoutAttributeLeading].sequence).to.equal(offsetLeading.sequence);
-		expect([rectSignal moveLeadingOutward:amount].sequence).to.equal(offsetLeading.sequence);
+		expect([rectSignal offsetByAmount:amount towardEdge:NSLayoutAttributeLeading].sequence).to(equal(offsetLeading.sequence));
+		expect([rectSignal moveLeadingOutward:amount].sequence).to(equal(offsetLeading.sequence));
 	});
 
 	it(@"should offset trailing side by a specified amount", ^{
-		expect([pointSignal offsetByAmount:amount towardEdge:NSLayoutAttributeTrailing].sequence).to.equal(offsetTrailing.origin.sequence);
-		expect([pointSignal moveTrailingOutward:amount].sequence).to.equal(offsetTrailing.origin.sequence);
+		expect([pointSignal offsetByAmount:amount towardEdge:NSLayoutAttributeTrailing].sequence).to(equal(offsetTrailing.origin.sequence));
+		expect([pointSignal moveTrailingOutward:amount].sequence).to(equal(offsetTrailing.origin.sequence));
 
-		expect([rectSignal offsetByAmount:amount towardEdge:NSLayoutAttributeTrailing].sequence).to.equal(offsetTrailing.sequence);
-		expect([rectSignal moveTrailingOutward:amount].sequence).to.equal(offsetTrailing.sequence);
+		expect([rectSignal offsetByAmount:amount towardEdge:NSLayoutAttributeTrailing].sequence).to(equal(offsetTrailing.sequence));
+		expect([rectSignal moveTrailingOutward:amount].sequence).to(equal(offsetTrailing.sequence));
 	});
 
 	it(@"should offset top side by a specified value", ^{
-		#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
-			expect([pointSignal offsetByAmount:amount towardEdge:NSLayoutAttributeTop].sequence).to.equal(offsetMinY.origin.sequence);
-			expect([pointSignal moveUp:amount].sequence).to.equal(offsetMinY.origin.sequence);
+		#ifdef RCL_FOR_IPHONE
+			expect([pointSignal offsetByAmount:amount towardEdge:NSLayoutAttributeTop].sequence).to(equal(offsetMinY.origin.sequence));
+			expect([pointSignal moveUp:amount].sequence).to(equal(offsetMinY.origin.sequence));
 
-			expect([rectSignal offsetByAmount:amount towardEdge:NSLayoutAttributeTop].sequence).to.equal(offsetMinY.sequence);
-			expect([rectSignal moveUp:amount].sequence).to.equal(offsetMinY.sequence);
-		#elif TARGET_OS_MAC
-			expect([pointSignal offsetByAmount:amount towardEdge:NSLayoutAttributeTop].sequence).to.equal(offsetMaxY.origin.sequence);
-			expect([pointSignal moveUp:amount].sequence).to.equal(offsetMaxY.origin.sequence);
+			expect([rectSignal offsetByAmount:amount towardEdge:NSLayoutAttributeTop].sequence).to(equal(offsetMinY.sequence));
+			expect([rectSignal moveUp:amount].sequence).to(equal(offsetMinY.sequence));
+		#else
+			expect([pointSignal offsetByAmount:amount towardEdge:NSLayoutAttributeTop].sequence).to(equal(offsetMaxY.origin.sequence));
+			expect([pointSignal moveUp:amount].sequence).to(equal(offsetMaxY.origin.sequence));
 
-			expect([rectSignal offsetByAmount:amount towardEdge:NSLayoutAttributeTop].sequence).to.equal(offsetMaxY.sequence);
-			expect([rectSignal moveUp:amount].sequence).to.equal(offsetMaxY.sequence);
+			expect([rectSignal offsetByAmount:amount towardEdge:NSLayoutAttributeTop].sequence).to(equal(offsetMaxY.sequence));
+			expect([rectSignal moveUp:amount].sequence).to(equal(offsetMaxY.sequence));
 		#endif
 	});
 
 	it(@"should offset bottom side by a specified value", ^{
-		#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
-			expect([pointSignal offsetByAmount:amount towardEdge:NSLayoutAttributeBottom].sequence).to.equal(offsetMaxY.origin.sequence);
-			expect([pointSignal moveDown:amount].sequence).to.equal(offsetMaxY.origin.sequence);
+		#ifdef RCL_FOR_IPHONE
+			expect([pointSignal offsetByAmount:amount towardEdge:NSLayoutAttributeBottom].sequence).to(equal(offsetMaxY.origin.sequence));
+			expect([pointSignal moveDown:amount].sequence).to(equal(offsetMaxY.origin.sequence));
 
-			expect([rectSignal offsetByAmount:amount towardEdge:NSLayoutAttributeBottom].sequence).to.equal(offsetMaxY.sequence);
-			expect([rectSignal moveDown:amount].sequence).to.equal(offsetMaxY.sequence);
-		#elif TARGET_OS_MAC
-			expect([pointSignal offsetByAmount:amount towardEdge:NSLayoutAttributeBottom].sequence).to.equal(offsetMinY.origin.sequence);
-			expect([pointSignal moveDown:amount].sequence).to.equal(offsetMinY.origin.sequence);
+			expect([rectSignal offsetByAmount:amount towardEdge:NSLayoutAttributeBottom].sequence).to(equal(offsetMaxY.sequence));
+			expect([rectSignal moveDown:amount].sequence).to(equal(offsetMaxY.sequence));
+		#else
+			expect([pointSignal offsetByAmount:amount towardEdge:NSLayoutAttributeBottom].sequence).to(equal(offsetMinY.origin.sequence));
+			expect([pointSignal moveDown:amount].sequence).to(equal(offsetMinY.origin.sequence));
 
-			expect([rectSignal offsetByAmount:amount towardEdge:NSLayoutAttributeBottom].sequence).to.equal(offsetMinY.sequence);
-			expect([rectSignal moveDown:amount].sequence).to.equal(offsetMinY.sequence);
+			expect([rectSignal offsetByAmount:amount towardEdge:NSLayoutAttributeBottom].sequence).to(equal(offsetMinY.sequence));
+			expect([rectSignal moveDown:amount].sequence).to(equal(offsetMinY.sequence));
 		#endif
 	});
 });
 
-SpecEnd
+QuickSpecEnd

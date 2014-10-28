@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0510"
+   LastUpgradeVersion = "0610"
    version = "1.3">
    <BuildAction
-      parallelizeBuildables = "NO"
+      parallelizeBuildables = "YES"
       buildImplicitDependencies = "YES">
       <BuildActionEntries>
          <BuildActionEntry
@@ -14,37 +14,23 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "D02FAF8E1635DFD8008D42D9"
-               BuildableName = "libArchimedes-iOS.a"
-               BlueprintName = "Archimedes iOS"
-               ReferencedContainer = "container:External/Archimedes/Archimedes.xcodeproj">
-            </BuildableReference>
-         </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "YES"
-            buildForArchiving = "YES"
-            buildForAnalyzing = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "88F440AA153DAC820097B4C3"
-               BuildableName = "libReactiveCocoa-iOS.a"
-               BlueprintName = "ReactiveCocoa-iOS"
-               ReferencedContainer = "container:External/ReactiveCocoa/ReactiveCocoaFramework/ReactiveCocoa.xcodeproj">
-            </BuildableReference>
-         </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "YES"
-            buildForArchiving = "YES"
-            buildForAnalyzing = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "D06269EC1679440C00E951A5"
-               BuildableName = "libReactiveCocoaLayout iOS.a"
+               BlueprintIdentifier = "D0731B7B19FF028F00C01E16"
+               BuildableName = "ReactiveCocoaLayout.framework"
                BlueprintName = "ReactiveCocoaLayout iOS"
+               ReferencedContainer = "container:ReactiveCocoaLayout.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "NO"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "D0731B8519FF028F00C01E16"
+               BuildableName = "ReactiveCocoaLayout iOS Tests.xctest"
+               BlueprintName = "ReactiveCocoaLayout iOS Tests"
                ReferencedContainer = "container:ReactiveCocoaLayout.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -54,19 +40,28 @@
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES"
-      buildConfiguration = "Test">
+      buildConfiguration = "Debug">
       <Testables>
          <TestableReference
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "D06269FA1679440C00E951A5"
+               BlueprintIdentifier = "D0731B8519FF028F00C01E16"
                BuildableName = "ReactiveCocoaLayout iOS Tests.xctest"
                BlueprintName = "ReactiveCocoaLayout iOS Tests"
                ReferencedContainer = "container:ReactiveCocoaLayout.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "D0731B7B19FF028F00C01E16"
+            BuildableName = "ReactiveCocoaLayout.framework"
+            BlueprintName = "ReactiveCocoaLayout iOS"
+            ReferencedContainer = "container:ReactiveCocoaLayout.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
    </TestAction>
    <LaunchAction
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
@@ -77,6 +72,15 @@
       ignoresPersistentStateOnLaunch = "NO"
       debugDocumentVersioning = "YES"
       allowLocationSimulation = "YES">
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "D0731B7B19FF028F00C01E16"
+            BuildableName = "ReactiveCocoaLayout.framework"
+            BlueprintName = "ReactiveCocoaLayout iOS"
+            ReferencedContainer = "container:ReactiveCocoaLayout.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
       <AdditionalOptions>
       </AdditionalOptions>
    </LaunchAction>
@@ -86,6 +90,15 @@
       useCustomWorkingDirectory = "NO"
       buildConfiguration = "Profile"
       debugDocumentVersioning = "YES">
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "D0731B7B19FF028F00C01E16"
+            BuildableName = "ReactiveCocoaLayout.framework"
+            BlueprintName = "ReactiveCocoaLayout iOS"
+            ReferencedContainer = "container:ReactiveCocoaLayout.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">

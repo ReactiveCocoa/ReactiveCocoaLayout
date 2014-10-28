@@ -1,9 +1,0 @@
-//
-// Prefix header for all source files of the 'ReactiveCocoaLayout' target in the 'ReactiveCocoaLayout' project
-//
-
-#ifdef __OBJC__
-	#import <Foundation/Foundation.h>
-	#import <CoreGraphics/CoreGraphics.h>
-	#import <QuartzCore/QuartzCore.h>
-#endif

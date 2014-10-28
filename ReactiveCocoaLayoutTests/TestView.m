@@ -26,9 +26,9 @@
 	_baselineView = [[self.superclass alloc] initWithFrame:CGRectZero];
 	[self addSubview:self.baselineView];
 
-	#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
+	#ifdef RCL_FOR_IPHONE
 	[self.baselineView setAutoresizingMask:UIViewAutoresizingFlexibleTopMargin];
-	#elif TARGET_OS_MAC
+	#else
 	[(NSView *)self.baselineView setAutoresizingMask:NSViewMaxYMargin];
 	#endif
 
@@ -37,11 +37,11 @@
 	return self;
 }
 
-#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
+#ifdef RCL_FOR_IPHONE
 - (UIView *)viewForBaselineLayout {
 	return self.baselineView;
 }
-#elif TARGET_OS_MAC
+#else
 - (CGFloat)baselineOffsetFromBottom {
 	return CGRectGetMinY([self.baselineView frame]);
 }
@@ -69,7 +69,7 @@
 }
 
 - (void)setBaselineOffsetFromBottom:(CGFloat)baseline {
-	#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
+	#ifdef RCL_FOR_IPHONE
 	CGRect frame = CGRectMake(0, CGRectGetHeight(self.bounds) - baseline - 1, CGRectGetWidth(self.bounds), 1);
 	#else
 	CGRect frame = CGRectMake(0, baseline, CGRectGetWidth(self.bounds), 1);

@@ -144,7 +144,7 @@ static RACSignal *combineAttributeAndSignals(NSLayoutAttribute attribute, NSArra
 			edgeSignal = [RACSignal return:@(CGRectMaxXEdge)];
 			break;
 
-	#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
+	#ifdef RCL_FOR_IPHONE
 		case NSLayoutAttributeTop:
 			edgeSignal = [RACSignal return:@(CGRectMinYEdge)];
 			break;
@@ -152,7 +152,7 @@ static RACSignal *combineAttributeAndSignals(NSLayoutAttribute attribute, NSArra
 		case NSLayoutAttributeBottom:
 			edgeSignal = [RACSignal return:@(CGRectMaxYEdge)];
 			break;
-	#elif TARGET_OS_MAC
+	#else
 		case NSLayoutAttributeTop:
 			edgeSignal = [RACSignal return:@(CGRectMaxYEdge)];
 			break;
@@ -612,13 +612,13 @@ static RACSignal *combineAttributeAndSignals(NSLayoutAttribute attribute, NSArra
 			CGRect referenceRect = referenceRectValue.med_rectValue;
 			CGFloat referenceBaseline = referenceBaselineNum.doubleValue;
 
-			#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
+			#ifdef RCL_FOR_IPHONE
 				// Flip the baselines so they're relative to a shared minY.
 				baseline = CGRectGetHeight(rect) - baseline + CGRectGetMinY(rect);
 				referenceBaseline = CGRectGetHeight(referenceRect) - referenceBaseline + CGRectGetMinY(referenceRect);
 
 				rect = CGRectOffset(rect, 0, referenceBaseline - baseline);
-			#elif TARGET_OS_MAC
+			#else
 				// Recalculate the baselines relative to a shared minY.
 				baseline += CGRectGetMinY(rect);
 				referenceBaseline += CGRectGetMinY(referenceRect);

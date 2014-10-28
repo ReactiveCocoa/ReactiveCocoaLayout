@@ -6,18 +6,24 @@
 //  Copyright (c) 2012 GitHub. All rights reserved.
 //
 
+#import <Archimedes/Archimedes.h>
+#import <Nimble/Nimble.h>
+#import <Quick/Quick.h>
+#import <ReactiveCocoa/ReactiveCocoa.h>
+#import <ReactiveCocoaLayout/ReactiveCocoaLayout.h>
+
 #import "ViewExamples.h"
 
-SpecBegin(NSViewRCLGeometryAdditions)
+QuickSpecBegin(NSViewRCLGeometryAdditions)
 
-itShouldBehaveLike(ViewExamples, nil);
+itBehavesLike(ViewExamples, nil);
 
 describe(@"NSTextField", ^{
 	__block NSTextField *field;
 
 	beforeEach(^{
 		field = [[NSTextField alloc] initWithFrame:CGRectMake(0, 0, 100, 20)];
-		expect(field).notTo.beNil();
+		expect(field).notTo(beNil());
 	});
 
 	describe(@"baseline", ^{
@@ -25,18 +31,18 @@ describe(@"NSTextField", ^{
 
 		beforeEach(^{
 			baseline = field.baselineOffsetFromBottom;
-			expect(baseline).to.beGreaterThan(0);
+			expect(@(baseline)).to(beGreaterThan(@0));
 		});
 
 		it(@"should send the baseline", ^{
-			expect([[field.rcl_baselineSignal first] doubleValue]).to.equal(baseline);
+			expect([field.rcl_baselineSignal first]).to(equal(@(baseline)));
 		});
 
 		it(@"should defer reading baseline", ^{
 			RACSignal *signal = field.rcl_baselineSignal;
 
 			field.font = [NSFont systemFontOfSize:144];
-			expect([[signal first] doubleValue]).notTo.equal(baseline);
+			expect([signal first]).notTo(equal(@(baseline)));
 		});
 
 		it(@"should send baseline changes", ^{
@@ -45,13 +51,13 @@ describe(@"NSTextField", ^{
 				lastBaseline = baseline.doubleValue;
 			}];
 
-			expect(lastBaseline).to.equal(baseline);
+			expect(@(lastBaseline)).to(equal(@(baseline)));
 
 			field.font = [NSFont systemFontOfSize:144];
-			expect(lastBaseline).to.beGreaterThan(baseline);
-			expect(lastBaseline).to.equal(field.baselineOffsetFromBottom);
+			expect(@(lastBaseline)).to(beGreaterThan(@(baseline)));
+			expect(@(lastBaseline)).to(equal(@(field.baselineOffsetFromBottom)));
 		});
 	});
 });
 
-SpecEnd
+QuickSpecEnd

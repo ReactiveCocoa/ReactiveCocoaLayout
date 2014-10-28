@@ -19,7 +19,7 @@
 //                              a stop.
 // RCLAnimationCurveLinear    - Animates with the same pace over the duration of
 //                              the animation.
-#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
+#ifdef RCL_FOR_IPHONE
     typedef enum {
         RCLAnimationCurveDefault = 0,
         RCLAnimationCurveEaseInOut = UIViewAnimationOptionCurveEaseInOut,
@@ -27,7 +27,7 @@
         RCLAnimationCurveEaseOut = UIViewAnimationOptionCurveEaseOut,
         RCLAnimationCurveLinear = UIViewAnimationOptionCurveLinear
     } RCLAnimationCurve;
-#elif TARGET_OS_MAC
+#else
     typedef enum : NSUInteger {
         RCLAnimationCurveDefault,
         RCLAnimationCurveEaseInOut,
