@@ -25,666 +25,668 @@ static NSString * const MacroBindingBlock = @"MacroBindingBlock";
 // Associated with the name of the view property that is being bound.
 static NSString * const MacroPropertyName = @"MacroPropertyName";
 
-QuickSharedExampleGroupsBegin(MacroBindingExampleGroup)
+QuickConfigurationBegin(MacroBindingExampleGroup)
 
-sharedExamples(MacroBindingExamples, ^(QCKDSLSharedExampleContext data) {
-	CGSize intrinsicSize = CGSizeMake(10, 15);
++ (void)configure:(Configuration *)configuration {
+	sharedExamples(MacroBindingExamples, ^(QCKDSLSharedExampleContext data) {
+		CGSize intrinsicSize = CGSizeMake(10, 15);
 
-	__block TestView *view;
+		__block TestView *view;
 
-	__block void (^bind)(NSDictionary *);
-	__block NSValue * (^getProperty)(void);
+		__block void (^bind)(NSDictionary *);
+		__block NSValue * (^getProperty)(void);
 
-	__block CGRect rect;
-	__block RACSubject *values;
-
-	beforeEach(^{
-		view = [[TestView alloc] initWithFrame:CGRectZero];
-		[view invalidateAndSetIntrinsicContentSize:intrinsicSize];
-
-		void (^innerBindingBlock)(TestView *, NSDictionary *) = data()[MacroBindingBlock];
-		bind = [^(NSDictionary *bindings) {
-			return innerBindingBlock(view, bindings);
-		} copy];
-
-		getProperty = [^{
-			return [view valueForKey:data()[MacroPropertyName]];
-		} copy];
-
-		rect = CGRectMake(0, 0, intrinsicSize.width, intrinsicSize.height);
-		values = [RACSubject subject];
-	});
-
-	it(@"should default to the view's intrinsic bounds", ^{
-		bind(@{});
-
-		CGRect rect = { .origin = CGPointZero, .size = intrinsicSize };
-		expect(getProperty()).to(equal(MEDBox(rect)));
-	});
-
-	describe(@"rcl_rect", ^{
-		beforeEach(^{
-			rect = CGRectMake(1, 7, 13, 21);
-		});
-
-		it(@"should bind to a constant", ^{
-			bind(@{
-				rcl_rect: MEDBox(rect)
-			});
-
-			expect(getProperty()).to(equal(MEDBox(rect)));
-		});
-
-		it(@"should bind to a signal", ^{
-			bind(@{
-				rcl_rect: values
-			});
-
-			[values sendNext:MEDBox(rect)];
-			expect(getProperty()).to(equal(MEDBox(rect)));
-
-			rect = CGRectMake(2, 3, 4, 5);
-
-			[values sendNext:MEDBox(rect)];
-			expect(getProperty()).to(equal(MEDBox(rect)));
-		});
-	});
-
-	describe(@"rcl_size", ^{
-		beforeEach(^{
-			rect.size = CGSizeMake(13, 21);
-		});
-
-		it(@"should bind to a constant", ^{
-			bind(@{
-				rcl_size: MEDBox(rect.size)
-			});
-
-			expect(getProperty()).to(equal(MEDBox(rect)));
-		});
-
-		it(@"should bind to a signal", ^{
-			bind(@{
-				rcl_size: values
-			});
-
-			[values sendNext:MEDBox(rect.size)];
-			expect(getProperty()).to(equal(MEDBox(rect)));
-
-			rect.size = CGSizeMake(4, 5);
-
-			[values sendNext:MEDBox(rect.size)];
-			expect(getProperty()).to(equal(MEDBox(rect)));
-		});
-
-		it(@"should override rcl_rect", ^{
-			CGRect clobberRect = { .origin = rect.origin, .size = CGSizeMake(100, 500) };
-
-			bind(@{
-				rcl_rect: MEDBox(clobberRect),
-				rcl_size: MEDBox(rect.size)
-			});
-
-			expect(getProperty()).to(equal(MEDBox(rect)));
-		});
-	});
-
-	describe(@"rcl_origin", ^{
-		beforeEach(^{
-			rect = CGRectMake(1, 3, intrinsicSize.width, intrinsicSize.height);
-		});
-
-		it(@"should bind to a constant", ^{
-			bind(@{
-				rcl_origin: MEDBox(rect.origin)
-			});
-
-			expect(getProperty()).to(equal(MEDBox(rect)));
-		});
-
-		it(@"should bind to a signal", ^{
-			bind(@{
-				rcl_origin: values
-			});
-
-			[values sendNext:MEDBox(rect.origin)];
-			expect(getProperty()).to(equal(MEDBox(rect)));
-
-			rect.origin = CGPointMake(5, 7);
-
-			[values sendNext:MEDBox(rect.origin)];
-			expect(getProperty()).to(equal(MEDBox(rect)));
-		});
-
-		it(@"should override rcl_rect", ^{
-			CGRect clobberRect = { .origin = CGPointMake(100, 500), .size = rect.size };
-
-			bind(@{
-				rcl_rect: MEDBox(clobberRect),
-				rcl_origin: MEDBox(rect.origin)
-			});
-
-			expect(getProperty()).to(equal(MEDBox(rect)));
-		});
-	});
-
-	describe(@"rcl_width", ^{
-		beforeEach(^{
-			rect.size.width = 3;
-		});
-
-		it(@"should bind to a constant", ^{
-			bind(@{
-				rcl_width: @(rect.size.width)
-			});
-
-			expect(getProperty()).to(equal(MEDBox(rect)));
-		});
-
-		it(@"should bind to a signal", ^{
-			bind(@{
-				rcl_width: values
-			});
-
-			[values sendNext:@(rect.size.width)];
-			expect(getProperty()).to(equal(MEDBox(rect)));
-
-			rect.size.width = 7;
-
-			[values sendNext:@(rect.size.width)];
-			expect(getProperty()).to(equal(MEDBox(rect)));
-		});
-
-		it(@"should override rcl_size", ^{
-			CGSize clobberSize = { .width = 999, .height = rect.size.height };
-
-			bind(@{
-				rcl_size: MEDBox(clobberSize),
-				rcl_width: @(rect.size.width)
-			});
-
-			expect(getProperty()).to(equal(MEDBox(rect)));
-		});
-	});
-
-	describe(@"rcl_height", ^{
-		beforeEach(^{
-			rect.size.height = 3;
-		});
-
-		it(@"should bind to a constant", ^{
-			bind(@{
-				rcl_height: @(rect.size.height)
-			});
-
-			expect(getProperty()).to(equal(MEDBox(rect)));
-		});
-
-		it(@"should bind to a signal", ^{
-			bind(@{
-				rcl_height: values
-			});
-
-			[values sendNext:@(rect.size.height)];
-			expect(getProperty()).to(equal(MEDBox(rect)));
-
-			rect.size.height = 7;
-
-			[values sendNext:@(rect.size.height)];
-			expect(getProperty()).to(equal(MEDBox(rect)));
-		});
-
-		it(@"should override rcl_size", ^{
-			CGSize clobberSize = { .width = rect.size.width, .height = 999 };
-
-			bind(@{
-				rcl_size: MEDBox(clobberSize),
-				rcl_height: @(rect.size.height)
-			});
-
-			expect(getProperty()).to(equal(MEDBox(rect)));
-		});
-	});
-
-	describe(@"rcl_center", ^{
-		__block NSValue * (^getCenter)(void);
+		__block CGRect rect;
+		__block RACSubject *values;
 
 		beforeEach(^{
-			rect.origin = CGPointMake(2, 3);
-			getCenter = ^{
-				return MEDBox(CGPointMake(CGRectGetMidX(rect), CGRectGetMidY(rect)));
-			};
+			view = [[TestView alloc] initWithFrame:CGRectZero];
+			[view invalidateAndSetIntrinsicContentSize:intrinsicSize];
+
+			void (^innerBindingBlock)(TestView *, NSDictionary *) = data()[MacroBindingBlock];
+			bind = [^(NSDictionary *bindings) {
+				return innerBindingBlock(view, bindings);
+			} copy];
+
+			getProperty = [^{
+				return [view valueForKey:data()[MacroPropertyName]];
+			} copy];
+
+			rect = CGRectMake(0, 0, intrinsicSize.width, intrinsicSize.height);
+			values = [RACSubject subject];
 		});
 
-		it(@"should bind to a constant", ^{
-			bind(@{
-				rcl_center: getCenter()
+		it(@"should default to the view's intrinsic bounds", ^{
+			bind(@{});
+
+			CGRect rect = { .origin = CGPointZero, .size = intrinsicSize };
+			expect(getProperty()).to(equal(MEDBox(rect)));
+		});
+
+		describe(@"rcl_rect", ^{
+			beforeEach(^{
+				rect = CGRectMake(1, 7, 13, 21);
 			});
 
-			expect(getProperty()).to(equal(MEDBox(rect)));
-		});
+			it(@"should bind to a constant", ^{
+				bind(@{
+					rcl_rect: MEDBox(rect)
+				});
 
-		it(@"should bind to a signal", ^{
-			bind(@{
-				rcl_center: values
+				expect(getProperty()).to(equal(MEDBox(rect)));
 			});
 
-			[values sendNext:getCenter()];
-			expect(getProperty()).to(equal(MEDBox(rect)));
+			it(@"should bind to a signal", ^{
+				bind(@{
+					rcl_rect: values
+				});
 
-			rect.origin = CGPointMake(4, 5);
+				[values sendNext:MEDBox(rect)];
+				expect(getProperty()).to(equal(MEDBox(rect)));
 
-			[values sendNext:getCenter()];
-			expect(getProperty()).to(equal(MEDBox(rect)));
+				rect = CGRectMake(2, 3, 4, 5);
+
+				[values sendNext:MEDBox(rect)];
+				expect(getProperty()).to(equal(MEDBox(rect)));
+			});
 		});
 
-		it(@"should override rcl_origin", ^{
-			CGPoint clobberOrigin = CGPointMake(999, 333);
-
-			bind(@{
-				rcl_origin: MEDBox(clobberOrigin),
-				rcl_center: getCenter()
+		describe(@"rcl_size", ^{
+			beforeEach(^{
+				rect.size = CGSizeMake(13, 21);
 			});
 
-			expect(getProperty()).to(equal(MEDBox(rect)));
-		});
-	});
+			it(@"should bind to a constant", ^{
+				bind(@{
+					rcl_size: MEDBox(rect.size)
+				});
 
-	describe(@"rcl_centerX", ^{
-		__block NSNumber * (^getCenter)(void);
-
-		beforeEach(^{
-			rect.origin.x = 2;
-			getCenter = ^{
-				return @(CGRectGetMidX(rect));
-			};
-		});
-
-		it(@"should bind to a constant", ^{
-			bind(@{
-				rcl_centerX: getCenter()
+				expect(getProperty()).to(equal(MEDBox(rect)));
 			});
 
-			expect(getProperty()).to(equal(MEDBox(rect)));
-		});
+			it(@"should bind to a signal", ^{
+				bind(@{
+					rcl_size: values
+				});
 
-		it(@"should bind to a signal", ^{
-			bind(@{
-				rcl_centerX: values
+				[values sendNext:MEDBox(rect.size)];
+				expect(getProperty()).to(equal(MEDBox(rect)));
+
+				rect.size = CGSizeMake(4, 5);
+
+				[values sendNext:MEDBox(rect.size)];
+				expect(getProperty()).to(equal(MEDBox(rect)));
 			});
 
-			[values sendNext:getCenter()];
-			expect(getProperty()).to(equal(MEDBox(rect)));
+			it(@"should override rcl_rect", ^{
+				CGRect clobberRect = { .origin = rect.origin, .size = CGSizeMake(100, 500) };
 
-			rect.origin.x = 4;
+				bind(@{
+					rcl_rect: MEDBox(clobberRect),
+					rcl_size: MEDBox(rect.size)
+				});
 
-			[values sendNext:getCenter()];
-			expect(getProperty()).to(equal(MEDBox(rect)));
+				expect(getProperty()).to(equal(MEDBox(rect)));
+			});
 		});
 
-		it(@"should override rcl_center", ^{
-			CGPoint clobberCenter = CGPointMake(999, CGRectGetMidY(rect));
-
-			bind(@{
-				rcl_center: MEDBox(clobberCenter),
-				rcl_centerX: getCenter()
+		describe(@"rcl_origin", ^{
+			beforeEach(^{
+				rect = CGRectMake(1, 3, intrinsicSize.width, intrinsicSize.height);
 			});
 
-			expect(getProperty()).to(equal(MEDBox(rect)));
-		});
-	});
+			it(@"should bind to a constant", ^{
+				bind(@{
+					rcl_origin: MEDBox(rect.origin)
+				});
 
-	describe(@"rcl_centerY", ^{
-		__block NSNumber * (^getCenter)(void);
-
-		beforeEach(^{
-			rect.origin.y = 2;
-			getCenter = ^{
-				return @(CGRectGetMidY(rect));
-			};
-		});
-
-		it(@"should bind to a constant", ^{
-			bind(@{
-				rcl_centerY: getCenter()
+				expect(getProperty()).to(equal(MEDBox(rect)));
 			});
 
-			expect(getProperty()).to(equal(MEDBox(rect)));
-		});
+			it(@"should bind to a signal", ^{
+				bind(@{
+					rcl_origin: values
+				});
 
-		it(@"should bind to a signal", ^{
-			bind(@{
-				rcl_centerY: values
+				[values sendNext:MEDBox(rect.origin)];
+				expect(getProperty()).to(equal(MEDBox(rect)));
+
+				rect.origin = CGPointMake(5, 7);
+
+				[values sendNext:MEDBox(rect.origin)];
+				expect(getProperty()).to(equal(MEDBox(rect)));
 			});
 
-			[values sendNext:getCenter()];
-			expect(getProperty()).to(equal(MEDBox(rect)));
+			it(@"should override rcl_rect", ^{
+				CGRect clobberRect = { .origin = CGPointMake(100, 500), .size = rect.size };
 
-			rect.origin.y = 4;
+				bind(@{
+					rcl_rect: MEDBox(clobberRect),
+					rcl_origin: MEDBox(rect.origin)
+				});
 
-			[values sendNext:getCenter()];
-			expect(getProperty()).to(equal(MEDBox(rect)));
+				expect(getProperty()).to(equal(MEDBox(rect)));
+			});
 		});
 
-		it(@"should override rcl_origin", ^{
-			CGPoint clobberCenter = CGPointMake(CGRectGetMidX(rect), 999);
-
-			bind(@{
-				rcl_center: MEDBox(clobberCenter),
-				rcl_centerY: getCenter()
+		describe(@"rcl_width", ^{
+			beforeEach(^{
+				rect.size.width = 3;
 			});
 
-			expect(getProperty()).to(equal(MEDBox(rect)));
-		});
-	});
+			it(@"should bind to a constant", ^{
+				bind(@{
+					rcl_width: @(rect.size.width)
+				});
 
-	describe(@"rcl_left", ^{
-		beforeEach(^{
-			rect.origin.x = 7;
-		});
-
-		it(@"should bind to a constant", ^{
-			bind(@{
-				rcl_left: @(rect.origin.x)
+				expect(getProperty()).to(equal(MEDBox(rect)));
 			});
 
-			expect(getProperty()).to(equal(MEDBox(rect)));
-		});
+			it(@"should bind to a signal", ^{
+				bind(@{
+					rcl_width: values
+				});
 
-		it(@"should bind to a signal", ^{
-			bind(@{
-				rcl_left: values
+				[values sendNext:@(rect.size.width)];
+				expect(getProperty()).to(equal(MEDBox(rect)));
+
+				rect.size.width = 7;
+
+				[values sendNext:@(rect.size.width)];
+				expect(getProperty()).to(equal(MEDBox(rect)));
 			});
 
-			[values sendNext:@(rect.origin.x)];
-			expect(getProperty()).to(equal(MEDBox(rect)));
+			it(@"should override rcl_size", ^{
+				CGSize clobberSize = { .width = 999, .height = rect.size.height };
 
-			rect.origin.x = 17;
+				bind(@{
+					rcl_size: MEDBox(clobberSize),
+					rcl_width: @(rect.size.width)
+				});
 
-			[values sendNext:@(rect.origin.x)];
-			expect(getProperty()).to(equal(MEDBox(rect)));
+				expect(getProperty()).to(equal(MEDBox(rect)));
+			});
 		});
 
-		it(@"should override rcl_centerX", ^{
-			bind(@{
-				rcl_centerX: @999,
-				rcl_left: @(rect.origin.x)
+		describe(@"rcl_height", ^{
+			beforeEach(^{
+				rect.size.height = 3;
 			});
 
-			expect(getProperty()).to(equal(MEDBox(rect)));
-		});
-	});
+			it(@"should bind to a constant", ^{
+				bind(@{
+					rcl_height: @(rect.size.height)
+				});
 
-	describe(@"rcl_right", ^{
-		__block NSNumber * (^getRight)(void);
-
-		beforeEach(^{
-			rect.origin.x = 7;
-			getRight = ^{
-				return @(CGRectGetMaxX(rect));
-			};
-		});
-
-		it(@"should bind to a constant", ^{
-			bind(@{
-				rcl_right: getRight()
+				expect(getProperty()).to(equal(MEDBox(rect)));
 			});
 
-			expect(getProperty()).to(equal(MEDBox(rect)));
-		});
+			it(@"should bind to a signal", ^{
+				bind(@{
+					rcl_height: values
+				});
 
-		it(@"should bind to a signal", ^{
-			bind(@{
-				rcl_right: values
+				[values sendNext:@(rect.size.height)];
+				expect(getProperty()).to(equal(MEDBox(rect)));
+
+				rect.size.height = 7;
+
+				[values sendNext:@(rect.size.height)];
+				expect(getProperty()).to(equal(MEDBox(rect)));
 			});
 
-			[values sendNext:getRight()];
-			expect(getProperty()).to(equal(MEDBox(rect)));
+			it(@"should override rcl_size", ^{
+				CGSize clobberSize = { .width = rect.size.width, .height = 999 };
 
-			rect.origin.x = 17;
+				bind(@{
+					rcl_size: MEDBox(clobberSize),
+					rcl_height: @(rect.size.height)
+				});
 
-			[values sendNext:getRight()];
-			expect(getProperty()).to(equal(MEDBox(rect)));
+				expect(getProperty()).to(equal(MEDBox(rect)));
+			});
 		});
 
-		it(@"should override rcl_centerX", ^{
-			bind(@{
-				rcl_centerX: @999,
-				rcl_right: getRight()
+		describe(@"rcl_center", ^{
+			__block NSValue * (^getCenter)(void);
+
+			beforeEach(^{
+				rect.origin = CGPointMake(2, 3);
+				getCenter = ^{
+					return MEDBox(CGPointMake(CGRectGetMidX(rect), CGRectGetMidY(rect)));
+				};
 			});
 
-			expect(getProperty()).to(equal(MEDBox(rect)));
-		});
-	});
+			it(@"should bind to a constant", ^{
+				bind(@{
+					rcl_center: getCenter()
+				});
 
-	describe(@"rcl_top", ^{
-		__block NSNumber * (^getTop)(void);
-
-		beforeEach(^{
-			rect.origin.y = 7;
-			getTop = ^{
-				#ifdef RCL_FOR_IPHONE
-					return @(CGRectGetMinY(rect));
-				#else
-					return @(CGRectGetMaxY(rect));
-				#endif
-			};
-		});
-
-		it(@"should bind to a constant", ^{
-			bind(@{
-				rcl_top: getTop()
+				expect(getProperty()).to(equal(MEDBox(rect)));
 			});
 
-			expect(getProperty()).to(equal(MEDBox(rect)));
-		});
+			it(@"should bind to a signal", ^{
+				bind(@{
+					rcl_center: values
+				});
 
-		it(@"should bind to a signal", ^{
-			bind(@{
-				rcl_top: values
+				[values sendNext:getCenter()];
+				expect(getProperty()).to(equal(MEDBox(rect)));
+
+				rect.origin = CGPointMake(4, 5);
+
+				[values sendNext:getCenter()];
+				expect(getProperty()).to(equal(MEDBox(rect)));
 			});
 
-			[values sendNext:getTop()];
-			expect(getProperty()).to(equal(MEDBox(rect)));
+			it(@"should override rcl_origin", ^{
+				CGPoint clobberOrigin = CGPointMake(999, 333);
 
-			rect.origin.y = 17;
+				bind(@{
+					rcl_origin: MEDBox(clobberOrigin),
+					rcl_center: getCenter()
+				});
 
-			[values sendNext:getTop()];
-			expect(getProperty()).to(equal(MEDBox(rect)));
+				expect(getProperty()).to(equal(MEDBox(rect)));
+			});
 		});
 
-		it(@"should override rcl_centerY", ^{
-			bind(@{
-				rcl_centerY: @999,
-				rcl_top: getTop()
+		describe(@"rcl_centerX", ^{
+			__block NSNumber * (^getCenter)(void);
+
+			beforeEach(^{
+				rect.origin.x = 2;
+				getCenter = ^{
+					return @(CGRectGetMidX(rect));
+				};
 			});
 
-			expect(getProperty()).to(equal(MEDBox(rect)));
-		});
-	});
+			it(@"should bind to a constant", ^{
+				bind(@{
+					rcl_centerX: getCenter()
+				});
 
-	describe(@"rcl_bottom", ^{
-		__block NSNumber * (^getBottom)(void);
-
-		beforeEach(^{
-			rect.origin.y = 7;
-			getBottom = ^{
-				#ifdef RCL_FOR_IPHONE
-					return @(CGRectGetMaxY(rect));
-				#else
-					return @(CGRectGetMinY(rect));
-				#endif
-			};
-		});
-
-		it(@"should bind to a constant", ^{
-			bind(@{
-				rcl_bottom: getBottom()
+				expect(getProperty()).to(equal(MEDBox(rect)));
 			});
 
-			expect(getProperty()).to(equal(MEDBox(rect)));
-		});
+			it(@"should bind to a signal", ^{
+				bind(@{
+					rcl_centerX: values
+				});
 
-		it(@"should bind to a signal", ^{
-			bind(@{
-				rcl_bottom: values
+				[values sendNext:getCenter()];
+				expect(getProperty()).to(equal(MEDBox(rect)));
+
+				rect.origin.x = 4;
+
+				[values sendNext:getCenter()];
+				expect(getProperty()).to(equal(MEDBox(rect)));
 			});
 
-			[values sendNext:getBottom()];
-			expect(getProperty()).to(equal(MEDBox(rect)));
+			it(@"should override rcl_center", ^{
+				CGPoint clobberCenter = CGPointMake(999, CGRectGetMidY(rect));
 
-			rect.origin.y = 17;
+				bind(@{
+					rcl_center: MEDBox(clobberCenter),
+					rcl_centerX: getCenter()
+				});
 
-			[values sendNext:getBottom()];
-			expect(getProperty()).to(equal(MEDBox(rect)));
+				expect(getProperty()).to(equal(MEDBox(rect)));
+			});
 		});
 
-		it(@"should override rcl_centerY", ^{
-			bind(@{
-				rcl_centerY: @999,
-				rcl_bottom: getBottom()
+		describe(@"rcl_centerY", ^{
+			__block NSNumber * (^getCenter)(void);
+
+			beforeEach(^{
+				rect.origin.y = 2;
+				getCenter = ^{
+					return @(CGRectGetMidY(rect));
+				};
 			});
 
-			expect(getProperty()).to(equal(MEDBox(rect)));
+			it(@"should bind to a constant", ^{
+				bind(@{
+					rcl_centerY: getCenter()
+				});
+
+				expect(getProperty()).to(equal(MEDBox(rect)));
+			});
+
+			it(@"should bind to a signal", ^{
+				bind(@{
+					rcl_centerY: values
+				});
+
+				[values sendNext:getCenter()];
+				expect(getProperty()).to(equal(MEDBox(rect)));
+
+				rect.origin.y = 4;
+
+				[values sendNext:getCenter()];
+				expect(getProperty()).to(equal(MEDBox(rect)));
+			});
+
+			it(@"should override rcl_origin", ^{
+				CGPoint clobberCenter = CGPointMake(CGRectGetMidX(rect), 999);
+
+				bind(@{
+					rcl_center: MEDBox(clobberCenter),
+					rcl_centerY: getCenter()
+				});
+
+				expect(getProperty()).to(equal(MEDBox(rect)));
+			});
 		});
-	});
 
-	describe(@"rcl_leading", ^{
-		__block NSNumber * (^getLeading)(void);
+		describe(@"rcl_left", ^{
+			beforeEach(^{
+				rect.origin.x = 7;
+			});
 
-		beforeEach(^{
-			rect.origin.x = 7;
-			getLeading = ^{
-				NSNumber *edge = [[RACSignal leadingEdgeSignal] first];
-				if (edge.integerValue == CGRectMinXEdge) {
-					return @(CGRectGetMinX(rect));
-				} else {
+			it(@"should bind to a constant", ^{
+				bind(@{
+					rcl_left: @(rect.origin.x)
+				});
+
+				expect(getProperty()).to(equal(MEDBox(rect)));
+			});
+
+			it(@"should bind to a signal", ^{
+				bind(@{
+					rcl_left: values
+				});
+
+				[values sendNext:@(rect.origin.x)];
+				expect(getProperty()).to(equal(MEDBox(rect)));
+
+				rect.origin.x = 17;
+
+				[values sendNext:@(rect.origin.x)];
+				expect(getProperty()).to(equal(MEDBox(rect)));
+			});
+
+			it(@"should override rcl_centerX", ^{
+				bind(@{
+					rcl_centerX: @999,
+					rcl_left: @(rect.origin.x)
+				});
+
+				expect(getProperty()).to(equal(MEDBox(rect)));
+			});
+		});
+
+		describe(@"rcl_right", ^{
+			__block NSNumber * (^getRight)(void);
+
+			beforeEach(^{
+				rect.origin.x = 7;
+				getRight = ^{
 					return @(CGRectGetMaxX(rect));
-				}
-			};
-		});
-
-		it(@"should bind to a constant", ^{
-			bind(@{
-				rcl_leading: getLeading()
+				};
 			});
 
-			expect(getProperty()).to(equal(MEDBox(rect)));
-		});
+			it(@"should bind to a constant", ^{
+				bind(@{
+					rcl_right: getRight()
+				});
 
-		it(@"should bind to a signal", ^{
-			bind(@{
-				rcl_leading: values
+				expect(getProperty()).to(equal(MEDBox(rect)));
 			});
 
-			[values sendNext:getLeading()];
-			expect(getProperty()).to(equal(MEDBox(rect)));
+			it(@"should bind to a signal", ^{
+				bind(@{
+					rcl_right: values
+				});
 
-			rect.origin.x = 17;
+				[values sendNext:getRight()];
+				expect(getProperty()).to(equal(MEDBox(rect)));
 
-			[values sendNext:getLeading()];
-			expect(getProperty()).to(equal(MEDBox(rect)));
-		});
+				rect.origin.x = 17;
 
-		it(@"should override rcl_centerX", ^{
-			bind(@{
-				rcl_centerX: @999,
-				rcl_leading: getLeading()
+				[values sendNext:getRight()];
+				expect(getProperty()).to(equal(MEDBox(rect)));
 			});
 
-			expect(getProperty()).to(equal(MEDBox(rect)));
+			it(@"should override rcl_centerX", ^{
+				bind(@{
+					rcl_centerX: @999,
+					rcl_right: getRight()
+				});
+
+				expect(getProperty()).to(equal(MEDBox(rect)));
+			});
+		});
+
+		describe(@"rcl_top", ^{
+			__block NSNumber * (^getTop)(void);
+
+			beforeEach(^{
+				rect.origin.y = 7;
+				getTop = ^{
+					#ifdef RCL_FOR_IPHONE
+						return @(CGRectGetMinY(rect));
+					#else
+						return @(CGRectGetMaxY(rect));
+					#endif
+				};
+			});
+
+			it(@"should bind to a constant", ^{
+				bind(@{
+					rcl_top: getTop()
+				});
+
+				expect(getProperty()).to(equal(MEDBox(rect)));
+			});
+
+			it(@"should bind to a signal", ^{
+				bind(@{
+					rcl_top: values
+				});
+
+				[values sendNext:getTop()];
+				expect(getProperty()).to(equal(MEDBox(rect)));
+
+				rect.origin.y = 17;
+
+				[values sendNext:getTop()];
+				expect(getProperty()).to(equal(MEDBox(rect)));
+			});
+
+			it(@"should override rcl_centerY", ^{
+				bind(@{
+					rcl_centerY: @999,
+					rcl_top: getTop()
+				});
+
+				expect(getProperty()).to(equal(MEDBox(rect)));
+			});
+		});
+
+		describe(@"rcl_bottom", ^{
+			__block NSNumber * (^getBottom)(void);
+
+			beforeEach(^{
+				rect.origin.y = 7;
+				getBottom = ^{
+					#ifdef RCL_FOR_IPHONE
+						return @(CGRectGetMaxY(rect));
+					#else
+						return @(CGRectGetMinY(rect));
+					#endif
+				};
+			});
+
+			it(@"should bind to a constant", ^{
+				bind(@{
+					rcl_bottom: getBottom()
+				});
+
+				expect(getProperty()).to(equal(MEDBox(rect)));
+			});
+
+			it(@"should bind to a signal", ^{
+				bind(@{
+					rcl_bottom: values
+				});
+
+				[values sendNext:getBottom()];
+				expect(getProperty()).to(equal(MEDBox(rect)));
+
+				rect.origin.y = 17;
+
+				[values sendNext:getBottom()];
+				expect(getProperty()).to(equal(MEDBox(rect)));
+			});
+
+			it(@"should override rcl_centerY", ^{
+				bind(@{
+					rcl_centerY: @999,
+					rcl_bottom: getBottom()
+				});
+
+				expect(getProperty()).to(equal(MEDBox(rect)));
+			});
+		});
+
+		describe(@"rcl_leading", ^{
+			__block NSNumber * (^getLeading)(void);
+
+			beforeEach(^{
+				rect.origin.x = 7;
+				getLeading = ^{
+					NSNumber *edge = [[RACSignal leadingEdgeSignal] first];
+					if (edge.integerValue == CGRectMinXEdge) {
+						return @(CGRectGetMinX(rect));
+					} else {
+						return @(CGRectGetMaxX(rect));
+					}
+				};
+			});
+
+			it(@"should bind to a constant", ^{
+				bind(@{
+					rcl_leading: getLeading()
+				});
+
+				expect(getProperty()).to(equal(MEDBox(rect)));
+			});
+
+			it(@"should bind to a signal", ^{
+				bind(@{
+					rcl_leading: values
+				});
+
+				[values sendNext:getLeading()];
+				expect(getProperty()).to(equal(MEDBox(rect)));
+
+				rect.origin.x = 17;
+
+				[values sendNext:getLeading()];
+				expect(getProperty()).to(equal(MEDBox(rect)));
+			});
+
+			it(@"should override rcl_centerX", ^{
+				bind(@{
+					rcl_centerX: @999,
+					rcl_leading: getLeading()
+				});
+
+				expect(getProperty()).to(equal(MEDBox(rect)));
+			});
+		});
+
+		describe(@"rcl_trailing", ^{
+			__block NSNumber * (^getTrailing)(void);
+
+			beforeEach(^{
+				rect.origin.x = 7;
+				getTrailing = ^{
+					NSNumber *edge = [[RACSignal trailingEdgeSignal] first];
+					if (edge.integerValue == CGRectMinXEdge) {
+						return @(CGRectGetMinX(rect));
+					} else {
+						return @(CGRectGetMaxX(rect));
+					}
+				};
+			});
+
+			it(@"should bind to a constant", ^{
+				bind(@{
+					rcl_trailing: getTrailing()
+				});
+
+				expect(getProperty()).to(equal(MEDBox(rect)));
+			});
+
+			it(@"should bind to a signal", ^{
+				bind(@{
+					rcl_trailing: values
+				});
+
+				[values sendNext:getTrailing()];
+				expect(getProperty()).to(equal(MEDBox(rect)));
+
+				rect.origin.x = 17;
+
+				[values sendNext:getTrailing()];
+				expect(getProperty()).to(equal(MEDBox(rect)));
+			});
+
+			it(@"should override rcl_centerX", ^{
+				bind(@{
+					rcl_centerX: @999,
+					rcl_trailing: getTrailing()
+				});
+
+				expect(getProperty()).to(equal(MEDBox(rect)));
+			});
+		});
+
+		describe(@"combining non-conflicting attributes", ^{
+			it(@"should combine rcl_origin with rcl_width and rcl_height", ^{
+				rect = CGRectMake(7, 13, 29, 39);
+
+				bind(@{
+					rcl_origin: MEDBox(rect.origin),
+					rcl_width: @(rect.size.width),
+					rcl_height: @(rect.size.height),
+				});
+
+				expect(getProperty()).to(equal(MEDBox(rect)));
+			});
+
+			it(@"should combine rcl_size with rcl_center", ^{
+				CGPoint center = CGPointMake(2, 5);
+				rect = CGRectMake(0, 1, 4, 8);
+
+				bind(@{
+					rcl_size: MEDBox(rect.size),
+					rcl_center: MEDBox(center),
+				});
+
+				expect(getProperty()).to(equal(MEDBox(rect)));
+			});
+
+			it(@"should combine rcl_left, rcl_centerY, rcl_width, and rcl_height", ^{
+				CGFloat centerY = 5;
+				rect = CGRectMake(0, 1, 4, 8);
+
+				bind(@{
+					rcl_left: @(rect.origin.x),
+					rcl_centerY: @(centerY),
+					rcl_width: @(rect.size.width),
+					rcl_height: @(rect.size.height),
+				});
+
+				expect(getProperty()).to(equal(MEDBox(rect)));
+			});
 		});
 	});
+}
 
-	describe(@"rcl_trailing", ^{
-		__block NSNumber * (^getTrailing)(void);
-
-		beforeEach(^{
-			rect.origin.x = 7;
-			getTrailing = ^{
-				NSNumber *edge = [[RACSignal trailingEdgeSignal] first];
-				if (edge.integerValue == CGRectMinXEdge) {
-					return @(CGRectGetMinX(rect));
-				} else {
-					return @(CGRectGetMaxX(rect));
-				}
-			};
-		});
-
-		it(@"should bind to a constant", ^{
-			bind(@{
-				rcl_trailing: getTrailing()
-			});
-
-			expect(getProperty()).to(equal(MEDBox(rect)));
-		});
-
-		it(@"should bind to a signal", ^{
-			bind(@{
-				rcl_trailing: values
-			});
-
-			[values sendNext:getTrailing()];
-			expect(getProperty()).to(equal(MEDBox(rect)));
-
-			rect.origin.x = 17;
-
-			[values sendNext:getTrailing()];
-			expect(getProperty()).to(equal(MEDBox(rect)));
-		});
-
-		it(@"should override rcl_centerX", ^{
-			bind(@{
-				rcl_centerX: @999,
-				rcl_trailing: getTrailing()
-			});
-
-			expect(getProperty()).to(equal(MEDBox(rect)));
-		});
-	});
-
-	describe(@"combining non-conflicting attributes", ^{
-		it(@"should combine rcl_origin with rcl_width and rcl_height", ^{
-			rect = CGRectMake(7, 13, 29, 39);
-
-			bind(@{
-				rcl_origin: MEDBox(rect.origin),
-				rcl_width: @(rect.size.width),
-				rcl_height: @(rect.size.height),
-			});
-
-			expect(getProperty()).to(equal(MEDBox(rect)));
-		});
-
-		it(@"should combine rcl_size with rcl_center", ^{
-			CGPoint center = CGPointMake(2, 5);
-			rect = CGRectMake(0, 1, 4, 8);
-
-			bind(@{
-				rcl_size: MEDBox(rect.size),
-				rcl_center: MEDBox(center),
-			});
-
-			expect(getProperty()).to(equal(MEDBox(rect)));
-		});
-
-		it(@"should combine rcl_left, rcl_centerY, rcl_width, and rcl_height", ^{
-			CGFloat centerY = 5;
-			rect = CGRectMake(0, 1, 4, 8);
-
-			bind(@{
-				rcl_left: @(rect.origin.x),
-				rcl_centerY: @(centerY),
-				rcl_width: @(rect.size.width),
-				rcl_height: @(rect.size.height),
-			});
-
-			expect(getProperty()).to(equal(MEDBox(rect)));
-		});
-	});
-});
-
-QuickSharedExampleGroupsEnd
+QuickConfigurationEnd
 
 QuickSpecBegin(RCLMacros)
 
