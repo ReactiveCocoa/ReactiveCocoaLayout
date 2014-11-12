@@ -562,7 +562,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastTestingUpgradeCheck = 0510;
-				LastUpgradeCheck = 0510;
+				LastUpgradeCheck = 0610;
 				ORGANIZATIONNAME = GitHub;
 				TargetAttributes = {
 					D0731B7B19FF028F00C01E16 = {
