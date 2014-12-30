@@ -1,5 +1,5 @@
-github "github/Archimedes" "eb94ec4011d13a5466e4e6d06968531dbc1555f1"
+github "github/Archimedes" "1.1.3"
 github "Quick/Nimble" "v0.2.0"
 github "Quick/Quick" "v0.2.2"
-github "ReactiveCocoa/ReactiveCocoa" "b0f789ad14233e93b2f35a624d91f07326a2f719"
+github "ReactiveCocoa/ReactiveCocoa" "v2.4.3"
 github "jspahrsummers/xcconfigs" "0.7"

@@ -1,2 +1,2 @@
-github "ReactiveCocoa/ReactiveCocoa" "carthage-0.5"
-github "github/Archimedes" "carthage-0.5"
+github "ReactiveCocoa/ReactiveCocoa" ~> 2.4.3
+github "github/Archimedes" ~> 1.1.3
