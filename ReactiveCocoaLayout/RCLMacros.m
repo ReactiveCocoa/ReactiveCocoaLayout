@@ -67,17 +67,19 @@ static NSString *NSStringFromRCLAttribute(RCLAttribute attribute) __attribute__(
 	NSParameterAssert(property != nil);
 	NSParameterAssert([bindings isKindOfClass:NSDictionary.class]);
 
-	[[self rectSignalFromBindings:bindings] setKeyPath:property onObject:self.view];
+	[[RACSignal rectsWithView:self.view bindings:bindings] setKeyPath:property onObject:self.view];
 }
 
-#pragma mark Attribute Parsing
+@end
 
-- (RACSignal *)rectSignalFromBindings:(NSDictionary *)bindings {
+@implementation RACSignal (RCLBindings)
+
++ (RACSignal *)rectsWithView:(id)view bindings:(NSDictionary *)bindings {
 	NSParameterAssert(bindings != nil);
 
 	NSArray *sortedAttributes = [bindings.allKeys sortedArrayUsingSelector:@selector(compare:)];
 
-	RACSignal *signal = [self.view rcl_intrinsicBoundsSignal];
+	RACSignal *signal = [view rcl_intrinsicBoundsSignal];
 	for (NSNumber *attribute in sortedAttributes) {
 		NSAssert([attribute isKindOfClass:NSNumber.class], @"Layout binding key is not a RCLAttribute: %@", attribute);
 
@@ -158,7 +160,7 @@ static NSString *NSStringFromRCLAttribute(RCLAttribute attribute) __attribute__(
 					}]
 					switchToLatest];
 
-				signal = [signal alignBaseline:[self.view rcl_baselineSignal] toBaseline:referenceBaseline ofRect:referenceRect];
+				signal = [signal alignBaseline:[view rcl_baselineSignal] toBaseline:referenceBaseline ofRect:referenceRect];
 				break;
 			}
 		}
@@ -167,7 +169,7 @@ static NSString *NSStringFromRCLAttribute(RCLAttribute attribute) __attribute__(
 	return signal;
 }
 
-- (RACSignal *)signalWithConstantValue:(id)value forAttribute:(RCLAttribute)attribute {
++ (RACSignal *)signalWithConstantValue:(id)value forAttribute:(RCLAttribute)attribute {
 	NSParameterAssert(value != nil);
 
 	switch (attribute) {
